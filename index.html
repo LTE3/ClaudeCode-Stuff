@@ -189,6 +189,7 @@
             position: relative;
             width: min(500px, 85vw);
             margin: 0 auto 40px;
+            padding-top: 90px;
         }
 
         .casita-house {
@@ -261,11 +262,11 @@
         /* DJ booth on top */
         .dj-booth {
             position: absolute;
-            top: -70px;
+            top: -80px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 40px;
+            width: 200px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -291,18 +292,23 @@
         }
 
         .neon-sign {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 0.9rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
             font-weight: 700;
+            letter-spacing: 6px;
             color: var(--hot-pink);
-            text-shadow: 0 0 10px var(--hot-pink), 0 0 20px var(--hot-pink), 0 0 40px var(--hot-pink);
+            text-shadow: 0 0 10px var(--hot-pink), 0 0 25px var(--hot-pink), 0 0 50px var(--hot-pink), 0 0 80px rgba(255, 77, 141, 0.4);
             animation: neonPulse 1.5s ease-in-out infinite alternate;
+            padding: 5px 15px;
+            border: 2px solid var(--hot-pink);
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(255, 77, 141, 0.4), inset 0 0 15px rgba(255, 77, 141, 0.1);
         }
 
         @keyframes neonPulse {
-            0% { opacity: 1; text-shadow: 0 0 10px var(--hot-pink), 0 0 20px var(--hot-pink), 0 0 40px var(--hot-pink); }
-            50% { opacity: 0.85; text-shadow: 0 0 5px var(--hot-pink), 0 0 10px var(--hot-pink); }
-            100% { opacity: 1; text-shadow: 0 0 10px var(--hot-pink), 0 0 20px var(--hot-pink), 0 0 60px var(--hot-pink); }
+            0% { opacity: 1; text-shadow: 0 0 10px var(--hot-pink), 0 0 25px var(--hot-pink), 0 0 50px var(--hot-pink); box-shadow: 0 0 15px rgba(255, 77, 141, 0.4), inset 0 0 15px rgba(255, 77, 141, 0.1); }
+            50% { opacity: 0.85; text-shadow: 0 0 5px var(--hot-pink), 0 0 15px var(--hot-pink); box-shadow: 0 0 8px rgba(255, 77, 141, 0.2), inset 0 0 8px rgba(255, 77, 141, 0.05); }
+            100% { opacity: 1; text-shadow: 0 0 15px var(--hot-pink), 0 0 30px var(--hot-pink), 0 0 70px var(--hot-pink); box-shadow: 0 0 25px rgba(255, 77, 141, 0.6), inset 0 0 20px rgba(255, 77, 141, 0.15); }
         }
 
         /* Plastic chairs */
@@ -407,13 +413,18 @@
         }
 
         .countdown-box {
-            background: rgba(255, 77, 141, 0.1);
-            border: 2px solid var(--hot-pink);
+            background: rgba(0, 212, 255, 0.08);
+            border: 2px solid var(--cyan);
             border-radius: 12px;
             padding: 12px 18px;
             min-width: 75px;
             text-align: center;
-            animation: pulseBorder 2s ease-in-out infinite;
+            animation: pulseBorderCyan 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseBorderCyan {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(0, 212, 255, 0.6); }
         }
 
         .countdown-box .number {
@@ -478,7 +489,7 @@
         }
 
         .section-title .accent {
-            background: linear-gradient(135deg, var(--yellow), var(--orange));
+            background: linear-gradient(135deg, var(--cyan), var(--teal));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -498,8 +509,8 @@
         }
 
         .about-card {
-            background: linear-gradient(135deg, rgba(255,77,141,0.08), rgba(0,229,204,0.05));
-            border: 1px solid rgba(255,255,255,0.08);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06), rgba(0, 229, 204, 0.08));
+            border: 1px solid rgba(0, 212, 255, 0.12);
             border-radius: 20px;
             padding: 40px 30px;
             text-align: center;
@@ -508,7 +519,7 @@
 
         .about-card:hover {
             transform: translateY(-5px);
-            border-color: rgba(255, 214, 0, 0.3);
+            border-color: rgba(0, 212, 255, 0.4);
         }
 
         .about-card .icon {
@@ -549,15 +560,15 @@
             align-items: center;
             gap: 20px;
             padding: 25px 30px;
-            background: rgba(255,255,255,0.03);
-            border-left: 3px solid var(--hot-pink);
+            background: rgba(0, 212, 255, 0.04);
+            border-left: 3px solid var(--cyan);
             border-radius: 0 15px 15px 0;
             transition: background 0.3s, border-color 0.3s;
         }
 
         .exp-item:hover {
-            background: rgba(255,255,255,0.06);
-            border-left-color: var(--yellow);
+            background: rgba(0, 212, 255, 0.08);
+            border-left-color: var(--teal);
         }
 
         .exp-item .exp-icon {
@@ -580,8 +591,8 @@
         /* ─── CHECKERED SECTION DIVIDER ─── */
         .checkered-divider {
             height: 30px;
-            background: repeating-conic-gradient(#1a1a1a 0% 25%, #111 0% 50%) 0 0 / 30px 30px;
-            opacity: 0.5;
+            background: repeating-conic-gradient(rgba(0, 212, 255, 0.08) 0% 25%, #111 0% 50%) 0 0 / 30px 30px;
+            opacity: 0.6;
         }
 
         /* ─── SIGNUP SECTION ─── */
@@ -828,185 +839,219 @@
         }
 
         /* Dancing Pink Casita Character */
-        .dancing-casita {
-            width: 120px;
+        /* ─── BAD BUNNY HEART CHARACTER ─── */
+        .dancing-heart {
+            width: 150px;
             position: relative;
-            animation: casitaBounce 0.6s ease-in-out infinite alternate;
+            animation: heartBounce 0.6s ease-in-out infinite alternate;
             cursor: pointer;
             transition: filter 0.3s;
         }
 
-        .dancing-casita:hover {
-            filter: drop-shadow(0 0 20px rgba(255, 77, 141, 0.6));
+        .dancing-heart:hover {
+            filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.6));
         }
 
-        @keyframes casitaBounce {
+        @keyframes heartBounce {
             0% { transform: translateY(0) rotate(-3deg); }
             100% { transform: translateY(-15px) rotate(3deg); }
         }
 
-        .dc-body {
-            width: 100px;
-            height: 80px;
-            background: linear-gradient(180deg, #F2A0A0, #E8967C);
-            border-radius: 8px;
-            margin: 0 auto;
+        .heart-body {
+            width: 120px;
+            height: 100px;
             position: relative;
-            border: 3px solid var(--casita-yellow);
+            margin: 0 auto;
         }
 
-        .dc-roof {
-            width: 115px;
-            height: 25px;
-            background: var(--casita-yellow);
-            clip-path: polygon(10% 100%, 50% 0%, 90% 100%);
-            margin: 0 auto -2px;
+        .heart-shape {
+            width: 120px;
+            height: 100px;
+            position: relative;
         }
 
-        .dc-face {
+        .heart-shape::before,
+        .heart-shape::after {
+            content: '';
             position: absolute;
-            top: 15px;
+            width: 65px;
+            height: 100px;
+            background: #E02020;
+            border-radius: 65px 65px 0 0;
+            border: 3px solid #1a1a1a;
+        }
+
+        .heart-shape::before {
+            left: 5px;
+            transform: rotate(-45deg);
+            transform-origin: bottom right;
+        }
+
+        .heart-shape::after {
+            right: 5px;
+            transform: rotate(45deg);
+            transform-origin: bottom left;
+        }
+
+        /* Heart face */
+        .heart-face {
+            position: absolute;
+            top: 35px;
             left: 50%;
             transform: translateX(-50%);
-            width: 70px;
+            width: 60px;
             height: 40px;
+            z-index: 5;
         }
 
-        .dc-eye {
-            width: 14px;
-            height: 16px;
+        .heart-eye {
+            width: 18px;
+            height: 22px;
             background: #1a1a1a;
-            border-radius: 50%;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             position: absolute;
-            top: 5px;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
             animation: blink 3s ease-in-out infinite;
         }
 
-        .dc-eye.left { left: 10px; }
-        .dc-eye.right { right: 10px; }
+        @keyframes blink {
+            0%, 45%, 55%, 100% { transform: translateX(-50%) scaleY(1); }
+            50% { transform: translateX(-50%) scaleY(0.1); }
+        }
 
-        .dc-eye::after {
+        .heart-eye::after {
             content: '';
-            width: 5px;
-            height: 5px;
+            width: 7px;
+            height: 9px;
             background: #fff;
             border-radius: 50%;
             position: absolute;
-            top: 2px;
-            right: 2px;
+            top: 3px;
+            right: 3px;
         }
 
-        @keyframes blink {
-            0%, 45%, 55%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(0.1); }
-        }
-
-        .dc-mouth {
-            width: 25px;
-            height: 12px;
+        .heart-mouth {
+            width: 28px;
+            height: 10px;
             border: 3px solid #1a1a1a;
-            border-top: none;
-            border-radius: 0 0 15px 15px;
+            border-bottom: none;
+            border-radius: 15px 15px 0 0;
             position: absolute;
-            bottom: 5px;
+            bottom: 2px;
             left: 50%;
             transform: translateX(-50%);
         }
 
-        .dc-cheek {
-            width: 12px;
-            height: 8px;
-            background: rgba(255, 77, 141, 0.4);
-            border-radius: 50%;
+        .heart-nose {
+            width: 8px;
+            height: 6px;
+            background: #1a1a1a;
+            border-radius: 0 0 50% 50%;
             position: absolute;
-            top: 18px;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        .dc-cheek.left { left: 2px; }
-        .dc-cheek.right { right: 2px; }
+        /* Heart arms - stick arms with white gloves */
+        .heart-arm {
+            width: 4px;
+            height: 45px;
+            background: #1a1a1a;
+            position: absolute;
+            top: 55px;
+            transform-origin: top center;
+            z-index: 4;
+        }
 
-        /* Casita Arms */
-        .dc-arm {
-            width: 8px;
-            height: 40px;
-            background: #E8967C;
+        .heart-arm.left {
+            left: 5px;
+            animation: heartArmL 0.6s ease-in-out infinite alternate;
+        }
+
+        .heart-arm.right {
+            right: 5px;
+            animation: heartArmR 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes heartArmL {
+            0% { transform: rotate(30deg); }
+            100% { transform: rotate(-50deg); }
+        }
+
+        @keyframes heartArmR {
+            0% { transform: rotate(-30deg); }
+            100% { transform: rotate(50deg); }
+        }
+
+        .heart-glove {
+            width: 22px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -10px;
+            left: -9px;
+            border: 2px solid #ddd;
+        }
+
+        .heart-glove::before {
+            content: '';
+            width: 6px;
+            height: 8px;
+            background: #fff;
             border-radius: 4px;
             position: absolute;
-            top: 50px;
-            transform-origin: top center;
+            top: -4px;
+            left: 2px;
+            border: 1px solid #ddd;
         }
 
-        .dc-arm.left {
-            left: -5px;
-            animation: armWaveL 0.6s ease-in-out infinite alternate;
-        }
-
-        .dc-arm.right {
-            right: -5px;
-            animation: armWaveR 0.6s ease-in-out infinite alternate;
-        }
-
-        @keyframes armWaveL {
-            0% { transform: rotate(30deg); }
-            100% { transform: rotate(-40deg); }
-        }
-
-        @keyframes armWaveR {
-            0% { transform: rotate(-30deg); }
-            100% { transform: rotate(40deg); }
-        }
-
-        .dc-hand {
-            width: 16px;
-            height: 16px;
-            background: var(--casita-yellow);
-            border-radius: 50%;
-            position: absolute;
-            bottom: -8px;
-            left: -4px;
-        }
-
-        /* Casita Legs */
-        .dc-legs {
+        /* Heart legs - thick black legs with boots */
+        .heart-legs {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 8px;
+            margin-top: -5px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .heart-leg {
+            width: 14px;
+            height: 40px;
+            background: #1a1a1a;
+            border-radius: 0 0 4px 4px;
+            transform-origin: top center;
+        }
+
+        .heart-leg.left {
+            animation: heartLegL 0.6s ease-in-out infinite alternate;
+        }
+
+        .heart-leg.right {
+            animation: heartLegR 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes heartLegL {
+            0% { transform: rotate(-8deg); }
+            100% { transform: rotate(12deg); }
+        }
+
+        @keyframes heartLegR {
+            0% { transform: rotate(8deg); }
+            100% { transform: rotate(-12deg); }
+        }
+
+        .heart-boot {
+            width: 24px;
+            height: 14px;
+            background: #1a1a1a;
+            border-radius: 0 12px 8px 6px;
             margin-top: -2px;
-        }
-
-        .dc-leg {
-            width: 10px;
-            height: 30px;
-            background: #E8967C;
-            border-radius: 0 0 5px 5px;
-        }
-
-        .dc-leg.left {
-            animation: legKickL 0.6s ease-in-out infinite alternate;
-            transform-origin: top center;
-        }
-
-        .dc-leg.right {
-            animation: legKickR 0.6s ease-in-out infinite alternate;
-            transform-origin: top center;
-        }
-
-        @keyframes legKickL {
-            0% { transform: rotate(-10deg); }
-            100% { transform: rotate(15deg); }
-        }
-
-        @keyframes legKickR {
-            0% { transform: rotate(10deg); }
-            100% { transform: rotate(-15deg); }
-        }
-
-        .dc-shoe {
-            width: 20px;
-            height: 10px;
-            background: var(--casita-yellow);
-            border-radius: 0 10px 10px 5px;
-            margin-top: -1px;
+            margin-left: -5px;
         }
 
         /* Dancing Stick Figures */
@@ -1306,26 +1351,6 @@
             <span class="city">Brooklyn, NYC</span> &mdash; La Casita Experience
         </p>
 
-        <!-- CSS Casita Illustration -->
-        <div class="casita-wrapper reveal">
-            <div class="casita-house">
-                <div class="casita-roof"></div>
-                <div class="dj-booth">
-                    <div class="truss-left"></div>
-                    <div class="truss-right"></div>
-                    <div class="truss-top"></div>
-                    <span class="neon-sign">LA CASITA</span>
-                </div>
-                <div class="casita-window left"></div>
-                <div class="casita-door"></div>
-                <div class="casita-window right"></div>
-            </div>
-            <div class="chairs">
-                <div class="chair"></div>
-                <div class="chair"></div>
-            </div>
-        </div>
-
         <!-- Dancing Characters -->
         <div class="dancers-container reveal">
             <!-- Dancer 1 (Left) -->
@@ -1346,28 +1371,26 @@
                 </div>
             </div>
 
-            <!-- Dancing Casita (Center) -->
-            <div class="dancing-casita">
+            <!-- Bad Bunny Heart Character (Center) -->
+            <div class="dancing-heart">
                 <div class="heart-bubbles">
                     <span>&#10084;&#65039;</span>
                     <span>&#10084;&#65039;</span>
                     <span>&#10084;&#65039;</span>
                 </div>
-                <div class="dc-roof"></div>
-                <div class="dc-body">
-                    <div class="dc-arm left"><div class="dc-hand"></div></div>
-                    <div class="dc-arm right"><div class="dc-hand"></div></div>
-                    <div class="dc-face">
-                        <div class="dc-eye left"></div>
-                        <div class="dc-eye right"></div>
-                        <div class="dc-cheek left"></div>
-                        <div class="dc-cheek right"></div>
-                        <div class="dc-mouth"></div>
+                <div class="heart-body">
+                    <div class="heart-shape"></div>
+                    <div class="heart-arm left"><div class="heart-glove"></div></div>
+                    <div class="heart-arm right"><div class="heart-glove"></div></div>
+                    <div class="heart-face">
+                        <div class="heart-eye"></div>
+                        <div class="heart-nose"></div>
+                        <div class="heart-mouth"></div>
                     </div>
                 </div>
-                <div class="dc-legs">
-                    <div class="dc-leg left"><div class="dc-shoe"></div></div>
-                    <div class="dc-leg right"><div class="dc-shoe"></div></div>
+                <div class="heart-legs">
+                    <div class="heart-leg left"><div class="heart-boot"></div></div>
+                    <div class="heart-leg right"><div class="heart-boot"></div></div>
                 </div>
             </div>
 
@@ -1433,6 +1456,26 @@
                 <span class="icon">&#127860;</span>
                 <h3>The Vibes</h3>
                 <p>Tropical drinks, Latin street food, neon lights, and an energy you won't find anywhere else in Brooklyn.</p>
+            </div>
+        </div>
+
+        <!-- Casita Stage Illustration -->
+        <div class="casita-wrapper reveal" style="margin-top: 50px;">
+            <div class="casita-house">
+                <div class="casita-roof"></div>
+                <div class="dj-booth">
+                    <div class="truss-left"></div>
+                    <div class="truss-right"></div>
+                    <div class="truss-top"></div>
+                    <span class="neon-sign">LA CASITA</span>
+                </div>
+                <div class="casita-window left"></div>
+                <div class="casita-door"></div>
+                <div class="casita-window right"></div>
+            </div>
+            <div class="chairs">
+                <div class="chair"></div>
+                <div class="chair"></div>
             </div>
         </div>
     </section>
