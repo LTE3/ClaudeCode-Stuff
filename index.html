@@ -864,68 +864,12 @@
             margin: 0 auto;
         }
 
-        /* Single-element heart using the classic CSS technique */
-        .heart-shape {
+        .heart-shape-svg {
+            width: 130px;
+            height: 120px;
             position: absolute;
-            top: 25px;
-            left: 50%;
-            width: 70px;
-            height: 70px;
-            background: #E02020;
-            transform: translateX(-50%) rotate(-45deg);
-            border: 3px solid #1a1a1a;
-            border-radius: 0 0 0 0;
-        }
-
-        .heart-shape::before,
-        .heart-shape::after {
-            content: '';
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            background: #E02020;
-            border-radius: 50%;
-        }
-
-        .heart-shape::before {
-            top: -35px;
-            left: 0;
-            box-shadow: -1px -2px 0 0 #1a1a1a, inset 0 0 0 3px transparent;
-            border: 3px solid #1a1a1a;
-            border-bottom: none;
-            border-right: none;
-        }
-
-        .heart-shape::after {
-            left: 35px;
             top: 0;
-            box-shadow: 2px -1px 0 0 #1a1a1a;
-            border: 3px solid #1a1a1a;
-            border-bottom: none;
-            border-left: none;
-        }
-
-        /* Use an overlay to clean up the inner borders of the heart */
-        .heart-fill {
-            position: absolute;
-            top: 25px;
-            left: 50%;
-            width: 70px;
-            height: 70px;
-            transform: translateX(-50%) rotate(-45deg);
-            z-index: 2;
-            overflow: visible;
-        }
-
-        .heart-fill::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -5px;
-            bottom: -5px;
-            background: #E02020;
-            border-radius: 5px;
+            left: 0;
         }
 
         /* Heart face */
@@ -1434,8 +1378,9 @@
                     <span>&#10084;&#65039;</span>
                 </div>
                 <div class="heart-body">
-                    <div class="heart-shape"></div>
-                    <div class="heart-fill"></div>
+                    <svg class="heart-shape-svg" viewBox="0 0 130 120" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M65 110 C65 110, 10 75, 10 40 C10 20, 25 5, 45 5 C55 5, 62 12, 65 18 C68 12, 75 5, 85 5 C105 5, 120 20, 120 40 C120 75, 65 110, 65 110Z" fill="#E02020" stroke="#1a1a1a" stroke-width="3"/>
+                    </svg>
                     <div class="heart-arm left"><div class="heart-glove"></div></div>
                     <div class="heart-arm right"><div class="heart-glove"></div></div>
                     <div class="heart-face">
