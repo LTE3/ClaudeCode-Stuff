@@ -858,59 +858,94 @@
         }
 
         .heart-body {
-            width: 120px;
-            height: 100px;
+            width: 130px;
+            height: 120px;
             position: relative;
             margin: 0 auto;
         }
 
+        /* Single-element heart using the classic CSS technique */
         .heart-shape {
-            width: 120px;
-            height: 100px;
-            position: relative;
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            width: 70px;
+            height: 70px;
+            background: #E02020;
+            transform: translateX(-50%) rotate(-45deg);
+            border: 3px solid #1a1a1a;
+            border-radius: 0 0 0 0;
         }
 
         .heart-shape::before,
         .heart-shape::after {
             content: '';
             position: absolute;
-            width: 65px;
-            height: 100px;
+            width: 70px;
+            height: 70px;
             background: #E02020;
-            border-radius: 65px 65px 0 0;
-            border: 3px solid #1a1a1a;
+            border-radius: 50%;
         }
 
         .heart-shape::before {
-            left: 5px;
-            transform: rotate(-45deg);
-            transform-origin: bottom right;
+            top: -35px;
+            left: 0;
+            box-shadow: -1px -2px 0 0 #1a1a1a, inset 0 0 0 3px transparent;
+            border: 3px solid #1a1a1a;
+            border-bottom: none;
+            border-right: none;
         }
 
         .heart-shape::after {
-            right: 5px;
-            transform: rotate(45deg);
-            transform-origin: bottom left;
+            left: 35px;
+            top: 0;
+            box-shadow: 2px -1px 0 0 #1a1a1a;
+            border: 3px solid #1a1a1a;
+            border-bottom: none;
+            border-left: none;
+        }
+
+        /* Use an overlay to clean up the inner borders of the heart */
+        .heart-fill {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            width: 70px;
+            height: 70px;
+            transform: translateX(-50%) rotate(-45deg);
+            z-index: 2;
+            overflow: visible;
+        }
+
+        .heart-fill::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -5px;
+            bottom: -5px;
+            background: #E02020;
+            border-radius: 5px;
         }
 
         /* Heart face */
         .heart-face {
             position: absolute;
-            top: 35px;
+            top: 30px;
             left: 50%;
             transform: translateX(-50%);
             width: 60px;
-            height: 40px;
+            height: 50px;
             z-index: 5;
         }
 
         .heart-eye {
-            width: 18px;
-            height: 22px;
+            width: 16px;
+            height: 20px;
             background: #1a1a1a;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             position: absolute;
-            top: 0;
+            top: 5px;
             left: 50%;
             transform: translateX(-50%);
             animation: blink 3s ease-in-out infinite;
@@ -923,34 +958,34 @@
 
         .heart-eye::after {
             content: '';
-            width: 7px;
-            height: 9px;
+            width: 6px;
+            height: 7px;
             background: #fff;
             border-radius: 50%;
             position: absolute;
             top: 3px;
-            right: 3px;
+            right: 2px;
         }
 
         .heart-mouth {
-            width: 28px;
+            width: 26px;
             height: 10px;
             border: 3px solid #1a1a1a;
             border-bottom: none;
             border-radius: 15px 15px 0 0;
             position: absolute;
-            bottom: 2px;
+            bottom: 8px;
             left: 50%;
             transform: translateX(-50%);
         }
 
         .heart-nose {
-            width: 8px;
-            height: 6px;
+            width: 7px;
+            height: 5px;
             background: #1a1a1a;
             border-radius: 0 0 50% 50%;
             position: absolute;
-            top: 22px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
         }
@@ -963,16 +998,16 @@
             position: absolute;
             top: 55px;
             transform-origin: top center;
-            z-index: 4;
+            z-index: 6;
         }
 
         .heart-arm.left {
-            left: 5px;
+            left: 0;
             animation: heartArmL 0.6s ease-in-out infinite alternate;
         }
 
         .heart-arm.right {
-            right: 5px;
+            right: 0;
             animation: heartArmR 0.6s ease-in-out infinite alternate;
         }
 
@@ -1351,6 +1386,26 @@
             <span class="city">Brooklyn, NYC</span> &mdash; La Casita Experience
         </p>
 
+        <!-- CSS Casita Illustration -->
+        <div class="casita-wrapper reveal">
+            <div class="casita-house">
+                <div class="casita-roof"></div>
+                <div class="dj-booth">
+                    <div class="truss-left"></div>
+                    <div class="truss-right"></div>
+                    <div class="truss-top"></div>
+                    <span class="neon-sign">LA CASITA</span>
+                </div>
+                <div class="casita-window left"></div>
+                <div class="casita-door"></div>
+                <div class="casita-window right"></div>
+            </div>
+            <div class="chairs">
+                <div class="chair"></div>
+                <div class="chair"></div>
+            </div>
+        </div>
+
         <!-- Dancing Characters -->
         <div class="dancers-container reveal">
             <!-- Dancer 1 (Left) -->
@@ -1380,6 +1435,7 @@
                 </div>
                 <div class="heart-body">
                     <div class="heart-shape"></div>
+                    <div class="heart-fill"></div>
                     <div class="heart-arm left"><div class="heart-glove"></div></div>
                     <div class="heart-arm right"><div class="heart-glove"></div></div>
                     <div class="heart-face">
@@ -1459,25 +1515,6 @@
             </div>
         </div>
 
-        <!-- Casita Stage Illustration -->
-        <div class="casita-wrapper reveal" style="margin-top: 50px;">
-            <div class="casita-house">
-                <div class="casita-roof"></div>
-                <div class="dj-booth">
-                    <div class="truss-left"></div>
-                    <div class="truss-right"></div>
-                    <div class="truss-top"></div>
-                    <span class="neon-sign">LA CASITA</span>
-                </div>
-                <div class="casita-window left"></div>
-                <div class="casita-door"></div>
-                <div class="casita-window right"></div>
-            </div>
-            <div class="chairs">
-                <div class="chair"></div>
-                <div class="chair"></div>
-            </div>
-        </div>
     </section>
 
     <!-- EXPERIENCE -->
