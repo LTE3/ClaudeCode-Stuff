@@ -884,12 +884,13 @@
         }
 
         .heart-eye {
-            width: 16px;
-            height: 20px;
-            background: #1a1a1a;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            width: 12px;
+            height: 28px;
+            background: #fff;
+            border: 3px solid #1a1a1a;
+            border-radius: 50%;
             position: absolute;
-            top: 5px;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
             animation: blink 3s ease-in-out infinite;
@@ -900,15 +901,17 @@
             50% { transform: translateX(-50%) scaleY(0.1); }
         }
 
+        /* Black pupil inside the white eye */
         .heart-eye::after {
             content: '';
-            width: 6px;
-            height: 7px;
-            background: #fff;
+            width: 8px;
+            height: 12px;
+            background: #1a1a1a;
             border-radius: 50%;
             position: absolute;
-            top: 3px;
-            right: 2px;
+            bottom: 3px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .heart-mouth {
