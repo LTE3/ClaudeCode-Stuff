@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La CaSiTa - Reggaeton Pop-Up Experience | Brooklyn, NYC</title>
+    <meta name="description" content="La Casita - The ultimate reggaeton party experience pop-up in Brooklyn, NYC. Presented by LatinPulse.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pink: #F2A0A0;
+            --hot-pink: #FF4D8D;
+            --yellow: #FFD600;
+            --orange: #FF6B2B;
+            --teal: #00E5CC;
+            --cyan: #00D4FF;
+            --dark: #0A0A0A;
+            --darker: #050505;
+            --casita-pink: #E8967C;
+            --casita-yellow: #F5C542;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* ─── SCROLLING BANNER ─── */
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            background: var(--yellow);
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .ticker {
+            display: flex;
+            animation: ticker 20s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ticker span {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            color: var(--dark);
+            letter-spacing: 3px;
+            padding: 0 40px;
+            text-transform: uppercase;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 60px 20px 40px;
+            background: radial-gradient(ellipse at 50% 80%, rgba(255, 214, 0, 0.15) 0%, transparent 60%),
+                        radial-gradient(ellipse at 20% 50%, rgba(255, 77, 141, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 50%, rgba(0, 229, 204, 0.1) 0%, transparent 50%),
+                        var(--darker);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* Floating tropical elements */
+        .palm-left, .palm-right {
+            position: absolute;
+            font-size: 5rem;
+            opacity: 0.15;
+            animation: sway 4s ease-in-out infinite;
+        }
+        .palm-left { left: 5%; top: 30%; }
+        .palm-right { right: 5%; top: 25%; animation-delay: -2s; }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .presented-by {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 10px;
+        }
+
+        .presented-by strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            line-height: 0.85;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .hero-title .la {
+            display: block;
+            font-size: clamp(3rem, 10vw, 7rem);
+            background: linear-gradient(135deg, var(--teal), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(0, 229, 204, 0.4));
+        }
+
+        .hero-title .casita {
+            display: block;
+            font-size: clamp(5rem, 18vw, 13rem);
+            background: linear-gradient(135deg, var(--teal), var(--cyan), var(--teal));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px rgba(0, 229, 204, 0.3));
+            letter-spacing: -2px;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 6vw, 4.5rem);
+            color: var(--orange);
+            letter-spacing: 5px;
+            text-shadow: 0 0 30px rgba(255, 107, 43, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .hero-location {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+        }
+
+        .hero-location .city {
+            color: var(--yellow);
+            text-shadow: 0 0 20px rgba(255, 214, 0, 0.5);
+        }
+
+        /* ─── CASITA ILLUSTRATION (CSS) ─── */
+        .casita-wrapper {
+            position: relative;
+            width: min(500px, 85vw);
+            margin: 0 auto 40px;
+        }
+
+        .casita-house {
+            position: relative;
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(180deg, var(--casita-pink), #d4836e);
+            border-radius: 4px;
+            border: 3px solid var(--casita-yellow);
+            box-shadow: 0 0 40px rgba(232, 150, 124, 0.3),
+                        0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .casita-roof {
+            position: absolute;
+            top: -30px;
+            left: -5px;
+            right: -5px;
+            height: 30px;
+            background: var(--casita-yellow);
+            clip-path: polygon(0 100%, 5% 0, 95% 0, 100% 100%);
+        }
+
+        .casita-door {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 75px;
+            background: #4a2810;
+            border-radius: 20px 20px 0 0;
+            border: 2px solid var(--casita-yellow);
+        }
+
+        .casita-window {
+            position: absolute;
+            width: 60px;
+            height: 45px;
+            background: rgba(255, 200, 50, 0.3);
+            border: 2px solid var(--casita-yellow);
+            border-radius: 3px;
+            bottom: 35px;
+            box-shadow: inset 0 0 15px rgba(255, 165, 0, 0.5);
+            animation: windowGlow 2s ease-in-out infinite alternate;
+        }
+
+        .casita-window.left { left: 30px; }
+        .casita-window.right { right: 30px; }
+
+        @keyframes windowGlow {
+            0% { box-shadow: inset 0 0 15px rgba(255, 165, 0, 0.3); }
+            100% { box-shadow: inset 0 0 25px rgba(255, 165, 0, 0.7); }
+        }
+
+        .casita-arch {
+            position: absolute;
+            bottom: 0;
+            width: 80px;
+            height: 90px;
+            border: 3px solid var(--casita-yellow);
+            border-bottom: none;
+            border-radius: 40px 40px 0 0;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .casita-arch.a1 { left: 15px; }
+        .casita-arch.a2 { right: 15px; }
+
+        /* DJ booth on top */
+        .dj-booth {
+            position: absolute;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dj-booth .truss-left,
+        .dj-booth .truss-right {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #888;
+            bottom: -10px;
+        }
+        .dj-booth .truss-left { left: -15px; }
+        .dj-booth .truss-right { right: -15px; }
+
+        .dj-booth .truss-top {
+            position: absolute;
+            width: 140px;
+            height: 3px;
+            background: #888;
+            top: 0;
+        }
+
+        .neon-sign {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--hot-pink);
+            text-shadow: 0 0 10px var(--hot-pink), 0 0 20px var(--hot-pink), 0 0 40px var(--hot-pink);
+            animation: neonPulse 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes neonPulse {
+            0% { opacity: 1; text-shadow: 0 0 10px var(--hot-pink), 0 0 20px var(--hot-pink), 0 0 40px var(--hot-pink); }
+            50% { opacity: 0.85; text-shadow: 0 0 5px var(--hot-pink), 0 0 10px var(--hot-pink); }
+            100% { opacity: 1; text-shadow: 0 0 10px var(--hot-pink), 0 0 20px var(--hot-pink), 0 0 60px var(--hot-pink); }
+        }
+
+        /* Plastic chairs */
+        .chairs {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin: -10px auto 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .chair {
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.85);
+            border-radius: 3px 3px 0 0;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .chair::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 4px;
+            right: 4px;
+            height: 12px;
+            background: rgba(255,255,255,0.7);
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+        }
+
+        /* ─── CTA BUTTON ─── */
+        .cta-btn {
+            display: inline-block;
+            padding: 18px 50px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            color: var(--dark);
+            background: linear-gradient(135deg, var(--yellow), var(--orange));
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 30px rgba(255, 214, 0, 0.3);
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(255, 214, 0, 0.5);
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: btnShine 3s ease-in-out infinite;
+        }
+
+        @keyframes btnShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .coming-soon-tag {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 25px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            color: var(--hot-pink);
+            border: 2px solid var(--hot-pink);
+            border-radius: 30px;
+            animation: pulseBorder 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseBorder {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 77, 141, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(255, 77, 141, 0.6); }
+        }
+
+        /* ─── FLOATING PARTICLES ─── */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+
+        /* ─── SECTION STYLES ─── */
+        section {
+            padding: 100px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            text-align: center;
+            margin-bottom: 50px;
+            letter-spacing: 5px;
+        }
+
+        .section-title .accent {
+            background: linear-gradient(135deg, var(--yellow), var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ─── ABOUT / WHAT IS ─── */
+        .about {
+            background: linear-gradient(180deg, var(--darker), #0f0505, var(--darker));
+        }
+
+        .about-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .about-card {
+            background: linear-gradient(135deg, rgba(255,77,141,0.08), rgba(0,229,204,0.05));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .about-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 214, 0, 0.3);
+        }
+
+        .about-card .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .about-card h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            color: var(--yellow);
+            margin-bottom: 10px;
+        }
+
+        .about-card p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* ─── EXPERIENCE SECTION ─── */
+        .experience {
+            background: linear-gradient(180deg, var(--darker), #100808, var(--darker));
+        }
+
+        .exp-features {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .exp-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 25px 30px;
+            background: rgba(255,255,255,0.03);
+            border-left: 3px solid var(--hot-pink);
+            border-radius: 0 15px 15px 0;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .exp-item:hover {
+            background: rgba(255,255,255,0.06);
+            border-left-color: var(--yellow);
+        }
+
+        .exp-item .exp-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .exp-item h4 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+
+        .exp-item p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+
+        /* ─── CHECKERED SECTION DIVIDER ─── */
+        .checkered-divider {
+            height: 30px;
+            background: repeating-conic-gradient(#1a1a1a 0% 25%, #111 0% 50%) 0 0 / 30px 30px;
+            opacity: 0.5;
+        }
+
+        /* ─── SIGNUP SECTION ─── */
+        .signup {
+            background: linear-gradient(180deg, var(--darker), #0a0505);
+            text-align: center;
+        }
+
+        .signup-box {
+            max-width: 550px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(255,77,141,0.1), rgba(255,214,0,0.05));
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 50px 40px;
+        }
+
+        .signup-box h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+
+        .signup-box p {
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .signup-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .signup-form input[type="email"] {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px 25px;
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 50px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .signup-form input[type="email"]::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .signup-form input[type="email"]:focus {
+            border-color: var(--hot-pink);
+        }
+
+        .signup-form button {
+            padding: 15px 35px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            color: var(--dark);
+            background: linear-gradient(135deg, var(--yellow), var(--orange));
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .signup-form button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 214, 0, 0.4);
+        }
+
+        .signup-perks {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .perk {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .perk::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--teal);
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        /* ─── GALLERY MARQUEE ─── */
+        .gallery-section {
+            padding: 60px 0;
+            overflow: hidden;
+            background: var(--darker);
+        }
+
+        .gallery-track {
+            display: flex;
+            gap: 20px;
+            animation: scroll 25s linear infinite;
+            width: max-content;
+        }
+
+        .gallery-item {
+            width: 300px;
+            height: 200px;
+            border-radius: 15px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.3);
+        }
+
+        .gallery-item:nth-child(odd) {
+            background: linear-gradient(135deg, rgba(255,77,141,0.15), rgba(255,107,43,0.1));
+            border: 1px solid rgba(255,77,141,0.2);
+        }
+
+        .gallery-item:nth-child(even) {
+            background: linear-gradient(135deg, rgba(0,229,204,0.1), rgba(0,212,255,0.08));
+            border: 1px solid rgba(0,229,204,0.15);
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: var(--dark);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--teal), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: border-color 0.3s, color 0.3s, transform 0.3s;
+        }
+
+        .social-links a:hover {
+            border-color: var(--hot-pink);
+            color: var(--hot-pink);
+            transform: scale(1.1);
+        }
+
+        .footer-copy {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* ─── FLOATING ACTION ─── */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--hot-pink), var(--orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 25px rgba(255, 77, 141, 0.4);
+            cursor: pointer;
+            text-decoration: none;
+            z-index: 100;
+            transition: transform 0.3s;
+            animation: fabPulse 2s ease-in-out infinite;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes fabPulse {
+            0%, 100% { box-shadow: 0 5px 25px rgba(255, 77, 141, 0.4); }
+            50% { box-shadow: 0 5px 40px rgba(255, 77, 141, 0.7); }
+        }
+
+        /* ─── DANCING CHARACTERS ─── */
+        .dancers-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px auto;
+            flex-wrap: wrap;
+        }
+
+        /* Dancing Pink Casita Character */
+        .dancing-casita {
+            width: 120px;
+            position: relative;
+            animation: casitaBounce 0.6s ease-in-out infinite alternate;
+            cursor: pointer;
+            transition: filter 0.3s;
+        }
+
+        .dancing-casita:hover {
+            filter: drop-shadow(0 0 20px rgba(255, 77, 141, 0.6));
+        }
+
+        @keyframes casitaBounce {
+            0% { transform: translateY(0) rotate(-3deg); }
+            100% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        .dc-body {
+            width: 100px;
+            height: 80px;
+            background: linear-gradient(180deg, #F2A0A0, #E8967C);
+            border-radius: 8px;
+            margin: 0 auto;
+            position: relative;
+            border: 3px solid var(--casita-yellow);
+        }
+
+        .dc-roof {
+            width: 115px;
+            height: 25px;
+            background: var(--casita-yellow);
+            clip-path: polygon(10% 100%, 50% 0%, 90% 100%);
+            margin: 0 auto -2px;
+        }
+
+        .dc-face {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 40px;
+        }
+
+        .dc-eye {
+            width: 14px;
+            height: 16px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            animation: blink 3s ease-in-out infinite;
+        }
+
+        .dc-eye.left { left: 10px; }
+        .dc-eye.right { right: 10px; }
+
+        .dc-eye::after {
+            content: '';
+            width: 5px;
+            height: 5px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+        }
+
+        @keyframes blink {
+            0%, 45%, 55%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
+        }
+
+        .dc-mouth {
+            width: 25px;
+            height: 12px;
+            border: 3px solid #1a1a1a;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dc-cheek {
+            width: 12px;
+            height: 8px;
+            background: rgba(255, 77, 141, 0.4);
+            border-radius: 50%;
+            position: absolute;
+            top: 18px;
+        }
+
+        .dc-cheek.left { left: 2px; }
+        .dc-cheek.right { right: 2px; }
+
+        /* Casita Arms */
+        .dc-arm {
+            width: 8px;
+            height: 40px;
+            background: #E8967C;
+            border-radius: 4px;
+            position: absolute;
+            top: 50px;
+            transform-origin: top center;
+        }
+
+        .dc-arm.left {
+            left: -5px;
+            animation: armWaveL 0.6s ease-in-out infinite alternate;
+        }
+
+        .dc-arm.right {
+            right: -5px;
+            animation: armWaveR 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes armWaveL {
+            0% { transform: rotate(30deg); }
+            100% { transform: rotate(-40deg); }
+        }
+
+        @keyframes armWaveR {
+            0% { transform: rotate(-30deg); }
+            100% { transform: rotate(40deg); }
+        }
+
+        .dc-hand {
+            width: 16px;
+            height: 16px;
+            background: var(--casita-yellow);
+            border-radius: 50%;
+            position: absolute;
+            bottom: -8px;
+            left: -4px;
+        }
+
+        /* Casita Legs */
+        .dc-legs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: -2px;
+        }
+
+        .dc-leg {
+            width: 10px;
+            height: 30px;
+            background: #E8967C;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .dc-leg.left {
+            animation: legKickL 0.6s ease-in-out infinite alternate;
+            transform-origin: top center;
+        }
+
+        .dc-leg.right {
+            animation: legKickR 0.6s ease-in-out infinite alternate;
+            transform-origin: top center;
+        }
+
+        @keyframes legKickL {
+            0% { transform: rotate(-10deg); }
+            100% { transform: rotate(15deg); }
+        }
+
+        @keyframes legKickR {
+            0% { transform: rotate(10deg); }
+            100% { transform: rotate(-15deg); }
+        }
+
+        .dc-shoe {
+            width: 20px;
+            height: 10px;
+            background: var(--casita-yellow);
+            border-radius: 0 10px 10px 5px;
+            margin-top: -1px;
+        }
+
+        /* Dancing Stick Figures */
+        .dancer-figure {
+            width: 60px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .dancer-figure.dancer1 {
+            animation: dancer1Move 0.8s ease-in-out infinite alternate;
+        }
+
+        .dancer-figure.dancer2 {
+            animation: dancer2Move 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes dancer1Move {
+            0% { transform: translateY(0) rotate(-5deg) scaleY(0.95); }
+            100% { transform: translateY(-10px) rotate(5deg) scaleY(1.05); }
+        }
+
+        @keyframes dancer2Move {
+            0% { transform: translateY(-8px) rotate(8deg); }
+            100% { transform: translateY(0) rotate(-8deg); }
+        }
+
+        .df-head {
+            width: 24px;
+            height: 24px;
+            background: var(--casita-yellow);
+            border-radius: 50%;
+            margin: 0 auto 2px;
+            position: relative;
+        }
+
+        .df-head::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 14px;
+            background: #1a1a1a;
+            border-radius: 14px 14px 0 0;
+        }
+
+        .df-body {
+            width: 6px;
+            height: 30px;
+            background: var(--hot-pink);
+            margin: 0 auto;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .df-arm {
+            width: 6px;
+            height: 25px;
+            background: var(--casita-yellow);
+            border-radius: 3px;
+            position: absolute;
+            top: 2px;
+            transform-origin: top center;
+        }
+
+        .dancer1 .df-arm.left {
+            left: -10px;
+            animation: dArmL1 0.8s ease-in-out infinite alternate;
+        }
+
+        .dancer1 .df-arm.right {
+            right: -10px;
+            animation: dArmR1 0.8s ease-in-out infinite alternate;
+        }
+
+        .dancer2 .df-arm.left {
+            left: -10px;
+            animation: dArmL2 0.6s ease-in-out infinite alternate;
+        }
+
+        .dancer2 .df-arm.right {
+            right: -10px;
+            animation: dArmR2 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes dArmL1 { 0% { transform: rotate(60deg); } 100% { transform: rotate(-120deg); } }
+        @keyframes dArmR1 { 0% { transform: rotate(-60deg); } 100% { transform: rotate(120deg); } }
+        @keyframes dArmL2 { 0% { transform: rotate(-45deg); } 100% { transform: rotate(90deg); } }
+        @keyframes dArmR2 { 0% { transform: rotate(45deg); } 100% { transform: rotate(-90deg); } }
+
+        .df-legs {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .df-leg {
+            width: 6px;
+            height: 28px;
+            background: #1a1a1a;
+            border-radius: 3px;
+            transform-origin: top center;
+        }
+
+        .dancer1 .df-leg.left { animation: dLegL1 0.8s ease-in-out infinite alternate; }
+        .dancer1 .df-leg.right { animation: dLegR1 0.8s ease-in-out infinite alternate; }
+        .dancer2 .df-leg.left { animation: dLegL2 0.6s ease-in-out infinite alternate; }
+        .dancer2 .df-leg.right { animation: dLegR2 0.6s ease-in-out infinite alternate; }
+
+        @keyframes dLegL1 { 0% { transform: rotate(20deg); } 100% { transform: rotate(-30deg); } }
+        @keyframes dLegR1 { 0% { transform: rotate(-20deg); } 100% { transform: rotate(30deg); } }
+        @keyframes dLegL2 { 0% { transform: rotate(-25deg); } 100% { transform: rotate(20deg); } }
+        @keyframes dLegR2 { 0% { transform: rotate(25deg); } 100% { transform: rotate(-20deg); } }
+
+        /* Music notes floating from dancers */
+        .music-notes {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        .music-notes span {
+            position: absolute;
+            animation: noteFloat 2s ease-out infinite;
+            opacity: 0;
+            color: var(--yellow);
+        }
+
+        .music-notes span:nth-child(1) { animation-delay: 0s; left: -10px; }
+        .music-notes span:nth-child(2) { animation-delay: 0.7s; left: 5px; }
+        .music-notes span:nth-child(3) { animation-delay: 1.4s; left: -5px; }
+
+        @keyframes noteFloat {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-50px) rotate(20deg); opacity: 0; }
+        }
+
+        /* Heart bubbles from casita */
+        .heart-bubbles {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            pointer-events: none;
+        }
+
+        .heart-bubbles span {
+            position: absolute;
+            font-size: 1rem;
+            animation: heartFloat 3s ease-out infinite;
+            opacity: 0;
+        }
+
+        .heart-bubbles span:nth-child(1) { animation-delay: 0s; left: -15px; }
+        .heart-bubbles span:nth-child(2) { animation-delay: 1s; left: 5px; }
+        .heart-bubbles span:nth-child(3) { animation-delay: 2s; left: -5px; }
+
+        @keyframes heartFloat {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            20% { opacity: 1; transform: translateY(-15px) scale(1); }
+            100% { transform: translateY(-70px) scale(0.3); opacity: 0; }
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .signup-box { padding: 35px 25px; }
+            .signup-form input[type="email"] { min-width: 100%; }
+            .signup-form button { width: 100%; }
+            .exp-item { flex-direction: column; text-align: center; }
+            .chairs { width: 90%; }
+            .casita-house { height: 110px; }
+            .casita-window { width: 45px; height: 35px; bottom: 30px; }
+            .casita-window.left { left: 20px; }
+            .casita-window.right { right: 20px; }
+            .casita-door { width: 40px; height: 60px; }
+            .casita-arch { width: 60px; height: 70px; }
+        }
+
+        /* ─── REVEAL ANIMATION ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── SUCCESS MESSAGE ─── */
+        .success-msg {
+            display: none;
+            color: var(--teal);
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            margin-top: 15px;
+        }
+
+        .success-msg.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── NAV ─── */
+        .nav-inner {
+            position: fixed;
+            top: 38px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-inner a {
+            padding: 8px 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .nav-inner a:hover {
+            color: #fff;
+            border-color: var(--hot-pink);
+            background: rgba(255, 77, 141, 0.15);
+        }
+
+        @media (max-width: 600px) {
+            .nav-inner {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scrolling Ticker -->
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <span>Reggaeton Party Experience</span>
+            <span>&#127796; Brooklyn, NYC &#127796;</span>
+            <span>Reggaeton Party Experience</span>
+            <span>&#127796; Brooklyn, NYC &#127796;</span>
+            <span>Reggaeton Party Experience</span>
+            <span>&#127796; Brooklyn, NYC &#127796;</span>
+            <span>Reggaeton Party Experience</span>
+            <span>&#127796; Brooklyn, NYC &#127796;</span>
+            <span>Reggaeton Party Experience</span>
+            <span>&#127796; Brooklyn, NYC &#127796;</span>
+            <span>Reggaeton Party Experience</span>
+            <span>&#127796; Brooklyn, NYC &#127796;</span>
+        </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="nav-inner">
+        <a href="#about">About</a>
+        <a href="#experience">Vibe</a>
+        <a href="#signup">Early Access</a>
+    </nav>
+
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="palm-left">&#127796;</div>
+        <div class="palm-right">&#127796;</div>
+
+        <p class="presented-by"><strong>LatinPulse</strong> presents</p>
+
+        <h1 class="hero-title">
+            <span class="la">La</span>
+            <span class="casita">CaSiTa</span>
+        </h1>
+
+        <p class="hero-subtitle">Pop-Up</p>
+
+        <p class="hero-location">
+            <span class="city">Brooklyn, NYC</span> &mdash; Warehouse Experience
+        </p>
+
+        <!-- CSS Casita Illustration -->
+        <div class="casita-wrapper reveal">
+            <div class="casita-house">
+                <div class="casita-roof"></div>
+                <div class="dj-booth">
+                    <div class="truss-left"></div>
+                    <div class="truss-right"></div>
+                    <div class="truss-top"></div>
+                    <span class="neon-sign">LA CASITA</span>
+                </div>
+                <div class="casita-window left"></div>
+                <div class="casita-door"></div>
+                <div class="casita-window right"></div>
+            </div>
+            <div class="chairs">
+                <div class="chair"></div>
+                <div class="chair"></div>
+            </div>
+        </div>
+
+        <!-- Dancing Characters -->
+        <div class="dancers-container reveal">
+            <!-- Dancer 1 (Left) -->
+            <div class="dancer-figure dancer1">
+                <div class="music-notes">
+                    <span>&#9835;</span>
+                    <span>&#9834;</span>
+                    <span>&#9833;</span>
+                </div>
+                <div class="df-head"></div>
+                <div class="df-body">
+                    <div class="df-arm left"></div>
+                    <div class="df-arm right"></div>
+                </div>
+                <div class="df-legs">
+                    <div class="df-leg left"></div>
+                    <div class="df-leg right"></div>
+                </div>
+            </div>
+
+            <!-- Dancing Casita (Center) -->
+            <div class="dancing-casita">
+                <div class="heart-bubbles">
+                    <span>&#10084;&#65039;</span>
+                    <span>&#10084;&#65039;</span>
+                    <span>&#10084;&#65039;</span>
+                </div>
+                <div class="dc-roof"></div>
+                <div class="dc-body">
+                    <div class="dc-arm left"><div class="dc-hand"></div></div>
+                    <div class="dc-arm right"><div class="dc-hand"></div></div>
+                    <div class="dc-face">
+                        <div class="dc-eye left"></div>
+                        <div class="dc-eye right"></div>
+                        <div class="dc-cheek left"></div>
+                        <div class="dc-cheek right"></div>
+                        <div class="dc-mouth"></div>
+                    </div>
+                </div>
+                <div class="dc-legs">
+                    <div class="dc-leg left"><div class="dc-shoe"></div></div>
+                    <div class="dc-leg right"><div class="dc-shoe"></div></div>
+                </div>
+            </div>
+
+            <!-- Dancer 2 (Right) -->
+            <div class="dancer-figure dancer2">
+                <div class="music-notes">
+                    <span>&#9835;</span>
+                    <span>&#9834;</span>
+                    <span>&#9833;</span>
+                </div>
+                <div class="df-head"></div>
+                <div class="df-body">
+                    <div class="df-arm left"></div>
+                    <div class="df-arm right"></div>
+                </div>
+                <div class="df-legs">
+                    <div class="df-leg left"></div>
+                    <div class="df-leg right"></div>
+                </div>
+            </div>
+        </div>
+
+        <a href="#signup" class="cta-btn">Get Early Access</a>
+        <div class="coming-soon-tag">Coming Soon</div>
+    </section>
+
+    <!-- ABOUT -->
+    <div class="checkered-divider"></div>
+    <section class="about" id="about">
+        <h2 class="section-title reveal"><span class="accent">What Is</span> La Casita?</h2>
+        <div class="about-grid">
+            <div class="about-card reveal">
+                <span class="icon">&#127968;</span>
+                <h3>The Pop-Up</h3>
+                <p>A fully immersive reggaeton warehouse party built inside a life-size casita stage set. Walk into the party of your dreams.</p>
+            </div>
+            <div class="about-card reveal">
+                <span class="icon">&#127925;</span>
+                <h3>The Sound</h3>
+                <p>Non-stop perreo. Old school reggaeton, dembow, Bad Bunny, and all the Latin hits that make you move. Top DJs all night.</p>
+            </div>
+            <div class="about-card reveal">
+                <span class="icon">&#127860;</span>
+                <h3>The Vibes</h3>
+                <p>Tropical drinks, Latin street food, neon lights, and an energy you won't find anywhere else in Brooklyn.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <div class="checkered-divider"></div>
+    <section class="experience" id="experience">
+        <h2 class="section-title reveal">The <span class="accent">Experience</span></h2>
+        <div class="exp-features">
+            <div class="exp-item reveal">
+                <span class="exp-icon">&#127926;</span>
+                <div>
+                    <h4>Live DJ Sets All Night</h4>
+                    <p>Top reggaeton & Latin DJs spinning from the rooftop of the casita stage</p>
+                </div>
+            </div>
+            <div class="exp-item reveal">
+                <span class="exp-icon">&#127865;</span>
+                <div>
+                    <h4>Tropical Bar & Cocktails</h4>
+                    <p>Signature drinks, tropical flavors, and premium bottle service for VIP tables</p>
+                </div>
+            </div>
+            <div class="exp-item reveal">
+                <span class="exp-icon">&#128248;</span>
+                <div>
+                    <h4>Immersive Photo Ops</h4>
+                    <p>The iconic pink casita, neon signs, and tropical backdrops for your feed</p>
+                </div>
+            </div>
+            <div class="exp-item reveal">
+                <span class="exp-icon">&#11088;</span>
+                <div>
+                    <h4>VIP Tables & Bottle Service</h4>
+                    <p>Reserve your spot for the ultimate experience with premium perks</p>
+                </div>
+            </div>
+            <div class="exp-item reveal">
+                <span class="exp-icon">&#127796;</span>
+                <div>
+                    <h4>Full Warehouse Takeover</h4>
+                    <p>A Brooklyn warehouse transformed into a tropical Latin paradise</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY MARQUEE -->
+    <div class="checkered-divider"></div>
+    <div class="gallery-section">
+        <div class="gallery-track">
+            <div class="gallery-item">Perreo All Night</div>
+            <div class="gallery-item">Tropical Vibes</div>
+            <div class="gallery-item">Brooklyn Warehouse</div>
+            <div class="gallery-item">Bad Bunny Hits</div>
+            <div class="gallery-item">Neon Nights</div>
+            <div class="gallery-item">VIP Experience</div>
+            <div class="gallery-item">Perreo All Night</div>
+            <div class="gallery-item">Tropical Vibes</div>
+            <div class="gallery-item">Brooklyn Warehouse</div>
+            <div class="gallery-item">Bad Bunny Hits</div>
+            <div class="gallery-item">Neon Nights</div>
+            <div class="gallery-item">VIP Experience</div>
+        </div>
+    </div>
+
+    <!-- SIGNUP -->
+    <section class="signup" id="signup">
+        <div class="signup-box reveal">
+            <h3>Get On The List</h3>
+            <p>Be first to know about tickets, VIP tables, and opening night</p>
+            <form class="signup-form" id="signupForm">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">I'm In</button>
+            </form>
+            <div class="signup-perks">
+                <span class="perk">Early Tickets</span>
+                <span class="perk">VIP Access</span>
+                <span class="perk">Opening Night</span>
+            </div>
+            <p class="success-msg" id="successMsg">You're on the list! We'll hit you up soon.</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">La CaSiTa</div>
+        <div class="footer-brand">Presented by LatinPulse</div>
+        <div class="social-links">
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="TikTok">TT</a>
+            <a href="#" aria-label="Twitter">X</a>
+        </div>
+        <p class="footer-copy">&copy; 2026 LatinPulse. All rights reserved. Brooklyn, NYC.</p>
+    </footer>
+
+    <!-- FAB -->
+    <a href="#signup" class="fab" aria-label="Get Early Access">&#127930;</a>
+
+    <script>
+        // ─── Floating Particles ───
+        (function createParticles() {
+            const container = document.getElementById('particles');
+            const colors = ['#FF4D8D', '#FFD600', '#00E5CC', '#FF6B2B', '#00D4FF'];
+            const shapes = ['&#9733;', '&#9829;', '&#9830;', '&#8226;'];
+
+            for (let i = 0; i < 25; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+                p.style.left = Math.random() * 100 + '%';
+                p.style.fontSize = (Math.random() * 14 + 6) + 'px';
+                p.style.color = colors[Math.floor(Math.random() * colors.length)];
+                p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                p.style.animationDelay = (Math.random() * 20) + 's';
+                container.appendChild(p);
+            }
+        })();
+
+        // ─── Scroll Reveal ───
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ─── Signup Form ───
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]');
+            if (email.value) {
+                this.style.display = 'none';
+                document.getElementById('successMsg').classList.add('show');
+            }
+        });
+
+        // ─── Smooth hover parallax on hero ───
+        const hero = document.querySelector('.hero');
+        hero.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 10;
+            const y = (e.clientY / window.innerHeight - 0.5) * 10;
+            const casita = document.querySelector('.casita-wrapper');
+            if (casita) {
+                casita.style.transform = `perspective(1000px) rotateY(${x * 0.3}deg) rotateX(${-y * 0.3}deg)`;
+            }
+        });
+
+        hero.addEventListener('mouseleave', () => {
+            const casita = document.querySelector('.casita-wrapper');
+            if (casita) casita.style.transform = '';
+        });
+    </script>
+</body>
+</html>
