@@ -377,16 +377,59 @@
         }
 
         .coming-soon-tag {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 8px 25px;
+            display: none;
+        }
+
+        .presale-countdown {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .presale-countdown .presale-label {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem;
-            letter-spacing: 3px;
+            font-size: 1.3rem;
+            letter-spacing: 4px;
             color: var(--hot-pink);
+            margin-bottom: 15px;
+            animation: pulseText 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 15px rgba(255, 77, 141, 0.5); }
+        }
+
+        .countdown-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-box {
+            background: rgba(255, 77, 141, 0.1);
             border: 2px solid var(--hot-pink);
-            border-radius: 30px;
+            border-radius: 12px;
+            padding: 12px 18px;
+            min-width: 75px;
+            text-align: center;
             animation: pulseBorder 2s ease-in-out infinite;
+        }
+
+        .countdown-box .number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            color: var(--yellow);
+            line-height: 1;
+        }
+
+        .countdown-box .unit {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--hot-pink);
+            text-transform: uppercase;
+            margin-top: 4px;
         }
 
         @keyframes pulseBorder {
@@ -1260,7 +1303,7 @@
         <p class="hero-subtitle">Pop-Up</p>
 
         <p class="hero-location">
-            <span class="city">Brooklyn, NYC</span> &mdash; Warehouse Experience
+            <span class="city">Brooklyn, NYC</span> &mdash; La Casita Experience
         </p>
 
         <!-- CSS Casita Illustration -->
@@ -1348,7 +1391,27 @@
         </div>
 
         <a href="#signup" class="cta-btn">Get Early Access</a>
-        <div class="coming-soon-tag">Coming Soon</div>
+        <div class="presale-countdown">
+            <div class="presale-label">PRESALE DROPS IN</div>
+            <div class="countdown-boxes">
+                <div class="countdown-box">
+                    <div class="number" id="cd-days">00</div>
+                    <div class="unit">Days</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="number" id="cd-hours">00</div>
+                    <div class="unit">Hours</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="number" id="cd-mins">00</div>
+                    <div class="unit">Mins</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="number" id="cd-secs">00</div>
+                    <div class="unit">Secs</div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- ABOUT -->
@@ -1359,7 +1422,7 @@
             <div class="about-card reveal">
                 <span class="icon">&#127968;</span>
                 <h3>The Pop-Up</h3>
-                <p>A fully immersive reggaeton warehouse party built inside a life-size casita stage set. Walk into the party of your dreams.</p>
+                <p>A fully immersive reggaeton pop-up party built inside a life-size casita stage set. Walk into the party of your dreams.</p>
             </div>
             <div class="about-card reveal">
                 <span class="icon">&#127925;</span>
@@ -1410,8 +1473,8 @@
             <div class="exp-item reveal">
                 <span class="exp-icon">&#127796;</span>
                 <div>
-                    <h4>Full Warehouse Takeover</h4>
-                    <p>A Brooklyn warehouse transformed into a tropical Latin paradise</p>
+                    <h4>Full La Casita Takeover</h4>
+                    <p>A Brooklyn venue transformed into a tropical Latin paradise</p>
                 </div>
             </div>
         </div>
@@ -1423,13 +1486,13 @@
         <div class="gallery-track">
             <div class="gallery-item">Perreo All Night</div>
             <div class="gallery-item">Tropical Vibes</div>
-            <div class="gallery-item">Brooklyn Warehouse</div>
+            <div class="gallery-item">La Casita Brooklyn</div>
             <div class="gallery-item">Bad Bunny Hits</div>
             <div class="gallery-item">Neon Nights</div>
             <div class="gallery-item">VIP Experience</div>
             <div class="gallery-item">Perreo All Night</div>
             <div class="gallery-item">Tropical Vibes</div>
-            <div class="gallery-item">Brooklyn Warehouse</div>
+            <div class="gallery-item">La Casita Brooklyn</div>
             <div class="gallery-item">Bad Bunny Hits</div>
             <div class="gallery-item">Neon Nights</div>
             <div class="gallery-item">VIP Experience</div>
@@ -1509,6 +1572,30 @@
                 document.getElementById('successMsg').classList.add('show');
             }
         });
+
+        // ─── Presale Countdown ───
+        (function() {
+            const presaleDate = new Date('2026-04-01T00:00:00').getTime();
+            function updateCountdown() {
+                const now = Date.now();
+                const diff = presaleDate - now;
+                if (diff <= 0) {
+                    document.querySelector('.presale-label').textContent = 'PRESALE IS LIVE!';
+                    document.querySelector('.countdown-boxes').style.display = 'none';
+                    return;
+                }
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff % 86400000) / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+                document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+                document.getElementById('cd-mins').textContent = String(m).padStart(2, '0');
+                document.getElementById('cd-secs').textContent = String(s).padStart(2, '0');
+            }
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        })();
 
         // ─── Smooth hover parallax on hero ───
         const hero = document.querySelector('.hero');
