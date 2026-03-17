@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La CaSiTa - Reggaeton Pop-Up Experience | Brooklyn, NYC</title>
     <meta name="description" content="La Casita - The ultimate reggaeton party experience pop-up in Brooklyn, NYC. Presented by LatinPulse.">
+    <!-- Open Graph -->
+    <meta property="og:title" content="La CaSiTa - Reggaeton Pop-Up Experience">
+    <meta property="og:description" content="The ultimate reggaeton party experience pop-up in Brooklyn, NYC. Presented by LatinPulse.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="La CaSiTa - Reggaeton Pop-Up Experience">
+    <meta name="twitter:description" content="The ultimate reggaeton party experience pop-up in Brooklyn, NYC.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -891,14 +898,20 @@
             border-radius: 50%;
             position: absolute;
             top: 0;
-            left: 50%;
-            transform: translateX(-50%);
             animation: blink 3s ease-in-out infinite;
         }
 
+        .heart-eye.left-eye {
+            left: 8px;
+        }
+
+        .heart-eye.right-eye {
+            right: 8px;
+        }
+
         @keyframes blink {
-            0%, 45%, 55%, 100% { transform: translateX(-50%) scaleY(1); }
-            50% { transform: translateX(-50%) scaleY(0.1); }
+            0%, 45%, 55%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
         }
 
         /* Black pupil inside the white eye */
@@ -1387,7 +1400,8 @@
                     <div class="heart-arm left"><div class="heart-glove"></div></div>
                     <div class="heart-arm right"><div class="heart-glove"></div></div>
                     <div class="heart-face">
-                        <div class="heart-eye"></div>
+                        <div class="heart-eye left-eye"></div>
+                        <div class="heart-eye right-eye"></div>
                         <div class="heart-nose"></div>
                         <div class="heart-mouth"></div>
                     </div>
@@ -1533,7 +1547,7 @@
             <h3>Get On The List</h3>
             <p>Be first to know about tickets, VIP tables, and opening night</p>
             <form class="signup-form" id="signupForm">
-                <input type="email" placeholder="Enter your email" required>
+                <input type="email" placeholder="Enter your email" aria-label="Email address" required>
                 <button type="submit">I'm In</button>
             </form>
             <div class="signup-perks">
