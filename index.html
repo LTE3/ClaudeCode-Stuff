@@ -1127,7 +1127,8 @@
             border: 3px solid #1a1a1a;
             border-radius: 16px 16px 10px 10px;
             position: relative;
-            margin: 25px auto 0;
+            margin: -12px auto 0;
+            z-index: 2;
         }
 
         /* Blue cardigan buttons */
@@ -1159,13 +1160,13 @@
             z-index: 2;
         }
 
-        /* Frog head */
+        /* Frog head — wide flat toad shape */
         .frog-head {
-            width: 120px;
-            height: 70px;
+            width: 130px;
+            height: 65px;
             background: #c8a84e;
             border: 3px solid #1a1a1a;
-            border-radius: 60px 60px 40px 40px;
+            border-radius: 50px 50px 35px 35px;
             position: relative;
             margin: 0 auto;
             z-index: 4;
@@ -1205,45 +1206,43 @@
             border-radius: 50% 50% 0 0;
         }
 
-        /* Protruding eyes on top of head */
+        /* Protruding eyes on top of head — big glossy Concho eyes */
         .frog-eye-bump {
-            width: 36px;
-            height: 36px;
-            background: #c8a84e;
+            width: 44px;
+            height: 44px;
+            background: #1a1a1a;
             border: 3px solid #1a1a1a;
             border-radius: 50%;
             position: absolute;
-            top: -18px;
+            top: -24px;
             z-index: 5;
         }
 
-        .frog-eye-bump.left { left: 10px; }
-        .frog-eye-bump.right { right: 10px; }
+        .frog-eye-bump.left { left: 5px; }
+        .frog-eye-bump.right { right: 5px; }
 
-        /* White of the eye */
+        /* Glossy highlight on eye */
         .frog-eye-bump::before {
             content: '';
-            width: 22px;
-            height: 22px;
-            background: #fff;
+            width: 14px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 50%;
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 8px;
+            left: 8px;
         }
 
-        /* Pupil */
+        /* Secondary smaller highlight */
         .frog-eye-bump::after {
             content: '';
-            width: 12px;
-            height: 14px;
-            background: #1a1a1a;
+            width: 7px;
+            height: 7px;
+            background: rgba(255, 255, 255, 0.4);
             border-radius: 50%;
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -45%);
+            bottom: 10px;
+            right: 10px;
             animation: frogBlink 3.5s ease-in-out infinite;
         }
 
@@ -1254,8 +1253,8 @@
 
         /* Wide frog mouth */
         .frog-mouth {
-            width: 40px;
-            height: 8px;
+            width: 55px;
+            height: 10px;
             border: 3px solid #1a1a1a;
             border-top: none;
             border-radius: 0 0 20px 20px;
