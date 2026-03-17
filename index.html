@@ -1416,6 +1416,136 @@
             color: var(--yellow);
         }
 
+        /* ─── SEATING MAP / BOOKING SECTION ─── */
+        .booking-section {
+            display: none; /* Hidden until ready */
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .booking-map {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        /* SVG venue layout */
+        .venue-svg {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .venue-svg .stage {
+            fill: var(--hot-pink);
+            stroke: #fff;
+            stroke-width: 2;
+        }
+
+        .venue-svg .stage-label {
+            fill: #fff;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            letter-spacing: 3px;
+        }
+
+        .venue-svg .zone {
+            cursor: pointer;
+            transition: opacity 0.2s, filter 0.2s;
+            stroke: #fff;
+            stroke-width: 1.5;
+        }
+
+        .venue-svg .zone:hover {
+            opacity: 0.85;
+            filter: brightness(1.2);
+        }
+
+        .venue-svg .zone-ga { fill: #4a90d9; }
+        .venue-svg .zone-vip { fill: #f5a623; }
+        .venue-svg .zone-tables { fill: #e02020; }
+
+        .venue-svg .zone-label {
+            fill: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            pointer-events: none;
+        }
+
+        /* Ticket tier cards */
+        .ticket-tiers {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tier-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px 25px;
+            width: 250px;
+            text-align: center;
+            transition: border-color 0.3s, transform 0.3s;
+            cursor: pointer;
+        }
+
+        .tier-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .tier-card.ga { border-color: #4a90d9; }
+        .tier-card.ga:hover { border-color: #6aafff; }
+        .tier-card.vip { border-color: #f5a623; }
+        .tier-card.vip:hover { border-color: #ffc65c; }
+        .tier-card.tables { border-color: #e02020; }
+        .tier-card.tables:hover { border-color: #ff5050; }
+
+        .tier-card .tier-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+
+        .tier-card.ga .tier-name { color: #4a90d9; }
+        .tier-card.vip .tier-name { color: #f5a623; }
+        .tier-card.tables .tier-name { color: #e02020; }
+
+        .tier-card .tier-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+        }
+
+        .tier-card .tier-details {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        .tier-card .tier-btn {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 10px 28px;
+            border: 2px solid currentColor;
+            border-radius: 30px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            background: none;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .tier-card.ga .tier-btn:hover { background: #4a90d9; color: #000; }
+        .tier-card.vip .tier-btn:hover { background: #f5a623; color: #000; }
+        .tier-card.tables .tier-btn:hover { background: #e02020; color: #fff; }
+
         /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
             .signup-box { padding: 35px 25px; }
@@ -1741,6 +1871,69 @@
                     <h4>Full La Casita Takeover</h4>
                     <p>A Brooklyn venue transformed into a tropical Latin paradise</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING / SEATING MAP (Hidden until ready) -->
+    <div class="checkered-divider" style="display:none;"></div>
+    <section class="booking-section" id="booking">
+        <h2 class="section-title reveal">Choose Your <span class="accent">Experience</span></h2>
+
+        <!-- Venue Map -->
+        <div class="booking-map reveal">
+            <svg class="venue-svg" viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg">
+                <!-- Stage -->
+                <rect class="stage" x="200" y="10" width="300" height="60" rx="8"/>
+                <text class="stage-label" x="350" y="48" text-anchor="middle">STAGE</text>
+
+                <!-- VIP Section (closest to stage) -->
+                <rect class="zone zone-vip" x="175" y="90" width="350" height="80" rx="6"/>
+                <text class="zone-label" x="350" y="137" text-anchor="middle">VIP</text>
+
+                <!-- Tables (sides) -->
+                <rect class="zone zone-tables" x="30" y="90" width="120" height="180" rx="6"/>
+                <text class="zone-label" x="90" y="185" text-anchor="middle">TABLES</text>
+                <rect class="zone zone-tables" x="550" y="90" width="120" height="180" rx="6"/>
+                <text class="zone-label" x="610" y="185" text-anchor="middle">TABLES</text>
+
+                <!-- GA (general floor) -->
+                <rect class="zone zone-ga" x="100" y="190" width="500" height="200" rx="6"/>
+                <text class="zone-label" x="350" y="298" text-anchor="middle">GENERAL ADMISSION</text>
+            </svg>
+        </div>
+
+        <!-- Ticket Tiers -->
+        <div class="ticket-tiers">
+            <div class="tier-card ga reveal">
+                <div class="tier-name">General Admission</div>
+                <div class="tier-price">$35</div>
+                <div class="tier-details">
+                    Full floor access<br>
+                    Cash bar available<br>
+                    Standing room
+                </div>
+                <button class="tier-btn">Select GA</button>
+            </div>
+            <div class="tier-card vip reveal">
+                <div class="tier-name">VIP</div>
+                <div class="tier-price">$75</div>
+                <div class="tier-details">
+                    Priority entry<br>
+                    Front section access<br>
+                    Complimentary drink
+                </div>
+                <button class="tier-btn">Select VIP</button>
+            </div>
+            <div class="tier-card tables reveal">
+                <div class="tier-name">Tables</div>
+                <div class="tier-price">$250</div>
+                <div class="tier-details">
+                    Reserved table for 4<br>
+                    Bottle service<br>
+                    Side stage views
+                </div>
+                <button class="tier-btn">Reserve Table</button>
             </div>
         </div>
     </section>
