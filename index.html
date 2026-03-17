@@ -706,7 +706,7 @@
             justify-content: center;
         }
 
-        .signup-form input[type="email"] {
+        .signup-form input {
             flex: 1;
             min-width: 250px;
             padding: 15px 25px;
@@ -720,11 +720,22 @@
             transition: border-color 0.3s;
         }
 
-        .signup-form input[type="email"]::placeholder {
+        .signup-form .name-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .signup-form .name-row input {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .signup-form input::placeholder {
             color: rgba(255,255,255,0.3);
         }
 
-        .signup-form input[type="email"]:focus {
+        .signup-form input:focus {
             border-color: var(--hot-pink);
         }
 
@@ -1660,7 +1671,8 @@
         /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
             .signup-box { padding: 35px 25px; }
-            .signup-form input[type="email"] { min-width: 100%; }
+            .signup-form input { min-width: 100%; }
+            .signup-form .name-row { flex-direction: column; }
             .signup-form button { width: 100%; }
             .exp-item { flex-direction: column; text-align: center; }
             .chairs { width: 90%; }
@@ -2082,7 +2094,12 @@
             <h3>Get On The List</h3>
             <p>Be first to know about tickets, VIP tables, and opening night</p>
             <form class="signup-form" id="signupForm">
-                <input type="email" placeholder="Enter your email" aria-label="Email address" required>
+                <div class="name-row">
+                    <input type="text" placeholder="First Name" aria-label="First name" required>
+                    <input type="text" placeholder="Last Name" aria-label="Last name" required>
+                </div>
+                <input type="email" placeholder="Email" aria-label="Email address" required>
+                <input type="tel" placeholder="Phone Number" aria-label="Phone number" required>
                 <button type="submit">I'm In</button>
             </form>
             <div class="signup-perks">
@@ -2159,8 +2176,9 @@
         // ─── Signup Form ───
         document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = this.querySelector('input[type="email"]');
-            if (email.value) {
+            const inputs = this.querySelectorAll('input');
+            const allFilled = Array.from(inputs).every(input => input.value.trim());
+            if (allFilled) {
                 this.style.display = 'none';
                 document.getElementById('successMsg').classList.add('show');
             }
