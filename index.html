@@ -232,6 +232,49 @@
             border: 2px solid var(--casita-yellow);
         }
 
+        /* Puerto Rican flags on the building */
+        .pr-flag {
+            position: absolute;
+            font-size: 1.8rem;
+            top: 8px;
+            z-index: 10;
+            animation: flagWave 1.5s ease-in-out infinite alternate;
+        }
+
+        .pr-flag.left-flag { left: 8px; }
+        .pr-flag.right-flag { right: 8px; }
+
+        @keyframes flagWave {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+
+        /* PR cultural symbols floating around casita */
+        .pr-symbols {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .pr-symbol {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.4;
+            animation: symbolFloat 4s ease-in-out infinite alternate;
+        }
+
+        .pr-symbol:nth-child(2) { animation-delay: 1s; }
+        .pr-symbol:nth-child(3) { animation-delay: 2s; }
+        .pr-symbol:nth-child(4) { animation-delay: 3s; }
+
+        @keyframes symbolFloat {
+            0% { transform: translateY(0) scale(1); opacity: 0.4; }
+            100% { transform: translateY(-10px) scale(1.1); opacity: 0.6; }
+        }
+
         .casita-window {
             position: absolute;
             width: 60px;
@@ -855,6 +898,7 @@
         .dancers-container {
             display: flex;
             justify-content: center;
+            align-items: flex-end;
             gap: 40px;
             margin: 30px auto;
             flex-wrap: wrap;
@@ -1068,7 +1112,7 @@
         }
 
         .dancing-frog:hover {
-            filter: drop-shadow(0 0 25px rgba(76, 175, 80, 0.6));
+            filter: drop-shadow(0 0 25px rgba(200, 168, 78, 0.6));
         }
 
         @keyframes frogBounce {
@@ -1079,31 +1123,47 @@
         .frog-body {
             width: 110px;
             height: 90px;
-            background: #4a8c3f;
+            background: #4ca8e0;
             border: 3px solid #1a1a1a;
-            border-radius: 55px 55px 40px 40px;
+            border-radius: 16px 16px 10px 10px;
             position: relative;
             margin: 25px auto 0;
         }
 
-        /* Belly */
-        .frog-body::after {
+        /* Blue cardigan buttons */
+        .frog-body::before {
             content: '';
-            width: 70px;
-            height: 50px;
-            background: #8cc63f;
+            width: 6px;
+            height: 6px;
+            background: #fff;
             border-radius: 50%;
             position: absolute;
-            bottom: 5px;
+            top: 18px;
             left: 50%;
             transform: translateX(-50%);
+            box-shadow: 0 16px 0 #fff, 0 32px 0 #fff;
+            z-index: 2;
+        }
+
+        /* Cardigan pocket */
+        .frog-body::after {
+            content: '';
+            width: 22px;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 3px;
+            position: absolute;
+            top: 15px;
+            right: 18px;
+            z-index: 2;
         }
 
         /* Frog head */
         .frog-head {
             width: 120px;
             height: 70px;
-            background: #4a8c3f;
+            background: #c8a84e;
             border: 3px solid #1a1a1a;
             border-radius: 60px 60px 40px 40px;
             position: relative;
@@ -1119,7 +1179,7 @@
             transform: translateX(-50%);
             width: 80px;
             height: 10px;
-            border-top: 4px solid #3a6e30;
+            border-top: 4px solid #a08030;
             border-radius: 50% 50% 0 0;
         }
 
@@ -1130,7 +1190,7 @@
             left: 10px;
             width: 25px;
             height: 6px;
-            border-top: 3px solid #3a6e30;
+            border-top: 3px solid #a08030;
             border-radius: 50% 50% 0 0;
         }
 
@@ -1141,7 +1201,7 @@
             right: 10px;
             width: 25px;
             height: 6px;
-            border-top: 3px solid #3a6e30;
+            border-top: 3px solid #a08030;
             border-radius: 50% 50% 0 0;
         }
 
@@ -1149,7 +1209,7 @@
         .frog-eye-bump {
             width: 36px;
             height: 36px;
-            background: #4a8c3f;
+            background: #c8a84e;
             border: 3px solid #1a1a1a;
             border-radius: 50%;
             position: absolute;
@@ -1210,7 +1270,7 @@
         .frog-nostril {
             width: 5px;
             height: 5px;
-            background: #3a6e30;
+            background: #a08030;
             border-radius: 50%;
             position: absolute;
             top: 28px;
@@ -1224,7 +1284,7 @@
         .frog-arm {
             width: 6px;
             height: 50px;
-            background: #4a8c3f;
+            background: #c8a84e;
             border: 2px solid #1a1a1a;
             border-radius: 4px;
             position: absolute;
@@ -1257,7 +1317,7 @@
         .frog-hand {
             width: 20px;
             height: 14px;
-            background: #4a8c3f;
+            background: #c8a84e;
             border: 2px solid #1a1a1a;
             border-radius: 50% 50% 50% 50%;
             position: absolute;
@@ -1278,7 +1338,7 @@
         .frog-leg {
             width: 16px;
             height: 35px;
-            background: #4a8c3f;
+            background: #c0392b;
             border: 2px solid #1a1a1a;
             border-radius: 0 0 6px 6px;
             transform-origin: top center;
@@ -1306,9 +1366,9 @@
         .frog-foot {
             width: 30px;
             height: 12px;
-            background: #4a8c3f;
+            background: #4ca8e0;
             border: 2px solid #1a1a1a;
-            border-radius: 0 50% 50% 50%;
+            border-radius: 6px 12px 8px 6px;
             margin-top: -2px;
             margin-left: -7px;
         }
@@ -1705,10 +1765,18 @@
                 <div class="casita-window left"></div>
                 <div class="casita-door"></div>
                 <div class="casita-window right"></div>
+                <div class="pr-flag left-flag">&#127477;&#127479;</div>
+                <div class="pr-flag right-flag">&#127477;&#127479;</div>
             </div>
             <div class="chairs">
                 <div class="chair"></div>
                 <div class="chair"></div>
+            </div>
+            <div class="pr-symbols">
+                <span class="pr-symbol" style="left: 8%; top: 60%;">&#127477;&#127479;</span>
+                <span class="pr-symbol" style="right: 8%; top: 55%;">&#127180;</span>
+                <span class="pr-symbol" style="left: 15%; top: 80%;">&#127940;</span>
+                <span class="pr-symbol" style="right: 15%; top: 75%;">&#9733;</span>
             </div>
         </div>
 
