@@ -936,7 +936,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            gap: 40px;
+            gap: 0px;
             margin: 30px auto;
             flex-wrap: wrap;
         }
@@ -949,6 +949,10 @@
             animation: heartBounce 0.6s ease-in-out infinite alternate;
             cursor: pointer;
             transition: filter 0.3s;
+            transform-origin: bottom center;
+            scale: 0.55;
+            z-index: 1;
+            margin-top: -20px;
         }
 
         .dancing-heart:hover {
@@ -1146,6 +1150,9 @@
             animation: frogBounce 0.5s ease-in-out infinite alternate;
             cursor: pointer;
             transition: filter 0.3s;
+            z-index: 2;
+            transform-origin: bottom center;
+            scale: 1.15;
         }
 
         .dancing-frog:hover {
