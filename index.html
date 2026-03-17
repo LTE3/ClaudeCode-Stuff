@@ -1043,121 +1043,262 @@
             margin-left: -5px;
         }
 
-        /* Dancing Stick Figures */
-        .dancer-figure {
-            width: 60px;
+        /* ─── SAPO CONCHO (FROG) CHARACTER ─── */
+        .dancing-frog {
+            width: 160px;
             position: relative;
+            animation: frogBounce 0.5s ease-in-out infinite alternate;
             cursor: pointer;
+            transition: filter 0.3s;
         }
 
-        .dancer-figure.dancer1 {
-            animation: dancer1Move 0.8s ease-in-out infinite alternate;
+        .dancing-frog:hover {
+            filter: drop-shadow(0 0 25px rgba(76, 175, 80, 0.6));
         }
 
-        .dancer-figure.dancer2 {
-            animation: dancer2Move 0.6s ease-in-out infinite alternate;
+        @keyframes frogBounce {
+            0% { transform: translateY(0) rotate(-2deg); }
+            100% { transform: translateY(-18px) rotate(2deg); }
         }
 
-        @keyframes dancer1Move {
-            0% { transform: translateY(0) rotate(-5deg) scaleY(0.95); }
-            100% { transform: translateY(-10px) rotate(5deg) scaleY(1.05); }
-        }
-
-        @keyframes dancer2Move {
-            0% { transform: translateY(-8px) rotate(8deg); }
-            100% { transform: translateY(0) rotate(-8deg); }
-        }
-
-        .df-head {
-            width: 24px;
-            height: 24px;
-            background: var(--casita-yellow);
-            border-radius: 50%;
-            margin: 0 auto 2px;
+        .frog-body {
+            width: 110px;
+            height: 90px;
+            background: #4a8c3f;
+            border: 3px solid #1a1a1a;
+            border-radius: 55px 55px 40px 40px;
             position: relative;
+            margin: 25px auto 0;
         }
 
-        .df-head::before {
+        /* Belly */
+        .frog-body::after {
             content: '';
+            width: 70px;
+            height: 50px;
+            background: #8cc63f;
+            border-radius: 50%;
             position: absolute;
-            top: -8px;
+            bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
-            width: 28px;
+        }
+
+        /* Frog head */
+        .frog-head {
+            width: 120px;
+            height: 70px;
+            background: #4a8c3f;
+            border: 3px solid #1a1a1a;
+            border-radius: 60px 60px 40px 40px;
+            position: relative;
+            margin: 0 auto;
+            z-index: 4;
+        }
+
+        /* Crested ridges on top of head (sapo concho signature feature) */
+        .frog-crest {
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 10px;
+            border-top: 4px solid #3a6e30;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .frog-crest::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 10px;
+            width: 25px;
+            height: 6px;
+            border-top: 3px solid #3a6e30;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .frog-crest::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: 10px;
+            width: 25px;
+            height: 6px;
+            border-top: 3px solid #3a6e30;
+            border-radius: 50% 50% 0 0;
+        }
+
+        /* Protruding eyes on top of head */
+        .frog-eye-bump {
+            width: 36px;
+            height: 36px;
+            background: #4a8c3f;
+            border: 3px solid #1a1a1a;
+            border-radius: 50%;
+            position: absolute;
+            top: -18px;
+            z-index: 5;
+        }
+
+        .frog-eye-bump.left { left: 10px; }
+        .frog-eye-bump.right { right: 10px; }
+
+        /* White of the eye */
+        .frog-eye-bump::before {
+            content: '';
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Pupil */
+        .frog-eye-bump::after {
+            content: '';
+            width: 12px;
             height: 14px;
             background: #1a1a1a;
-            border-radius: 14px 14px 0 0;
-        }
-
-        .df-body {
-            width: 6px;
-            height: 30px;
-            background: var(--hot-pink);
-            margin: 0 auto;
-            border-radius: 3px;
-            position: relative;
-        }
-
-        .df-arm {
-            width: 6px;
-            height: 25px;
-            background: var(--casita-yellow);
-            border-radius: 3px;
+            border-radius: 50%;
             position: absolute;
-            top: 2px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -45%);
+            animation: frogBlink 3.5s ease-in-out infinite;
+        }
+
+        @keyframes frogBlink {
+            0%, 42%, 58%, 100% { transform: translate(-50%, -45%) scaleY(1); }
+            50% { transform: translate(-50%, -45%) scaleY(0.1); }
+        }
+
+        /* Wide frog mouth */
+        .frog-mouth {
+            width: 40px;
+            height: 8px;
+            border: 3px solid #1a1a1a;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+
+        /* Nostrils */
+        .frog-nostril {
+            width: 5px;
+            height: 5px;
+            background: #3a6e30;
+            border-radius: 50%;
+            position: absolute;
+            top: 28px;
+            z-index: 5;
+        }
+
+        .frog-nostril.left { left: 35px; }
+        .frog-nostril.right { right: 35px; }
+
+        /* Frog arms */
+        .frog-arm {
+            width: 6px;
+            height: 50px;
+            background: #4a8c3f;
+            border: 2px solid #1a1a1a;
+            border-radius: 4px;
+            position: absolute;
+            top: 35px;
             transform-origin: top center;
+            z-index: 6;
         }
 
-        .dancer1 .df-arm.left {
-            left: -10px;
-            animation: dArmL1 0.8s ease-in-out infinite alternate;
+        .frog-arm.left {
+            left: 0;
+            animation: frogArmL 0.5s ease-in-out infinite alternate;
         }
 
-        .dancer1 .df-arm.right {
-            right: -10px;
-            animation: dArmR1 0.8s ease-in-out infinite alternate;
+        .frog-arm.right {
+            right: 0;
+            animation: frogArmR 0.5s ease-in-out infinite alternate;
         }
 
-        .dancer2 .df-arm.left {
-            left: -10px;
-            animation: dArmL2 0.6s ease-in-out infinite alternate;
+        @keyframes frogArmL {
+            0% { transform: rotate(40deg); }
+            100% { transform: rotate(-60deg); }
         }
 
-        .dancer2 .df-arm.right {
-            right: -10px;
-            animation: dArmR2 0.6s ease-in-out infinite alternate;
+        @keyframes frogArmR {
+            0% { transform: rotate(-40deg); }
+            100% { transform: rotate(60deg); }
         }
 
-        @keyframes dArmL1 { 0% { transform: rotate(60deg); } 100% { transform: rotate(-120deg); } }
-        @keyframes dArmR1 { 0% { transform: rotate(-60deg); } 100% { transform: rotate(120deg); } }
-        @keyframes dArmL2 { 0% { transform: rotate(-45deg); } 100% { transform: rotate(90deg); } }
-        @keyframes dArmR2 { 0% { transform: rotate(45deg); } 100% { transform: rotate(-90deg); } }
+        /* Frog hands (webbed) */
+        .frog-hand {
+            width: 20px;
+            height: 14px;
+            background: #4a8c3f;
+            border: 2px solid #1a1a1a;
+            border-radius: 50% 50% 50% 50%;
+            position: absolute;
+            bottom: -8px;
+            left: -8px;
+        }
 
-        .df-legs {
+        /* Frog legs */
+        .frog-legs {
             display: flex;
             justify-content: center;
-            gap: 6px;
+            gap: 14px;
+            margin-top: -5px;
+            position: relative;
+            z-index: 3;
         }
 
-        .df-leg {
-            width: 6px;
-            height: 28px;
-            background: #1a1a1a;
-            border-radius: 3px;
+        .frog-leg {
+            width: 16px;
+            height: 35px;
+            background: #4a8c3f;
+            border: 2px solid #1a1a1a;
+            border-radius: 0 0 6px 6px;
             transform-origin: top center;
         }
 
-        .dancer1 .df-leg.left { animation: dLegL1 0.8s ease-in-out infinite alternate; }
-        .dancer1 .df-leg.right { animation: dLegR1 0.8s ease-in-out infinite alternate; }
-        .dancer2 .df-leg.left { animation: dLegL2 0.6s ease-in-out infinite alternate; }
-        .dancer2 .df-leg.right { animation: dLegR2 0.6s ease-in-out infinite alternate; }
+        .frog-leg.left {
+            animation: frogLegL 0.5s ease-in-out infinite alternate;
+        }
 
-        @keyframes dLegL1 { 0% { transform: rotate(20deg); } 100% { transform: rotate(-30deg); } }
-        @keyframes dLegR1 { 0% { transform: rotate(-20deg); } 100% { transform: rotate(30deg); } }
-        @keyframes dLegL2 { 0% { transform: rotate(-25deg); } 100% { transform: rotate(20deg); } }
-        @keyframes dLegR2 { 0% { transform: rotate(25deg); } 100% { transform: rotate(-20deg); } }
+        .frog-leg.right {
+            animation: frogLegR 0.5s ease-in-out infinite alternate;
+        }
 
-        /* Music notes floating from dancers */
+        @keyframes frogLegL {
+            0% { transform: rotate(-10deg); }
+            100% { transform: rotate(15deg); }
+        }
+
+        @keyframes frogLegR {
+            0% { transform: rotate(10deg); }
+            100% { transform: rotate(-15deg); }
+        }
+
+        /* Frog feet (webbed) */
+        .frog-foot {
+            width: 30px;
+            height: 12px;
+            background: #4a8c3f;
+            border: 2px solid #1a1a1a;
+            border-radius: 0 50% 50% 50%;
+            margin-top: -2px;
+            margin-left: -7px;
+        }
+
+        /* Music notes floating from frog */
         .music-notes {
             position: absolute;
             top: -10px;
@@ -1362,25 +1503,7 @@
 
         <!-- Dancing Characters -->
         <div class="dancers-container reveal">
-            <!-- Dancer 1 (Left) -->
-            <div class="dancer-figure dancer1">
-                <div class="music-notes">
-                    <span>&#9835;</span>
-                    <span>&#9834;</span>
-                    <span>&#9833;</span>
-                </div>
-                <div class="df-head"></div>
-                <div class="df-body">
-                    <div class="df-arm left"></div>
-                    <div class="df-arm right"></div>
-                </div>
-                <div class="df-legs">
-                    <div class="df-leg left"></div>
-                    <div class="df-leg right"></div>
-                </div>
-            </div>
-
-            <!-- Bad Bunny Heart Character (Center) -->
+            <!-- Heart Character (Left) -->
             <div class="dancing-heart">
                 <div class="heart-bubbles">
                     <span>&#10084;&#65039;</span>
@@ -1405,21 +1528,53 @@
                 </div>
             </div>
 
-            <!-- Dancer 2 (Right) -->
-            <div class="dancer-figure dancer2">
+            <!-- Sapo Concho Frog (Center) -->
+            <div class="dancing-frog">
                 <div class="music-notes">
                     <span>&#9835;</span>
                     <span>&#9834;</span>
                     <span>&#9833;</span>
                 </div>
-                <div class="df-head"></div>
-                <div class="df-body">
-                    <div class="df-arm left"></div>
-                    <div class="df-arm right"></div>
+                <div class="frog-head">
+                    <div class="frog-eye-bump left"></div>
+                    <div class="frog-eye-bump right"></div>
+                    <div class="frog-crest"></div>
+                    <div class="frog-nostril left"></div>
+                    <div class="frog-nostril right"></div>
+                    <div class="frog-mouth"></div>
                 </div>
-                <div class="df-legs">
-                    <div class="df-leg left"></div>
-                    <div class="df-leg right"></div>
+                <div class="frog-body">
+                    <div class="frog-arm left"><div class="frog-hand"></div></div>
+                    <div class="frog-arm right"><div class="frog-hand"></div></div>
+                </div>
+                <div class="frog-legs">
+                    <div class="frog-leg left"><div class="frog-foot"></div></div>
+                    <div class="frog-leg right"><div class="frog-foot"></div></div>
+                </div>
+            </div>
+
+            <!-- Heart Character (Right) -->
+            <div class="dancing-heart">
+                <div class="heart-bubbles">
+                    <span>&#10084;&#65039;</span>
+                    <span>&#10084;&#65039;</span>
+                    <span>&#10084;&#65039;</span>
+                </div>
+                <div class="heart-body">
+                    <svg class="heart-shape-svg" viewBox="0 0 130 120" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M65 110 C65 110, 10 75, 10 40 C10 20, 25 5, 45 5 C55 5, 62 12, 65 18 C68 12, 75 5, 85 5 C105 5, 120 20, 120 40 C120 75, 65 110, 65 110Z" fill="#E02020" stroke="#1a1a1a" stroke-width="3"/>
+                    </svg>
+                    <div class="heart-arm left"><div class="heart-glove"></div></div>
+                    <div class="heart-arm right"><div class="heart-glove"></div></div>
+                    <div class="heart-face">
+                        <div class="heart-eye"></div>
+                        <div class="heart-nose"></div>
+                        <div class="heart-mouth"></div>
+                    </div>
+                </div>
+                <div class="heart-legs">
+                    <div class="heart-leg left"><div class="heart-boot"></div></div>
+                    <div class="heart-leg right"><div class="heart-boot"></div></div>
                 </div>
             </div>
         </div>
