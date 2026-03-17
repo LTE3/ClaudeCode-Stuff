@@ -1350,6 +1350,72 @@
             100% { transform: translateY(-70px) scale(0.3); opacity: 0; }
         }
 
+        /* ─── GRAND OPENING SECTION ─── */
+        .grand-opening {
+            text-align: center;
+            background: linear-gradient(180deg, var(--darker) 0%, #1a0a1a 50%, var(--darker) 100%);
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grand-opening::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .go-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 10px;
+        }
+
+        .go-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            letter-spacing: 6px;
+            line-height: 1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .go-date {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            letter-spacing: 10px;
+            color: var(--hot-pink);
+            margin-bottom: 15px;
+            animation: goPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes goPulse {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(255, 0, 100, 0.3); }
+            50% { opacity: 0.85; text-shadow: 0 0 30px rgba(255, 0, 100, 0.6), 0 0 60px rgba(255, 0, 100, 0.3); }
+        }
+
+        .go-location {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .go-location span {
+            color: var(--yellow);
+        }
+
         /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
             .signup-box { padding: 35px 25px; }
@@ -1601,6 +1667,15 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- GRAND OPENING -->
+    <div class="checkered-divider"></div>
+    <section class="grand-opening" id="grand-opening">
+        <div class="go-label reveal">Grand Opening</div>
+        <div class="go-title reveal">La CaSiTa</div>
+        <div class="go-date reveal">May 1, 2026</div>
+        <div class="go-location reveal">Brooklyn, <span>NYC</span></div>
     </section>
 
     <!-- ABOUT -->
