@@ -1185,82 +1185,93 @@
 
         /* Frog head — wide flat toad shape */
         .frog-head {
-            width: 130px;
-            height: 65px;
+            width: 140px;
+            height: 60px;
             background: #c8a84e;
+            background-image: radial-gradient(circle 3px at 20% 40%, #b89838 30%, transparent 31%),
+                              radial-gradient(circle 2px at 70% 55%, #b89838 30%, transparent 31%),
+                              radial-gradient(circle 3px at 40% 65%, #b89838 30%, transparent 31%),
+                              radial-gradient(circle 2px at 80% 35%, #b89838 30%, transparent 31%),
+                              radial-gradient(circle 2px at 25% 70%, #b89838 30%, transparent 31%),
+                              radial-gradient(circle 3px at 60% 40%, #b89838 30%, transparent 31%);
             border: 3px solid #1a1a1a;
-            border-radius: 50px 50px 35px 35px;
+            border-radius: 55px 55px 40px 40px;
             position: relative;
             margin: 0 auto;
             z-index: 4;
         }
 
-        /* Crested ridges on top of head (sapo concho signature feature) */
+        /* Bony supraorbital crests — signature Sapo Concho ridges above eyes */
         .frog-crest {
             position: absolute;
-            top: -4px;
+            top: -2px;
             left: 50%;
             transform: translateX(-50%);
-            width: 80px;
-            height: 10px;
-            border-top: 4px solid #a08030;
-            border-radius: 50% 50% 0 0;
+            width: 90px;
+            height: 12px;
+            border-top: 5px solid #a08030;
+            border-radius: 40% 40% 0 0;
+            z-index: 6;
         }
 
+        /* Left bony ridge extending from eye toward snout */
         .frog-crest::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: 10px;
-            width: 25px;
-            height: 6px;
-            border-top: 3px solid #a08030;
-            border-radius: 50% 50% 0 0;
+            top: -4px;
+            left: -10px;
+            width: 40px;
+            height: 10px;
+            border-top: 4px solid #a08030;
+            border-left: 3px solid #a08030;
+            border-radius: 50% 30% 0 0;
         }
 
+        /* Right bony ridge extending from eye toward snout */
         .frog-crest::after {
             content: '';
             position: absolute;
-            top: -2px;
-            right: 10px;
-            width: 25px;
-            height: 6px;
-            border-top: 3px solid #a08030;
-            border-radius: 50% 50% 0 0;
+            top: -4px;
+            right: -10px;
+            width: 40px;
+            height: 10px;
+            border-top: 4px solid #a08030;
+            border-right: 3px solid #a08030;
+            border-radius: 30% 50% 0 0;
         }
 
-        /* Protruding eyes on top of head — big glossy Concho eyes */
+        /* Protruding eyes — golden/amber iris with dark pupil (like real Sapo Concho) */
         .frog-eye-bump {
-            width: 44px;
-            height: 44px;
-            background: #1a1a1a;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 35%, #c89020 36%, #daa520 55%, #b8860b 80%, #8B6914 100%);
             border: 3px solid #1a1a1a;
             border-radius: 50%;
             position: absolute;
-            top: -24px;
+            top: -22px;
             z-index: 5;
         }
 
-        .frog-eye-bump.left { left: 5px; }
-        .frog-eye-bump.right { right: 5px; }
+        .frog-eye-bump.left { left: 8px; }
+        .frog-eye-bump.right { right: 8px; }
 
         /* Glossy highlight on eye */
         .frog-eye-bump::before {
             content: '';
-            width: 14px;
-            height: 14px;
-            background: rgba(255, 255, 255, 0.7);
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
             position: absolute;
-            top: 8px;
+            top: 6px;
             left: 8px;
         }
 
         /* Secondary smaller highlight */
         .frog-eye-bump::after {
             content: '';
-            width: 7px;
-            height: 7px;
+            width: 5px;
+            height: 5px;
             background: rgba(255, 255, 255, 0.4);
             border-radius: 50%;
             position: absolute;
@@ -1274,33 +1285,33 @@
             50% { transform: translate(-50%, -45%) scaleY(0.1); }
         }
 
-        /* Wide frog mouth */
+        /* Wide frog mouth — flatter like a real toad */
         .frog-mouth {
-            width: 55px;
-            height: 10px;
-            border: 3px solid #1a1a1a;
+            width: 60px;
+            height: 6px;
+            border: 2px solid #1a1a1a;
             border-top: none;
-            border-radius: 0 0 20px 20px;
+            border-radius: 0 0 30px 30px;
             position: absolute;
-            bottom: 12px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
         }
 
-        /* Nostrils */
+        /* Nostrils — at tip of snout like real toad */
         .frog-nostril {
-            width: 5px;
-            height: 5px;
-            background: #a08030;
+            width: 6px;
+            height: 4px;
+            background: #8B6914;
             border-radius: 50%;
             position: absolute;
-            top: 28px;
+            top: 24px;
             z-index: 5;
         }
 
-        .frog-nostril.left { left: 35px; }
-        .frog-nostril.right { right: 35px; }
+        .frog-nostril.left { left: 38px; }
+        .frog-nostril.right { right: 38px; }
 
         /* Frog arms */
         .frog-arm {
