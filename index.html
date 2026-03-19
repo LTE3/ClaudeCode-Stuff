@@ -2181,8 +2181,12 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+        // ─── Supabase Config ───
+        const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
         // ─── Signup Form ───
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const firstName = this.querySelector('input[aria-label="First name"]').value.trim();
             const lastName = this.querySelector('input[aria-label="Last name"]').value.trim();
@@ -2197,8 +2201,35 @@
                 alert('Please enter your phone number.');
                 return;
             }
-            this.style.display = 'none';
-            document.getElementById('successMsg').classList.add('show');
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            try {
+                const res = await fetch(SUPABASE_URL + '/rest/v1/signups', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        last_name: lastName,
+                        phone: phone,
+                        email: email || null
+                    })
+                });
+                if (!res.ok) throw new Error('Signup failed');
+                this.style.display = 'none';
+                document.getElementById('successMsg').classList.add('show');
+            } catch (err) {
+                alert('Something went wrong. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = "I'm In";
+            }
         });
 
         // ─── Presale Countdown ───
