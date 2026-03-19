@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La CaSiTa - Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0A0A0A;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .login-container, .dashboard {
+            width: 100%;
+            max-width: 900px;
+            padding: 40px 20px;
+        }
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .login-container h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: #FF4D8D;
+        }
+        .login-container p {
+            color: #888;
+            margin-bottom: 24px;
+        }
+        .login-form {
+            display: flex;
+            gap: 10px;
+        }
+        .login-form input {
+            padding: 12px 16px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 1rem;
+            width: 260px;
+        }
+        .login-form input:focus { outline: none; border-color: #FF4D8D; }
+        .login-form button {
+            padding: 12px 24px;
+            background: #FF4D8D;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .login-form button:hover { background: #e0437d; }
+        .error-msg {
+            color: #ff4444;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .dashboard { display: none; }
+        .dashboard.active { display: block; }
+        .login-container.hidden { display: none; }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #222;
+        }
+        .dash-header h1 { color: #FF4D8D; font-size: 1.5rem; }
+        .dash-header button {
+            padding: 8px 16px;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .dash-header button:hover { background: #444; }
+
+        .stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #FF4D8D;
+        }
+        .stat-card .label {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        .table-container {
+            background: #1a1a1a;
+            border: 1px solid #222;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #222;
+        }
+        .table-header h2 { font-size: 1.1rem; }
+        .table-header button {
+            padding: 8px 16px;
+            background: #00E5CC;
+            color: #0A0A0A;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            text-align: left;
+            padding: 12px 20px;
+            background: #111;
+            color: #888;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        td {
+            padding: 12px 20px;
+            border-top: 1px solid #1f1f1f;
+            font-size: 0.9rem;
+        }
+        tr:hover td { background: #151515; }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        @media (max-width: 600px) {
+            .stats { flex-direction: column; }
+            .login-form { flex-direction: column; }
+            .login-form input { width: 100%; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 10px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <h1>La CaSiTa Admin</h1>
+        <p>Enter admin password to continue</p>
+        <form class="login-form" id="loginForm">
+            <input type="password" id="adminPassword" placeholder="Password" autocomplete="current-password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p class="error-msg" id="errorMsg">Invalid password. Try again.</p>
+    </div>
+
+    <div class="dashboard" id="dashboard">
+        <div class="dash-header">
+            <h1>La CaSiTa Admin</h1>
+            <button id="logoutBtn">Logout</button>
+        </div>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number" id="totalSignups">-</div>
+                <div class="label">Total Signups</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="todaySignups">-</div>
+                <div class="label">Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="emailCount">-</div>
+                <div class="label">With Email</div>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Signups</h2>
+                <button id="exportBtn">Export CSV</button>
+            </div>
+            <div id="tableBody">
+                <div class="loading">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+        let signupsData = [];
+        let adminPassword = '';
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pw = document.getElementById('adminPassword').value;
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.style.display = 'none';
+
+            try {
+                const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_signups', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ admin_password: pw })
+                });
+
+                if (!res.ok) {
+                    errorMsg.style.display = 'block';
+                    return;
+                }
+
+                signupsData = await res.json();
+                adminPassword = pw;
+                showDashboard();
+            } catch (err) {
+                errorMsg.style.display = 'block';
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('loginContainer').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('active');
+            renderStats();
+            renderTable();
+        }
+
+        function renderStats() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayCount = signupsData.filter(s => s.created_at.startsWith(today)).length;
+            const withEmail = signupsData.filter(s => s.email).length;
+
+            document.getElementById('totalSignups').textContent = signupsData.length;
+            document.getElementById('todaySignups').textContent = todayCount;
+            document.getElementById('emailCount').textContent = withEmail;
+        }
+
+        function renderTable() {
+            const container = document.getElementById('tableBody');
+            if (signupsData.length === 0) {
+                container.innerHTML = '<div class="empty-state">No signups yet</div>';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Email</th><th>Signed Up</th></tr></thead><tbody>';
+            signupsData.forEach((s, i) => {
+                const date = new Date(s.created_at);
+                const formatted = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' +
+                    date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                html += `<tr>
+                    <td>${i + 1}</td>
+                    <td>${escapeHtml(s.first_name)} ${escapeHtml(s.last_name)}</td>
+                    <td>${escapeHtml(s.phone)}</td>
+                    <td>${s.email ? escapeHtml(s.email) : '<span style="color:#555">—</span>'}</td>
+                    <td>${formatted}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            if (signupsData.length === 0) return;
+            let csv = 'First Name,Last Name,Phone,Email,Signed Up\n';
+            signupsData.forEach(s => {
+                csv += `"${s.first_name}","${s.last_name}","${s.phone}","${s.email || ''}","${s.created_at}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'lacasita-signups-' + new Date().toISOString().split('T')[0] + '.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            adminPassword = '';
+            signupsData = [];
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('loginContainer').classList.remove('hidden');
+            document.getElementById('adminPassword').value = '';
+        });
+    </script>
+</body>
+</html>
