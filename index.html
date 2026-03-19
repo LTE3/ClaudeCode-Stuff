@@ -2106,8 +2106,8 @@
                     <input type="text" placeholder="First Name" aria-label="First name" required>
                     <input type="text" placeholder="Last Name" aria-label="Last name" required>
                 </div>
-                <input type="email" placeholder="Email (or phone below)" aria-label="Email address" id="signupEmail">
-                <input type="tel" placeholder="Phone (or email above)" aria-label="Phone number" id="signupPhone">
+                <input type="tel" placeholder="Phone Number" aria-label="Phone number" id="signupPhone" required>
+                <input type="email" placeholder="Email (optional)" aria-label="Email address" id="signupEmail">
                 <button type="submit">I'm In</button>
             </form>
             <div class="signup-perks">
@@ -2193,8 +2193,8 @@
                 alert('Please enter your first and last name.');
                 return;
             }
-            if (!email && !phone) {
-                alert('Please enter either an email or phone number.');
+            if (!phone) {
+                alert('Please enter your phone number.');
                 return;
             }
             this.style.display = 'none';
