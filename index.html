@@ -2103,11 +2103,15 @@
             <p>Be first to know about tickets, VIP tables, and opening night</p>
             <form class="signup-form" id="signupForm">
                 <div class="name-row">
-                    <input type="text" placeholder="First Name" aria-label="First name" required>
-                    <input type="text" placeholder="Last Name" aria-label="Last name" required>
+                    <input type="text" placeholder="First Name" aria-label="First name" required maxlength="100" autocomplete="given-name">
+                    <input type="text" placeholder="Last Name" aria-label="Last name" required maxlength="100" autocomplete="family-name">
                 </div>
-                <input type="tel" placeholder="Phone Number" aria-label="Phone number" id="signupPhone" required>
-                <input type="email" placeholder="Email (optional)" aria-label="Email address" id="signupEmail">
+                <input type="tel" placeholder="Phone Number" aria-label="Phone number" id="signupPhone" required maxlength="20" pattern="[0-9+\-() ]+" autocomplete="tel">
+                <input type="email" placeholder="Email (optional)" aria-label="Email address" id="signupEmail" maxlength="254" autocomplete="email">
+                <!-- Honeypot field — hidden from real users, bots fill it -->
+                <div style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden;" aria-hidden="true">
+                    <input type="text" name="website" id="signupHoneypot" tabindex="-1" autocomplete="off">
+                </div>
                 <button type="submit">I'm In</button>
             </form>
             <div class="signup-perks">
@@ -2188,6 +2192,10 @@
         // ─── Signup Form ───
         document.getElementById('signupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+
+            // Honeypot check — bots fill hidden fields
+            if (document.getElementById('signupHoneypot').value) return;
+
             const firstName = this.querySelector('input[aria-label="First name"]').value.trim();
             const lastName = this.querySelector('input[aria-label="Last name"]').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
@@ -2197,8 +2205,16 @@
                 alert('Please enter your first and last name.');
                 return;
             }
-            if (!phone) {
-                alert('Please enter your phone number.');
+            if (!phone || phone.length < 7) {
+                alert('Please enter a valid phone number.');
+                return;
+            }
+            if (!/^[0-9+\-() ]+$/.test(phone)) {
+                alert('Phone number can only contain digits, +, -, (, ) and spaces.');
+                return;
+            }
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert('Please enter a valid email address.');
                 return;
             }
 
@@ -2222,6 +2238,12 @@
                         email: email || null
                     })
                 });
+                if (res.status === 409 || (res.status === 400 && (await res.text()).includes('uniq_phone'))) {
+                    this.style.display = 'none';
+                    document.getElementById('successMsg').classList.add('show');
+                    document.getElementById('successMsg').textContent = "You're already on the list! We'll hit you up soon.";
+                    return;
+                }
                 if (!res.ok) throw new Error('Signup failed');
                 this.style.display = 'none';
                 document.getElementById('successMsg').classList.add('show');
