@@ -672,6 +672,66 @@
             opacity: 0.6;
         }
 
+        /* ─── PROMO VIDEO ─── */
+        .promo-video {
+            padding: 60px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, #0A0A0A 0%, #111 50%, #0A0A0A 100%);
+        }
+        .promo-video h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: var(--yellow);
+            margin-bottom: 24px;
+        }
+        .video-wrapper {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(255, 77, 141, 0.2), 0 0 80px rgba(255, 77, 141, 0.05);
+            border: 2px solid rgba(255, 77, 141, 0.3);
+        }
+        .video-wrapper video {
+            width: 100%;
+            display: block;
+            border-radius: 14px;
+        }
+        .video-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 77, 141, 0.9);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s, background 0.3s;
+            z-index: 2;
+        }
+        .video-play-btn:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: var(--hot-pink);
+        }
+        .video-play-btn::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 14px 0 14px 24px;
+            border-color: transparent transparent transparent #fff;
+            margin-left: 4px;
+        }
+        .video-play-btn.hidden { display: none; }
+
         /* ─── SIGNUP SECTION ─── */
         .signup {
             background: linear-gradient(180deg, var(--darker), #0a0505);
@@ -1947,6 +2007,17 @@
         <div class="go-location reveal">Brooklyn, <span>NYC</span></div>
     </section>
 
+    <!-- PROMO VIDEO -->
+    <section class="promo-video reveal">
+        <h2>Get A Taste</h2>
+        <div class="video-wrapper">
+            <video id="promoVideo" playsinline preload="metadata" poster="">
+                <source src="lacasita-promo.mp4" type="video/mp4">
+            </video>
+            <button class="video-play-btn" id="videoPlayBtn" aria-label="Play video"></button>
+        </div>
+    </section>
+
     <!-- ABOUT -->
     <div class="checkered-divider"></div>
     <section class="about" id="about">
@@ -2253,6 +2324,16 @@
                 submitBtn.textContent = "I'm In";
             }
         });
+
+        // ─── Promo Video ───
+        const promoVideo = document.getElementById('promoVideo');
+        const playBtn = document.getElementById('videoPlayBtn');
+        playBtn.addEventListener('click', () => {
+            promoVideo.play();
+            playBtn.classList.add('hidden');
+        });
+        promoVideo.addEventListener('pause', () => playBtn.classList.remove('hidden'));
+        promoVideo.addEventListener('ended', () => playBtn.classList.remove('hidden'));
 
         // ─── Presale Countdown ───
         (function() {
