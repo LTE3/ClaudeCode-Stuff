@@ -765,24 +765,25 @@
         }
         .popup-close {
             position: absolute;
-            top: -14px;
-            right: -14px;
-            width: 36px;
-            height: 36px;
-            background: #fff;
-            color: #0A0A0A;
-            border: none;
+            top: 8px;
+            right: 8px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border: 2px solid #fff;
             border-radius: 50%;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
             line-height: 1;
+            z-index: 10000;
         }
-        .popup-close:hover { background: #FF4D8D; color: #fff; }
+        .popup-close:hover { background: #FF4D8D; border-color: #FF4D8D; }
 
         /* ─── SIGNUP SECTION ─── */
         .signup {
@@ -1881,7 +1882,7 @@
     <div class="popup-overlay" id="flyerPopup" style="display:none;">
         <div class="popup-container">
             <button class="popup-close" id="popupClose" aria-label="Close">&times;</button>
-            <img src="flyer.png" alt="La CaSiTa Pop-Up — Coming Soon to Brooklyn, NYC">
+            <img src="flyer-compressed.jpg" alt="La CaSiTa Pop-Up — Coming Soon to Brooklyn, NYC">
         </div>
     </div>
 
