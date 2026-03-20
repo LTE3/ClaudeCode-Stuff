@@ -244,6 +244,12 @@
                 });
 
                 if (!res.ok) {
+                    const errBody = await res.json().catch(() => null);
+                    if (errBody && typeof errBody.message === 'string' && errBody.message.includes('Too many')) {
+                        errorMsg.textContent = 'Too many login attempts. Try again later.';
+                    } else {
+                        errorMsg.textContent = 'Invalid password. Try again.';
+                    }
                     errorMsg.style.display = 'block';
                     return;
                 }
