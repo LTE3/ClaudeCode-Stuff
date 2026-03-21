@@ -701,8 +701,13 @@
             margin: 0 auto;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 0 40px rgba(255, 77, 141, 0.2), 0 0 80px rgba(255, 77, 141, 0.05);
-            border: 2px solid rgba(255, 77, 141, 0.3);
+            box-shadow: 0 0 20px rgba(255, 77, 141, 0.4), 0 0 60px rgba(255, 77, 141, 0.2), 0 0 120px rgba(255, 77, 141, 0.1);
+            border: 2px solid rgba(255, 77, 141, 0.5);
+            animation: videoGlow 3s ease-in-out infinite alternate;
+        }
+        @keyframes videoGlow {
+            0% { box-shadow: 0 0 20px rgba(255, 77, 141, 0.4), 0 0 60px rgba(255, 77, 141, 0.2), 0 0 120px rgba(255, 77, 141, 0.1); }
+            100% { box-shadow: 0 0 30px rgba(255, 77, 141, 0.6), 0 0 80px rgba(255, 77, 141, 0.3), 0 0 150px rgba(255, 77, 141, 0.15); }
         }
         .video-wrapper video {
             width: 100%;
