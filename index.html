@@ -2418,6 +2418,21 @@
             }
         });
 
+        // ─── Analytics (privacy-friendly page view) ───
+        if (!sessionStorage.getItem('lacasita_viewed')) {
+            fetch(SUPABASE_URL + '/rest/v1/page_views', {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ page: window.location.pathname, referrer: document.referrer || null })
+            }).catch(() => {});
+            sessionStorage.setItem('lacasita_viewed', '1');
+        }
+
         // ─── Popup Flyer (one-time) ───
         if (!localStorage.getItem('lacasita_popup_seen')) {
             const popup = document.getElementById('flyerPopup');

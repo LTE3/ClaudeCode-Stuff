@@ -201,11 +201,25 @@
             </div>
             <div class="stat-card">
                 <div class="number" id="todaySignups">-</div>
-                <div class="label">Today</div>
+                <div class="label">Signups Today</div>
             </div>
             <div class="stat-card">
                 <div class="number" id="emailCount">-</div>
                 <div class="label">With Email</div>
+            </div>
+        </div>
+        <div class="stats" style="margin-bottom: 24px;">
+            <div class="stat-card">
+                <div class="number" id="totalViews">-</div>
+                <div class="label">Total Page Views</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="todayViews">-</div>
+                <div class="label">Views Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="weekViews">-</div>
+                <div class="label">Views This Week</div>
             </div>
         </div>
         <div class="table-container">
@@ -257,6 +271,7 @@
                 signupsData = await res.json();
                 adminPassword = pw;
                 showDashboard();
+                loadAnalytics(pw);
             } catch (err) {
                 errorMsg.style.display = 'block';
             }
@@ -307,6 +322,26 @@
             const div = document.createElement('div');
             div.textContent = str;
             return div.innerHTML;
+        }
+
+        async function loadAnalytics(pw) {
+            try {
+                const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_analytics', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ admin_password: pw })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('totalViews').textContent = data.total_views || 0;
+                    document.getElementById('todayViews').textContent = data.today_views || 0;
+                    document.getElementById('weekViews').textContent = data.week_views || 0;
+                }
+            } catch (e) {}
         }
 
         document.getElementById('exportBtn').addEventListener('click', () => {
