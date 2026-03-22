@@ -3,3 +3,13 @@ package.json
 package-lock.json
 check-signups.mjs
 setup-brute.mjs
+setup-dns.mjs
+setup-https.mjs
+setup-redirect.mjs
+setup-analytics.mjs
+setup-analytics-v2.mjs
+fix-analytics.mjs
+confirm-run.mjs
+screenshot-*.png
+analytics-result*.png
+redirect-*.png
