@@ -136,7 +136,7 @@
           "name": "When does La Casita BK open?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "La Casita BK opens on May 1, 2026 in Brooklyn, NYC. Presale tickets go live Friday April 3, 2026 at 7PM EST. Sign up at lacasitabk.com to get early access to tickets."
+            "text": "La Casita BK opens May 1st & 2nd, 2026 in Brooklyn, NYC. Presale tickets go live Friday April 3, 2026 at 7PM EST. Sign up at lacasitabk.com to get early access to tickets."
           }
         },
         {
@@ -193,12 +193,13 @@
             --hot-pink: #FF4D8D;
             --yellow: #FFD600;
             --orange: #FF6B2B;
-            --teal: #00E5CC;
-            --cyan: #00D4FF;
+            --teal: #34D399;
+            --cyan: #34D399;
             --dark: #0A0A0A;
-            --darker: #050505;
+            --darker: #020203;
             --casita-pink: #E8967C;
             --casita-yellow: #F5C542;
+            --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         html {
@@ -253,9 +254,9 @@
             text-align: center;
             position: relative;
             padding: 60px 20px 40px;
-            background: radial-gradient(ellipse at 50% 80%, rgba(255, 214, 0, 0.15) 0%, transparent 60%),
-                        radial-gradient(ellipse at 20% 50%, rgba(255, 77, 141, 0.1) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 50%, rgba(0, 229, 204, 0.1) 0%, transparent 50%),
+            background: radial-gradient(ellipse at 50% 80%, rgba(255, 214, 0, 0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 20% 50%, rgba(255, 77, 141, 0.06) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 50%, rgba(52, 211, 153, 0.06) 0%, transparent 50%),
                         var(--darker);
             overflow: hidden;
         }
@@ -311,23 +312,23 @@
         .hero-title .la {
             display: block;
             font-size: clamp(3rem, 10vw, 7rem);
-            background: linear-gradient(135deg, var(--teal), var(--cyan));
+            background: linear-gradient(135deg, var(--teal), #6EE7B7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            filter: drop-shadow(0 0 30px rgba(0, 229, 204, 0.4));
+            filter: drop-shadow(0 0 20px rgba(52, 211, 153, 0.2));
         }
 
         .hero-title .casita {
             display: block;
             font-size: clamp(5rem, 18vw, 13rem);
-            background: linear-gradient(135deg, var(--teal), var(--cyan), var(--teal));
+            background: linear-gradient(135deg, var(--teal), #6EE7B7, var(--teal));
             background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: shimmer 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 40px rgba(0, 229, 204, 0.3));
+            filter: drop-shadow(0 0 25px rgba(52, 211, 153, 0.15));
             letter-spacing: -2px;
         }
 
@@ -340,8 +341,8 @@
             font-family: 'Bebas Neue', sans-serif;
             font-size: clamp(2rem, 6vw, 4.5rem);
             color: var(--orange);
-            letter-spacing: 5px;
-            text-shadow: 0 0 30px rgba(255, 107, 43, 0.5);
+            letter-spacing: 6px;
+            text-shadow: 0 0 20px rgba(255, 107, 43, 0.3);
             margin-bottom: 20px;
         }
 
@@ -354,7 +355,7 @@
 
         .hero-location .city {
             color: var(--yellow);
-            text-shadow: 0 0 20px rgba(255, 214, 0, 0.5);
+            text-shadow: 0 0 12px rgba(255, 214, 0, 0.3);
         }
 
         /* ─── CASITA ILLUSTRATION (CSS) ─── */
@@ -537,18 +538,18 @@
             font-weight: 700;
             letter-spacing: 6px;
             color: var(--hot-pink);
-            text-shadow: 0 0 10px var(--hot-pink), 0 0 25px var(--hot-pink), 0 0 50px var(--hot-pink), 0 0 80px rgba(255, 77, 141, 0.4);
+            text-shadow: 0 0 8px var(--hot-pink), 0 0 20px var(--hot-pink), 0 0 40px rgba(255, 77, 141, 0.3);
             animation: neonPulse 1.5s ease-in-out infinite alternate;
             padding: 5px 15px;
             border: 2px solid var(--hot-pink);
             border-radius: 4px;
-            box-shadow: 0 0 15px rgba(255, 77, 141, 0.4), inset 0 0 15px rgba(255, 77, 141, 0.1);
+            box-shadow: 0 0 10px rgba(255, 77, 141, 0.2), inset 0 0 10px rgba(255, 77, 141, 0.05);
         }
 
         @keyframes neonPulse {
-            0% { opacity: 1; text-shadow: 0 0 10px var(--hot-pink), 0 0 25px var(--hot-pink), 0 0 50px var(--hot-pink); box-shadow: 0 0 15px rgba(255, 77, 141, 0.4), inset 0 0 15px rgba(255, 77, 141, 0.1); }
-            50% { opacity: 0.85; text-shadow: 0 0 5px var(--hot-pink), 0 0 15px var(--hot-pink); box-shadow: 0 0 8px rgba(255, 77, 141, 0.2), inset 0 0 8px rgba(255, 77, 141, 0.05); }
-            100% { opacity: 1; text-shadow: 0 0 15px var(--hot-pink), 0 0 30px var(--hot-pink), 0 0 70px var(--hot-pink); box-shadow: 0 0 25px rgba(255, 77, 141, 0.6), inset 0 0 20px rgba(255, 77, 141, 0.15); }
+            0% { opacity: 1; text-shadow: 0 0 8px var(--hot-pink), 0 0 20px var(--hot-pink), 0 0 40px rgba(255, 77, 141, 0.3); box-shadow: 0 0 10px rgba(255, 77, 141, 0.2), inset 0 0 10px rgba(255, 77, 141, 0.05); }
+            50% { opacity: 0.88; text-shadow: 0 0 4px var(--hot-pink), 0 0 12px var(--hot-pink); box-shadow: 0 0 6px rgba(255, 77, 141, 0.1), inset 0 0 6px rgba(255, 77, 141, 0.03); }
+            100% { opacity: 1; text-shadow: 0 0 10px var(--hot-pink), 0 0 25px var(--hot-pink), 0 0 50px rgba(255, 77, 141, 0.2); box-shadow: 0 0 15px rgba(255, 77, 141, 0.3), inset 0 0 12px rgba(255, 77, 141, 0.08); }
         }
 
         /* Plastic chairs */
@@ -596,13 +597,13 @@
             text-decoration: none;
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 0 30px rgba(255, 214, 0, 0.3);
+            transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
+            box-shadow: 0 0 20px rgba(255, 214, 0, 0.15);
         }
 
         .cta-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 50px rgba(255, 214, 0, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 30px rgba(255, 214, 0, 0.3);
         }
 
         .cta-btn::before {
@@ -653,18 +654,18 @@
         }
 
         .countdown-box {
-            background: rgba(0, 212, 255, 0.08);
-            border: 2px solid var(--cyan);
+            background: rgba(52, 211, 153, 0.05);
+            border: 1px solid rgba(52, 211, 153, 0.25);
             border-radius: 12px;
             padding: 12px 18px;
             min-width: 75px;
             text-align: center;
-            animation: pulseBorderCyan 2s ease-in-out infinite;
+            animation: pulseBorderCyan 2.5s ease-in-out infinite;
         }
 
         @keyframes pulseBorderCyan {
-            0%, 100% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); }
-            50% { box-shadow: 0 0 25px rgba(0, 212, 255, 0.6); }
+            0%, 100% { box-shadow: 0 0 8px rgba(52, 211, 153, 0.1); }
+            50% { box-shadow: 0 0 16px rgba(52, 211, 153, 0.25); }
         }
 
         .countdown-box .number {
@@ -725,11 +726,11 @@
             font-size: clamp(2.5rem, 6vw, 4rem);
             text-align: center;
             margin-bottom: 50px;
-            letter-spacing: 5px;
+            letter-spacing: 4px;
         }
 
         .section-title .accent {
-            background: linear-gradient(135deg, var(--cyan), var(--teal));
+            background: linear-gradient(135deg, var(--teal), #6EE7B7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -749,17 +750,18 @@
         }
 
         .about-card {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06), rgba(0, 229, 204, 0.08));
-            border: 1px solid rgba(0, 212, 255, 0.12);
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.04), rgba(52, 211, 153, 0.06));
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             padding: 40px 30px;
             text-align: center;
-            transition: transform 0.3s, border-color 0.3s;
+            transition: transform 0.4s var(--ease-smooth), border-color 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
         }
 
         .about-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 212, 255, 0.4);
+            transform: translateY(-3px);
+            border-color: rgba(52, 211, 153, 0.2);
+            box-shadow: 0 8px 30px rgba(52, 211, 153, 0.06);
         }
 
         .about-card .icon {
@@ -800,14 +802,14 @@
             align-items: center;
             gap: 20px;
             padding: 25px 30px;
-            background: rgba(0, 212, 255, 0.04);
-            border-left: 3px solid var(--cyan);
+            background: rgba(52, 211, 153, 0.03);
+            border-left: 3px solid rgba(52, 211, 153, 0.3);
             border-radius: 0 15px 15px 0;
-            transition: background 0.3s, border-color 0.3s;
+            transition: background 0.4s var(--ease-smooth), border-color 0.4s var(--ease-smooth);
         }
 
         .exp-item:hover {
-            background: rgba(0, 212, 255, 0.08);
+            background: rgba(52, 211, 153, 0.06);
             border-left-color: var(--teal);
         }
 
@@ -831,7 +833,7 @@
         /* ─── CHECKERED SECTION DIVIDER ─── */
         .checkered-divider {
             height: 30px;
-            background: repeating-conic-gradient(rgba(0, 212, 255, 0.08) 0% 25%, #111 0% 50%) 0 0 / 30px 30px;
+            background: repeating-conic-gradient(rgba(52, 211, 153, 0.05) 0% 25%, #0a0a0a 0% 50%) 0 0 / 30px 30px;
             opacity: 0.6;
         }
 
@@ -839,7 +841,7 @@
         .promo-video {
             padding: 60px 20px;
             text-align: center;
-            background: linear-gradient(180deg, #0A0A0A 0%, #111 50%, #0A0A0A 100%);
+            background: linear-gradient(180deg, var(--darker) 0%, #0a0a0c 50%, var(--darker) 100%);
         }
         .promo-video h2 {
             font-family: 'Bebas Neue', sans-serif;
@@ -854,13 +856,13 @@
             margin: 0 auto;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(255, 77, 141, 0.4), 0 0 60px rgba(255, 77, 141, 0.2), 0 0 120px rgba(255, 77, 141, 0.1);
-            border: 2px solid rgba(255, 77, 141, 0.5);
+            box-shadow: 0 0 15px rgba(255, 77, 141, 0.2), 0 0 40px rgba(255, 77, 141, 0.08);
+            border: 1px solid rgba(255, 77, 141, 0.3);
             animation: videoGlow 3s ease-in-out infinite alternate;
         }
         @keyframes videoGlow {
-            0% { box-shadow: 0 0 20px rgba(255, 77, 141, 0.4), 0 0 60px rgba(255, 77, 141, 0.2), 0 0 120px rgba(255, 77, 141, 0.1); }
-            100% { box-shadow: 0 0 30px rgba(255, 77, 141, 0.6), 0 0 80px rgba(255, 77, 141, 0.3), 0 0 150px rgba(255, 77, 141, 0.15); }
+            0% { box-shadow: 0 0 15px rgba(255, 77, 141, 0.2), 0 0 40px rgba(255, 77, 141, 0.08); }
+            100% { box-shadow: 0 0 20px rgba(255, 77, 141, 0.3), 0 0 50px rgba(255, 77, 141, 0.1); }
         }
         .video-wrapper video {
             width: 100%;
@@ -983,14 +985,15 @@
         }
         .merch-card {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 16px;
             overflow: hidden;
-            transition: border-color 0.3s, transform 0.3s;
+            transition: border-color 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
         }
         .merch-card:hover {
-            border-color: rgba(255, 77, 141, 0.5);
-            transform: translateY(-4px);
+            border-color: rgba(255, 77, 141, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
         .merch-img {
             width: 100%;
@@ -1094,8 +1097,8 @@
             transform: scale(0.95);
         }
         .merch-add-btn.added {
-            background: #00E5CC;
-            border-color: #00E5CC;
+            background: #34D399;
+            border-color: #34D399;
             color: #000;
         }
         /* Cart icon */
@@ -1112,12 +1115,12 @@
             justify-content: center;
             cursor: pointer;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(255, 77, 141, 0.4);
-            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 77, 141, 0.2);
+            transition: transform 0.4s var(--ease-smooth);
             border: none;
             font-size: 1.5rem;
         }
-        .cart-fab:hover { transform: scale(1.1); }
+        .cart-fab:hover { transform: translateY(-2px); }
         .cart-fab .cart-count {
             position: absolute;
             top: -4px;
@@ -1156,8 +1159,8 @@
             z-index: 2001;
             display: flex;
             flex-direction: column;
-            transition: right 0.3s ease;
-            border-left: 1px solid #222;
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: 1px solid rgba(255,255,255,0.06);
         }
         .cart-panel.open { right: 0; }
         .cart-header {
@@ -1287,17 +1290,18 @@
             margin-top: 40px;
         }
         .faq-item {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
             overflow: hidden;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.4s var(--ease-smooth), background 0.4s var(--ease-smooth);
         }
         .faq-item:hover {
-            border-color: rgba(255, 77, 141, 0.3);
+            border-color: rgba(255, 77, 141, 0.2);
+            background: rgba(255, 255, 255, 0.04);
         }
         .faq-item[open] {
-            border-color: rgba(255, 77, 141, 0.5);
+            border-color: rgba(255, 77, 141, 0.3);
         }
         .faq-item summary {
             padding: 18px 24px;
@@ -1316,7 +1320,7 @@
             font-size: 1.4rem;
             color: #FF4D8D;
             font-weight: 300;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s var(--ease-smooth);
         }
         .faq-item[open] summary::after {
             transform: rotate(45deg);
@@ -1339,8 +1343,8 @@
         .signup-box {
             max-width: 550px;
             margin: 0 auto;
-            background: linear-gradient(135deg, rgba(255,77,141,0.1), rgba(255,214,0,0.05));
-            border: 1px solid rgba(255,255,255,0.1);
+            background: linear-gradient(135deg, rgba(255,77,141,0.06), rgba(255,214,0,0.03));
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 25px;
             padding: 50px 40px;
         }
@@ -1408,12 +1412,12 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
         }
 
         .signup-form button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 214, 0, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 25px rgba(255, 214, 0, 0.25);
         }
 
         .signup-perks {
@@ -1436,7 +1440,7 @@
             display: inline-block;
             width: 6px;
             height: 6px;
-            background: var(--teal);
+            background: #34D399;
             border-radius: 50%;
             margin-right: 6px;
             vertical-align: middle;
@@ -1471,13 +1475,13 @@
         }
 
         .gallery-item:nth-child(odd) {
-            background: linear-gradient(135deg, rgba(255,77,141,0.15), rgba(255,107,43,0.1));
-            border: 1px solid rgba(255,77,141,0.2);
+            background: linear-gradient(135deg, rgba(255,77,141,0.08), rgba(255,107,43,0.05));
+            border: 1px solid rgba(255,77,141,0.1);
         }
 
         .gallery-item:nth-child(even) {
-            background: linear-gradient(135deg, rgba(0,229,204,0.1), rgba(0,212,255,0.08));
-            border: 1px solid rgba(0,229,204,0.15);
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(52,211,153,0.04));
+            border: 1px solid rgba(52,211,153,0.1);
         }
 
         @keyframes scroll {
@@ -1487,8 +1491,8 @@
 
         /* ─── FOOTER ─── */
         footer {
-            background: var(--dark);
-            border-top: 1px solid rgba(255,255,255,0.05);
+            background: #030304;
+            border-top: 1px solid rgba(255,255,255,0.04);
             padding: 40px 20px;
             text-align: center;
         }
@@ -1497,7 +1501,7 @@
             font-family: 'Fredoka', sans-serif;
             font-size: 1.8rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--teal), var(--cyan));
+            background: linear-gradient(135deg, var(--teal), #6EE7B7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1524,20 +1528,20 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             color: rgba(255,255,255,0.6);
             text-decoration: none;
             font-size: 1.2rem;
-            transition: border-color 0.3s, color 0.3s, transform 0.3s;
+            transition: border-color 0.4s var(--ease-smooth), color 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth);
         }
 
         .social-links a:hover {
             border-color: var(--hot-pink);
             color: var(--hot-pink);
-            transform: scale(1.1);
+            transform: translateY(-2px);
         }
 
         .footer-copy {
@@ -1573,21 +1577,21 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            box-shadow: 0 5px 25px rgba(255, 77, 141, 0.4);
+            box-shadow: 0 4px 20px rgba(255, 77, 141, 0.2);
             cursor: pointer;
             text-decoration: none;
             z-index: 100;
-            transition: transform 0.3s;
-            animation: fabPulse 2s ease-in-out infinite;
+            transition: transform 0.4s var(--ease-smooth);
+            animation: fabPulse 2.5s ease-in-out infinite;
         }
 
         .fab:hover {
-            transform: scale(1.1);
+            transform: translateY(-2px);
         }
 
         @keyframes fabPulse {
-            0%, 100% { box-shadow: 0 5px 25px rgba(255, 77, 141, 0.4); }
-            50% { box-shadow: 0 5px 40px rgba(255, 77, 141, 0.7); }
+            0%, 100% { box-shadow: 0 4px 20px rgba(255, 77, 141, 0.2); }
+            50% { box-shadow: 0 4px 30px rgba(255, 77, 141, 0.35); }
         }
 
         /* ─── DANCING CHARACTERS ─── */
@@ -2157,7 +2161,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
+            background: radial-gradient(circle at 50% 50%, rgba(52, 211, 153, 0.03) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -2166,7 +2170,7 @@
             font-size: clamp(1.2rem, 3vw, 1.6rem);
             letter-spacing: 8px;
             text-transform: uppercase;
-            color: var(--cyan);
+            color: var(--teal);
             margin-bottom: 10px;
         }
 
@@ -2176,7 +2180,7 @@
             letter-spacing: 6px;
             line-height: 1;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--teal) 100%);
+            background: linear-gradient(135deg, #fff 0%, var(--teal) 50%, #6EE7B7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -2274,26 +2278,26 @@
         }
 
         .tier-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 30px 25px;
             width: 250px;
             text-align: center;
-            transition: border-color 0.3s, transform 0.3s;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
         }
 
         .tier-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px);
         }
 
-        .tier-card.ga { border-color: #4a90d9; }
-        .tier-card.ga:hover { border-color: #6aafff; }
-        .tier-card.vip { border-color: #f5a623; }
-        .tier-card.vip:hover { border-color: #ffc65c; }
-        .tier-card.tables { border-color: #e02020; }
-        .tier-card.tables:hover { border-color: #ff5050; }
+        .tier-card.ga { border-color: #4a90d9; box-shadow: 0 0 15px rgba(74, 144, 217, 0.15); }
+        .tier-card.ga:hover { border-color: #6aafff; box-shadow: 0 0 30px rgba(74, 144, 217, 0.3), 0 0 60px rgba(74, 144, 217, 0.1); }
+        .tier-card.vip { border-color: #f5a623; box-shadow: 0 0 15px rgba(245, 166, 35, 0.15); }
+        .tier-card.vip:hover { border-color: #ffc65c; box-shadow: 0 0 30px rgba(245, 166, 35, 0.3), 0 0 60px rgba(245, 166, 35, 0.1); }
+        .tier-card.tables { border-color: #FF4D8D; box-shadow: 0 0 15px rgba(255, 77, 141, 0.15); }
+        .tier-card.tables:hover { border-color: #ff7aad; box-shadow: 0 0 30px rgba(255, 77, 141, 0.3), 0 0 60px rgba(255, 77, 141, 0.1); }
 
         .tier-card .tier-name {
             font-family: 'Bebas Neue', sans-serif;
@@ -2302,9 +2306,9 @@
             margin-bottom: 8px;
         }
 
-        .tier-card.ga .tier-name { color: #4a90d9; }
-        .tier-card.vip .tier-name { color: #f5a623; }
-        .tier-card.tables .tier-name { color: #e02020; }
+        .tier-card.ga .tier-name { color: #4a90d9; text-shadow: 0 0 20px rgba(74, 144, 217, 0.4); }
+        .tier-card.vip .tier-name { color: #f5a623; text-shadow: 0 0 20px rgba(245, 166, 35, 0.4); }
+        .tier-card.tables .tier-name { color: #FF4D8D; text-shadow: 0 0 20px rgba(255, 77, 141, 0.4); }
 
         .tier-card .tier-price {
             font-family: 'Bebas Neue', sans-serif;
@@ -2335,9 +2339,9 @@
             text-align: center;
         }
 
-        .tier-card.ga .tier-btn:hover { background: #4a90d9; color: #000; }
-        .tier-card.vip .tier-btn:hover { background: #f5a623; color: #000; }
-        .tier-card.tables .tier-btn:hover { background: #e02020; color: #fff; }
+        .tier-card.ga .tier-btn:hover { background: #4a90d9; color: #000; box-shadow: 0 0 20px rgba(74, 144, 217, 0.5); }
+        .tier-card.vip .tier-btn:hover { background: #f5a623; color: #000; box-shadow: 0 0 20px rgba(245, 166, 35, 0.5); }
+        .tier-card.tables .tier-btn:hover { background: #FF4D8D; color: #fff; box-shadow: 0 0 20px rgba(255, 77, 141, 0.5); }
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
@@ -2358,8 +2362,8 @@
         /* ─── REVEAL ANIMATION ─── */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal.visible {
@@ -2370,7 +2374,7 @@
         /* ─── SUCCESS MESSAGE ─── */
         .success-msg {
             display: none;
-            color: var(--teal);
+            color: #34D399;
             font-family: 'Fredoka', sans-serif;
             font-size: 1.1rem;
             margin-top: 15px;
@@ -2406,9 +2410,9 @@
             text-decoration: none;
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 20px;
-            transition: all 0.3s;
+            transition: all 0.4s var(--ease-smooth);
         }
 
         .nav-inner a:hover {
@@ -2460,8 +2464,8 @@
             flex-direction: column;
             padding: 80px 30px 30px;
             gap: 8px;
-            transition: right 0.3s ease;
-            border-left: 1px solid rgba(255,255,255,0.08);
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: 1px solid rgba(255,255,255,0.06);
         }
         .mobile-menu.open { right: 0; }
         .mobile-menu a {
@@ -2489,7 +2493,7 @@
             bottom: 30px;
             left: 30px;
             padding: 10px 20px;
-            background: linear-gradient(135deg, #00E5CC, #00B8A9);
+            background: linear-gradient(135deg, #34D399, #059669);
             border-radius: 30px;
             display: flex;
             align-items: center;
@@ -2497,15 +2501,15 @@
             font-family: 'Bebas Neue', sans-serif;
             font-size: 0.85rem;
             letter-spacing: 2px;
-            color: #FFD600;
+            color: #fff;
             font-weight: 700;
-            box-shadow: 0 5px 20px rgba(0, 229, 204, 0.4);
+            box-shadow: 0 4px 15px rgba(52, 211, 153, 0.2);
             cursor: pointer;
             text-decoration: none;
             z-index: 100;
-            transition: transform 0.3s;
+            transition: transform 0.4s var(--ease-smooth);
         }
-        .fab-merch:hover { transform: scale(1.05); }
+        .fab-merch:hover { transform: translateY(-2px); }
         /* Sold out */
         .merch-card.sold-out {
             opacity: 0.5;
@@ -2737,7 +2741,7 @@
     <section class="grand-opening" id="grand-opening">
         <div class="go-label reveal">Grand Opening</div>
         <div class="go-title reveal">La CaSiTa</div>
-        <div class="go-date reveal">May 1, 2026</div>
+        <div class="go-date reveal">May 1st & 2nd, 2026</div>
         <div class="go-location reveal">Brooklyn, <span>NYC</span></div>
     </section>
 
@@ -2825,29 +2829,95 @@
 
     <!-- BOOKING / SEATING MAP (Hidden until ready) -->
     <div class="checkered-divider" style="display:none;"></div>
-    <section class="booking-section" id="booking">
+    <section class="booking-section" id="booking" style="display:none;">
         <h2 class="section-title reveal">Choose Your <span class="accent">Experience</span></h2>
 
         <!-- Venue Map -->
         <div class="booking-map reveal">
-            <svg class="venue-svg" viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="La Casita BK venue seating map showing general admission, VIP, and private table areas">
+            <svg class="venue-svg" viewBox="0 0 600 820" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="La Casita BK venue seating map showing general admission, VIP, and private table areas" style="max-width:500px;margin:0 auto;display:block;border-radius:20px;overflow:hidden;">
+                <defs>
+                    <linearGradient id="stageGradMain" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF4D8D"/><stop offset="100%" style="stop-color:#e02050"/></linearGradient>
+                    <linearGradient id="vipGradMain" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f5a623"/><stop offset="100%" style="stop-color:#d4881a"/></linearGradient>
+                    <linearGradient id="gaGradMain" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#4a90d9"/><stop offset="100%" style="stop-color:#2d6cb5"/></linearGradient>
+                    <filter id="neonGlowMain"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                    <filter id="softGlowMain"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                </defs>
+                <!-- Background -->
+                <rect width="600" height="820" fill="#050508" rx="20"/>
+                <pattern id="gridMain" width="30" height="30" patternUnits="userSpaceOnUse"><rect width="30" height="30" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></pattern>
+                <rect width="600" height="820" fill="url(#gridMain)" rx="20"/>
+
+                <!-- DJ Booth -->
+                <rect x="130" y="20" width="340" height="60" rx="12" fill="#111" stroke="#444" stroke-width="1"/>
+                <text x="300" y="58" text-anchor="middle" fill="#666" font-family="'Bebas Neue',sans-serif" font-size="26" letter-spacing="6">DJ BOOTH</text>
+                <line x1="180" y1="80" x2="420" y2="80" stroke="#FF4D8D" stroke-width="2" opacity="0.4"/>
+
                 <!-- Stage -->
-                <rect class="stage" x="200" y="10" width="300" height="60" rx="8"/>
-                <text class="stage-label" x="350" y="48" text-anchor="middle">STAGE</text>
+                <rect x="80" y="95" width="440" height="85" rx="14" fill="url(#stageGradMain)" filter="url(#neonGlowMain)"/>
+                <rect x="80" y="95" width="440" height="85" rx="14" fill="none" stroke="#fff" stroke-width="2"/>
+                <text x="300" y="148" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="42" letter-spacing="6">LA CASITA</text>
 
-                <!-- VIP Section (closest to stage) -->
-                <rect class="zone zone-vip" x="175" y="90" width="350" height="80" rx="6"/>
-                <text class="zone-label" x="350" y="137" text-anchor="middle">VIP</text>
+                <line x1="50" y1="195" x2="550" y2="195" stroke="#f5a623" stroke-width="1" opacity="0.3"/>
+                <text x="300" y="225" text-anchor="middle" fill="#f5a623" font-family="'Bebas Neue',sans-serif" font-size="22" letter-spacing="6" opacity="0.9">VIP SECTION</text>
 
-                <!-- Tables (sides) -->
-                <rect class="zone zone-tables" x="30" y="90" width="120" height="180" rx="6"/>
-                <text class="zone-label" x="90" y="185" text-anchor="middle">TABLES</text>
-                <rect class="zone zone-tables" x="550" y="90" width="120" height="180" rx="6"/>
-                <text class="zone-label" x="610" y="185" text-anchor="middle">TABLES</text>
+                <!-- Couches -->
+                <rect x="20" y="245" width="130" height="95" rx="12" fill="url(#vipGradMain)" filter="url(#softGlowMain)"/>
+                <rect x="20" y="245" width="130" height="95" rx="12" fill="none" stroke="#f5a623" stroke-width="2"/>
+                <text x="85" y="285" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="2">COUCH 1</text>
+                <text x="85" y="315" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif" font-size="14">5-10 guests</text>
 
-                <!-- GA (general floor) -->
-                <rect class="zone zone-ga" x="100" y="190" width="500" height="200" rx="6"/>
-                <text class="zone-label" x="350" y="298" text-anchor="middle">GENERAL ADMISSION</text>
+                <rect x="165" y="245" width="130" height="95" rx="12" fill="url(#vipGradMain)" filter="url(#softGlowMain)"/>
+                <rect x="165" y="245" width="130" height="95" rx="12" fill="none" stroke="#f5a623" stroke-width="2"/>
+                <text x="230" y="285" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="2">COUCH 2</text>
+                <text x="230" y="315" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif" font-size="14">5-10 guests</text>
+
+                <rect x="310" y="245" width="130" height="95" rx="12" fill="url(#vipGradMain)" filter="url(#softGlowMain)"/>
+                <rect x="310" y="245" width="130" height="95" rx="12" fill="none" stroke="#f5a623" stroke-width="2"/>
+                <text x="375" y="285" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="2">COUCH 3</text>
+                <text x="375" y="315" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif" font-size="14">5-10 guests</text>
+
+                <rect x="455" y="245" width="130" height="95" rx="12" fill="url(#vipGradMain)" filter="url(#softGlowMain)"/>
+                <rect x="455" y="245" width="130" height="95" rx="12" fill="none" stroke="#f5a623" stroke-width="2"/>
+                <text x="520" y="285" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="2">COUCH 4</text>
+                <text x="520" y="315" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif" font-size="14">5-10 guests</text>
+
+                <!-- High Tops -->
+                <rect x="20" y="355" width="130" height="80" rx="12" fill="url(#vipGradMain)" opacity="0.8"/>
+                <rect x="20" y="355" width="130" height="80" rx="12" fill="none" stroke="#f5a623" stroke-width="1.5"/>
+                <text x="85" y="398" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2">HIGH TOP 1</text>
+                <text x="85" y="420" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif" font-size="12">1-4 guests</text>
+
+                <rect x="165" y="355" width="130" height="80" rx="12" fill="url(#vipGradMain)" opacity="0.8"/>
+                <rect x="165" y="355" width="130" height="80" rx="12" fill="none" stroke="#f5a623" stroke-width="1.5"/>
+                <text x="230" y="398" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2">HIGH TOP 2</text>
+                <text x="230" y="420" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif" font-size="12">1-4 guests</text>
+
+                <rect x="310" y="355" width="130" height="80" rx="12" fill="url(#vipGradMain)" opacity="0.8"/>
+                <rect x="310" y="355" width="130" height="80" rx="12" fill="none" stroke="#f5a623" stroke-width="1.5"/>
+                <text x="375" y="398" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2">HIGH TOP 3</text>
+                <text x="375" y="420" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif" font-size="12">1-4 guests</text>
+
+                <rect x="455" y="355" width="130" height="80" rx="12" fill="url(#vipGradMain)" opacity="0.8"/>
+                <rect x="455" y="355" width="130" height="80" rx="12" fill="none" stroke="#f5a623" stroke-width="1.5"/>
+                <text x="520" y="398" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2">HIGH TOP 4</text>
+                <text x="520" y="420" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif" font-size="12">1-4 guests</text>
+
+                <line x1="50" y1="455" x2="550" y2="455" stroke="#4a90d9" stroke-width="1" opacity="0.3"/>
+
+                <!-- Bar -->
+                <rect x="10" y="475" width="55" height="260" rx="10" fill="#151518" stroke="#333" stroke-width="1.5"/>
+                <text x="37" y="615" text-anchor="middle" fill="#888" font-family="'Bebas Neue',sans-serif" font-size="22" letter-spacing="3" transform="rotate(-90,37,615)">BAR</text>
+
+                <!-- GA Floor -->
+                <rect x="80" y="475" width="505" height="260" rx="14" fill="url(#gaGradMain)"/>
+                <rect x="80" y="475" width="505" height="260" rx="14" fill="none" stroke="#4a90d9" stroke-width="2"/>
+                <text x="332" y="590" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="36" letter-spacing="5">GENERAL</text>
+                <text x="332" y="630" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="36" letter-spacing="5">ADMISSION</text>
+
+                <!-- Entrance -->
+                <rect x="200" y="760" width="200" height="45" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
+                <text x="300" y="790" text-anchor="middle" fill="#666" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="4">ENTRANCE</text>
+                <polygon points="290,748 300,738 310,748" fill="#444"/>
             </svg>
         </div>
 
@@ -3047,7 +3117,7 @@
             </details>
             <details class="faq-item reveal">
                 <summary>When does La Casita BK open?</summary>
-                <p>La Casita BK opens May 1, 2026 in Brooklyn, NYC. Presale tickets go live Friday April 3, 2026 at 7PM EST. Sign up above to get early access to tickets and VIP tables.</p>
+                <p>La Casita BK opens May 1st & 2nd, 2026 in Brooklyn, NYC. Presale tickets go live Friday April 3, 2026 at 7PM EST. Sign up above to get early access to tickets and VIP tables.</p>
             </details>
             <details class="faq-item reveal">
                 <summary>What kind of music is played?</summary>
@@ -3083,7 +3153,7 @@
                 <span class="perk">Opening Night</span>
             </div>
             <p class="success-msg" id="successMsg">You're on the list! We'll hit you up soon.</p>
-            <a href="#merch" style="display:inline-block; margin-top:20px; padding:10px 28px; font-family:'Bebas Neue',sans-serif; font-size:0.9rem; letter-spacing:2px; color:#00E5CC; text-decoration:none; border:1px solid rgba(0,229,204,0.3); border-radius:30px; transition:all 0.3s;" onmouseover="this.style.background='rgba(0,229,204,0.1)';this.style.borderColor='#00E5CC'" onmouseout="this.style.background='none';this.style.borderColor='rgba(0,229,204,0.3)'">GET MERCH NOW</a>
+            <a href="#merch" style="display:inline-block; margin-top:20px; padding:10px 28px; font-family:'Bebas Neue',sans-serif; font-size:0.9rem; letter-spacing:2px; color:#34D399; text-decoration:none; border:1px solid rgba(52,211,153,0.3); border-radius:30px; transition:all 0.3s;" onmouseover="this.style.background='rgba(52,211,153,0.1)';this.style.borderColor='#34D399'" onmouseout="this.style.background='none';this.style.borderColor='rgba(52,211,153,0.3)'">GET MERCH NOW</a>
         </div>
     </section>
 
