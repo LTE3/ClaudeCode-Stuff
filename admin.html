@@ -389,19 +389,19 @@
             <div id="ticketCalendar" style="padding: 24px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
                     <button onclick="changeMonth(-1)" style="background:none;border:1px solid #333;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;">&lt; Prev</button>
-                    <h3 id="calendarTitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:#fff;"></h3>
+                    <h3 id="calendarTitle" style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;color:#fff;"></h3>
                     <button onclick="changeMonth(1)" style="background:none;border:1px solid #333;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;">Next &gt;</button>
                 </div>
-                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;">
-                    <div style="color:#666;font-size:0.75rem;padding:8px;">SUN</div>
-                    <div style="color:#666;font-size:0.75rem;padding:8px;">MON</div>
-                    <div style="color:#666;font-size:0.75rem;padding:8px;">TUE</div>
-                    <div style="color:#666;font-size:0.75rem;padding:8px;">WED</div>
-                    <div style="color:#666;font-size:0.75rem;padding:8px;">THU</div>
-                    <div style="color:#666;font-size:0.75rem;padding:8px;">FRI</div>
-                    <div style="color:#666;font-size:0.75rem;padding:8px;">SAT</div>
+                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;">
+                    <div style="color:#666;font-size:0.9rem;padding:12px;font-weight:600;">SUN</div>
+                    <div style="color:#666;font-size:0.9rem;padding:12px;font-weight:600;">MON</div>
+                    <div style="color:#666;font-size:0.9rem;padding:12px;font-weight:600;">TUE</div>
+                    <div style="color:#666;font-size:0.9rem;padding:12px;font-weight:600;">WED</div>
+                    <div style="color:#666;font-size:0.9rem;padding:12px;font-weight:600;">THU</div>
+                    <div style="color:#666;font-size:0.9rem;padding:12px;font-weight:600;">FRI</div>
+                    <div style="color:#666;font-size:0.9rem;padding:12px;font-weight:600;">SAT</div>
                 </div>
-                <div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;"></div>
+                <div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;"></div>
             </div>
 
             <!-- Step 2: Selected Date + Floor Plan -->
@@ -415,8 +415,8 @@
                 </div>
 
                 <!-- SVG Floor Plan -->
-                <div style="text-align:center;margin-bottom:24px;">
-                    <svg id="venueMap" viewBox="0 0 800 550" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;background:#0a0a0a;border-radius:16px;border:1px solid #222;">
+                <div style="text-align:center;margin-bottom:32px;">
+                    <svg id="venueMap" viewBox="0 0 800 550" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;background:#0a0a0a;border-radius:16px;border:1px solid #222;padding:10px;">
                         <!-- DJ Booth -->
                         <defs>
                             <linearGradient id="stageGrad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -491,23 +491,28 @@
                 </div>
 
                 <!-- Ticket Type Cards (below map) -->
-                <div id="ticketCards" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">
-                    <div class="ticket-type-card" onclick="selectGA()" style="flex:1;min-width:150px;max-width:200px;background:#111;border:2px solid #4a90d9;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 0.3s;">
-                        <div style="color:#4a90d9;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;">GA</div>
-                        <div style="color:#fff;font-size:1.5rem;font-weight:700;">$15<span style="font-size:0.7rem;color:#888;">+$5 fee</span></div>
+                <div id="ticketCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;max-width:900px;margin-left:auto;margin-right:auto;">
+                    <div class="ticket-type-card" onclick="selectGA()" style="background:#111;border:2px solid #4a90d9;border-radius:16px;padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#6aafff'" onmouseout="this.style.transform='none';this.style.borderColor='#4a90d9'">
+                        <div style="color:#4a90d9;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;">GENERAL ADMISSION</div>
+                        <div style="color:#fff;font-size:2.2rem;font-weight:700;margin:8px 0;">$15</div>
+                        <div style="color:#888;font-size:0.85rem;">+ $5 fee = $20 total</div>
+                        <div style="color:#4a90d9;font-size:0.8rem;margin-top:8px;">Floor access • Cash bar</div>
                     </div>
-                    <div class="ticket-type-card" onclick="selectVipGA()" style="flex:1;min-width:150px;max-width:200px;background:#111;border:2px solid #f5a623;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 0.3s;">
-                        <div style="color:#f5a623;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;">VIP GA</div>
-                        <div style="color:#fff;font-size:1.5rem;font-weight:700;">$35<span style="font-size:0.7rem;color:#888;">+$5 fee</span></div>
+                    <div class="ticket-type-card" onclick="selectVipGA()" style="background:#111;border:2px solid #f5a623;border-radius:16px;padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#ffc65c'" onmouseout="this.style.transform='none';this.style.borderColor='#f5a623'">
+                        <div style="color:#f5a623;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;">VIP GA</div>
+                        <div style="color:#fff;font-size:2.2rem;font-weight:700;margin:8px 0;">$35</div>
+                        <div style="color:#888;font-size:0.85rem;">+ $5 fee = $40 total</div>
+                        <div style="color:#f5a623;font-size:0.8rem;margin-top:8px;">VIP area • Priority entry</div>
                     </div>
-                    <div class="ticket-type-card" style="flex:1;min-width:150px;max-width:200px;background:#111;border:2px solid #00E5CC;border-radius:12px;padding:16px;text-align:center;cursor:default;">
-                        <div style="color:#00E5CC;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;">LADIES FREE</div>
-                        <div id="ladiesFreeCount" style="color:#fff;font-size:0.85rem;"></div>
-                        <button onclick="showLadiesFree()" style="margin-top:8px;padding:6px 16px;border:1px solid #00E5CC;border-radius:20px;background:none;color:#00E5CC;cursor:pointer;font-size:0.75rem;">Claim</button>
+                    <div class="ticket-type-card" style="background:#111;border:2px solid #00E5CC;border-radius:16px;padding:28px 20px;text-align:center;">
+                        <div style="color:#00E5CC;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;">LADIES FREE</div>
+                        <div id="ladiesFreeCount" style="color:#fff;font-size:1.2rem;margin:8px 0;font-weight:600;"></div>
+                        <button onclick="showLadiesFree()" style="margin-top:8px;padding:10px 24px;border:2px solid #00E5CC;border-radius:30px;background:none;color:#00E5CC;cursor:pointer;font-size:0.9rem;font-weight:600;letter-spacing:1px;transition:all 0.3s;" onmouseover="this.style.background='#00E5CC';this.style.color='#000'" onmouseout="this.style.background='none';this.style.color='#00E5CC'">Claim Free Entry</button>
                     </div>
-                    <div class="ticket-type-card" onclick="buyTestTicket()" style="flex:1;min-width:150px;max-width:200px;background:#111;border:2px solid #888;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 0.3s;">
-                        <div style="color:#888;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;">TEST</div>
-                        <div style="color:#fff;font-size:1.5rem;font-weight:700;">$1</div>
+                    <div class="ticket-type-card" onclick="buyTestTicket()" style="background:#111;border:2px solid #888;border-radius:16px;padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+                        <div style="color:#888;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;">TEST TICKET</div>
+                        <div style="color:#fff;font-size:2.2rem;font-weight:700;margin:8px 0;">$1</div>
+                        <div style="color:#888;font-size:0.85rem;">For testing checkout</div>
                     </div>
                 </div>
             </div>
@@ -936,15 +941,15 @@
                     else if (pctGA > 0.7) { dotColor = '#f5a623'; urgency = 'SELLING FAST'; }
                     else if (pctGA > 0.3) { dotColor = '#FFD600'; urgency = 'LIMITED'; }
 
-                    html += '<div onclick="selectDate(\'' + dateStr + '\')" style="padding:10px 4px;cursor:pointer;background:#1a1a1a;border-radius:8px;border:1px solid #333;transition:all 0.2s;text-align:center;" onmouseover="this.style.borderColor=\'#FF4D8D\'" onmouseout="this.style.borderColor=\'#333\'">';
-                    html += '<div style="font-size:1rem;color:#fff;font-weight:600;">' + d + '</div>';
-                    html += '<div style="width:8px;height:8px;background:' + dotColor + ';border-radius:50%;margin:4px auto 0;"></div>';
-                    if (urgency) html += '<div style="font-size:0.55rem;color:' + dotColor + ';margin-top:2px;">' + urgency + '</div>';
+                    html += '<div onclick="selectDate(\'' + dateStr + '\')" style="padding:16px 8px;cursor:pointer;background:#1a1a1a;border-radius:10px;border:2px solid #333;transition:all 0.2s;text-align:center;" onmouseover="this.style.borderColor=\'#FF4D8D\';this.style.transform=\'scale(1.05)\'" onmouseout="this.style.borderColor=\'#333\';this.style.transform=\'none\'">';
+                    html += '<div style="font-size:1.3rem;color:#fff;font-weight:700;">' + d + '</div>';
+                    html += '<div style="width:10px;height:10px;background:' + dotColor + ';border-radius:50%;margin:6px auto 0;"></div>';
+                    if (urgency) html += '<div style="font-size:0.7rem;color:' + dotColor + ';margin-top:4px;font-weight:600;">' + urgency + '</div>';
                     html += '</div>';
                 } else if (isPast) {
-                    html += '<div style="padding:10px 4px;text-align:center;color:#333;">' + d + '</div>';
+                    html += '<div style="padding:16px 8px;text-align:center;color:#333;font-size:1.1rem;">' + d + '</div>';
                 } else {
-                    html += '<div style="padding:10px 4px;text-align:center;color:#555;">' + d + '</div>';
+                    html += '<div style="padding:16px 8px;text-align:center;color:#555;font-size:1.1rem;">' + d + '</div>';
                 }
             }
             grid.innerHTML = html;
@@ -1139,15 +1144,27 @@
                 </div>`;
             }
 
+            const flyerImg = isCouch ? 'bottle-menu-vip.jpg' : 'bottle-menu-vip.jpg';
+
             document.getElementById('bookingContent').innerHTML = `
-                <h3 style="color:#f5a623;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;">${label}</h3>
-                <p style="color:#888;margin:4px 0;">${groupSize}</p>
-                <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:16px;margin:16px 0;">
-                    <div style="color:#f5a623;font-weight:700;margin-bottom:8px;">Package Includes:</div>
-                    <p style="color:#ccc;font-size:0.85rem;line-height:1.6;">${pkg}</p>
+                <h3 style="color:#f5a623;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;">${label}</h3>
+                <p style="color:#888;margin:6px 0;font-size:1rem;">${groupSize}</p>
+                <div style="display:flex;gap:20px;flex-wrap:wrap;margin:20px 0;">
+                    <div style="flex:1;min-width:250px;">
+                        <img src="${flyerImg}" alt="VIP Bottle Package" style="width:100%;border-radius:12px;border:1px solid #333;" onerror="this.style.display='none'">
+                    </div>
+                    <div style="flex:1;min-width:250px;">
+                        <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:20px;">
+                            <div style="color:#f5a623;font-weight:700;margin-bottom:10px;font-size:1.1rem;">Package Includes:</div>
+                            <p style="color:#ccc;font-size:1rem;line-height:1.8;">${pkg}</p>
+                        </div>
+                        <div style="margin-top:16px;">
+                            <img src="bottle-menu-packages.jpg" alt="Additional Bottle Packages" style="width:100%;border-radius:12px;border:1px solid #333;" onerror="this.style.display='none'">
+                        </div>
+                    </div>
                 </div>
-                <div style="font-size:0.85rem;color:#888;margin-bottom:12px;">Choose your time slot:</div>
-                <div style="display:flex;gap:12px;margin-bottom:16px;">${slotsHTML}</div>
+                <div style="font-size:1rem;color:#888;margin-bottom:16px;font-weight:600;">Choose your time slot:</div>
+                <div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;">${slotsHTML}</div>
             `;
         }
 
