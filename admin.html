@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La CaSiTa - Admin</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0A0A0A;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .login-container, .dashboard {
+            width: 100%;
+            max-width: 900px;
+            padding: 40px 20px;
+        }
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .login-container h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: #FF4D8D;
+        }
+        .login-container p {
+            color: #888;
+            margin-bottom: 24px;
+        }
+        .login-form {
+            display: flex;
+            gap: 10px;
+        }
+        .login-form input {
+            padding: 12px 16px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 1rem;
+            width: 260px;
+        }
+        .login-form input:focus { outline: none; border-color: #FF4D8D; }
+        .login-form button {
+            padding: 12px 24px;
+            background: #FF4D8D;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .login-form button:hover { background: #e0437d; }
+        .error-msg {
+            color: #ff4444;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .dashboard { display: none; }
+        .dashboard.active { display: block; }
+        .login-container.hidden { display: none; }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #222;
+        }
+        .dash-header h1 { color: #FF4D8D; font-size: 1.5rem; }
+        .dash-header button {
+            padding: 8px 16px;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .dash-header button:hover { background: #444; }
+
+        .stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #FF4D8D;
+        }
+        .stat-card .label {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        .table-container {
+            background: #1a1a1a;
+            border: 1px solid #222;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #222;
+        }
+        .table-header h2 { font-size: 1.1rem; }
+        .table-header button {
+            padding: 8px 16px;
+            background: #00E5CC;
+            color: #0A0A0A;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            text-align: left;
+            padding: 12px 20px;
+            background: #111;
+            color: #888;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        td {
+            padding: 12px 20px;
+            border-top: 1px solid #1f1f1f;
+            font-size: 0.9rem;
+        }
+        tr:hover td { background: #151515; }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            border-bottom: 1px solid #222;
+            gap: 12px;
+        }
+        .table-controls input {
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            flex: 1;
+            max-width: 300px;
+        }
+        .table-controls .page-btns {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            color: #888;
+            font-size: 0.85rem;
+        }
+        .table-controls .page-btns button {
+            padding: 6px 12px;
+            background: #222;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .table-controls .page-btns button:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .table-controls .page-btns button:hover:not(:disabled) {
+            background: #333;
+        }
+        .table-scroll {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 600px) {
+            .stats { flex-direction: column; }
+            .login-form { flex-direction: column; }
+            .login-form input { width: 100%; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 10px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <h1>La CaSiTa Admin</h1>
+        <p>Enter admin password to continue</p>
+        <form class="login-form" id="loginForm">
+            <input type="password" id="adminPassword" placeholder="Password" autocomplete="current-password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p class="error-msg" id="errorMsg">Invalid password. Try again.</p>
+    </div>
+
+    <div class="dashboard" id="dashboard">
+        <div class="dash-header">
+            <h1>La CaSiTa Admin</h1>
+            <button id="logoutBtn">Logout</button>
+        </div>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number" id="totalSignups">-</div>
+                <div class="label">Total Signups</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="todaySignups">-</div>
+                <div class="label">Signups Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="emailCount">-</div>
+                <div class="label">With Email</div>
+            </div>
+        </div>
+        <div class="stats" style="margin-bottom: 24px;">
+            <div class="stat-card">
+                <div class="number" id="totalViews">-</div>
+                <div class="label">Total Page Views</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="todayViews">-</div>
+                <div class="label">Views Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="weekViews">-</div>
+                <div class="label">Views This Week</div>
+            </div>
+        </div>
+        <!-- Orders Section -->
+        <div class="stats" style="margin-bottom: 24px;">
+            <div class="stat-card" style="border-color: #00E5CC;">
+                <div class="number" id="totalOrders" style="color:#00E5CC;">-</div>
+                <div class="label">Total Orders</div>
+            </div>
+            <div class="stat-card" style="border-color: #00E5CC;">
+                <div class="number" id="totalRevenue" style="color:#00E5CC;">-</div>
+                <div class="label">Revenue</div>
+            </div>
+        </div>
+        <div class="table-container" style="margin-bottom: 24px;">
+            <div class="table-header">
+                <h2>Orders & Merch Sold</h2>
+            </div>
+            <div id="itemBreakdown" style="padding: 16px 20px; display:flex; flex-wrap:wrap; gap:10px;"></div>
+            <div class="table-scroll">
+                <div id="ordersTable">
+                    <div class="loading">Loading orders...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Recent Signups <span style="color:#666;font-size:0.8rem;font-weight:400">(latest 1000 — Export CSV for all)</span></h2>
+                <button id="exportBtn">Export CSV</button>
+            </div>
+            <div class="table-controls" id="tableControls" style="display:none;">
+                <input type="text" id="searchBox" placeholder="Search by name, phone, or email...">
+                <div class="page-btns">
+                    <button id="prevPage">&lt; Prev</button>
+                    <span id="pageInfo">Page 1</span>
+                    <button id="nextPage">Next &gt;</button>
+                </div>
+            </div>
+            <div class="table-scroll">
+                <div id="tableBody">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ticket Test Section -->
+        <div class="table-container" style="margin-top: 24px;">
+            <div class="table-header">
+                <h2>Ticket Checkout <span style="color:#666;font-size:0.8rem;font-weight:400">(live Stripe — real payments)</span></h2>
+            </div>
+            <div style="display: flex; gap: 16px; padding: 24px; flex-wrap: wrap; justify-content: center;">
+                <div style="flex:1; min-width:200px; max-width:280px; background:#111; border:1px solid #4a90d9; border-radius:12px; padding:24px; text-align:center;">
+                    <div style="color:#4a90d9; font-size:0.85rem; font-weight:600; letter-spacing:2px; text-transform:uppercase;">General Admission</div>
+                    <div style="font-size:2.2rem; font-weight:700; color:#fff; margin:8px 0;">$35</div>
+                    <div style="color:#888; font-size:0.8rem; line-height:1.6; margin-bottom:16px;">Full floor access<br>Cash bar available<br>Standing room</div>
+                    <button onclick="buyTicket('ga')" style="padding:10px 28px; border:2px solid #4a90d9; border-radius:30px; background:none; color:#fff; cursor:pointer; font-size:0.9rem; font-weight:600; letter-spacing:1px; transition:all 0.3s;" onmouseover="this.style.background='#4a90d9';this.style.color='#000'" onmouseout="this.style.background='none';this.style.color='#fff'">Buy GA</button>
+                </div>
+                <div style="flex:1; min-width:200px; max-width:280px; background:#111; border:1px solid #f5a623; border-radius:12px; padding:24px; text-align:center;">
+                    <div style="color:#f5a623; font-size:0.85rem; font-weight:600; letter-spacing:2px; text-transform:uppercase;">VIP</div>
+                    <div style="font-size:2.2rem; font-weight:700; color:#fff; margin:8px 0;">$75</div>
+                    <div style="color:#888; font-size:0.8rem; line-height:1.6; margin-bottom:16px;">Priority entry<br>Front section access<br>Complimentary drink</div>
+                    <button onclick="buyTicket('vip')" style="padding:10px 28px; border:2px solid #f5a623; border-radius:30px; background:none; color:#fff; cursor:pointer; font-size:0.9rem; font-weight:600; letter-spacing:1px; transition:all 0.3s;" onmouseover="this.style.background='#f5a623';this.style.color='#000'" onmouseout="this.style.background='none';this.style.color='#fff'">Buy VIP</button>
+                </div>
+                <div style="flex:1; min-width:200px; max-width:280px; background:#111; border:1px solid #e02020; border-radius:12px; padding:24px; text-align:center;">
+                    <div style="color:#e02020; font-size:0.85rem; font-weight:600; letter-spacing:2px; text-transform:uppercase;">Tables</div>
+                    <div style="font-size:2.2rem; font-weight:700; color:#fff; margin:8px 0;">$250</div>
+                    <div style="color:#888; font-size:0.8rem; line-height:1.6; margin-bottom:16px;">Reserved table for 4<br>Bottle service<br>Side stage views</div>
+                    <button onclick="buyTicket('tables')" style="padding:10px 28px; border:2px solid #e02020; border-radius:30px; background:none; color:#fff; cursor:pointer; font-size:0.9rem; font-weight:600; letter-spacing:1px; transition:all 0.3s;" onmouseover="this.style.background='#e02020';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='#fff'">Reserve Table</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Merch Section -->
+        <div class="table-container" style="margin-top: 24px;">
+            <div class="table-header">
+                <h2>Merch <span style="color:#666;font-size:0.8rem;font-weight:400">(live Stripe Payment Links)</span></h2>
+            </div>
+            <div style="padding: 24px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+                <div style="flex:1; min-width:200px; max-width:280px; background:#111; border:1px solid #FF4D8D; border-radius:12px; padding:20px; text-align:center;">
+                    <div style="font-size:1.1rem; font-weight:700; letter-spacing:2px; color:#fff;">DTMF SONG KEYCHAINS</div>
+                    <div style="color:#888; font-size:0.8rem; margin:8px 0;">Spotify acrylic keychain</div>
+                    <div style="font-size:1.5rem; font-weight:700; color:#FF4D8D; margin:8px 0;">$12</div>
+                    <a href="https://buy.stripe.com/cNieVfajCcZjbkJaZf0Jq04" target="_blank" rel="noopener noreferrer" style="display:block; padding:12px; border:2px solid #FF4D8D; border-radius:30px; color:#fff; text-decoration:none; font-weight:600; margin-top:12px; transition:all 0.3s;" onmouseover="this.style.background='#FF4D8D';this.style.color='#000'" onmouseout="this.style.background='none';this.style.color='#fff'">Buy — $12</a>
+                </div>
+                <div style="flex:1; min-width:200px; max-width:280px; background:#111; border:1px solid #00E5CC; border-radius:12px; padding:20px; text-align:center;">
+                    <div style="font-size:1.1rem; font-weight:700; letter-spacing:2px; color:#fff;">DTMF ACRYLIC KEYCHAINS</div>
+                    <div style="color:#888; font-size:0.8rem; margin:8px 0;">DeBí TiRAR MáS FOToS</div>
+                    <div style="font-size:1.5rem; font-weight:700; color:#00E5CC; margin:8px 0;">$12</div>
+                    <a href="https://buy.stripe.com/00w7sN3Ve1gB88xebr0Jq05" target="_blank" rel="noopener noreferrer" style="display:block; padding:12px; border:2px solid #00E5CC; border-radius:30px; color:#fff; text-decoration:none; font-weight:600; margin-top:12px; transition:all 0.3s;" onmouseover="this.style.background='#00E5CC';this.style.color='#000'" onmouseout="this.style.background='none';this.style.color='#fff'">Buy — $12</a>
+                </div>
+                <div style="flex:1; min-width:200px; max-width:280px; background:#111; border:1px solid #FFD600; border-radius:12px; padding:20px; text-align:center;">
+                    <div style="font-size:1.1rem; font-weight:700; letter-spacing:2px; color:#fff;">SAPO CONCHO PLUSHIES</div>
+                    <div style="color:#888; font-size:0.8rem; margin:8px 0;">El Sapo Concho plush toy</div>
+                    <div style="font-size:1.5rem; font-weight:700; color:#FFD600; margin:8px 0;">$15</div>
+                    <a href="https://buy.stripe.com/cNifZj0J2gbvagFc3j0Jq06" target="_blank" rel="noopener noreferrer" style="display:block; padding:12px; border:2px solid #FFD600; border-radius:30px; color:#fff; text-decoration:none; font-weight:600; margin-top:12px; transition:all 0.3s;" onmouseover="this.style.background='#FFD600';this.style.color='#000'" onmouseout="this.style.background='none';this.style.color='#fff'">Buy — $15</a>
+                </div>
+                <div style="flex:1; min-width:200px; max-width:280px; background:#111; border:1px solid #FF6B2B; border-radius:12px; padding:20px; text-align:center;">
+                    <div style="font-size:1.1rem; font-weight:700; letter-spacing:2px; color:#fff;">SAPO CONCHO TOTE BAG</div>
+                    <div style="color:#888; font-size:0.8rem; margin:8px 0;">White or Beige</div>
+                    <div style="font-size:1.5rem; font-weight:700; color:#FF6B2B; margin:8px 0;">$20</div>
+                    <a href="https://buy.stripe.com/dRmdRb63mf7r1K9ffv0Jq07" target="_blank" rel="noopener noreferrer" style="display:block; padding:12px; border:2px solid #FF6B2B; border-radius:30px; color:#fff; text-decoration:none; font-weight:600; margin-top:12px; transition:all 0.3s;" onmouseover="this.style.background='#FF6B2B';this.style.color='#000'" onmouseout="this.style.background='none';this.style.color='#fff'">Buy — $20</a>
+                </div>
+                <div style="flex:1; min-width:200px; max-width:280px; background:#111; border:1px solid #e02020; border-radius:12px; padding:20px; text-align:center;">
+                    <div style="font-size:1.1rem; font-weight:700; letter-spacing:2px; color:#fff;">DTMF T-SHIRTS</div>
+                    <div style="color:#888; font-size:0.8rem; margin:8px 0;">5 designs, S/M/L/XL</div>
+                    <div style="font-size:1.5rem; font-weight:700; color:#e02020; margin:8px 0;">$20</div>
+                    <a href="https://buy.stripe.com/7sY3cx0J27EZ2Od8R70Jq08" target="_blank" rel="noopener noreferrer" style="display:block; padding:12px; border:2px solid #e02020; border-radius:30px; color:#fff; text-decoration:none; font-weight:600; margin-top:12px; transition:all 0.3s;" onmouseover="this.style.background='#e02020';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='#fff'">Buy — $20</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- TICKETING SYSTEM -->
+        <!-- ═══════════════════════════════════════ -->
+        <div class="table-container" style="margin-top: 24px;">
+            <div class="table-header">
+                <h2>Ticketing <span style="color:#FF4D8D;font-size:0.8rem;font-weight:400;">LIVE SYSTEM</span></h2>
+            </div>
+
+            <!-- Step 1: Calendar -->
+            <div id="ticketCalendar" style="padding: 24px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <button onclick="changeMonth(-1)" style="background:none;border:1px solid #333;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;">&lt; Prev</button>
+                    <h3 id="calendarTitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:#fff;"></h3>
+                    <button onclick="changeMonth(1)" style="background:none;border:1px solid #333;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;">Next &gt;</button>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;">
+                    <div style="color:#666;font-size:0.75rem;padding:8px;">SUN</div>
+                    <div style="color:#666;font-size:0.75rem;padding:8px;">MON</div>
+                    <div style="color:#666;font-size:0.75rem;padding:8px;">TUE</div>
+                    <div style="color:#666;font-size:0.75rem;padding:8px;">WED</div>
+                    <div style="color:#666;font-size:0.75rem;padding:8px;">THU</div>
+                    <div style="color:#666;font-size:0.75rem;padding:8px;">FRI</div>
+                    <div style="color:#666;font-size:0.75rem;padding:8px;">SAT</div>
+                </div>
+                <div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;"></div>
+            </div>
+
+            <!-- Step 2: Selected Date + Floor Plan -->
+            <div id="ticketFloorPlan" style="display:none; padding: 24px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                    <div>
+                        <span id="selectedDateBadge" style="background:#FF4D8D;color:#fff;padding:6px 16px;border-radius:20px;font-size:0.85rem;font-weight:600;"></span>
+                        <button onclick="backToCalendar()" style="background:none;border:none;color:#888;cursor:pointer;margin-left:12px;font-size:0.85rem;">Change Date</button>
+                    </div>
+                    <div id="urgencyBadge" style="font-size:0.8rem;color:#e02020;font-weight:600;"></div>
+                </div>
+
+                <!-- SVG Floor Plan -->
+                <div style="text-align:center;margin-bottom:24px;">
+                    <svg id="venueMap" viewBox="0 0 800 550" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;background:#0a0a0a;border-radius:16px;border:1px solid #222;">
+                        <!-- DJ Booth -->
+                        <defs>
+                            <linearGradient id="stageGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FF4D8D;stop-opacity:1"/>
+                                <stop offset="100%" style="stop-color:#e02050;stop-opacity:1"/>
+                            </linearGradient>
+                            <linearGradient id="vipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f5a623;stop-opacity:0.9"/>
+                                <stop offset="100%" style="stop-color:#e8951a;stop-opacity:0.9"/>
+                            </linearGradient>
+                            <linearGradient id="gaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#4a90d9;stop-opacity:0.8"/>
+                                <stop offset="100%" style="stop-color:#3a7bc0;stop-opacity:0.8"/>
+                            </linearGradient>
+                            <filter id="glow"><feGaussianBlur stdDeviation="3" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                        </defs>
+
+                        <!-- DJ Booth -->
+                        <rect x="250" y="15" width="300" height="40" rx="8" fill="#333" stroke="#555" stroke-width="1"/>
+                        <text x="400" y="42" text-anchor="middle" fill="#888" font-family="'Bebas Neue',sans-serif" font-size="16" letter-spacing="3">DJ BOOTH</text>
+
+                        <!-- Stage / La Casita -->
+                        <rect x="200" y="65" width="400" height="60" rx="10" fill="url(#stageGrad)" stroke="#fff" stroke-width="2" filter="url(#glow)"/>
+                        <text x="400" y="103" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="22" letter-spacing="4">LA CASITA</text>
+
+                        <!-- VIP Area Label -->
+                        <text x="400" y="155" text-anchor="middle" fill="#f5a623" font-family="'Bebas Neue',sans-serif" font-size="14" letter-spacing="3" opacity="0.7">VIP SECTION</text>
+
+                        <!-- Couches (4) -->
+                        <rect id="couch-1" x="100" y="165" width="130" height="55" rx="8" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="1.5" cursor="pointer" onclick="selectTable('couch',1)"/>
+                        <text x="165" y="192" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="11" font-weight="600" pointer-events="none">COUCH 1</text>
+                        <text x="165" y="207" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="9" opacity="0.7" pointer-events="none">5-10 guests</text>
+
+                        <rect id="couch-2" x="245" y="165" width="130" height="55" rx="8" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="1.5" cursor="pointer" onclick="selectTable('couch',2)"/>
+                        <text x="310" y="192" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="11" font-weight="600" pointer-events="none">COUCH 2</text>
+                        <text x="310" y="207" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="9" opacity="0.7" pointer-events="none">5-10 guests</text>
+
+                        <rect id="couch-3" x="425" y="165" width="130" height="55" rx="8" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="1.5" cursor="pointer" onclick="selectTable('couch',3)"/>
+                        <text x="490" y="192" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="11" font-weight="600" pointer-events="none">COUCH 3</text>
+                        <text x="490" y="207" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="9" opacity="0.7" pointer-events="none">5-10 guests</text>
+
+                        <rect id="couch-4" x="570" y="165" width="130" height="55" rx="8" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="1.5" cursor="pointer" onclick="selectTable('couch',4)"/>
+                        <text x="635" y="192" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="11" font-weight="600" pointer-events="none">COUCH 4</text>
+                        <text x="635" y="207" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="9" opacity="0.7" pointer-events="none">5-10 guests</text>
+
+                        <!-- High Tops (4) -->
+                        <rect id="hightop-1" x="100" y="235" width="130" height="45" rx="8" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="1.5" cursor="pointer" onclick="selectTable('high_top',1)" opacity="0.85"/>
+                        <text x="165" y="261" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="11" font-weight="600" pointer-events="none">HIGH TOP 1</text>
+
+                        <rect id="hightop-2" x="245" y="235" width="130" height="45" rx="8" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="1.5" cursor="pointer" onclick="selectTable('high_top',2)" opacity="0.85"/>
+                        <text x="310" y="261" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="11" font-weight="600" pointer-events="none">HIGH TOP 2</text>
+
+                        <rect id="hightop-3" x="425" y="235" width="130" height="45" rx="8" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="1.5" cursor="pointer" onclick="selectTable('high_top',3)" opacity="0.85"/>
+                        <text x="490" y="261" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="11" font-weight="600" pointer-events="none">HIGH TOP 3</text>
+
+                        <rect id="hightop-4" x="570" y="235" width="130" height="45" rx="8" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="1.5" cursor="pointer" onclick="selectTable('high_top',4)" opacity="0.85"/>
+                        <text x="635" y="261" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="11" font-weight="600" pointer-events="none">HIGH TOP 4</text>
+
+                        <!-- Bar -->
+                        <rect x="30" y="300" width="55" height="180" rx="6" fill="#333" stroke="#555" stroke-width="1"/>
+                        <text x="57" y="395" text-anchor="middle" fill="#888" font-family="'Bebas Neue',sans-serif" font-size="14" letter-spacing="2" transform="rotate(-90,57,395)">BAR</text>
+
+                        <!-- GA Floor -->
+                        <rect id="ga-zone" x="100" y="300" width="600" height="180" rx="10" fill="url(#gaGrad)" stroke="#4a90d9" stroke-width="1.5" cursor="pointer" onclick="selectGA()"/>
+                        <text x="400" y="380" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="24" letter-spacing="4" pointer-events="none">GENERAL ADMISSION</text>
+                        <text id="gaCountLabel" x="400" y="410" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif" font-size="13" pointer-events="none"></text>
+
+                        <!-- Entrance -->
+                        <rect x="300" y="500" width="200" height="35" rx="6" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+                        <text x="400" y="523" text-anchor="middle" fill="#666" font-family="'Bebas Neue',sans-serif" font-size="14" letter-spacing="3">ENTRANCE</text>
+                    </svg>
+                </div>
+
+                <!-- Ticket Type Cards (below map) -->
+                <div id="ticketCards" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">
+                    <div class="ticket-type-card" onclick="selectGA()" style="flex:1;min-width:150px;max-width:200px;background:#111;border:2px solid #4a90d9;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 0.3s;">
+                        <div style="color:#4a90d9;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;">GA</div>
+                        <div style="color:#fff;font-size:1.5rem;font-weight:700;">$15<span style="font-size:0.7rem;color:#888;">+$5 fee</span></div>
+                    </div>
+                    <div class="ticket-type-card" onclick="selectVipGA()" style="flex:1;min-width:150px;max-width:200px;background:#111;border:2px solid #f5a623;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 0.3s;">
+                        <div style="color:#f5a623;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;">VIP GA</div>
+                        <div style="color:#fff;font-size:1.5rem;font-weight:700;">$35<span style="font-size:0.7rem;color:#888;">+$5 fee</span></div>
+                    </div>
+                    <div class="ticket-type-card" style="flex:1;min-width:150px;max-width:200px;background:#111;border:2px solid #00E5CC;border-radius:12px;padding:16px;text-align:center;cursor:default;">
+                        <div style="color:#00E5CC;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;">LADIES FREE</div>
+                        <div id="ladiesFreeCount" style="color:#fff;font-size:0.85rem;"></div>
+                        <button onclick="showLadiesFree()" style="margin-top:8px;padding:6px 16px;border:1px solid #00E5CC;border-radius:20px;background:none;color:#00E5CC;cursor:pointer;font-size:0.75rem;">Claim</button>
+                    </div>
+                    <div class="ticket-type-card" onclick="buyTestTicket()" style="flex:1;min-width:150px;max-width:200px;background:#111;border:2px solid #888;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 0.3s;">
+                        <div style="color:#888;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;">TEST</div>
+                        <div style="color:#fff;font-size:1.5rem;font-weight:700;">$1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Booking Detail Panel -->
+            <div id="bookingPanel" style="display:none;padding:24px;border-top:1px solid #222;">
+                <div id="bookingContent"></div>
+            </div>
+
+            <!-- Event Bookings Dashboard -->
+            <div id="eventBookings" style="display:none;padding:24px;border-top:1px solid #222;">
+                <h3 style="color:#fff;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;margin-bottom:16px;">Event Bookings</h3>
+                <div id="bookingSummary" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;"></div>
+                <div id="bookingsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+        let signupsData = [];
+        let adminPassword = '';
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pw = document.getElementById('adminPassword').value;
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.style.display = 'none';
+
+            try {
+                // Fetch most recent 1000 signups for table display
+                // True total count comes from get_signup_count
+                const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_signups', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ admin_password: pw, page_offset: 0, page_limit: 1000 })
+                });
+
+                if (!res.ok) {
+                    const errBody = await res.json().catch(() => null);
+                    if (errBody && typeof errBody.message === 'string' && errBody.message.includes('Too many')) {
+                        errorMsg.textContent = 'Too many login attempts. Try again later.';
+                    } else {
+                        errorMsg.textContent = 'Invalid password. Try again.';
+                    }
+                    errorMsg.style.display = 'block';
+                    return;
+                }
+
+                signupsData = await res.json();
+                adminPassword = pw;
+                sessionStorage.setItem('lacasita_admin_pw', pw);
+                showDashboard();
+                loadAnalytics(pw);
+                loadOrders(pw);
+            } catch (err) {
+                errorMsg.style.display = 'block';
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('loginContainer').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('active');
+            renderStats();
+            renderTable();
+        }
+
+        function renderStats() {
+            // Fallback to array counts (may be capped at 1000 by PostgREST)
+            const today = new Date().toISOString().split('T')[0];
+            const todayCount = signupsData.filter(s => s.created_at.startsWith(today)).length;
+            const withEmail = signupsData.filter(s => s.email).length;
+
+            document.getElementById('totalSignups').textContent = signupsData.length;
+            document.getElementById('todaySignups').textContent = todayCount;
+            document.getElementById('emailCount').textContent = withEmail;
+
+            // Fetch true counts from DB (not subject to 1000 row limit)
+            loadSignupCounts(adminPassword);
+        }
+
+        async function loadSignupCounts(pw) {
+            try {
+                const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_signup_count', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ admin_password: pw })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('totalSignups').textContent = data.total || 0;
+                    document.getElementById('todaySignups').textContent = data.today || 0;
+                    document.getElementById('emailCount').textContent = data.with_email || 0;
+                }
+            } catch (e) {}
+        }
+
+        const PAGE_SIZE = 100;
+        let currentPage = 0;
+        let filteredData = [];
+        let searchTerm = '';
+
+        function renderTable() {
+            const container = document.getElementById('tableBody');
+            const controls = document.getElementById('tableControls');
+
+            if (signupsData.length === 0) {
+                container.innerHTML = '<div class="empty-state">No signups yet</div>';
+                controls.style.display = 'none';
+                return;
+            }
+
+            controls.style.display = 'flex';
+            applyFilter();
+        }
+
+        function applyFilter() {
+            const term = searchTerm.toLowerCase();
+            filteredData = term
+                ? signupsData.filter(s =>
+                    (s.first_name + ' ' + s.last_name).toLowerCase().includes(term) ||
+                    s.phone.toLowerCase().includes(term) ||
+                    (s.email || '').toLowerCase().includes(term))
+                : signupsData;
+            currentPage = 0;
+            renderPage();
+        }
+
+        function renderPage() {
+            const container = document.getElementById('tableBody');
+            const totalPages = Math.ceil(filteredData.length / PAGE_SIZE);
+            const start = currentPage * PAGE_SIZE;
+            const pageData = filteredData.slice(start, start + PAGE_SIZE);
+
+            let html = '<table><thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Email</th><th>Signed Up</th></tr></thead><tbody>';
+            pageData.forEach((s, i) => {
+                const date = new Date(s.created_at);
+                const formatted = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' +
+                    date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                html += `<tr>
+                    <td>${start + i + 1}</td>
+                    <td>${escapeHtml(s.first_name)} ${escapeHtml(s.last_name)}</td>
+                    <td>${escapeHtml(s.phone)}</td>
+                    <td>${s.email ? escapeHtml(s.email) : '<span style="color:#555">—</span>'}</td>
+                    <td>${formatted}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+
+            document.getElementById('pageInfo').textContent =
+                'Page ' + (currentPage + 1) + ' of ' + totalPages + ' (' + filteredData.length + ' rows)';
+            document.getElementById('prevPage').disabled = currentPage === 0;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages - 1;
+        }
+
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            applyFilter();
+        });
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 0) { currentPage--; renderPage(); }
+        });
+        document.getElementById('nextPage').addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredData.length / PAGE_SIZE);
+            if (currentPage < totalPages - 1) { currentPage++; renderPage(); }
+        });
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        async function loadAnalytics(pw) {
+            try {
+                const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_analytics', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ admin_password: pw })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('totalViews').textContent = data.total_views || 0;
+                    document.getElementById('todayViews').textContent = data.today_views || 0;
+                    document.getElementById('weekViews').textContent = data.week_views || 0;
+                }
+            } catch (e) {}
+        }
+
+        async function loadOrders(pw) {
+            try {
+                const res = await fetch(SUPABASE_URL + '/functions/v1/get-orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ admin_password: pw })
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+
+                document.getElementById('totalOrders').textContent = data.totalOrders || 0;
+                document.getElementById('totalRevenue').textContent = '$' + (data.totalRevenue || 0).toFixed(2);
+
+                // Item breakdown badges
+                const breakdown = document.getElementById('itemBreakdown');
+                if (data.itemCounts && Object.keys(data.itemCounts).length > 0) {
+                    breakdown.innerHTML = Object.entries(data.itemCounts)
+                        .sort((a, b) => b[1] - a[1])
+                        .map(([name, qty]) =>
+                            '<span style="background:#1a1a1a; border:1px solid #333; border-radius:20px; padding:6px 14px; font-size:0.8rem; color:#fff;">' +
+                            name + ' <span style="color:#00E5CC; font-weight:700;">x' + qty + '</span></span>'
+                        ).join('');
+                } else {
+                    breakdown.innerHTML = '<span style="color:#555; font-size:0.85rem;">No orders yet</span>';
+                }
+
+                // Orders table
+                const table = document.getElementById('ordersTable');
+                if (data.orders && data.orders.length > 0) {
+                    let html = '<table><thead><tr><th>#</th><th>Customer</th><th>Items</th><th>Total</th><th>Shipping</th><th>Date</th></tr></thead><tbody>';
+                    data.orders.forEach((o, i) => {
+                        const date = new Date(o.date);
+                        const formatted = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' +
+                            date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                        const items = o.items.map(it => it.name + (it.qty > 1 ? ' x' + it.qty : '')).join('<br>');
+                        const shipping = o.shipping || '<span style="color:#555">N/A</span>';
+                        html += '<tr><td>' + (i+1) + '</td><td>' + o.name + '<br><span style="color:#888;font-size:0.75rem;">' + o.email + '</span></td><td style="font-size:0.8rem;">' + items + '</td><td style="color:#00E5CC;font-weight:700;">$' + o.amount.toFixed(2) + '</td><td style="font-size:0.75rem;">' + shipping + '</td><td style="font-size:0.8rem;">' + formatted + '</td></tr>';
+                    });
+                    html += '</tbody></table>';
+                    table.innerHTML = html;
+                } else {
+                    table.innerHTML = '<div class="empty-state">No orders yet</div>';
+                }
+            } catch (e) {}
+        }
+
+        document.getElementById('exportBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('exportBtn');
+            btn.textContent = 'Exporting...';
+            btn.disabled = true;
+            try {
+                // Fetch ALL signups for export (paginate through DB)
+                let allRows = [];
+                let offset = 0;
+                while (true) {
+                    const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_signups', {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ admin_password: adminPassword, page_offset: offset, page_limit: 1000 })
+                    });
+                    if (!res.ok) break;
+                    const batch = await res.json();
+                    allRows = allRows.concat(batch);
+                    if (batch.length < 1000) break;
+                    offset += 1000;
+                }
+                if (allRows.length === 0) { btn.textContent = 'Export CSV'; btn.disabled = false; return; }
+                let csv = 'First Name,Last Name,Phone,Email,Signed Up\n';
+                allRows.forEach(s => {
+                    csv += `"${s.first_name}","${s.last_name}","${s.phone}","${s.email || ''}","${s.created_at}"\n`;
+                });
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'lacasita-signups-' + new Date().toISOString().split('T')[0] + '.csv';
+                a.click();
+                URL.revokeObjectURL(url);
+            } catch (e) {}
+            btn.textContent = 'Export CSV';
+            btn.disabled = false;
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            adminPassword = '';
+            signupsData = [];
+            sessionStorage.removeItem('lacasita_admin_pw');
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('loginContainer').classList.remove('hidden');
+            document.getElementById('adminPassword').value = '';
+        });
+
+        // Auto-login if session exists (survives refresh, clears when browser closes)
+        (async () => {
+            const savedPw = sessionStorage.getItem('lacasita_admin_pw');
+            if (!savedPw) return;
+            try {
+                const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_signup_count', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ admin_password: savedPw })
+                });
+                if (!res.ok) { sessionStorage.removeItem('lacasita_admin_pw'); return; }
+
+                // Password still valid — load dashboard
+                adminPassword = savedPw;
+                document.getElementById('adminPassword').value = savedPw;
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            } catch (e) {
+                sessionStorage.removeItem('lacasita_admin_pw');
+            }
+        })();
+    </script>
+
+    <!-- Stripe Checkout -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe('pk_live_51SCr4XRpujgqTzfRbbP5MeI1x3Zx6yTO5drQvv7AjsI5tPul6q2DUM3cZD7yZ9xV0R6H1zqFglov8nosNpIueHKG000aCfVG0y');
+
+        async function buyTicket(tier) {
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Loading...';
+            btn.style.pointerEvents = 'none';
+
+            const payload = { tier };
+            if (tier === 'dtmf_keychain') {
+                const songSelect = document.getElementById('keychainSong');
+                if (songSelect) payload.song = songSelect.value;
+            } else if (tier === 'dtmf_acrylic') {
+                const styleSelect = document.getElementById('acrylicStyle');
+                if (styleSelect) payload.style = styleSelect.value;
+            } else if (tier === 'sapo_plushie') {
+                const styleSelect = document.getElementById('plushieStyle');
+                if (styleSelect) payload.style = styleSelect.value;
+            } else if (tier === 'tote_bag') {
+                const colorSelect = document.getElementById('toteColor');
+                if (colorSelect) payload.color = colorSelect.value;
+            } else if (tier === 'dtmf_shirt') {
+                const designSelect = document.getElementById('shirtDesign');
+                const sizeSelect = document.getElementById('shirtSize');
+                if (designSelect) payload.design = designSelect.value;
+                if (sizeSelect) payload.size = sizeSelect.value;
+            }
+
+            try {
+                const res = await fetch('https://tqeunmqnaoyrerkbhokk.supabase.co/functions/v1/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('Error: ' + (data.error || 'Something went wrong'));
+                    btn.textContent = originalText;
+                    btn.style.pointerEvents = '';
+                }
+            } catch (err) {
+                alert('Connection error. Please try again.');
+                btn.textContent = originalText;
+                btn.style.pointerEvents = '';
+            }
+        }
+
+        // ═══════════════════════════════════════
+        // TICKETING SYSTEM
+        // ═══════════════════════════════════════
+        let calendarMonth = new Date().getMonth();
+        let calendarYear = new Date().getFullYear();
+        let eventDates = {};
+        let selectedEvent = null;
+        let eventAvailability = null;
+
+        // Load events on login
+        async function loadEvents() {
+            try {
+                const resp = await fetch(SUPABASE_URL + '/rest/v1/events?is_active=eq.true&select=event_date,title,ga_sold,ga_capacity,vip_ga_sold,vip_ga_capacity,ladies_free_claimed,ladies_free_capacity', {
+                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+                });
+                const events = await resp.json();
+                eventDates = {};
+                events.forEach(e => { eventDates[e.event_date] = e; });
+                renderCalendar();
+            } catch(e) {}
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const title = document.getElementById('calendarTitle');
+            const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            title.textContent = months[calendarMonth] + ' ' + calendarYear;
+
+            const firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
+            const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+            const today = new Date().toISOString().split('T')[0];
+
+            let html = '';
+            for (let i = 0; i < firstDay; i++) html += '<div></div>';
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = calendarYear + '-' + String(calendarMonth + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+                const evt = eventDates[dateStr];
+                const isPast = dateStr < today;
+
+                if (evt && !isPast) {
+                    const pctGA = evt.ga_sold / evt.ga_capacity;
+                    let dotColor = '#00E5CC';
+                    let urgency = '';
+                    if (pctGA > 0.9) { dotColor = '#e02020'; urgency = 'ALMOST OUT'; }
+                    else if (pctGA > 0.7) { dotColor = '#f5a623'; urgency = 'SELLING FAST'; }
+                    else if (pctGA > 0.3) { dotColor = '#FFD600'; urgency = 'LIMITED'; }
+
+                    html += '<div onclick="selectDate(\'' + dateStr + '\')" style="padding:10px 4px;cursor:pointer;background:#1a1a1a;border-radius:8px;border:1px solid #333;transition:all 0.2s;text-align:center;" onmouseover="this.style.borderColor=\'#FF4D8D\'" onmouseout="this.style.borderColor=\'#333\'">';
+                    html += '<div style="font-size:1rem;color:#fff;font-weight:600;">' + d + '</div>';
+                    html += '<div style="width:8px;height:8px;background:' + dotColor + ';border-radius:50%;margin:4px auto 0;"></div>';
+                    if (urgency) html += '<div style="font-size:0.55rem;color:' + dotColor + ';margin-top:2px;">' + urgency + '</div>';
+                    html += '</div>';
+                } else if (isPast) {
+                    html += '<div style="padding:10px 4px;text-align:center;color:#333;">' + d + '</div>';
+                } else {
+                    html += '<div style="padding:10px 4px;text-align:center;color:#555;">' + d + '</div>';
+                }
+            }
+            grid.innerHTML = html;
+        }
+
+        function changeMonth(dir) {
+            calendarMonth += dir;
+            if (calendarMonth > 11) { calendarMonth = 0; calendarYear++; }
+            if (calendarMonth < 0) { calendarMonth = 11; calendarYear--; }
+            renderCalendar();
+        }
+
+        async function selectDate(dateStr) {
+            selectedEvent = dateStr;
+            document.getElementById('selectedDateBadge').textContent = new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('ticketCalendar').style.display = 'none';
+            document.getElementById('ticketFloorPlan').style.display = 'block';
+            document.getElementById('bookingPanel').style.display = 'none';
+
+            await loadAvailability(dateStr);
+            loadEventBookings(dateStr);
+        }
+
+        function backToCalendar() {
+            document.getElementById('ticketCalendar').style.display = 'block';
+            document.getElementById('ticketFloorPlan').style.display = 'none';
+            document.getElementById('bookingPanel').style.display = 'none';
+            document.getElementById('eventBookings').style.display = 'none';
+            selectedEvent = null;
+        }
+
+        async function loadAvailability(dateStr) {
+            try {
+                const resp = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_event_availability', {
+                    method: 'POST',
+                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ p_event_date: dateStr })
+                });
+                eventAvailability = await resp.json();
+                updateFloorPlan();
+            } catch(e) {}
+        }
+
+        function updateFloorPlan() {
+            if (!eventAvailability) return;
+            const a = eventAvailability;
+
+            // GA count
+            const gaRemaining = a.ga_capacity - a.ga_sold;
+            const gaLabel = document.getElementById('gaCountLabel');
+            if (gaRemaining <= 0) gaLabel.textContent = 'SOLD OUT';
+            else if (gaRemaining <= 20) gaLabel.textContent = 'ALMOST SOLD OUT — ' + gaRemaining + ' left';
+            else if (gaRemaining <= 50) gaLabel.textContent = 'SELLING FAST — ' + gaRemaining + ' left';
+            else gaLabel.textContent = 'LIMITED — ' + gaRemaining + ' tickets left';
+
+            // Urgency badge
+            const pct = a.ga_sold / a.ga_capacity;
+            const urgencyEl = document.getElementById('urgencyBadge');
+            if (pct > 0.7) urgencyEl.innerHTML = '&#128293; SELLING FAST';
+            else urgencyEl.innerHTML = '&#9200; Limited Availability';
+
+            // Ladies free
+            document.getElementById('ladiesFreeCount').textContent = a.ladies_free_remaining + ' of 25 left';
+
+            // Update table colors
+            if (a.tables) {
+                a.tables.forEach(t => {
+                    const prefix = t.table_type === 'couch' ? 'couch' : 'hightop';
+                    const el = document.getElementById(prefix + '-' + t.table_number);
+                    if (!el) return;
+
+                    // Check both time slots for this table
+                    const slots = a.tables.filter(x => x.table_type === t.table_type && x.table_number === t.table_number);
+                    const allBooked = slots.every(s => s.status === 'booked');
+                    const someBooked = slots.some(s => s.status === 'booked');
+
+                    if (allBooked) {
+                        el.setAttribute('fill', '#333');
+                        el.setAttribute('stroke', '#555');
+                        el.style.cursor = 'default';
+                        el.setAttribute('opacity', '0.4');
+                    } else if (someBooked) {
+                        el.setAttribute('stroke', '#e02020');
+                        el.setAttribute('opacity', '0.9');
+                    } else {
+                        el.setAttribute('fill', 'url(#vipGrad)');
+                        el.setAttribute('stroke', '#f5a623');
+                        el.setAttribute('opacity', '1');
+                    }
+                });
+            }
+        }
+
+        function selectGA() {
+            if (!selectedEvent) return;
+            const a = eventAvailability;
+            const remaining = a.ga_capacity - a.ga_sold;
+            const panel = document.getElementById('bookingPanel');
+            panel.style.display = 'block';
+            panel.scrollIntoView({ behavior: 'smooth' });
+
+            document.getElementById('bookingContent').innerHTML = `
+                <h3 style="color:#4a90d9;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;">General Admission</h3>
+                <p style="color:#888;margin:8px 0;">Full floor access • Cash bar • Standing room</p>
+                <div style="font-size:1.8rem;font-weight:700;color:#fff;margin:12px 0;">$15 <span style="font-size:0.8rem;color:#888;">+ $5 fee = $20</span></div>
+                <div style="color:${remaining <= 20 ? '#e02020' : '#f5a623'};font-size:0.85rem;margin-bottom:16px;">${remaining <= 0 ? 'SOLD OUT' : remaining + ' tickets remaining'}</div>
+                ${remaining > 0 ? `
+                <div style="margin-bottom:12px;">
+                    <label style="color:#aaa;font-size:0.85rem;">Quantity:</label>
+                    <select id="gaQty" style="background:#222;color:#fff;border:1px solid #444;border-radius:6px;padding:6px 12px;margin-left:8px;">
+                        ${[1,2,3,4,5,6,7,8,9,10].filter(n=>n<=remaining).map(n=>'<option value="'+n+'">'+n+'</option>').join('')}
+                    </select>
+                </div>
+                <input type="text" id="gaName" placeholder="Full Name" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:8px;">
+                <input type="email" id="gaEmail" placeholder="Email" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:8px;">
+                <input type="tel" id="gaPhone" placeholder="Phone" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:16px;">
+                <button onclick="purchaseTicket('ga')" style="width:100%;padding:14px;background:#4a90d9;color:#fff;border:none;border-radius:30px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;">Buy GA — $20</button>
+                ` : '<p style="color:#e02020;font-weight:700;">SOLD OUT</p>'}
+            `;
+        }
+
+        function selectVipGA() {
+            if (!selectedEvent) return;
+            const a = eventAvailability;
+            const remaining = a.vip_ga_capacity - a.vip_ga_sold;
+            const panel = document.getElementById('bookingPanel');
+            panel.style.display = 'block';
+            panel.scrollIntoView({ behavior: 'smooth' });
+
+            document.getElementById('bookingContent').innerHTML = `
+                <h3 style="color:#f5a623;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;">VIP GA</h3>
+                <p style="color:#888;margin:8px 0;">VIP area access • Priority entry • Front section</p>
+                <div style="font-size:1.8rem;font-weight:700;color:#fff;margin:12px 0;">$35 <span style="font-size:0.8rem;color:#888;">+ $5 fee = $40</span></div>
+                <div style="color:${remaining <= 10 ? '#e02020' : '#f5a623'};font-size:0.85rem;margin-bottom:16px;">${remaining + ' tickets remaining'}</div>
+                <div style="margin-bottom:12px;">
+                    <label style="color:#aaa;font-size:0.85rem;">Quantity:</label>
+                    <select id="gaQty" style="background:#222;color:#fff;border:1px solid #444;border-radius:6px;padding:6px 12px;margin-left:8px;">
+                        ${[1,2,3,4,5].filter(n=>n<=remaining).map(n=>'<option value="'+n+'">'+n+'</option>').join('')}
+                    </select>
+                </div>
+                <input type="text" id="gaName" placeholder="Full Name" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:8px;">
+                <input type="email" id="gaEmail" placeholder="Email" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:8px;">
+                <input type="tel" id="gaPhone" placeholder="Phone" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:16px;">
+                <button onclick="purchaseTicket('vip_ga')" style="width:100%;padding:14px;background:#f5a623;color:#000;border:none;border-radius:30px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;">Buy VIP GA — $40</button>
+            `;
+        }
+
+        function selectTable(type, num) {
+            if (!selectedEvent || !eventAvailability) return;
+            const tables = eventAvailability.tables.filter(t => t.table_type === type && t.table_number === num);
+            const beforeSlot = tables.find(t => t.time_slot === 'before_midnight');
+            const afterSlot = tables.find(t => t.time_slot === 'after_midnight');
+
+            const isCouch = type === 'couch';
+            const label = isCouch ? 'VIP Couch ' + num : 'High Top ' + num;
+            const beforePrice = isCouch ? '$700++' : '$400++';
+            const afterPrice = isCouch ? '$800++' : '$450++';
+            const deposit = isCouch ? '$100' : '$50';
+            const groupSize = isCouch ? '5-10 guests' : '1-4 guests';
+            const pkg = isCouch
+                ? '2 Premium Bottles, 1 House Champagne, 1 Hookah, $50 Merch Credit, Full Admission'
+                : '1 Premium Bottle, 1 House Champagne, 1 Hookah, $50 Merch Credit, Full Admission';
+
+            const panel = document.getElementById('bookingPanel');
+            panel.style.display = 'block';
+            panel.scrollIntoView({ behavior: 'smooth' });
+
+            let slotsHTML = '';
+            if (beforeSlot?.status === 'available') {
+                slotsHTML += `<button onclick="reserveTable('${type}','${beforeSlot.id}','before_midnight')" style="flex:1;padding:14px;background:none;border:2px solid #f5a623;border-radius:12px;color:#fff;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(245,166,35,0.15)'" onmouseout="this.style.background='none'">
+                    <div style="font-weight:700;">Before Midnight</div>
+                    <div style="font-size:0.8rem;color:#888;">10pm — 1am</div>
+                    <div style="color:#f5a623;font-weight:700;margin-top:4px;">${beforePrice} min</div>
+                    <div style="font-size:0.75rem;color:#888;">Reserve with ${deposit} deposit</div>
+                </button>`;
+            } else {
+                slotsHTML += `<div style="flex:1;padding:14px;background:#1a1a1a;border:2px solid #333;border-radius:12px;text-align:center;opacity:0.5;">
+                    <div style="color:#888;">Before Midnight</div><div style="color:#e02020;font-weight:700;">BOOKED</div>
+                </div>`;
+            }
+
+            if (afterSlot?.status === 'available') {
+                slotsHTML += `<button onclick="reserveTable('${type}','${afterSlot.id}','after_midnight')" style="flex:1;padding:14px;background:none;border:2px solid #f5a623;border-radius:12px;color:#fff;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(245,166,35,0.15)'" onmouseout="this.style.background='none'">
+                    <div style="font-weight:700;">After Midnight</div>
+                    <div style="font-size:0.8rem;color:#888;">1am — 4am</div>
+                    <div style="color:#f5a623;font-weight:700;margin-top:4px;">${afterPrice} min</div>
+                    <div style="font-size:0.75rem;color:#888;">Reserve with ${deposit} deposit</div>
+                </button>`;
+            } else {
+                slotsHTML += `<div style="flex:1;padding:14px;background:#1a1a1a;border:2px solid #333;border-radius:12px;text-align:center;opacity:0.5;">
+                    <div style="color:#888;">After Midnight</div><div style="color:#e02020;font-weight:700;">BOOKED</div>
+                </div>`;
+            }
+
+            document.getElementById('bookingContent').innerHTML = `
+                <h3 style="color:#f5a623;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;">${label}</h3>
+                <p style="color:#888;margin:4px 0;">${groupSize}</p>
+                <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:16px;margin:16px 0;">
+                    <div style="color:#f5a623;font-weight:700;margin-bottom:8px;">Package Includes:</div>
+                    <p style="color:#ccc;font-size:0.85rem;line-height:1.6;">${pkg}</p>
+                </div>
+                <div style="font-size:0.85rem;color:#888;margin-bottom:12px;">Choose your time slot:</div>
+                <div style="display:flex;gap:12px;margin-bottom:16px;">${slotsHTML}</div>
+            `;
+        }
+
+        async function reserveTable(type, tableId, timeSlot) {
+            const isCouch = type === 'couch';
+            const ticketType = isCouch
+                ? (timeSlot === 'before_midnight' ? 'vip_couch_before' : 'vip_couch_after')
+                : (timeSlot === 'before_midnight' ? 'vip_high_top_before' : 'vip_high_top_after');
+            const deposit = isCouch ? 10000 : 5000;
+
+            const panel = document.getElementById('bookingContent');
+            panel.innerHTML += `
+                <div style="border-top:1px solid #333;padding-top:16px;margin-top:8px;">
+                    <input type="text" id="tableName" placeholder="Full Name" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:8px;">
+                    <input type="email" id="tableEmail" placeholder="Email" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:8px;">
+                    <input type="tel" id="tablePhone" placeholder="Phone" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:8px;">
+                    <div style="margin-bottom:16px;">
+                        <label style="color:#aaa;font-size:0.85rem;">Party Size:</label>
+                        <select id="tablePartySize" style="background:#222;color:#fff;border:1px solid #444;border-radius:6px;padding:6px 12px;margin-left:8px;">
+                            ${(isCouch ? [5,6,7,8,9,10] : [1,2,3,4]).map(n=>'<option value="'+n+'">'+n+' guests</option>').join('')}
+                        </select>
+                    </div>
+                    <p style="color:#888;font-size:0.8rem;margin-bottom:12px;">Deposit of $${deposit/100} will be charged now and applied to your minimum spend at arrival.</p>
+                    <button onclick="completePurchase('${ticketType}','${tableId}','${timeSlot}')" id="reserveBtn" style="width:100%;padding:14px;background:#f5a623;color:#000;border:none;border-radius:30px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;font-weight:700;">Reserve — $${deposit/100} Deposit</button>
+                </div>
+            `;
+        }
+
+        async function purchaseTicket(type) {
+            const name = document.getElementById('gaName')?.value;
+            const email = document.getElementById('gaEmail')?.value;
+            const phone = document.getElementById('gaPhone')?.value;
+            const qty = parseInt(document.getElementById('gaQty')?.value || '1');
+
+            if (!name || !email) { alert('Please enter your name and email'); return; }
+
+            const payload = {
+                ticket_type: type,
+                event_date: selectedEvent,
+                customer_name: name,
+                customer_email: email,
+                customer_phone: phone,
+                quantity: qty
+            };
+
+            try {
+                const resp = await fetch(SUPABASE_URL + '/functions/v1/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await resp.json();
+                if (data.url) window.location.href = data.url;
+                else alert('Error: ' + (data.error || 'Something went wrong'));
+            } catch(e) { alert('Connection error'); }
+        }
+
+        async function completePurchase(ticketType, tableId, timeSlot) {
+            const name = document.getElementById('tableName')?.value;
+            const email = document.getElementById('tableEmail')?.value;
+            const phone = document.getElementById('tablePhone')?.value;
+            const partySize = parseInt(document.getElementById('tablePartySize')?.value || '1');
+
+            if (!name || !email) { alert('Please enter your name and email'); return; }
+
+            const btn = document.getElementById('reserveBtn');
+            btn.textContent = 'Processing...';
+            btn.disabled = true;
+
+            try {
+                const resp = await fetch(SUPABASE_URL + '/functions/v1/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ticket_type: ticketType,
+                        event_date: selectedEvent,
+                        table_id: tableId,
+                        time_slot: timeSlot,
+                        customer_name: name,
+                        customer_email: email,
+                        customer_phone: phone,
+                        party_size: partySize
+                    })
+                });
+                const data = await resp.json();
+                if (data.url) window.location.href = data.url;
+                else { alert('Error: ' + (data.error || 'Something went wrong')); btn.textContent = 'Reserve'; btn.disabled = false; }
+            } catch(e) { alert('Connection error'); btn.textContent = 'Reserve'; btn.disabled = false; }
+        }
+
+        async function buyTestTicket() {
+            const resp = await fetch(SUPABASE_URL + '/functions/v1/create-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ticket_type: 'test_ticket', event_date: selectedEvent, customer_email: 'test@test.com', customer_name: 'Test' })
+            });
+            const data = await resp.json();
+            if (data.url) window.location.href = data.url;
+            else alert('Error: ' + (data.error || 'Something went wrong'));
+        }
+
+        function showLadiesFree() {
+            if (!selectedEvent) return;
+            const panel = document.getElementById('bookingPanel');
+            panel.style.display = 'block';
+            panel.scrollIntoView({ behavior: 'smooth' });
+
+            document.getElementById('bookingContent').innerHTML = `
+                <h3 style="color:#00E5CC;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;">Ladies Free Entry</h3>
+                <p style="color:#888;margin:8px 0;">First 25 ladies enter free! Must provide name, email, and phone for the door list.</p>
+                <div style="color:#00E5CC;font-size:0.85rem;margin-bottom:16px;">${eventAvailability?.ladies_free_remaining || 0} spots remaining</div>
+                <input type="text" id="freeName" placeholder="Full Name" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:8px;">
+                <input type="email" id="freeEmail" placeholder="Email" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:8px;">
+                <input type="tel" id="freePhone" placeholder="Phone" style="width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;margin-bottom:16px;">
+                <button onclick="claimFreeTicket()" id="claimBtn" style="width:100%;padding:14px;background:#00E5CC;color:#000;border:none;border-radius:30px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;font-weight:700;">Claim Free Entry</button>
+            `;
+        }
+
+        async function claimFreeTicket() {
+            const name = document.getElementById('freeName')?.value;
+            const email = document.getElementById('freeEmail')?.value;
+            const phone = document.getElementById('freePhone')?.value;
+            if (!name || !email || !phone) { alert('All fields required'); return; }
+
+            const btn = document.getElementById('claimBtn');
+            btn.textContent = 'Claiming...';
+            btn.disabled = true;
+
+            try {
+                const resp = await fetch(SUPABASE_URL + '/functions/v1/claim-free-ticket', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ event_date: selectedEvent, customer_name: name, customer_email: email, customer_phone: phone })
+                });
+                const data = await resp.json();
+                if (data.status === 'confirmed') {
+                    document.getElementById('bookingContent').innerHTML = '<div style="text-align:center;padding:20px;"><div style="font-size:2rem;">&#127881;</div><h3 style="color:#00E5CC;margin:12px 0;">You\'re on the list!</h3><p style="color:#888;">Show your ID at the door. Name: ' + name + '</p></div>';
+                    loadAvailability(selectedEvent);
+                } else {
+                    alert(data.error || 'Something went wrong');
+                    btn.textContent = 'Claim Free Entry';
+                    btn.disabled = false;
+                }
+            } catch(e) { alert('Connection error'); btn.textContent = 'Claim Free Entry'; btn.disabled = false; }
+        }
+
+        async function loadEventBookings(dateStr) {
+            if (!adminPassword) return;
+            try {
+                const resp = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_event_bookings', {
+                    method: 'POST',
+                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ p_event_date: dateStr, admin_password: adminPassword })
+                });
+                const data = await resp.json();
+                const container = document.getElementById('eventBookings');
+                container.style.display = 'block';
+
+                // Summary badges
+                const s = data.summary || {};
+                document.getElementById('bookingSummary').innerHTML = `
+                    <div style="background:#1a1a1a;border:1px solid #4a90d9;border-radius:8px;padding:10px 16px;"><span style="color:#4a90d9;font-weight:700;">${s.ga_count || 0}</span> <span style="color:#888;font-size:0.8rem;">GA</span></div>
+                    <div style="background:#1a1a1a;border:1px solid #f5a623;border-radius:8px;padding:10px 16px;"><span style="color:#f5a623;font-weight:700;">${s.vip_ga_count || 0}</span> <span style="color:#888;font-size:0.8rem;">VIP GA</span></div>
+                    <div style="background:#1a1a1a;border:1px solid #00E5CC;border-radius:8px;padding:10px 16px;"><span style="color:#00E5CC;font-weight:700;">${s.ladies_free_count || 0}</span> <span style="color:#888;font-size:0.8rem;">Ladies Free</span></div>
+                    <div style="background:#1a1a1a;border:1px solid #f5a623;border-radius:8px;padding:10px 16px;"><span style="color:#f5a623;font-weight:700;">${s.couch_count || 0}</span> <span style="color:#888;font-size:0.8rem;">Couches</span></div>
+                    <div style="background:#1a1a1a;border:1px solid #f5a623;border-radius:8px;padding:10px 16px;"><span style="color:#f5a623;font-weight:700;">${s.high_top_count || 0}</span> <span style="color:#888;font-size:0.8rem;">High Tops</span></div>
+                    <div style="background:#1a1a1a;border:1px solid #00E5CC;border-radius:8px;padding:10px 16px;"><span style="color:#00E5CC;font-weight:700;">$${((s.total_revenue || 0) / 100).toFixed(0)}</span> <span style="color:#888;font-size:0.8rem;">Revenue</span></div>
+                `;
+
+                // Bookings list
+                const bookings = data.bookings || [];
+                if (bookings.length === 0) {
+                    document.getElementById('bookingsList').innerHTML = '<p style="color:#555;text-align:center;padding:20px;">No bookings yet</p>';
+                } else {
+                    let html = '<table style="width:100%;border-collapse:collapse;"><thead><tr><th style="text-align:left;padding:8px;color:#888;font-size:0.75rem;border-bottom:1px solid #222;">Type</th><th style="text-align:left;padding:8px;color:#888;font-size:0.75rem;border-bottom:1px solid #222;">Customer</th><th style="text-align:left;padding:8px;color:#888;font-size:0.75rem;border-bottom:1px solid #222;">Details</th><th style="text-align:left;padding:8px;color:#888;font-size:0.75rem;border-bottom:1px solid #222;">Status</th></tr></thead><tbody>';
+                    bookings.forEach(b => {
+                        const typeColors = { ga: '#4a90d9', vip_ga: '#f5a623', vip_couch: '#f5a623', vip_high_top: '#f5a623', ladies_free: '#00E5CC', test: '#888' };
+                        const color = typeColors[b.booking_type] || '#888';
+                        const details = b.table_type ? (b.table_type === 'couch' ? 'Couch ' : 'High Top ') + b.table_number + ' (' + (b.time_slot === 'before_midnight' ? '10pm-1am' : '1am-4am') + ')' : 'Party of ' + b.party_size;
+                        const statusColor = b.status === 'confirmed' ? '#00E5CC' : b.status === 'pending' ? '#f5a623' : '#888';
+                        html += '<tr><td style="padding:8px;border-bottom:1px solid #1a1a1a;"><span style="color:' + color + ';font-weight:600;font-size:0.8rem;text-transform:uppercase;">' + b.booking_type.replace('_', ' ') + '</span></td>';
+                        html += '<td style="padding:8px;border-bottom:1px solid #1a1a1a;color:#fff;font-size:0.85rem;">' + b.customer_name + '<br><span style="color:#666;font-size:0.75rem;">' + b.customer_email + '</span></td>';
+                        html += '<td style="padding:8px;border-bottom:1px solid #1a1a1a;color:#888;font-size:0.8rem;">' + details + '</td>';
+                        html += '<td style="padding:8px;border-bottom:1px solid #1a1a1a;"><span style="color:' + statusColor + ';font-size:0.8rem;font-weight:600;">' + b.status.toUpperCase() + '</span></td></tr>';
+                    });
+                    html += '</tbody></table>';
+                    document.getElementById('bookingsList').innerHTML = html;
+                }
+            } catch(e) {}
+        }
+
+        // Refresh availability every 30 seconds
+        setInterval(() => {
+            if (selectedEvent) loadAvailability(selectedEvent);
+        }, 30000);
+
+        // Load events after login
+        const origShowDashboard = showDashboard;
+        showDashboard = function() {
+            origShowDashboard();
+            loadEvents();
+        };
+    </script>
+</body>
+</html>
