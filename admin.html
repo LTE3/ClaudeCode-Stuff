@@ -416,76 +416,91 @@
 
                 <!-- SVG Floor Plan -->
                 <div style="text-align:center;margin-bottom:32px;">
-                    <svg id="venueMap" viewBox="0 0 700 750" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:100%;background:#0a0a0a;border-radius:16px;border:1px solid #222;padding:15px;">
+                    <svg id="venueMap" viewBox="0 0 600 820" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:100%;border-radius:20px;overflow:hidden;">
                         <defs>
-                            <linearGradient id="stageGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#FF4D8D;stop-opacity:1"/>
-                                <stop offset="100%" style="stop-color:#e02050;stop-opacity:1"/>
-                            </linearGradient>
-                            <linearGradient id="vipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#f5a623;stop-opacity:0.9"/>
-                                <stop offset="100%" style="stop-color:#e8951a;stop-opacity:0.9"/>
-                            </linearGradient>
-                            <linearGradient id="gaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#4a90d9;stop-opacity:0.8"/>
-                                <stop offset="100%" style="stop-color:#3a7bc0;stop-opacity:0.8"/>
-                            </linearGradient>
-                            <filter id="glow"><feGaussianBlur stdDeviation="4" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                            <linearGradient id="stageGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF4D8D"/><stop offset="100%" style="stop-color:#e02050"/></linearGradient>
+                            <linearGradient id="vipGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f5a623"/><stop offset="100%" style="stop-color:#d4881a"/></linearGradient>
+                            <linearGradient id="gaGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#4a90d9"/><stop offset="100%" style="stop-color:#2d6cb5"/></linearGradient>
+                            <filter id="neonGlow"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                            <filter id="softGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
                         </defs>
+                        <!-- Background -->
+                        <rect width="600" height="820" fill="#050508" rx="20"/>
+                        <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><rect width="30" height="30" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></pattern>
+                        <rect width="600" height="820" fill="url(#grid)" rx="20"/>
 
                         <!-- DJ Booth -->
-                        <rect x="150" y="15" width="400" height="55" rx="10" fill="#333" stroke="#555" stroke-width="1.5"/>
-                        <text x="350" y="50" text-anchor="middle" fill="#aaa" font-family="'Bebas Neue',sans-serif" font-size="24" letter-spacing="4">DJ BOOTH</text>
+                        <rect x="130" y="20" width="340" height="60" rx="12" fill="#111" stroke="#444" stroke-width="1"/>
+                        <text x="300" y="58" text-anchor="middle" fill="#666" font-family="'Bebas Neue',sans-serif" font-size="26" letter-spacing="6">DJ BOOTH</text>
+                        <line x1="180" y1="80" x2="420" y2="80" stroke="#FF4D8D" stroke-width="2" opacity="0.4"/>
 
-                        <!-- Stage / La Casita -->
-                        <rect x="100" y="85" width="500" height="80" rx="12" fill="url(#stageGrad)" stroke="#fff" stroke-width="2.5" filter="url(#glow)"/>
-                        <text x="350" y="137" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="36" letter-spacing="5">LA CASITA</text>
+                        <!-- Stage -->
+                        <rect x="80" y="95" width="440" height="85" rx="14" fill="url(#stageGrad)" filter="url(#neonGlow)"/>
+                        <rect x="80" y="95" width="440" height="85" rx="14" fill="none" stroke="#fff" stroke-width="2"/>
+                        <text x="300" y="148" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="42" letter-spacing="6">LA CASITA</text>
 
-                        <!-- VIP Area Label -->
-                        <text x="350" y="200" text-anchor="middle" fill="#f5a623" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="4" opacity="0.8">VIP SECTION</text>
+                        <line x1="50" y1="195" x2="550" y2="195" stroke="#f5a623" stroke-width="1" opacity="0.3"/>
+                        <text x="300" y="225" text-anchor="middle" fill="#f5a623" font-family="'Bebas Neue',sans-serif" font-size="22" letter-spacing="6" opacity="0.9">VIP SECTION</text>
 
-                        <!-- Couches (4) — 2x2 grid -->
-                        <rect id="couch-1" x="40" y="220" width="150" height="80" rx="10" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="2" cursor="pointer" onclick="selectTable('couch',1)"/>
-                        <text x="115" y="255" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2" pointer-events="none">COUCH 1</text>
-                        <text x="115" y="278" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="13" opacity="0.7" pointer-events="none">5-10 guests</text>
+                        <!-- Couches -->
+                        <rect id="couch-1" x="20" y="245" width="130" height="95" rx="12" fill="url(#vipGrad)" filter="url(#softGlow)" cursor="pointer" onclick="selectTable('couch',1)"/>
+                        <rect x="20" y="245" width="130" height="95" rx="12" fill="none" stroke="#f5a623" stroke-width="2" pointer-events="none"/>
+                        <text x="85" y="285" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="2" pointer-events="none">COUCH 1</text>
+                        <text x="85" y="315" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif" font-size="14" pointer-events="none">5-10 guests</text>
 
-                        <rect id="couch-2" x="205" y="220" width="150" height="80" rx="10" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="2" cursor="pointer" onclick="selectTable('couch',2)"/>
-                        <text x="280" y="255" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2" pointer-events="none">COUCH 2</text>
-                        <text x="280" y="278" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="13" opacity="0.7" pointer-events="none">5-10 guests</text>
+                        <rect id="couch-2" x="165" y="245" width="130" height="95" rx="12" fill="url(#vipGrad)" filter="url(#softGlow)" cursor="pointer" onclick="selectTable('couch',2)"/>
+                        <rect x="165" y="245" width="130" height="95" rx="12" fill="none" stroke="#f5a623" stroke-width="2" pointer-events="none"/>
+                        <text x="230" y="285" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="2" pointer-events="none">COUCH 2</text>
+                        <text x="230" y="315" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif" font-size="14" pointer-events="none">5-10 guests</text>
 
-                        <rect id="couch-3" x="370" y="220" width="150" height="80" rx="10" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="2" cursor="pointer" onclick="selectTable('couch',3)"/>
-                        <text x="445" y="255" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2" pointer-events="none">COUCH 3</text>
-                        <text x="445" y="278" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="13" opacity="0.7" pointer-events="none">5-10 guests</text>
+                        <rect id="couch-3" x="310" y="245" width="130" height="95" rx="12" fill="url(#vipGrad)" filter="url(#softGlow)" cursor="pointer" onclick="selectTable('couch',3)"/>
+                        <rect x="310" y="245" width="130" height="95" rx="12" fill="none" stroke="#f5a623" stroke-width="2" pointer-events="none"/>
+                        <text x="375" y="285" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="2" pointer-events="none">COUCH 3</text>
+                        <text x="375" y="315" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif" font-size="14" pointer-events="none">5-10 guests</text>
 
-                        <rect id="couch-4" x="535" y="220" width="150" height="80" rx="10" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="2" cursor="pointer" onclick="selectTable('couch',4)"/>
-                        <text x="610" y="255" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2" pointer-events="none">COUCH 4</text>
-                        <text x="610" y="278" text-anchor="middle" fill="#fff" font-family="Inter,sans-serif" font-size="13" opacity="0.7" pointer-events="none">5-10 guests</text>
+                        <rect id="couch-4" x="455" y="245" width="130" height="95" rx="12" fill="url(#vipGrad)" filter="url(#softGlow)" cursor="pointer" onclick="selectTable('couch',4)"/>
+                        <rect x="455" y="245" width="130" height="95" rx="12" fill="none" stroke="#f5a623" stroke-width="2" pointer-events="none"/>
+                        <text x="520" y="285" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="2" pointer-events="none">COUCH 4</text>
+                        <text x="520" y="315" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Inter,sans-serif" font-size="14" pointer-events="none">5-10 guests</text>
 
-                        <!-- High Tops (4) -->
-                        <rect id="hightop-1" x="40" y="315" width="150" height="65" rx="10" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="2" cursor="pointer" onclick="selectTable('high_top',1)" opacity="0.85"/>
-                        <text x="115" y="355" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="16" letter-spacing="2" pointer-events="none">HIGH TOP 1</text>
+                        <!-- High Tops -->
+                        <rect id="hightop-1" x="20" y="355" width="130" height="80" rx="12" fill="url(#vipGrad)" opacity="0.8" cursor="pointer" onclick="selectTable('high_top',1)"/>
+                        <rect x="20" y="355" width="130" height="80" rx="12" fill="none" stroke="#f5a623" stroke-width="1.5" pointer-events="none"/>
+                        <text x="85" y="398" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2" pointer-events="none">HIGH TOP 1</text>
+                        <text x="85" y="420" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif" font-size="12" pointer-events="none">1-4 guests</text>
 
-                        <rect id="hightop-2" x="205" y="315" width="150" height="65" rx="10" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="2" cursor="pointer" onclick="selectTable('high_top',2)" opacity="0.85"/>
-                        <text x="280" y="355" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="16" letter-spacing="2" pointer-events="none">HIGH TOP 2</text>
+                        <rect id="hightop-2" x="165" y="355" width="130" height="80" rx="12" fill="url(#vipGrad)" opacity="0.8" cursor="pointer" onclick="selectTable('high_top',2)"/>
+                        <rect x="165" y="355" width="130" height="80" rx="12" fill="none" stroke="#f5a623" stroke-width="1.5" pointer-events="none"/>
+                        <text x="230" y="398" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2" pointer-events="none">HIGH TOP 2</text>
+                        <text x="230" y="420" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif" font-size="12" pointer-events="none">1-4 guests</text>
 
-                        <rect id="hightop-3" x="370" y="315" width="150" height="65" rx="10" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="2" cursor="pointer" onclick="selectTable('high_top',3)" opacity="0.85"/>
-                        <text x="445" y="355" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="16" letter-spacing="2" pointer-events="none">HIGH TOP 3</text>
+                        <rect id="hightop-3" x="310" y="355" width="130" height="80" rx="12" fill="url(#vipGrad)" opacity="0.8" cursor="pointer" onclick="selectTable('high_top',3)"/>
+                        <rect x="310" y="355" width="130" height="80" rx="12" fill="none" stroke="#f5a623" stroke-width="1.5" pointer-events="none"/>
+                        <text x="375" y="398" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2" pointer-events="none">HIGH TOP 3</text>
+                        <text x="375" y="420" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif" font-size="12" pointer-events="none">1-4 guests</text>
 
-                        <rect id="hightop-4" x="535" y="315" width="150" height="65" rx="10" fill="url(#vipGrad)" stroke="#f5a623" stroke-width="2" cursor="pointer" onclick="selectTable('high_top',4)" opacity="0.85"/>
-                        <text x="610" y="355" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="16" letter-spacing="2" pointer-events="none">HIGH TOP 4</text>
+                        <rect id="hightop-4" x="455" y="355" width="130" height="80" rx="12" fill="url(#vipGrad)" opacity="0.8" cursor="pointer" onclick="selectTable('high_top',4)"/>
+                        <rect x="455" y="355" width="130" height="80" rx="12" fill="none" stroke="#f5a623" stroke-width="1.5" pointer-events="none"/>
+                        <text x="520" y="398" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="18" letter-spacing="2" pointer-events="none">HIGH TOP 4</text>
+                        <text x="520" y="420" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Inter,sans-serif" font-size="12" pointer-events="none">1-4 guests</text>
+
+                        <line x1="50" y1="455" x2="550" y2="455" stroke="#4a90d9" stroke-width="1" opacity="0.3"/>
 
                         <!-- Bar -->
-                        <rect x="15" y="410" width="60" height="240" rx="8" fill="#333" stroke="#555" stroke-width="1.5"/>
-                        <text x="45" y="540" text-anchor="middle" fill="#aaa" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="3" transform="rotate(-90,45,540)">BAR</text>
+                        <rect x="10" y="475" width="55" height="260" rx="10" fill="#151518" stroke="#333" stroke-width="1.5"/>
+                        <text x="37" y="615" text-anchor="middle" fill="#888" font-family="'Bebas Neue',sans-serif" font-size="22" letter-spacing="3" transform="rotate(-90,37,615)">BAR</text>
 
                         <!-- GA Floor -->
-                        <rect id="ga-zone" x="90" y="410" width="595" height="240" rx="12" fill="url(#gaGrad)" stroke="#4a90d9" stroke-width="2" cursor="pointer" onclick="selectGA()"/>
-                        <text x="387" y="520" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="32" letter-spacing="5" pointer-events="none">GENERAL ADMISSION</text>
-                        <text id="gaCountLabel" x="387" y="560" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Inter,sans-serif" font-size="18" pointer-events="none"></text>
+                        <rect id="ga-zone" x="80" y="475" width="505" height="260" rx="14" fill="url(#gaGrad)" cursor="pointer" onclick="selectGA()"/>
+                        <rect x="80" y="475" width="505" height="260" rx="14" fill="none" stroke="#4a90d9" stroke-width="2" pointer-events="none"/>
+                        <text x="332" y="590" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="36" letter-spacing="5" pointer-events="none">GENERAL</text>
+                        <text x="332" y="630" text-anchor="middle" fill="#fff" font-family="'Bebas Neue',sans-serif" font-size="36" letter-spacing="5" pointer-events="none">ADMISSION</text>
+                        <text id="gaCountLabel" x="332" y="670" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Inter,sans-serif" font-size="18" font-weight="600" pointer-events="none"></text>
 
                         <!-- Entrance -->
-                        <rect x="225" y="680" width="250" height="45" rx="8" fill="#1a1a1a" stroke="#333" stroke-width="1.5"/>
-                        <text x="350" y="710" text-anchor="middle" fill="#888" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="4">ENTRANCE</text>
+                        <rect x="200" y="760" width="200" height="45" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
+                        <text x="300" y="790" text-anchor="middle" fill="#666" font-family="'Bebas Neue',sans-serif" font-size="20" letter-spacing="4">ENTRANCE</text>
+                        <polygon points="290,748 300,738 310,748" fill="#444"/>
                     </svg>
                 </div>
 
