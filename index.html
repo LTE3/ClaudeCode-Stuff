@@ -2701,6 +2701,31 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        /* ─── ANIMATED GRADIENT BORDERS ─── */
+        @keyframes borderRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .glow-border {
+            position: relative;
+        }
+        .glow-border::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--hot-pink), var(--yellow), var(--teal), var(--hot-pink));
+            background-size: 300% 100%;
+            animation: borderRotate 6s ease-in-out infinite;
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+        .glow-border:hover::before {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -2871,19 +2896,19 @@
         <div class="presale-countdown">
             <div class="presale-label">PRESALE DROPS IN</div>
             <div class="countdown-boxes">
-                <div class="countdown-box">
+                <div class="countdown-box glow-border">
                     <div class="number" id="cd-days">00</div>
                     <div class="unit">Days</div>
                 </div>
-                <div class="countdown-box">
+                <div class="countdown-box glow-border">
                     <div class="number" id="cd-hours">00</div>
                     <div class="unit">Hours</div>
                 </div>
-                <div class="countdown-box">
+                <div class="countdown-box glow-border">
                     <div class="number" id="cd-mins">00</div>
                     <div class="unit">Mins</div>
                 </div>
-                <div class="countdown-box">
+                <div class="countdown-box glow-border">
                     <div class="number" id="cd-secs">00</div>
                     <div class="unit">Secs</div>
                 </div>
@@ -2920,17 +2945,17 @@
     <section class="about" id="about">
         <h2 class="section-title reveal"><span class="accent">What Is</span> La Casita?</h2>
         <div class="about-grid">
-            <div class="about-card reveal">
+            <div class="about-card glow-border reveal">
                 <span class="icon">&#127968;</span>
                 <h3>The Pop-Up</h3>
                 <p>La Casita is a Puerto Rican–inspired reggaeton experience in Brooklyn, built to capture the feeling of being in Puerto Rico for the night. Real music, real energy, and a space that feels like an island house party right in NYC.</p>
             </div>
-            <div class="about-card reveal">
+            <div class="about-card glow-border reveal">
                 <span class="icon">&#127925;</span>
                 <h3>The Sound</h3>
                 <p>Non-stop perreo. Old school reggaeton, dembow, Bad Bunny, and all the Latin hits that make you move. Top DJs all night.</p>
             </div>
-            <div class="about-card reveal">
+            <div class="about-card glow-border reveal">
                 <span class="icon">&#127860;</span>
                 <h3>The Vibes</h3>
                 <p>Tropical drinks, Latin street food, neon lights, and an energy you won't find anywhere else in Brooklyn.</p>
@@ -3117,7 +3142,7 @@
         <h2 class="section-title reveal">La Casita <span class="accent">Merch</span></h2>
         <div class="merch-grid">
             <!-- Shirts -->
-            <div class="merch-card reveal" data-product="DTMF Beach Tee" data-price="20" data-img="merch-shirt-beach.jpg">
+            <div class="merch-card glow-border reveal" data-product="DTMF Beach Tee" data-price="20" data-img="merch-shirt-beach.jpg">
                 <div class="merch-img"><img src="merch-shirt-beach.jpg" alt="Bad Bunny DTMF Beach T-Shirt" loading="lazy"></div>
                 <div class="merch-info">
                     <h3>DTMF Beach Tee</h3>
@@ -3127,7 +3152,7 @@
                     <button class="merch-add-btn" onclick="addToCart(this)">Add to Cart</button>
                 </div>
             </div>
-            <div class="merch-card reveal" data-product="Discography Tee" data-price="20" data-img="merch-shirt-discography.jpg">
+            <div class="merch-card glow-border reveal" data-product="Discography Tee" data-price="20" data-img="merch-shirt-discography.jpg">
                 <div class="merch-img"><img src="merch-shirt-discography.jpg" alt="Bad Bunny Discography T-Shirt" loading="lazy"></div>
                 <div class="merch-info">
                     <h3>Discography Tee</h3>
@@ -3137,7 +3162,7 @@
                     <button class="merch-add-btn" onclick="addToCart(this)">Add to Cart</button>
                 </div>
             </div>
-            <div class="merch-card reveal sold-out" data-product="DTMF Tracklist Tee" data-price="20" data-img="merch-shirt-tracklist.jpg">
+            <div class="merch-card glow-border reveal sold-out" data-product="DTMF Tracklist Tee" data-price="20" data-img="merch-shirt-tracklist.jpg">
                 <div class="sold-out-badge">SOLD OUT</div>
                 <div class="merch-img"><img src="merch-shirt-tracklist.jpg" alt="Bad Bunny DTMF Tracklist T-Shirt" loading="lazy"></div>
                 <div class="merch-info">
@@ -3148,7 +3173,7 @@
                     <button class="merch-add-btn" onclick="addToCart(this)">Add to Cart</button>
                 </div>
             </div>
-            <div class="merch-card reveal" data-product="BB Signature Tee" data-price="20" data-img="merch-shirt-signature.jpg">
+            <div class="merch-card glow-border reveal" data-product="BB Signature Tee" data-price="20" data-img="merch-shirt-signature.jpg">
                 <div class="merch-img"><img src="merch-shirt-signature.jpg" alt="Bad Bunny Signature T-Shirt" loading="lazy"></div>
                 <div class="merch-info">
                     <h3>BB Signature Tee</h3>
@@ -3158,7 +3183,7 @@
                     <button class="merch-add-btn" onclick="addToCart(this)">Add to Cart</button>
                 </div>
             </div>
-            <div class="merch-card reveal" data-product="Sapo Concho Tee" data-price="20" data-img="merch-shirt-sapo.jpg">
+            <div class="merch-card glow-border reveal" data-product="Sapo Concho Tee" data-price="20" data-img="merch-shirt-sapo.jpg">
                 <div class="merch-img"><img src="merch-shirt-sapo.jpg" alt="Sapo Concho DTMF T-Shirt" loading="lazy"></div>
                 <div class="merch-info">
                     <h3>Sapo Concho Tee</h3>
@@ -3169,7 +3194,7 @@
                 </div>
             </div>
             <!-- Song Keychains -->
-            <div class="merch-card reveal" data-product="DTMF Song Keychain" data-price="12" data-img="merch-song-keychain.jpg">
+            <div class="merch-card glow-border reveal" data-product="DTMF Song Keychain" data-price="12" data-img="merch-song-keychain.jpg">
                 <div class="merch-img"><img src="merch-song-keychain.jpg" alt="Bad Bunny DTMF Spotify Song Keychains" loading="lazy" style="object-position: center; transform: scale(1.25);"></div>
                 <div class="merch-info">
                     <h3>DTMF Song Keychains</h3>
@@ -3180,7 +3205,7 @@
                 </div>
             </div>
             <!-- Acrylic Keychains — individual cards -->
-            <div class="merch-card reveal sold-out" data-product="DTMF Keychain - Blue Text" data-price="12" data-img="merch-acrylic-blue.jpg">
+            <div class="merch-card glow-border reveal sold-out" data-product="DTMF Keychain - Blue Text" data-price="12" data-img="merch-acrylic-blue.jpg">
                 <div class="sold-out-badge">SOLD OUT</div>
                 <div class="merch-img"><img src="merch-acrylic-blue.jpg" alt="DeBi TiRAR MaS FOToS Blue Text Keychain" loading="lazy"></div>
                 <div class="merch-info">
@@ -3190,7 +3215,7 @@
                     <button class="merch-add-btn" onclick="addToCart(this)">Add to Cart</button>
                 </div>
             </div>
-            <div class="merch-card reveal" data-product="DTMF Keychain - Black Text" data-price="12" data-img="merch-acrylic-black.jpg">
+            <div class="merch-card glow-border reveal" data-product="DTMF Keychain - Black Text" data-price="12" data-img="merch-acrylic-black.jpg">
                 <div class="merch-img"><img src="merch-acrylic-black.jpg" alt="DeBi TiRAR MaS FOToS Black Text Keychain" loading="lazy"></div>
                 <div class="merch-info">
                     <h3>DTMF Keychain — Black</h3>
@@ -3199,7 +3224,7 @@
                     <button class="merch-add-btn" onclick="addToCart(this)">Add to Cart</button>
                 </div>
             </div>
-            <div class="merch-card reveal" data-product="DTMF Keychain - Frog Photographer" data-price="12" data-img="merch-acrylic-frog.jpg">
+            <div class="merch-card glow-border reveal" data-product="DTMF Keychain - Frog Photographer" data-price="12" data-img="merch-acrylic-frog.jpg">
                 <div class="merch-img"><img src="merch-acrylic-frog.jpg" alt="Sapo Concho Frog Photographer Keychain" loading="lazy"></div>
                 <div class="merch-info">
                     <h3>Frog Photographer</h3>
@@ -3208,7 +3233,7 @@
                     <button class="merch-add-btn" onclick="addToCart(this)">Add to Cart</button>
                 </div>
             </div>
-            <div class="merch-card reveal" data-product="DTMF Keychain - Frog Oval" data-price="12" data-img="merch-acrylic-oval.jpg">
+            <div class="merch-card glow-border reveal" data-product="DTMF Keychain - Frog Oval" data-price="12" data-img="merch-acrylic-oval.jpg">
                 <div class="merch-img"><img src="merch-acrylic-oval.jpg" alt="DeBi TiRAR MaS FOToS Frog Oval Keychain" loading="lazy"></div>
                 <div class="merch-info">
                     <h3>Frog Oval Keychain</h3>
@@ -3218,7 +3243,7 @@
                 </div>
             </div>
             <!-- Plushies -->
-            <div class="merch-card reveal" data-product="El Sapo Concho Plushie" data-price="15" data-img="merch-plushie-group.jpg">
+            <div class="merch-card glow-border reveal" data-product="El Sapo Concho Plushie" data-price="15" data-img="merch-plushie-group.jpg">
                 <div class="merch-img"><img src="merch-plushie-group.jpg" alt="DTMF El Sapo Concho Plushie Collection" loading="lazy"></div>
                 <div class="merch-info">
                     <h3>Sapo Concho Plushies</h3>
@@ -3229,7 +3254,7 @@
                 </div>
             </div>
             <!-- Tote Bags -->
-            <div class="merch-card reveal" data-product="Sapo Concho Tote Bag" data-price="20" data-img="merch-tote.jpg">
+            <div class="merch-card glow-border reveal" data-product="Sapo Concho Tote Bag" data-price="20" data-img="merch-tote.jpg">
                 <div class="merch-img"><img src="merch-tote.jpg" alt="Sapo Concho Frog Tote Bag" loading="lazy"></div>
                 <div class="merch-info">
                     <h3>Sapo Concho Tote Bag</h3>
