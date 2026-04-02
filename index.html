@@ -2658,9 +2658,9 @@
             100% { transform: translate(0%, 0%) scale(1); }
         }
         .aurora-blob-1 {
-            position: absolute;
-            top: -20%;
-            left: 10%;
+            position: fixed;
+            top: 10%;
+            left: 5%;
             width: 500px;
             height: 500px;
             border-radius: 50%;
@@ -2672,9 +2672,9 @@
             pointer-events: none;
         }
         .aurora-blob-2 {
-            position: absolute;
-            bottom: -10%;
-            right: 15%;
+            position: fixed;
+            bottom: 10%;
+            right: 10%;
             width: 400px;
             height: 400px;
             border-radius: 50%;
@@ -2686,9 +2686,9 @@
             pointer-events: none;
         }
         .aurora-blob-3 {
-            position: absolute;
-            top: 30%;
-            right: 30%;
+            position: fixed;
+            top: 40%;
+            left: 40%;
             width: 350px;
             height: 350px;
             border-radius: 50%;
@@ -2709,6 +2709,10 @@
     </style>
 </head>
 <body>
+    <!-- Aurora ambient blobs — fixed position, visible across entire page -->
+    <div class="aurora-blob-1"></div>
+    <div class="aurora-blob-2"></div>
+    <div class="aurora-blob-3"></div>
     <!-- Hamburger Menu (mobile) -->
     <button class="hamburger" id="hamburger" onclick="document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');">
         <span></span><span></span><span></span>
@@ -2755,9 +2759,6 @@
 
     <!-- HERO -->
     <section class="hero">
-        <div class="aurora-blob-1"></div>
-        <div class="aurora-blob-2"></div>
-        <div class="aurora-blob-3"></div>
         <div class="palm-left">&#127796;</div>
         <div class="palm-right">&#127796;</div>
 
