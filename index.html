@@ -2259,10 +2259,12 @@
             letter-spacing: 6px;
             line-height: 1;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff 0%, var(--teal) 50%, #6EE7B7 100%);
+            background: linear-gradient(90deg, var(--hot-pink), var(--yellow), var(--teal), var(--hot-pink));
+            background-size: 300% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: gradientShift 4s ease-in-out infinite;
         }
 
         .go-date {
@@ -2709,10 +2711,6 @@
     </style>
 </head>
 <body>
-    <!-- Aurora ambient blobs — fixed position, visible across entire page -->
-    <div class="aurora-blob-1"></div>
-    <div class="aurora-blob-2"></div>
-    <div class="aurora-blob-3"></div>
     <!-- Hamburger Menu (mobile) -->
     <button class="hamburger" id="hamburger" onclick="document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');">
         <span></span><span></span><span></span>
