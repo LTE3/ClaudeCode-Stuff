@@ -3365,24 +3365,6 @@
                 container.appendChild(p);
             }
 
-            // Aurora orbs — same system as particles but bigger, blurrier, slower
-            const auroraColors = ['#FF4D8D', '#34D399', '#FFD600'];
-            for (let i = 0; i < 15; i++) {
-                const orb = document.createElement('div');
-                orb.className = 'particle';
-                orb.style.left = Math.random() * 100 + '%';
-                const size = Math.random() * 60 + 30;
-                orb.style.width = size + 'px';
-                orb.style.height = size + 'px';
-                orb.style.borderRadius = '50%';
-                orb.style.background = auroraColors[Math.floor(Math.random() * auroraColors.length)];
-                orb.style.filter = 'blur(' + (Math.random() * 20 + 15) + 'px)';
-                orb.style.opacity = (Math.random() * 0.08 + 0.03).toFixed(2);
-                orb.style.animationDuration = (Math.random() * 25 + 20) + 's';
-                orb.style.animationDelay = (Math.random() * 15) + 's';
-                orb.style.fontSize = '0px';
-                container.appendChild(orb);
-            }
         })();
 
         // ─── Scroll Reveal ───
