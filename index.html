@@ -749,7 +749,7 @@
 
         /* ─── ABOUT / WHAT IS ─── */
         .about {
-            background: linear-gradient(180deg, rgba(5,5,5,0.85), rgba(15,5,5,0.8), rgba(5,5,5,0.85));
+            background: linear-gradient(180deg, var(--darker), #0f0505, var(--darker));
         }
 
         .about-grid {
@@ -806,7 +806,7 @@
 
         /* ─── EXPERIENCE SECTION ─── */
         .experience {
-            background: linear-gradient(180deg, rgba(5,5,5,0.85), rgba(16,8,8,0.8), rgba(5,5,5,0.85));
+            background: linear-gradient(180deg, var(--darker), #100808, var(--darker));
         }
 
         .exp-features {
@@ -863,7 +863,7 @@
         .promo-video {
             padding: 72px 20px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(5,5,5,0.85) 0%, rgba(10,10,12,0.8) 50%, rgba(5,5,5,0.85) 100%);
+            background: linear-gradient(180deg, var(--darker) 0%, #0a0a0c 50%, var(--darker) 100%);
         }
         .promo-video h2 {
             font-family: 'Bebas Neue', sans-serif;
@@ -1401,7 +1401,7 @@
 
         /* ─── SIGNUP SECTION ─── */
         .signup {
-            background: linear-gradient(180deg, rgba(5,5,5,0.85), rgba(10,5,5,0.8));
+            background: linear-gradient(180deg, var(--darker), #0a0505);
             text-align: center;
         }
 
@@ -1518,7 +1518,7 @@
         .gallery-section {
             padding: 72px 0;
             overflow: hidden;
-            background: rgba(5,5,5,0.85);
+            background: var(--darker);
         }
 
         .gallery-track {
@@ -2227,7 +2227,7 @@
         /* ─── GRAND OPENING SECTION ─── */
         .grand-opening {
             text-align: center;
-            background: linear-gradient(180deg, rgba(5,5,5,0.85) 0%, rgba(26,10,26,0.8) 50%, rgba(5,5,5,0.85) 100%);
+            background: linear-gradient(180deg, var(--darker) 0%, #1a0a1a 50%, var(--darker) 100%);
             padding: 96px 20px;
             position: relative;
             overflow: hidden;
@@ -2660,8 +2660,8 @@
             100% { transform: translate(0%, 0%) scale(1); }
         }
         .aurora-blob-1 {
-            position: fixed;
-            top: 10%;
+            position: absolute;
+            top: -10%;
             left: 5%;
             width: 500px;
             height: 500px;
@@ -2674,8 +2674,8 @@
             pointer-events: none;
         }
         .aurora-blob-2 {
-            position: fixed;
-            bottom: 10%;
+            position: absolute;
+            bottom: -5%;
             right: 10%;
             width: 400px;
             height: 400px;
@@ -2688,9 +2688,9 @@
             pointer-events: none;
         }
         .aurora-blob-3 {
-            position: fixed;
-            top: 40%;
-            left: 40%;
+            position: absolute;
+            top: 35%;
+            right: 25%;
             width: 350px;
             height: 350px;
             border-radius: 50%;
@@ -2711,10 +2711,6 @@
     </style>
 </head>
 <body>
-    <!-- Aurora ambient blobs — fixed behind everything -->
-    <div class="aurora-blob-1"></div>
-    <div class="aurora-blob-2"></div>
-    <div class="aurora-blob-3"></div>
     <!-- Hamburger Menu (mobile) -->
     <button class="hamburger" id="hamburger" onclick="document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');">
         <span></span><span></span><span></span>
@@ -2761,6 +2757,9 @@
 
     <!-- HERO -->
     <section class="hero">
+        <div class="aurora-blob-1"></div>
+        <div class="aurora-blob-2"></div>
+        <div class="aurora-blob-3"></div>
         <div class="palm-left">&#127796;</div>
         <div class="palm-right">&#127796;</div>
 
