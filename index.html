@@ -749,7 +749,7 @@
 
         /* ─── ABOUT / WHAT IS ─── */
         .about {
-            background: linear-gradient(180deg, var(--darker), #0f0505, var(--darker));
+            background: linear-gradient(180deg, rgba(5,5,5,0.85), rgba(15,5,5,0.8), rgba(5,5,5,0.85));
         }
 
         .about-grid {
@@ -806,7 +806,7 @@
 
         /* ─── EXPERIENCE SECTION ─── */
         .experience {
-            background: linear-gradient(180deg, var(--darker), #100808, var(--darker));
+            background: linear-gradient(180deg, rgba(5,5,5,0.85), rgba(16,8,8,0.8), rgba(5,5,5,0.85));
         }
 
         .exp-features {
@@ -863,7 +863,7 @@
         .promo-video {
             padding: 72px 20px;
             text-align: center;
-            background: linear-gradient(180deg, var(--darker) 0%, #0a0a0c 50%, var(--darker) 100%);
+            background: linear-gradient(180deg, rgba(5,5,5,0.85) 0%, rgba(10,10,12,0.8) 50%, rgba(5,5,5,0.85) 100%);
         }
         .promo-video h2 {
             font-family: 'Bebas Neue', sans-serif;
@@ -1401,7 +1401,7 @@
 
         /* ─── SIGNUP SECTION ─── */
         .signup {
-            background: linear-gradient(180deg, var(--darker), #0a0505);
+            background: linear-gradient(180deg, rgba(5,5,5,0.85), rgba(10,5,5,0.8));
             text-align: center;
         }
 
@@ -1518,7 +1518,7 @@
         .gallery-section {
             padding: 72px 0;
             overflow: hidden;
-            background: var(--darker);
+            background: rgba(5,5,5,0.85);
         }
 
         .gallery-track {
@@ -2227,7 +2227,7 @@
         /* ─── GRAND OPENING SECTION ─── */
         .grand-opening {
             text-align: center;
-            background: linear-gradient(180deg, var(--darker) 0%, #1a0a1a 50%, var(--darker) 100%);
+            background: linear-gradient(180deg, rgba(5,5,5,0.85) 0%, rgba(26,10,26,0.8) 50%, rgba(5,5,5,0.85) 100%);
             padding: 96px 20px;
             position: relative;
             overflow: hidden;
@@ -2711,6 +2711,10 @@
     </style>
 </head>
 <body>
+    <!-- Aurora ambient blobs — fixed behind everything -->
+    <div class="aurora-blob-1"></div>
+    <div class="aurora-blob-2"></div>
+    <div class="aurora-blob-3"></div>
     <!-- Hamburger Menu (mobile) -->
     <button class="hamburger" id="hamburger" onclick="document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');">
         <span></span><span></span><span></span>
