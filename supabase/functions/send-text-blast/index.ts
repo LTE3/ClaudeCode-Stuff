@@ -82,7 +82,20 @@ Deno.serve(async (req) => {
       if (s.phone) allPhones.add(s.phone.trim())
     }
 
-    const phoneList = Array.from(allPhones).filter((p) => p.length >= 10)
+    // Format all phones to +1XXXXXXXXXX
+    const phoneList = Array.from(allPhones)
+      .map((p) => {
+        // Strip everything except digits
+        const digits = p.replace(/\D/g, '')
+        // If 10 digits, add +1
+        if (digits.length === 10) return '+1' + digits
+        // If 11 digits starting with 1, add +
+        if (digits.length === 11 && digits.startsWith('1')) return '+' + digits
+        // If already has +, return as-is
+        if (p.startsWith('+') && digits.length >= 10) return '+' + digits
+        return null
+      })
+      .filter((p): p is string => p !== null && p.length >= 12)
 
     // ─── Send via Twilio in batches ───
     const BATCH_SIZE = 10

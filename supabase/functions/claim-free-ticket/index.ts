@@ -11,8 +11,9 @@ Deno.serve(async (req) => {
   try {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!
     const SUPABASE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    const { event_date, customer_name, customer_email, customer_phone, claim_type } = await req.json()
+    const { event_date, customer_name, customer_email, customer_phone, claim_type, quantity } = await req.json()
     const type = claim_type || "ladies_free"
+    const qty = Math.min(Math.max(parseInt(quantity) || 1, 1), 5) // Max 5 per person
 
     if (!event_date || !customer_name || !customer_email || !customer_phone) {
       return new Response(JSON.stringify({ error: "Name, email, phone, and event date required" }), {
@@ -32,16 +33,16 @@ Deno.serve(async (req) => {
     }
     const evt = events[0]
 
-    // Check capacity based on claim type
+    // Check capacity based on claim type (accounting for quantity)
     if (type === "dance_ga_free") {
-      if (evt.free_ga_claimed >= evt.free_ga_capacity) {
-        return new Response(JSON.stringify({ error: "Free GA tickets are sold out" }), {
+      if (evt.free_ga_claimed + qty > evt.free_ga_capacity) {
+        return new Response(JSON.stringify({ error: "Not enough free GA tickets remaining" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         })
       }
     } else {
-      if (evt.ladies_free_claimed >= evt.ladies_free_capacity) {
-        return new Response(JSON.stringify({ error: "Free tickets are sold out" }), {
+      if (evt.ladies_free_claimed + qty > evt.ladies_free_capacity) {
+        return new Response(JSON.stringify({ error: "Not enough free tickets remaining" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         })
       }
@@ -77,7 +78,7 @@ Deno.serve(async (req) => {
         customer_name,
         customer_email,
         customer_phone,
-        party_size: 1,
+        party_size: qty,
         amount_paid: 0,
         status: "confirmed",
       }),
@@ -85,8 +86,8 @@ Deno.serve(async (req) => {
 
     // Increment the appropriate counter
     const counterUpdate = type === "dance_ga_free"
-      ? { free_ga_claimed: evt.free_ga_claimed + 1 }
-      : { ladies_free_claimed: evt.ladies_free_claimed + 1 }
+      ? { free_ga_claimed: evt.free_ga_claimed + qty }
+      : { ladies_free_claimed: evt.ladies_free_claimed + qty }
 
     await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${evt.id}`, {
       method: "PATCH",
