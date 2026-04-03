@@ -11,7 +11,8 @@ Deno.serve(async (req) => {
   try {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!
     const SUPABASE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    const { event_date, customer_name, customer_email, customer_phone } = await req.json()
+    const { event_date, customer_name, customer_email, customer_phone, claim_type } = await req.json()
+    const type = claim_type || "ladies_free"
 
     if (!event_date || !customer_name || !customer_email || !customer_phone) {
       return new Response(JSON.stringify({ error: "Name, email, phone, and event date required" }), {
@@ -31,16 +32,27 @@ Deno.serve(async (req) => {
     }
     const evt = events[0]
 
-    // Check capacity
-    if (evt.ladies_free_claimed >= evt.ladies_free_capacity) {
-      return new Response(JSON.stringify({ error: "Free tickets are sold out" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      })
+    // Check capacity based on claim type
+    if (type === "dance_ga_free") {
+      if (evt.free_ga_claimed >= evt.free_ga_capacity) {
+        return new Response(JSON.stringify({ error: "Free GA tickets are sold out" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+    } else {
+      if (evt.ladies_free_claimed >= evt.ladies_free_capacity) {
+        return new Response(JSON.stringify({ error: "Free tickets are sold out" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
     }
+
+    // Determine booking type
+    const bookingType = type === "dance_ga_free" ? "dance_ga_free" : "ladies_free"
 
     // Check for duplicate (same email or phone for this event)
     const dupResp = await fetch(
-      `${SUPABASE_URL}/rest/v1/bookings?event_id=eq.${evt.id}&booking_type=eq.ladies_free&status=neq.cancelled&or=(customer_email.eq.${encodeURIComponent(customer_email)},customer_phone.eq.${encodeURIComponent(customer_phone)})&select=id`,
+      `${SUPABASE_URL}/rest/v1/bookings?event_id=eq.${evt.id}&booking_type=eq.${bookingType}&status=neq.cancelled&or=(customer_email.eq.${encodeURIComponent(customer_email)},customer_phone.eq.${encodeURIComponent(customer_phone)})&select=id`,
       { headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` } }
     )
     const dups = await dupResp.json()
@@ -61,7 +73,7 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         event_id: evt.id,
-        booking_type: "ladies_free",
+        booking_type: bookingType,
         customer_name,
         customer_email,
         customer_phone,
@@ -71,7 +83,11 @@ Deno.serve(async (req) => {
       }),
     })
 
-    // Increment counter
+    // Increment the appropriate counter
+    const counterUpdate = type === "dance_ga_free"
+      ? { free_ga_claimed: evt.free_ga_claimed + 1 }
+      : { ladies_free_claimed: evt.ladies_free_claimed + 1 }
+
     await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${evt.id}`, {
       method: "PATCH",
       headers: {
@@ -80,13 +96,16 @@ Deno.serve(async (req) => {
         "Content-Type": "application/json",
         "Prefer": "return=minimal",
       },
-      body: JSON.stringify({ ladies_free_claimed: evt.ladies_free_claimed + 1 }),
+      body: JSON.stringify(counterUpdate),
     })
+
+    const capacity = type === "dance_ga_free" ? evt.free_ga_capacity : evt.ladies_free_capacity
+    const claimed = type === "dance_ga_free" ? evt.free_ga_claimed : evt.ladies_free_claimed
 
     return new Response(JSON.stringify({
       status: "confirmed",
       message: "Free ticket claimed!",
-      remaining: evt.ladies_free_capacity - evt.ladies_free_claimed - 1,
+      remaining: capacity - claimed - 1,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     })

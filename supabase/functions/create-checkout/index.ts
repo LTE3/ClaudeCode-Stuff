@@ -40,6 +40,15 @@ Deno.serve(async (req) => {
         vip_couch_after: { amount: 10000, name: "VIP Couch Deposit - After Midnight (1am-4am)" },
         vip_high_top_before: { amount: 5000, name: "VIP High Top Deposit - Before Midnight (10pm-1am)" },
         vip_high_top_after: { amount: 5000, name: "VIP High Top Deposit - After Midnight (1am-4am)" },
+        // Regular (non-VIP) table deposits
+        regular_couch_before: { amount: 10000, name: "Regular Couch (DTMF) — Before Midnight" },
+        regular_couch_after: { amount: 10000, name: "Regular Couch (DTMF) — After Midnight" },
+        regular_high_top: { amount: 5000, name: "Regular High Top (Verano)" },
+        // Dance night paid GA
+        dance_ga: { amount: 2000, name: "Dance Night GA ($15 + $5 fee)" },
+        // Season passes
+        season_pass_regular: { amount: 9900, name: "Bad Bunny Season Pass — All Access" },
+        season_pass_vip: { amount: 24900, name: "VIP Season Pass — All Access VIP" },
         test_ticket: { amount: 100, name: "Test Ticket ($1)" },
       }
 
@@ -84,7 +93,7 @@ Deno.serve(async (req) => {
         }
 
         // Check table availability and place hold
-        if (data.table_id && (data.ticket_type.startsWith("vip_couch") || data.ticket_type.startsWith("vip_high_top"))) {
+        if (data.table_id && (data.ticket_type.startsWith("vip_couch") || data.ticket_type.startsWith("vip_high_top") || data.ticket_type.startsWith("regular_couch") || data.ticket_type.startsWith("regular_high_top"))) {
           const tableCheck = avail.tables?.find((t: any) => t.id === data.table_id)
           if (!tableCheck || tableCheck.status !== "available") {
             return new Response(JSON.stringify({ error: "This table is no longer available" }), {
@@ -111,6 +120,9 @@ Deno.serve(async (req) => {
         // Create booking record
         const bookingType = data.ticket_type.startsWith("vip_couch") ? "vip_couch"
           : data.ticket_type.startsWith("vip_high_top") ? "vip_high_top"
+          : data.ticket_type.startsWith("regular_couch") ? "regular_couch"
+          : data.ticket_type === "regular_high_top" ? "regular_high_top"
+          : data.ticket_type.startsWith("season_pass_") ? "season_pass"
           : data.ticket_type === "test_ticket" ? "test"
           : data.ticket_type
 
@@ -210,6 +222,26 @@ Deno.serve(async (req) => {
     if (session.error) {
       return new Response(JSON.stringify({ error: session.error.message }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    // Create season pass record if applicable
+    if (data.ticket_type?.startsWith("season_pass_")) {
+      await fetch(`${SUPABASE_URL}/rest/v1/season_passes`, {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal",
+        },
+        body: JSON.stringify({
+          pass_type: data.ticket_type === "season_pass_vip" ? "vip" : "regular",
+          customer_name: data.customer_name || "Pending",
+          customer_email: data.customer_email || "pending@checkout.com",
+          customer_phone: data.customer_phone || null,
+          stripe_session_id: session.id,
+        }),
       })
     }
 
