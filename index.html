@@ -2730,6 +2730,70 @@
         .glow-border:hover::before {
             opacity: 1;
         }
+        /* ─── SCHEDULE ─── */
+        .schedule-section { padding: 120px 20px; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .schedule-subtitle { color: rgba(255,255,255,0.6); font-size: 1.1rem; margin-bottom: 50px; }
+        .schedule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .schedule-day-label { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 6px; color: var(--hot-pink); margin-bottom: 20px; }
+        .schedule-block { background: rgba(255,255,255,0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 30px 24px; text-align: left; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .schedule-block:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-3px); }
+        .schedule-block.early { border-left: 3px solid var(--teal); }
+        .schedule-block.late { border-left: 3px solid var(--hot-pink); }
+        .schedule-time { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 3px; color: var(--yellow); margin-bottom: 8px; }
+        .schedule-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 2px; color: #fff; margin-bottom: 10px; }
+        .schedule-desc { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.6; }
+        .schedule-arrow { font-size: 1.5rem; color: rgba(255,255,255,0.3); margin: 12px 0; text-align: center; }
+        .salsa-flyer { max-width: 500px; width: 100%; border-radius: 20px; margin: 40px auto 0; display: block; }
+        /* ─── WHAT TO EXPECT ─── */
+        .expect-section { padding: 120px 20px; max-width: 900px; margin: 0 auto; text-align: center; }
+        .expect-subtitle { color: rgba(255,255,255,0.6); font-size: 1.1rem; margin-bottom: 50px; }
+        .expect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; }
+        .expect-item { display: flex; gap: 16px; padding: 24px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .expect-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
+        .expect-icon { font-size: 2rem; flex-shrink: 0; }
+        .expect-text h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; color: #fff; margin-bottom: 6px; }
+        .expect-text p { color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.5; }
+        /* ─── BOTTLE SERVICE ─── */
+        .bottles-section { padding: 120px 20px; max-width: 1100px; margin: 0 auto; text-align: center; }
+        .bottles-subtitle { color: rgba(255,255,255,0.6); font-size: 1.1rem; margin-bottom: 50px; }
+        .bottles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .bottle-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .bottle-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .bottle-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
+        .bottle-card-info { padding: 24px 20px; }
+        .bottle-card-info h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 3px; color: var(--yellow); margin-bottom: 10px; }
+        .bottle-card-info p { color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px; }
+        .bottle-price-range { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; color: var(--hot-pink); }
+        /* ─── SEASON PASSES ─── */
+        .season-section { padding: 120px 20px; max-width: 800px; margin: 0 auto; text-align: center; }
+        .season-subtitle { color: rgba(255,255,255,0.6); font-size: 1.1rem; margin-bottom: 50px; }
+        .season-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .season-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 40px 28px; text-align: center; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .season-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .season-card.vip-pass { border-color: rgba(255,77,141,0.2); background: rgba(255,77,141,0.03); }
+        .season-card.vip-pass:hover { border-color: var(--hot-pink); box-shadow: 0 20px 50px rgba(255,77,141,0.15); }
+        .season-badge { display: inline-block; background: var(--teal); color: #000; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 6px 16px; border-radius: 20px; margin-bottom: 20px; }
+        .season-badge.vip-badge { background: var(--hot-pink); color: #fff; }
+        .season-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; color: #fff; margin-bottom: 4px; }
+        .season-label { color: rgba(255,255,255,0.5); font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 20px; }
+        .season-price { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: var(--yellow); line-height: 1; margin-bottom: 24px; }
+        .season-perks { list-style: none; text-align: left; margin-bottom: 20px; padding: 0; }
+        .season-perks li { color: rgba(255,255,255,0.7); font-size: 0.95rem; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .season-perks li:last-child { border-bottom: none; }
+        .season-value { color: var(--hot-pink); font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
+        .season-note { color: rgba(255,255,255,0.35); font-size: 0.75rem; margin-bottom: 24px; }
+        .season-buy-btn { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, var(--yellow), var(--orange)); color: #000; font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 3px; border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .season-buy-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,214,0,0.3); }
+        .season-buy-btn.vip-btn { background: linear-gradient(135deg, var(--hot-pink), #FF6B9D); color: #fff; }
+        .season-buy-btn.vip-btn:hover { box-shadow: 0 8px 25px rgba(255,77,141,0.3); }
+        @media (max-width: 600px) {
+            .schedule-grid { grid-template-columns: 1fr; }
+            .schedule-day-label { font-size: 2rem; }
+            .expect-grid { grid-template-columns: 1fr; }
+            .bottles-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .season-grid { grid-template-columns: 1fr; max-width: 380px; margin: 0 auto; }
+            .season-price { font-size: 3rem; }
+        }
     </style>
 </head>
 <body>
@@ -2741,7 +2805,10 @@
     <nav class="mobile-menu" id="mobileMenu">
         <a href="#about" onclick="document.getElementById('hamburger').click()">About</a>
         <a href="#experience" onclick="document.getElementById('hamburger').click()">Vibe</a>
+        <a href="#schedule" onclick="document.getElementById('hamburger').click()">Schedule</a>
         <a href="#merch" onclick="document.getElementById('hamburger').click()">Merch</a>
+        <a href="#bottles" onclick="document.getElementById('hamburger').click()">VIP</a>
+        <a href="#season-pass" onclick="document.getElementById('hamburger').click()">Season Pass</a>
         <a href="#faq" onclick="document.getElementById('hamburger').click()">FAQ</a>
         <a href="#signup" onclick="document.getElementById('hamburger').click()">Early Access</a>
     </nav>
@@ -2768,7 +2835,10 @@
     <nav class="nav-inner">
         <a href="#about">About</a>
         <a href="#experience">Vibe</a>
+        <a href="#schedule">Schedule</a>
         <a href="#merch">Merch</a>
+        <a href="#bottles">VIP</a>
+        <a href="#season-pass">Season Pass</a>
         <a href="#faq">FAQ</a>
         <a href="#signup">Early Access</a>
     </nav>
@@ -3007,6 +3077,75 @@
                     <h4>Full La Casita Takeover</h4>
                     <p>A Brooklyn venue transformed into a tropical Latin paradise</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section class="schedule-section reveal" id="schedule">
+        <h2 class="section-title reveal">The <span class="accent">Schedule</span></h2>
+        <p class="schedule-subtitle">Every weekend, two experiences under one roof</p>
+        <div class="schedule-grid">
+            <div class="schedule-day">
+                <div class="schedule-day-label">FRIDAYS</div>
+                <div class="schedule-block early">
+                    <div class="schedule-time">7PM — 10PM</div>
+                    <div class="schedule-name">Salsa Night</div>
+                    <div class="schedule-desc">Live instructor-led salsa experience. New instructor every week. Open dance floor, tropical cocktails, hookah, and real Puerto Rico vibes.</div>
+                </div>
+                <div class="schedule-arrow">↓</div>
+                <div class="schedule-block late">
+                    <div class="schedule-time">10PM — 4AM</div>
+                    <div class="schedule-name">Nightclub</div>
+                    <div class="schedule-desc">Full reggaeton nightlife experience. DJ sets, bottle service, VIP sections, and the La Casita energy turned all the way up.</div>
+                </div>
+            </div>
+            <div class="schedule-day">
+                <div class="schedule-day-label">SATURDAYS</div>
+                <div class="schedule-block early">
+                    <div class="schedule-time">7PM — 10PM</div>
+                    <div class="schedule-name">Bachata & Merengue Night</div>
+                    <div class="schedule-desc">Rotating dance instructors every week. Full bachata and merengue experience. Latin energy, high tops, hookah, and specialty drinks.</div>
+                </div>
+                <div class="schedule-arrow">↓</div>
+                <div class="schedule-block late">
+                    <div class="schedule-time">10PM — 4AM</div>
+                    <div class="schedule-name">Nightclub</div>
+                    <div class="schedule-desc">The main event. Perreo all night, live DJs, full bottle service, VIP couches, and Brooklyn's hottest Latin party.</div>
+                </div>
+            </div>
+        </div>
+        <img src="salsa-night-flyer.jpg" alt="Salsa Night at La Casita — Every Friday" class="salsa-flyer reveal" loading="lazy">
+    </section>
+
+    <!-- WHAT TO EXPECT -->
+    <section class="expect-section reveal" id="expect">
+        <h2 class="section-title reveal">What to <span class="accent">Expect</span></h2>
+        <p class="expect-subtitle">Everything you need to know before you pull up</p>
+        <div class="expect-grid">
+            <div class="expect-item reveal">
+                <div class="expect-icon">🌴</div>
+                <div class="expect-text"><h3>Full Tropical Experience</h3><p>Puerto Rico-inspired vibes from the moment you walk in. Neon lights, island decor, and a house party atmosphere all night.</p></div>
+            </div>
+            <div class="expect-item reveal">
+                <div class="expect-icon">💃</div>
+                <div class="expect-text"><h3>Dance Experience — 7PM</h3><p>Instructor-led salsa, bachata & merengue every weekend. Learn, dance, and vibe before the nightclub takes over at 10.</p></div>
+            </div>
+            <div class="expect-item reveal">
+                <div class="expect-icon">🎧</div>
+                <div class="expect-text"><h3>Full Nightlife — 10PM</h3><p>Live DJs, reggaeton all night, bottle service, VIP sections, and the energy Brooklyn's been waiting for.</p></div>
+            </div>
+            <div class="expect-item reveal">
+                <div class="expect-icon">🛍️</div>
+                <div class="expect-text"><h3>Merch & Photo Moments</h3><p>Exclusive La Casita merch on-site, immersive photo ops, and themed nights you'll want to post about.</p></div>
+            </div>
+            <div class="expect-item reveal">
+                <div class="expect-icon">🍹</div>
+                <div class="expect-text"><h3>Cocktails & Food</h3><p>Specialty tropical drinks all night. Food available at all times from multiple vendors — mostly finger foods. Hookah at every event.</p></div>
+            </div>
+            <div class="expect-item reveal">
+                <div class="expect-icon">🎪</div>
+                <div class="expect-text"><h3>Themed Nights</h3><p>Every weekend has its own energy. Salsa Fridays, Bachata Saturdays, and special themed events throughout the season.</p></div>
             </div>
         </div>
     </section>
@@ -3267,6 +3406,64 @@
                     <div class="merch-bottom"><span class="merch-price">$20</span></div>
                     <button class="merch-add-btn" onclick="addToCart(this)">Add to Cart</button>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIP & BOTTLE SERVICE -->
+    <section class="bottles-section reveal" id="bottles">
+        <h2 class="section-title reveal">VIP & <span class="accent">Bottle Service</span></h2>
+        <p class="bottles-subtitle">Reserve your section. Choose your package.</p>
+        <div class="bottles-grid">
+            <div class="bottle-card glow-border reveal">
+                <img src="vip-bottle-packages.jpg" alt="VIP Bottle Packages" class="bottle-img" loading="lazy">
+                <div class="bottle-card-info"><h3>VIP PACKAGES</h3><p>Premium bottles, champagne, hookah, $50 merch credit. Admission included for your whole group.</p><div class="bottle-price-range">From $400++</div></div>
+            </div>
+            <div class="bottle-card glow-border reveal">
+                <img src="regular-bottle-packages.jpg" alt="Bottle Packages" class="bottle-img" loading="lazy">
+                <div class="bottle-card-info"><h3>BOTTLE PACKAGES</h3><p>DTMF and Verano packages for your table. Bottles and champagne. Admission purchased separately.</p><div class="bottle-price-range">From $300++</div></div>
+            </div>
+            <div class="bottle-card glow-border reveal">
+                <img src="bottle-menu.jpg" alt="Full Bottle Menu" class="bottle-img" loading="lazy">
+                <div class="bottle-card-info"><h3>BOTTLE MENU</h3><p>Tequila, vodka, whiskey, champagne, cognac. Premium brands at bottle service prices.</p><div class="bottle-price-range">Starting at $225</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEASON PASSES -->
+    <section class="season-section reveal" id="season-pass">
+        <h2 class="section-title reveal">Season <span class="accent">Passes</span></h2>
+        <p class="season-subtitle">Pay once. Party all season.</p>
+        <div class="season-grid">
+            <div class="season-card glow-border reveal">
+                <div class="season-badge">BEST VALUE</div>
+                <div class="season-name">BAD BUNNY SEASON PASS</div>
+                <div class="season-label">ALL ACCESS</div>
+                <div class="season-price">$99</div>
+                <ul class="season-perks">
+                    <li>✓ Entry to every Friday & Saturday</li>
+                    <li>✓ Full 3-month season (May — September)</li>
+                    <li>✓ No weekly ticket purchases</li>
+                    <li>✓ Guaranteed access to the vibes</li>
+                </ul>
+                <div class="season-value">🔥 Total value $360+</div>
+                <div class="season-note">Subject to capacity / special event exclusions</div>
+                <a href="#signup" class="season-buy-btn">Get Season Pass</a>
+            </div>
+            <div class="season-card vip-pass glow-border reveal">
+                <div class="season-badge vip-badge">VIP</div>
+                <div class="season-name">VIP SEASON PASS</div>
+                <div class="season-label">ALL ACCESS VIP + DRINK + BACKSTAGE</div>
+                <div class="season-price">$249</div>
+                <ul class="season-perks">
+                    <li>✓ VIP entry every Friday & Saturday</li>
+                    <li>✓ Complimentary drink each visit</li>
+                    <li>✓ Backstage access all season</li>
+                    <li>✓ Priority entry, no lines</li>
+                </ul>
+                <div class="season-value">🔥 Total value $900+</div>
+                <div class="season-note">Subject to capacity / special event exclusions</div>
+                <a href="#signup" class="season-buy-btn vip-btn">Get VIP Pass</a>
             </div>
         </div>
     </section>
