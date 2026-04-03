@@ -3806,8 +3806,22 @@
                 const now = Date.now();
                 const diff = presaleDate - now;
                 if (diff <= 0) {
-                    document.querySelector('.presale-label').textContent = 'PRESALE IS LIVE!';
+                    document.querySelector('.presale-label').textContent = 'TICKETS ARE LIVE!';
                     document.querySelector('.countdown-boxes').style.display = 'none';
+                    // Change CTA button to link to tickets
+                    const ctaBtn = document.querySelector('.cta-btn');
+                    if (ctaBtn) {
+                        ctaBtn.textContent = '🎫 GET TICKETS NOW';
+                        ctaBtn.href = '#tickets';
+                        ctaBtn.style.animation = 'pulse 1.5s ease-in-out infinite';
+                    }
+                    // Change the FAB too
+                    const fab = document.querySelector('.fab');
+                    if (fab) {
+                        fab.innerHTML = '🎫';
+                        fab.href = '#tickets';
+                        fab.setAttribute('aria-label', 'Get Tickets');
+                    }
                     return;
                 }
                 const d = Math.floor(diff / 86400000);
