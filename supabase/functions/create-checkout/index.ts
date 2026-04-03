@@ -35,6 +35,9 @@ Deno.serve(async (req) => {
     else if (data.ticket_type) {
       const ticketPrices: Record<string, { amount: number; name: string }> = {
         ga: { amount: 2000, name: "La Casita BK - General Admission ($15 + $5 fee)" },
+        ga_tier1: { amount: 1500, name: "La Casita BK - GA Tier 1 ($10 + $5 fee)" },
+        ga_tier2: { amount: 2000, name: "La Casita BK - GA Tier 2 ($15 + $5 fee)" },
+        ga_tier3: { amount: 2500, name: "La Casita BK - GA Tier 3 ($20 + $5 fee)" },
         vip_ga: { amount: 4000, name: "La Casita BK - VIP GA ($35 + $5 fee)" },
         vip_couch_before: { amount: 10000, name: "VIP Couch Deposit - Before Midnight (10pm-1am)" },
         vip_couch_after: { amount: 10000, name: "VIP Couch Deposit - After Midnight (1am-4am)" },
