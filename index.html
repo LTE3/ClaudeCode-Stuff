@@ -1618,17 +1618,19 @@
             color: rgba(255,255,255,0.25);
         }
 
-        .pulse-logo {
+        .pulse-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
             margin: 25px auto 15px;
             opacity: 0.5;
             transition: opacity 0.3s;
         }
-
-        .pulse-logo:hover {
+        .pulse-logos:hover {
             opacity: 0.8;
         }
-
-        .pulse-logo svg {
+        .pulse-logo svg, .pulse-tix-logo svg {
             width: 200px;
             height: auto;
         }
@@ -3345,21 +3347,33 @@
             <a href="#" aria-label="TikTok">TT</a>
             <a href="#" aria-label="Twitter">X</a>
         </div>
-        <div class="pulse-logo">
-            <svg viewBox="0 0 360 110" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-label="Pulse Hospitality Group logo">
-                <!-- Heartbeat line + PULSE text -->
-                <g stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-                    <polyline points="18,38 38,38 44,28 50,48 56,20 62,52 68,32 74,38"/>
-                </g>
-                <text x="78" y="45" font-family="'Bebas Neue', 'Arial Narrow', sans-serif" font-size="38" fill="#fff" letter-spacing="4" font-weight="400">PULSE</text>
-                <g stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-                    <polyline points="222,38 242,38 248,28 254,48 260,18 266,54 272,30 278,38 298,38"/>
-                </g>
-                <!-- HOSPITALITY -->
-                <text x="160" y="78" font-family="'Bebas Neue', 'Arial Narrow', sans-serif" font-size="32" fill="#fff" letter-spacing="3" text-anchor="middle" font-weight="400">HOSPITALITY</text>
-                <!-- GROUP -->
-                <text x="160" y="102" font-family="'Inter', 'Helvetica', sans-serif" font-size="16" fill="#fff" letter-spacing="8" text-anchor="middle" font-weight="300">GROUP</text>
-            </svg>
+        <div class="pulse-logos">
+            <div class="pulse-logo">
+                <svg viewBox="0 0 360 110" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-label="Pulse Hospitality Group logo">
+                    <g stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                        <polyline points="18,38 38,38 44,28 50,48 56,20 62,52 68,32 74,38"/>
+                    </g>
+                    <text x="78" y="45" font-family="'Bebas Neue', 'Arial Narrow', sans-serif" font-size="38" fill="#fff" letter-spacing="4" font-weight="400">PULSE</text>
+                    <g stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                        <polyline points="222,38 242,38 248,28 254,48 260,18 266,54 272,30 278,38 298,38"/>
+                    </g>
+                    <text x="160" y="78" font-family="'Bebas Neue', 'Arial Narrow', sans-serif" font-size="32" fill="#fff" letter-spacing="3" text-anchor="middle" font-weight="400">HOSPITALITY</text>
+                    <text x="160" y="102" font-family="'Inter', 'Helvetica', sans-serif" font-size="16" fill="#fff" letter-spacing="8" text-anchor="middle" font-weight="300">GROUP</text>
+                </svg>
+            </div>
+            <div class="pulse-tix-logo">
+                <svg viewBox="0 0 240 90" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-label="Pulse Tix logo">
+                    <g stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="14,32 24,32 28,24 32,40 36,18 40,44 44,28 48,32"/>
+                    </g>
+                    <text x="120" y="38" font-family="'Bebas Neue', 'Arial Narrow', sans-serif" font-size="42" fill="#fff" letter-spacing="6" text-anchor="middle">PULSE</text>
+                    <g stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="192,32 202,32 206,24 210,40 214,18 218,44 222,28 226,32"/>
+                    </g>
+                    <rect x="68" y="48" width="104" height="34" rx="5" stroke="#fff" stroke-width="1.5" fill="none"/>
+                    <text x="120" y="73" font-family="'Bebas Neue', 'Arial Narrow', sans-serif" font-size="32" fill="#fff" letter-spacing="4" text-anchor="middle">TIX</text>
+                </svg>
+            </div>
         </div>
         <p class="footer-copy">&copy; 2026 Pulse Hospitality Group. All rights reserved. Brooklyn, NYC.</p>
     </footer>
