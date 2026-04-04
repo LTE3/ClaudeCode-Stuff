@@ -3475,26 +3475,9 @@
     <!-- TICKETS -->
     <section class="tickets-section" id="tickets">
         <h2 class="section-title reveal">Get <span class="accent">Tickets</span></h2>
-        <div id="ticketCountdown" style="text-align:center;padding:40px 20px;">
-            <p style="color:rgba(255,255,255,0.6);font-size:1.1rem;margin-bottom:20px;">Tickets go live at 7:00 PM Eastern</p>
-            <div style="display:flex;justify-content:center;gap:16px;margin-bottom:30px;">
-                <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 24px;min-width:80px;">
-                    <div id="tcHours" style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--hot-pink);">--</div>
-                    <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;">Hours</div>
-                </div>
-                <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 24px;min-width:80px;">
-                    <div id="tcMinutes" style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--hot-pink);">--</div>
-                    <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;">Minutes</div>
-                </div>
-                <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 24px;min-width:80px;">
-                    <div id="tcSeconds" style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--hot-pink);">--</div>
-                    <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;">Seconds</div>
-                </div>
-            </div>
-            <p style="color:rgba(255,255,255,0.4);font-size:0.85rem;">Sign up below to get notified when tickets drop</p>
-        </div>
-        <div id="ticketEmbed" style="display:none;">
-            <iframe src="/admin/?tickets" style="width:100%;min-height:800px;border:none;border-radius:20px;background:#020203;" title="La Casita Tickets"></iframe>
+        <div style="text-align:center;padding:40px 20px;">
+            <p style="color:rgba(255,255,255,0.7);font-size:1.2rem;margin-bottom:24px;">Tickets coming soon — sign up to get first access</p>
+            <a href="#signup" style="display:inline-block;padding:18px 48px;background:linear-gradient(135deg, var(--yellow), var(--orange));color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;border-radius:50px;text-decoration:none;font-weight:700;transition:all 0.3s;">Join the Waitlist</a>
         </div>
     </section>
 
@@ -3615,47 +3598,6 @@
     <a href="#signup" class="fab" aria-label="Get Early Access">&#127930;</a>
 
     <script>
-        // ─── Ticket Countdown (7PM Eastern) ───
-        (function ticketCountdown() {
-            function getNext7PMEastern() {
-                // Get current time in Eastern
-                const now = new Date();
-                const eastern = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-                const target = new Date(eastern);
-                target.setHours(19, 0, 0, 0); // 7PM
-                // If 7PM has passed today, it's live
-                if (eastern >= target) return null;
-                // Calculate diff using actual timestamps
-                const nowMs = now.getTime();
-                const diffMs = target.getTime() - eastern.getTime();
-                return diffMs;
-            }
-
-            function updateCountdown() {
-                const diff = getNext7PMEastern();
-                const countdownEl = document.getElementById('ticketCountdown');
-                const embedEl = document.getElementById('ticketEmbed');
-
-                if (diff === null || diff <= 0) {
-                    // 7PM has passed — show tickets
-                    countdownEl.style.display = 'none';
-                    embedEl.style.display = 'block';
-                    return;
-                }
-
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                document.getElementById('tcHours').textContent = String(hours).padStart(2, '0');
-                document.getElementById('tcMinutes').textContent = String(minutes).padStart(2, '0');
-                document.getElementById('tcSeconds').textContent = String(seconds).padStart(2, '0');
-            }
-
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-        })();
-
         // ─── Floating Particles ───
         (function createParticles() {
             const container = document.getElementById('particles');
@@ -3806,22 +3748,8 @@
                 const now = Date.now();
                 const diff = presaleDate - now;
                 if (diff <= 0) {
-                    document.querySelector('.presale-label').textContent = 'TICKETS ARE LIVE!';
+                    document.querySelector('.presale-label').textContent = 'SIGN UP FOR EARLY ACCESS';
                     document.querySelector('.countdown-boxes').style.display = 'none';
-                    // Change CTA button to link to tickets
-                    const ctaBtn = document.querySelector('.cta-btn');
-                    if (ctaBtn) {
-                        ctaBtn.textContent = '🎫 GET TICKETS NOW';
-                        ctaBtn.href = '#tickets';
-                        ctaBtn.style.animation = 'pulse 1.5s ease-in-out infinite';
-                    }
-                    // Change the FAB too
-                    const fab = document.querySelector('.fab');
-                    if (fab) {
-                        fab.innerHTML = '🎫';
-                        fab.href = '#tickets';
-                        fab.setAttribute('aria-label', 'Get Tickets');
-                    }
                     return;
                 }
                 const d = Math.floor(diff / 86400000);
