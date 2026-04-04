@@ -97,15 +97,28 @@ Deno.serve(async (req) => {
 
         // Check table availability and place hold
         if (data.table_id && (data.ticket_type.startsWith("vip_couch") || data.ticket_type.startsWith("vip_high_top") || data.ticket_type.startsWith("regular_couch") || data.ticket_type.startsWith("regular_high_top"))) {
-          const tableCheck = avail.tables?.find((t: any) => t.id === data.table_id)
+          // Parse table_id format "couch_1" or "high_top_1" into type + number
+          const idParts = data.table_id.match(/^(couch|high_top)_(\d+)$/)
+          const tType = idParts?.[1]
+          const tNum = parseInt(idParts?.[2] || "0")
+
+          // Map time_slot from form ("before"/"after") to DB ("before_midnight"/"after_midnight")
+          const dbSlot = data.time_slot === "before" ? "before_midnight"
+            : data.time_slot === "after" ? "after_midnight"
+            : data.time_slot // pass through for flat/null
+
+          const tableCheck = avail.tables?.find((t: any) =>
+            t.table_type === tType && t.table_number === tNum &&
+            (!dbSlot || t.time_slot === dbSlot)
+          )
           if (!tableCheck || tableCheck.status !== "available") {
             return new Response(JSON.stringify({ error: "This table is no longer available" }), {
               status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
             })
           }
 
-          // Place 10-minute hold
-          await fetch(`${SUPABASE_URL}/rest/v1/vip_tables?id=eq.${data.table_id}`, {
+          // Place 10-minute hold using the actual UUID
+          await fetch(`${SUPABASE_URL}/rest/v1/vip_tables?id=eq.${tableCheck.id}`, {
             method: "PATCH",
             headers: {
               "apikey": SUPABASE_KEY,
