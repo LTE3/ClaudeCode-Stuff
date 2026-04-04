@@ -3452,7 +3452,7 @@
                 </ul>
                 <div class="season-value">🔥 Total value $360+</div>
                 <div class="season-note">Subject to capacity / special event exclusions</div>
-                <a href="#signup" class="season-buy-btn">Get Season Pass</a>
+                <a href="#" onclick="buySeasonPass('season_pass_regular'); return false;" class="season-buy-btn">Get Season Pass</a>
             </div>
             <div class="season-card vip-pass glow-border reveal">
                 <div class="season-badge vip-badge">VIP</div>
@@ -3467,7 +3467,7 @@
                 </ul>
                 <div class="season-value">🔥 Total value $900+</div>
                 <div class="season-note">Subject to capacity / special event exclusions</div>
-                <a href="#signup" class="season-buy-btn vip-btn">Get VIP Pass</a>
+                <a href="#" onclick="buySeasonPass('season_pass_vip'); return false;" class="season-buy-btn vip-btn">Get VIP Pass</a>
             </div>
         </div>
     </section>
@@ -3631,6 +3631,30 @@
         // ─── Supabase Config ───
         const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+        // ─── Season Pass Purchase ───
+        async function buySeasonPass(passType) {
+            try {
+                const res = await fetch(SUPABASE_URL + '/functions/v1/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ticket_type: passType,
+                        event_date: '2026-05-01',
+                        customer_name: 'Season Pass Buyer',
+                        customer_email: 'pending@checkout.com',
+                    }),
+                });
+                const data = await res.json();
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert(data.error || 'Checkout failed. Please try again.');
+                }
+            } catch (err) {
+                alert('Something went wrong. Please try again.');
+            }
+        }
 
         // ─── Signup Form ───
         document.getElementById('signupForm').addEventListener('submit', async function(e) {
