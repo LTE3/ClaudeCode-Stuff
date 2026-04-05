@@ -38,19 +38,6 @@ const nightclubCards = [
     accentBg: 'bg-accent-teal',
     shadow: 'hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]',
   },
-  {
-    key: 'test',
-    emoji: '\u{1F9EA}',
-    title: 'TEST TICKET',
-    price: '$1',
-    fee: null,
-    color: 'muted',
-    borderColor: 'border-border-default',
-    hoverBorder: 'hover:border-border-hover',
-    textColor: 'text-text-muted',
-    accentBg: 'bg-text-muted',
-    shadow: '',
-  },
 ];
 
 const danceCards = [
