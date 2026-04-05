@@ -33,12 +33,14 @@ export default function GABookingForm({ date, availability, ticketOverride }) {
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [promoCode, setPromoCode] = useState('');
+  const [addOpenBar, setAddOpenBar] = useState(false);
+  const showOpenBarAddon = !isLadiesGroup && !isOpenBar;
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     const payload = {
-      ticket_type: ticketOverride || tierInfo.type,
+      ticket_type: addOpenBar ? 'ga_open_bar' : (ticketOverride || tierInfo.type),
       event_date: date,
       customer_name: name,
       customer_email: email,
@@ -105,6 +107,21 @@ export default function GABookingForm({ date, availability, ticketOverride }) {
         className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-gold focus:ring-[3px] focus:ring-accent-gold/20 transition-all duration-200 mb-2.5"
       />
 
+      {showOpenBarAddon && (
+        <label className="flex items-center gap-3 p-3.5 bg-bg-surface border border-accent-gold/20 rounded-[8px] mb-2.5 cursor-pointer hover:border-accent-gold/40 transition-all">
+          <input
+            type="checkbox"
+            checked={addOpenBar}
+            onChange={e => setAddOpenBar(e.target.checked)}
+            className="w-5 h-5 accent-accent-gold"
+          />
+          <div>
+            <span className="text-accent-gold font-medium text-sm">🍹 Add Open Bar — +$50</span>
+            <span className="text-text-muted text-xs block">Unlimited drinks all night</span>
+          </div>
+        </label>
+      )}
+
       {error && <p className="text-accent-coral text-sm mb-3">{error}</p>}
 
       <button
@@ -112,7 +129,7 @@ export default function GABookingForm({ date, availability, ticketOverride }) {
         disabled={loading || remaining === 0}
         className="w-full py-4 rounded-full font-[family-name:var(--font-display)] text-lg tracking-[3px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer border-none bg-accent-blue text-black disabled:opacity-50 disabled:cursor-not-allowed mt-2"
       >
-        {loading ? 'PROCESSING...' : `BUY GA — $${TOTAL * quantity}`}
+        {loading ? 'PROCESSING...' : `BUY ${isLadiesGroup ? 'LADIES x4' : isOpenBar ? 'GA + OPEN BAR' : addOpenBar ? 'GA + OPEN BAR' : 'GA'} — $${addOpenBar ? 70 * quantity : TOTAL * quantity}`}
       </button>
     </form>
   );
