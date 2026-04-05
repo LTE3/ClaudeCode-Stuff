@@ -193,8 +193,8 @@ export default function TicketingSection() {
                 <div className="text-text-secondary text-sm mb-1">
                   10PM - 4AM
                 </div>
-                <div className="text-text-muted text-xs mt-2">
-                  Full nightclub experience
+                <div className="text-text-muted text-xs mt-2 leading-relaxed">
+                  <span>This is what everyone's coming for.</span><br/><span>Full reggaeton takeover inside La Casita — late night gets crazy.</span>
                 </div>
               </button>
             </div>
