@@ -7,14 +7,16 @@ const MONTH_NAMES = [
 const DAY_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 function getSoldPercent(event) {
-  if (!event || !event.ga_capacity) return 0;
-  return (event.ga_sold / event.ga_capacity) * 100;
+  if (!event) return 0;
+  const totalSold = (event.ga_tier1_sold || 0) + (event.ga_tier2_sold || 0) + (event.ga_tier3_sold || 0) + (event.ga_sold || 0);
+  const totalCap = (event.ga_tier1_capacity || 100) + (event.ga_tier2_capacity || 100) + (event.ga_tier3_capacity || 100);
+  if (totalCap === 0) return 0;
+  return (totalSold / totalCap) * 100;
 }
 
 function getDotColor(pct) {
-  if (pct > 90) return 'bg-accent-coral';
-  if (pct > 70) return 'bg-accent-gold';
-  if (pct > 30) return 'bg-accent-gold';
+  if (pct > 80) return 'bg-accent-coral';
+  if (pct > 0) return 'bg-accent-gold';
   return 'bg-accent-teal';
 }
 

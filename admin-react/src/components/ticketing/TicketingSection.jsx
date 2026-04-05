@@ -157,13 +157,13 @@ export default function TicketingSection() {
               >
                 <div className="text-4xl mb-3">{'\u{1F483}'}</div>
                 <div className="font-[family-name:var(--font-display)] text-accent-teal text-xl tracking-[3px] mb-2">
-                  DANCE EXPERIENCE
+                  {selectedEvent?.early_type === 'salsa_night' ? 'SALSA NIGHT' : 'BACHATA NIGHT'}
                 </div>
                 <div className="text-text-secondary text-sm mb-1">
                   {selectedEvent?.early_start || '7PM'} - {selectedEvent?.early_end || '10PM'}
                 </div>
                 <div className="text-text-muted text-xs mt-2">
-                  {selectedEvent?.early_type === 'salsa_night' ? 'Salsa Night' : 'Bachata Night'}
+                  18+ • Dance Experience
                 </div>
               </button>
 
