@@ -106,7 +106,7 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({
       status: "confirmed",
       message: "Free ticket claimed!",
-      remaining: capacity - claimed - 1,
+      remaining: capacity - claimed - qty,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     })
