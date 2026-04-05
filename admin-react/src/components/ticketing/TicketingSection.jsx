@@ -6,6 +6,16 @@ import Calendar from './Calendar';
 import FloorPlan from './FloorPlan';
 import BookingPanel from './BookingPanel';
 
+function formatTime(t) {
+  if (!t) return '';
+  const [h] = t.split(':');
+  const hour = parseInt(h);
+  if (hour === 0) return '12AM';
+  if (hour < 12) return hour + 'AM';
+  if (hour === 12) return '12PM';
+  return (hour - 12) + 'PM';
+}
+
 export default function TicketingSection() {
   const { eventsByDate, loading: eventsLoading } = useEvents();
   const [step, setStep] = useState('calendar');
@@ -160,7 +170,7 @@ export default function TicketingSection() {
                   {selectedEvent?.early_type === 'salsa_night' ? 'SALSA NIGHT' : 'BACHATA NIGHT'}
                 </div>
                 <div className="text-text-secondary text-sm mb-1">
-                  {selectedEvent?.early_start || '7PM'} - {selectedEvent?.early_end || '10PM'}
+                  {formatTime(selectedEvent?.early_start) || '7PM'} - {formatTime(selectedEvent?.early_end) || '10PM'}
                 </div>
                 <div className="text-text-muted text-xs mt-2">
                   18+ • Dance Experience
