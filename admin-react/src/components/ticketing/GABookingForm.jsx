@@ -16,13 +16,15 @@ function getCurrentTier(availability) {
   return { tier: 3, price: 20, fee: 5, type: 'ga_tier3', remaining: 0 };
 }
 
-export default function GABookingForm({ date, availability }) {
+export default function GABookingForm({ date, availability, ticketOverride }) {
   const tierInfo = getCurrentTier(availability);
+  const isLadiesGroup = ticketOverride === 'ladies_group';
+  const isOpenBar = ticketOverride === 'ga_open_bar';
   const remaining = tierInfo.remaining;
-  const PRICE = tierInfo.price;
-  const FEE = tierInfo.fee;
+  const PRICE = isLadiesGroup ? 35 : isOpenBar ? 70 : tierInfo.price;
+  const FEE = isLadiesGroup ? 0 : isOpenBar ? 0 : tierInfo.fee;
   const TOTAL = PRICE + FEE;
-  const maxQty = Math.min(10, remaining);
+  const maxQty = isLadiesGroup ? 1 : Math.min(10, remaining);
   const { checkout, loading } = useCheckout();
 
   const [quantity, setQuantity] = useState(1);
@@ -36,7 +38,7 @@ export default function GABookingForm({ date, availability }) {
     e.preventDefault();
     setError('');
     const payload = {
-      ticket_type: tierInfo.type,
+      ticket_type: ticketOverride || tierInfo.type,
       event_date: date,
       customer_name: name,
       customer_email: email,
@@ -51,10 +53,10 @@ export default function GABookingForm({ date, availability }) {
   return (
     <form onSubmit={handleSubmit}>
       <h3 className="font-[family-name:var(--font-display)] text-accent-blue text-2xl tracking-[3px] mb-1">
-        GENERAL ADMISSION
+        {isLadiesGroup ? 'LADIES GROUP x4' : isOpenBar ? 'GA + OPEN BAR' : 'GENERAL ADMISSION'}
       </h3>
       <p className="text-text-secondary text-sm mb-4">
-        Full venue access, dance floor, bar area
+        {isLadiesGroup ? '4 ladies entry for $35' : isOpenBar ? 'GA entry + open bar all night' : 'Full venue access, dance floor, bar area'}
       </p>
 
       <div className="bg-bg-surface border border-accent-blue/15 rounded-lg p-4 mb-5">
