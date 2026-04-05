@@ -219,6 +219,20 @@ Deno.serve(async (req) => {
       })
     }
 
+    // Apply promo code if provided
+    if (data.promo_code) {
+      // Look up promo code to get coupon
+      const promoLookup = await fetch(`https://api.stripe.com/v1/promotion_codes?code=${data.promo_code}&active=true`, {
+        headers: { "Authorization": "Basic " + btoa(STRIPE_SK + ":") },
+      })
+      const promoData = await promoLookup.json()
+      if (promoData.data?.length > 0) {
+        body.append("discounts[0][promotion_code]", promoData.data[0].id)
+      }
+    } else {
+      body.append("allow_promotion_codes", "true")
+    }
+
     // Create Stripe checkout session
     const encoder = new TextEncoder()
     const credentials = encoder.encode(STRIPE_SK + ":")

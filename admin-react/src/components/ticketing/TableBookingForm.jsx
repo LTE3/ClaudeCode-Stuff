@@ -88,10 +88,12 @@ export default function TableBookingForm({ date, type, number, availability, tie
     return isFlat ? prefix : `${prefix}_${selectedSlot}`;
   }
 
+  const [promoCode, setPromoCode] = useState('');
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
-    const err = await checkout({
+    const payload = {
       ticket_type: getTicketType(),
       event_date: date,
       table_id: `${type}_${number}`,
@@ -101,7 +103,9 @@ export default function TableBookingForm({ date, type, number, availability, tie
       customer_email: email,
       customer_phone: phone,
       party_size: partySize,
-    });
+    };
+    if (promoCode.trim()) payload.promo_code = promoCode.trim();
+    const err = await checkout(payload);
     if (err) setError(err);
   }
 
@@ -236,6 +240,12 @@ export default function TableBookingForm({ date, type, number, availability, tie
               ))}
             </select>
           </div>
+
+          <input
+            type="text" placeholder="Promo Code (optional)" value={promoCode}
+            onChange={e => setPromoCode(e.target.value.toUpperCase())}
+            className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-gold focus:ring-[3px] focus:ring-accent-gold/20 transition-all duration-200 mb-2.5"
+          />
 
           {error && <p className="text-accent-coral text-sm mb-3">{error}</p>}
 
