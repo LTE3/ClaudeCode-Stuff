@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
         },
       }
     )
-    const guests = await guestResp.json()
+    const guests = guestResp.ok ? await guestResp.json() : []
 
     // ─── Fetch phone numbers from signups table ───
     const signupsResp = await fetch(
@@ -71,14 +71,14 @@ Deno.serve(async (req) => {
         },
       }
     )
-    const signups = await signupsResp.json()
+    const signups = signupsResp.ok ? await signupsResp.json() : []
 
     // ─── Deduplicate phone numbers ───
     const allPhones = new Set<string>()
-    for (const g of (guests || [])) {
+    for (const g of (Array.isArray(guests) ? guests : [])) {
       if (g.phone) allPhones.add(g.phone.trim())
     }
-    for (const s of (signups || [])) {
+    for (const s of (Array.isArray(signups) ? signups : [])) {
       if (s.phone) allPhones.add(s.phone.trim())
     }
 

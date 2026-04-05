@@ -16,7 +16,7 @@ Deno.serve(async (req) => {
 
     const body = new URLSearchParams()
     body.append("mode", "payment")
-    body.append("success_url", "https://lacasitabk.com/?purchased=true")
+    body.append("success_url", "https://lacasitabk.com/admin/?ticket={CHECKOUT_SESSION_ID}")
     body.append("cancel_url", "https://lacasitabk.com/")
     body.append("payment_method_types[0]", "card")
 
@@ -174,6 +174,9 @@ Deno.serve(async (req) => {
         body.append("metadata[booking_id]", bookingId || "")
         body.append("metadata[event_date]", data.event_date)
         body.append("metadata[ticket_type]", data.ticket_type)
+        body.append("metadata[customer_name]", data.customer_name || "")
+        body.append("metadata[customer_email]", data.customer_email || "")
+        body.append("metadata[quantity]", String(data.quantity || 1))
         if (data.table_id) body.append("metadata[table_id]", data.table_id)
       }
 
