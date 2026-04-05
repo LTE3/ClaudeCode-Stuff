@@ -172,8 +172,10 @@ export default function TicketingSection() {
                 <div className="text-text-secondary text-sm mb-1">
                   {formatTime(selectedEvent?.early_start) || '7PM'} - {formatTime(selectedEvent?.early_end) || '10PM'}
                 </div>
-                <div className="text-text-muted text-xs mt-2">
-                  18+ • Dance Experience
+                <div className="text-text-muted text-xs mt-2 leading-relaxed">
+                  {selectedEvent?.early_type === 'salsa_night'
+                    ? <><span>Una noche de salsa en la casita 🇵🇷</span><br/><span>Good music, smooth drinks, and room to actually dance.</span></>
+                    : '18+ • Dance Experience'}
                 </div>
               </button>
 
