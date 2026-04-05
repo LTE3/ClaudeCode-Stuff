@@ -172,7 +172,7 @@ export default function TicketingSection() {
                 <div className="text-text-secondary text-sm mb-1">
                   {formatTime(selectedEvent?.early_start) || '7PM'} - {formatTime(selectedEvent?.early_end) || '10PM'}
                 </div>
-                <div className="text-text-muted text-xs mt-2 leading-relaxed">
+                <div className="text-accent-teal text-xs mt-2 leading-relaxed">
                   {selectedEvent?.early_type === 'salsa_night'
                     ? <><span>Una noche de salsa en la casita 🇵🇷</span><br/><span>Good music, smooth drinks, and room to actually dance.</span></>
                     : <><span>Bachata inside La Casita.</span><br/><span>Closer vibes, good music, and space to move how you want.</span></>}
@@ -193,7 +193,7 @@ export default function TicketingSection() {
                 <div className="text-text-secondary text-sm mb-1">
                   10PM - 4AM
                 </div>
-                <div className="text-text-muted text-xs mt-2 leading-relaxed">
+                <div className="text-brand text-xs mt-2 leading-relaxed">
                   <span>This is what everyone's coming for.</span><br/><span>Full reggaeton takeover inside La Casita — late night gets crazy.</span>
                 </div>
               </button>
