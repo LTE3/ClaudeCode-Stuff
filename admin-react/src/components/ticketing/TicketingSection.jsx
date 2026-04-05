@@ -175,7 +175,7 @@ export default function TicketingSection() {
                 <div className="text-text-muted text-xs mt-2 leading-relaxed">
                   {selectedEvent?.early_type === 'salsa_night'
                     ? <><span>Una noche de salsa en la casita 🇵🇷</span><br/><span>Good music, smooth drinks, and room to actually dance.</span></>
-                    : '18+ • Dance Experience'}
+                    : <><span>Bachata inside La Casita.</span><br/><span>Closer vibes, good music, and space to move how you want.</span></>}
                 </div>
               </button>
 
