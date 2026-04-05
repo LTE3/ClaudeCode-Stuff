@@ -80,6 +80,12 @@ export default function TicketConfirmation({ sessionId }) {
           <p className="text-white/80 text-sm mt-1">Your ticket is confirmed</p>
         </div>
 
+        {/* Screenshot reminder - top */}
+        <div className="mx-4 mt-4 bg-accent-gold/10 border border-accent-gold/20 rounded-lg p-3 text-center">
+          <p className="text-accent-gold text-sm font-medium">📱 Screenshot this ticket!</p>
+          <p className="text-text-muted text-xs mt-1">You'll need it at the door</p>
+        </div>
+
         {/* QR Code */}
         <div className="p-6 flex flex-col items-center">
           <div className="bg-black rounded-[16px] p-4 mb-4 border border-border-default">
@@ -123,11 +129,6 @@ export default function TicketConfirmation({ sessionId }) {
             </div>
           </div>
 
-          {/* Screenshot reminder */}
-          <div className="mt-6 bg-accent-gold/10 border border-accent-gold/20 rounded-lg p-3 w-full text-center">
-            <p className="text-accent-gold text-sm font-medium">📱 Screenshot this ticket!</p>
-            <p className="text-text-muted text-xs mt-1">You'll need it at the door</p>
-          </div>
         </div>
       </div>
     </div>
