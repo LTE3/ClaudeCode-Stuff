@@ -38,9 +38,10 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA })
     if (getTableStatus(type, num, tier) !== 'booked') onSelectTable(type, num, tier);
   }
 
-  const gaRemaining = (availability?.ga_capacity - availability?.ga_sold) ?? '—';
+  const actualRemaining = (availability?.ga_capacity - availability?.ga_sold) ?? 0;
+  const gaRemaining = Math.min(actualRemaining, 94);
   let gaLabel = gaRemaining + ' tickets available';
-  if (gaRemaining <= 0) gaLabel = 'SOLD OUT';
+  if (actualRemaining <= 0) gaLabel = 'SOLD OUT';
   else if (gaRemaining <= 20) gaLabel = 'ALMOST SOLD OUT — ' + gaRemaining + ' left';
   else if (gaRemaining <= 50) gaLabel = 'SELLING FAST — ' + gaRemaining + ' left';
 
