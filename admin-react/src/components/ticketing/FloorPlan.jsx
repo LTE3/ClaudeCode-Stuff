@@ -22,7 +22,7 @@ function isDanceNight(eventType) {
   return eventType === 'salsa_night' || eventType === 'bachata_night';
 }
 
-export default function FloorPlan({ date, availability, eventType, onSelectGA, onSelectVipGA, onSelectTable, onBack, onShowLadiesFree, onBuyTest }) {
+export default function FloorPlan({ date, availability, eventType, onSelectGA, onSelectVipGA, onSelectTable, onBack, onShowLadiesFree, onBuyTest, onSelectDirect }) {
   const urgency = getUrgencyBadge(availability);
   const ladiesFreeRemaining = availability?.ladies_free_remaining ?? null;
   const danceNight = isDanceNight(eventType);
@@ -82,6 +82,7 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
         onSelectVipGA={onSelectVipGA}
         onShowLadiesFree={onShowLadiesFree}
         onBuyTest={onBuyTest}
+        onSelectDirect={onSelectDirect}
         ladiesFreeRemaining={ladiesFreeRemaining}
         availability={availability}
       />

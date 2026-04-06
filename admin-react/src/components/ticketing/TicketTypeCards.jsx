@@ -26,6 +26,32 @@ const nightclubCards = [
     shadow: 'hover:shadow-[0_0_20px_rgba(251,191,36,0.15)]',
   },
   {
+    key: 'ga_open_bar',
+    emoji: '\u{1F378}',
+    title: 'GA + OPEN BAR',
+    price: '$70',
+    fee: null,
+    color: 'gold',
+    borderColor: 'border-accent-gold/15',
+    hoverBorder: 'hover:border-accent-gold/40',
+    textColor: 'text-accent-gold',
+    accentBg: 'bg-accent-gold',
+    shadow: 'hover:shadow-[0_0_20px_rgba(251,191,36,0.15)]',
+  },
+  {
+    key: 'ladies_group',
+    emoji: '\u{1F46F}',
+    title: 'LADIES x4',
+    price: '$35',
+    fee: null,
+    color: 'pink',
+    borderColor: 'border-brand/15',
+    hoverBorder: 'hover:border-brand/40',
+    textColor: 'text-brand',
+    accentBg: 'bg-brand',
+    shadow: 'hover:shadow-[0_0_20px_rgba(255,77,141,0.15)]',
+  },
+  {
     key: 'ladies_free',
     emoji: '\u{1F483}',
     title: 'LADIES FREE',
@@ -90,7 +116,7 @@ function getCurrentTier(availability) {
   return { tier: 3, price: '$20', total: '$25', remaining: 0, soldOut: true };
 }
 
-export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, ladiesFreeRemaining, availability }) {
+export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, ladiesFreeRemaining, availability }) {
   const dance = isDanceNight(eventType);
   const tier = getCurrentTier(availability);
   const cards = dance ? danceCards : nightclubCards;
@@ -103,11 +129,11 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
     if (key === 'ga' || key === 'free_ga') onSelectGA();
     else if (key === 'vip_ga') onSelectVipGA();
     else if (key === 'ladies_free') onShowLadiesFree();
-    else if (key === 'test') onBuyTest();
+    else if (key === 'ga_open_bar' || key === 'ladies_group') onSelectDirect(key);
   }
 
   return (
-    <div className={`grid ${dance ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-4'} gap-4 mt-6`}>
+    <div className={`grid ${dance ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'} gap-3 mt-6`}>
       {cards.map(card => (
         <div
           key={card.key}

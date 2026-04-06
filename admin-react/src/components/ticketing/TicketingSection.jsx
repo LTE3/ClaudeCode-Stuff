@@ -81,6 +81,11 @@ export default function TicketingSection() {
     setStep('booking');
   }
 
+  function handleSelectDirect(type) {
+    setBookingType(type);
+    setStep('booking');
+  }
+
   function handleSelectVipGA() {
     setBookingType('vip_ga');
     setStep('booking');
@@ -215,6 +220,7 @@ export default function TicketingSection() {
               onBack={handleBack}
               onShowLadiesFree={handleShowLadiesFree}
               onBuyTest={handleBuyTest}
+              onSelectDirect={handleSelectDirect}
             />
           )
         ) : step === 'booking' ? (
