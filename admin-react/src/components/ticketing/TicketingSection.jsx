@@ -172,7 +172,7 @@ export default function TicketingSection() {
               >
                 <div className="text-4xl mb-3">{'\u{1F483}'}</div>
                 <div className="font-[family-name:var(--font-display)] text-accent-teal text-xl tracking-[3px] mb-2">
-                  {selectedEvent?.early_type === 'salsa_night' ? 'SALSA NIGHT' : 'BACHATA NIGHT'}
+                  {selectedEvent?.early_type === 'salsa_night' ? 'SALSA NIGHT 18+' : 'BACHATA NIGHT 18+'}
                 </div>
                 <div className="text-text-secondary text-sm mb-1">
                   {formatTime(selectedEvent?.early_start) || '7PM'} - {formatTime(selectedEvent?.early_end) || '10PM'}
@@ -193,7 +193,7 @@ export default function TicketingSection() {
               >
                 <div className="text-4xl mb-3">{'\u{1F386}'}</div>
                 <div className="font-[family-name:var(--font-display)] text-brand text-xl tracking-[3px] mb-2">
-                  NIGHTCLUB
+                  NIGHTCLUB 21+
                 </div>
                 <div className="text-text-secondary text-sm mb-1">
                   10PM - 4AM
