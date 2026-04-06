@@ -40,10 +40,10 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA })
 
   const actualRemaining = (availability?.ga_capacity - availability?.ga_sold) ?? 0;
   const gaRemaining = Math.min(actualRemaining, 94);
-  let gaLabel = gaRemaining + ' tickets available';
+  let gaLabel = gaRemaining + ' OF 600 TICKETS LEFT';
   if (actualRemaining <= 0) gaLabel = 'SOLD OUT';
-  else if (gaRemaining <= 20) gaLabel = 'ALMOST SOLD OUT — ' + gaRemaining + ' left';
-  else if (gaRemaining <= 50) gaLabel = 'SELLING FAST — ' + gaRemaining + ' left';
+  else if (gaRemaining <= 20) gaLabel = 'ALMOST SOLD OUT — ' + gaRemaining + ' OF 600 LEFT';
+  else if (gaRemaining <= 50) gaLabel = 'SELLING FAST — ' + gaRemaining + ' OF 600 LEFT';
 
   return (
     <svg viewBox="0 0 600 1020" className="w-full md:max-w-[550px] md:mx-auto rounded-[20px] overflow-hidden">
