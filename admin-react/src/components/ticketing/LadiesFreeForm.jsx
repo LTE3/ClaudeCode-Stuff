@@ -53,9 +53,13 @@ export default function LadiesFreeForm({ date, remaining }) {
             <span className="text-text-muted text-sm">Ticket</span>
             <span className="text-accent-teal text-sm font-medium">{ticketData?.ticket_type === 'ladies_free' ? 'Ladies Free Entry' : 'Free GA'}</span>
           </div>
-          <div className="flex justify-between py-1">
+          <div className="flex justify-between py-1 border-b border-border-default">
             <span className="text-text-muted text-sm">Date</span>
             <span className="text-text-primary text-sm font-medium">{ticketData?.event_date}</span>
+          </div>
+          <div className="flex justify-between py-1">
+            <span className="text-text-muted text-sm">Venue</span>
+            <span className="text-text-primary text-sm font-medium">428 Johnson Ave, BK 11237</span>
           </div>
         </div>
       </div>

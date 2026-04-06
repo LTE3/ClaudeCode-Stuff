@@ -127,6 +127,10 @@ export default function TicketConfirmation({ sessionId }) {
                 {ticket.status === 'paid' ? '✓ PAID' : ticket.status?.toUpperCase()}
               </span>
             </div>
+            <div className="flex justify-between items-center py-2 border-b border-border-default">
+              <span className="text-text-muted text-sm">Venue</span>
+              <span className="text-text-primary text-sm font-medium">428 Johnson Ave, Brooklyn, NY 11237</span>
+            </div>
           </div>
 
         </div>
