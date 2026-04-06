@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useClaimFreeTicket } from '../../hooks/useClaimFreeTicket';
 
 export default function LadiesFreeForm({ date, remaining }) {
-  const { claim, loading, success } = useClaimFreeTicket();
+  const { claim, loading, success, ticketData } = useClaimFreeTicket();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -21,15 +21,43 @@ export default function LadiesFreeForm({ date, remaining }) {
   }
 
   if (success) {
+    const qrData = ticketData?.booking_id
+      ? `https://lacasitabk.com/admin/?verify=free_${ticketData.booking_id}`
+      : '';
+    const qrUrl = qrData
+      ? `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrData)}&bgcolor=0a0a0a&color=ffffff`
+      : '';
+
     return (
-      <div className="text-center py-10">
-        <div className="text-5xl mb-4">&#127881;</div>
+      <div className="text-center py-6">
+        <div className="text-5xl mb-3">🎉</div>
         <h3 className="font-[family-name:var(--font-display)] text-accent-teal text-2xl tracking-[3px] mb-2">
-          YOU'RE ON THE LIST!
+          YOU'RE IN!
         </h3>
-        <p className="text-text-secondary text-sm">
-          Check your email for confirmation. See you there!
-        </p>
+        <div className="bg-accent-gold/10 border border-accent-gold/20 rounded-lg p-3 mb-4 mx-auto max-w-xs">
+          <p className="text-accent-gold text-sm font-medium">📱 Screenshot this ticket!</p>
+          <p className="text-text-muted text-xs mt-1">You'll need it at the door</p>
+        </div>
+        {qrUrl && (
+          <div className="inline-block bg-black rounded-[16px] p-4 mb-3 border border-border-default">
+            <img src={qrUrl} alt="Ticket QR Code" className="w-[180px] h-[180px]" />
+          </div>
+        )}
+        <p className="text-text-muted text-xs mb-3">Show this QR code at the door</p>
+        <div className="text-left max-w-xs mx-auto space-y-2">
+          <div className="flex justify-between py-1 border-b border-border-default">
+            <span className="text-text-muted text-sm">Name</span>
+            <span className="text-text-primary text-sm font-medium">{ticketData?.customer_name}</span>
+          </div>
+          <div className="flex justify-between py-1 border-b border-border-default">
+            <span className="text-text-muted text-sm">Ticket</span>
+            <span className="text-accent-teal text-sm font-medium">{ticketData?.ticket_type === 'ladies_free' ? 'Ladies Free Entry' : 'Free GA'}</span>
+          </div>
+          <div className="flex justify-between py-1">
+            <span className="text-text-muted text-sm">Date</span>
+            <span className="text-text-primary text-sm font-medium">{ticketData?.event_date}</span>
+          </div>
+        </div>
       </div>
     );
   }

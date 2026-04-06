@@ -64,13 +64,13 @@ Deno.serve(async (req) => {
     }
 
     // Create booking
-    await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
+    const bookingResp = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
       method: "POST",
       headers: {
         "apikey": SUPABASE_KEY,
         "Authorization": `Bearer ${SUPABASE_KEY}`,
         "Content-Type": "application/json",
-        "Prefer": "return=minimal",
+        "Prefer": "return=representation",
       },
       body: JSON.stringify({
         event_id: evt.id,
@@ -83,6 +83,8 @@ Deno.serve(async (req) => {
         status: "confirmed",
       }),
     })
+    const bookings = await bookingResp.json()
+    const bookingId = bookings?.[0]?.id || null
 
     // Increment the appropriate counter
     const counterUpdate = type === "dance_ga_free"
@@ -106,7 +108,11 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({
       status: "confirmed",
       message: "Free ticket claimed!",
-      remaining: capacity - claimed - 1,
+      remaining: capacity - claimed - qty,
+      booking_id: bookingId,
+      ticket_type: bookingType,
+      event_date,
+      customer_name,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     })

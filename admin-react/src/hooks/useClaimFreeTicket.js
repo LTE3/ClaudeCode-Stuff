@@ -4,6 +4,7 @@ import { supabaseEdge } from '../config/supabase';
 export function useClaimFreeTicket() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [ticketData, setTicketData] = useState(null);
 
   async function claim(payload) {
     try {
@@ -13,6 +14,7 @@ export function useClaimFreeTicket() {
       if (data.error) {
         return data.error;
       }
+      setTicketData(data);
       setSuccess(true);
       return null;
     } catch (err) {
@@ -22,5 +24,5 @@ export function useClaimFreeTicket() {
     }
   }
 
-  return { claim, loading, success };
+  return { claim, loading, success, ticketData };
 }
