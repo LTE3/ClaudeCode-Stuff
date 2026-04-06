@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useClaimFreeTicket } from '../../hooks/useClaimFreeTicket';
 
-export default function LadiesFreeForm({ date, remaining }) {
+export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_free', title, subtitle }) {
   const { claim, loading, success, ticketData } = useClaimFreeTicket();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -13,6 +13,7 @@ export default function LadiesFreeForm({ date, remaining }) {
     setError('');
     const err = await claim({
       event_date: date,
+      claim_type: claimType,
       customer_name: name,
       customer_email: email,
       customer_phone: phone,
@@ -69,10 +70,10 @@ export default function LadiesFreeForm({ date, remaining }) {
   return (
     <form onSubmit={handleSubmit}>
       <h3 className="font-[family-name:var(--font-display)] text-accent-teal text-2xl tracking-[3px] mb-1">
-        LADIES FREE ENTRY
+        {title || 'LADIES FREE ENTRY'}
       </h3>
       <p className="text-text-secondary text-sm mb-4">
-        Complimentary entry for ladies before midnight. Must be on the guest list.
+        {subtitle || 'Complimentary entry for ladies before midnight. Must be on the guest list.'}
       </p>
 
       <div className="bg-bg-surface border border-accent-teal/15 rounded-lg p-4 mb-5">

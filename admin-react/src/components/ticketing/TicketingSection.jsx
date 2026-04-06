@@ -97,8 +97,8 @@ export default function TicketingSection() {
     setStep('booking');
   }
 
-  function handleShowLadiesFree() {
-    setBookingType('ladies_free');
+  function handleShowLadiesFree(type) {
+    setBookingType(type || 'ladies_free');
     setStep('booking');
   }
 

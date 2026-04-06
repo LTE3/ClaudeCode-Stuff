@@ -89,6 +89,16 @@ export default function BookingPanel({ type, date, availability, tableInfo, onBa
         <LadiesFreeForm
           date={date}
           remaining={availability?.ladies_free_remaining}
+          claimType="ladies_free"
+        />
+      )}
+      {type === 'dance_ga_free' && (
+        <LadiesFreeForm
+          date={date}
+          remaining={availability?.free_ga_remaining}
+          claimType="dance_ga_free"
+          title="FREE DANCE GA"
+          subtitle="Free entry to the dance experience"
         />
       )}
       {(type === 'ga_open_bar' || type === 'ladies_group') && (

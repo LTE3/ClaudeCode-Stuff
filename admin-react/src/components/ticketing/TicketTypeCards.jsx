@@ -126,7 +126,8 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
   const freeGaRemaining = freeGaCapacity - freeGaClaimed;
 
   function handleClick(key) {
-    if (key === 'ga' || key === 'free_ga') onSelectGA();
+    if (key === 'ga') onSelectGA();
+    else if (key === 'free_ga') onShowLadiesFree('dance_ga_free');
     else if (key === 'vip_ga') onSelectVipGA();
     else if (key === 'ladies_free') onShowLadiesFree();
     else if (key === 'ga_open_bar' || key === 'ladies_group') onSelectDirect(key);
