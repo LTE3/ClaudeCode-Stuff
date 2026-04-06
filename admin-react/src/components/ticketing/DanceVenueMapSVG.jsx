@@ -1,4 +1,4 @@
-export default function DanceVenueMapSVG({ availability, onSelectTable, onSelectGA }) {
+export default function DanceVenueMapSVG({ availability, onSelectTable, onSelectGA, onSelectFreeGA }) {
   const tables = availability?.tables || [];
 
   function getTableStatus(type, num) {
@@ -103,7 +103,7 @@ export default function DanceVenueMapSVG({ availability, onSelectTable, onSelect
 
       {/* Dance Floor */}
       <rect x="40" y="210" width="520" height="340" rx="18" fill="url(#dFloorGrad)" stroke="rgba(45,212,191,0.25)" strokeWidth="2" strokeDasharray="8 4"
-        style={{ cursor: 'pointer' }} onClick={onSelectGA} />
+        style={{ cursor: 'pointer' }} onClick={onSelectFreeGA || onSelectGA} />
       <rect x="40" y="210" width="520" height="340" rx="18" fill="none" stroke="rgba(45,212,191,0.08)" strokeWidth="1" pointerEvents="none" />
 
       {/* Dance floor decorative circles */}

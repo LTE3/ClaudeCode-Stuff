@@ -64,6 +64,7 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
               availability={availability}
               onSelectTable={handleSelectTable}
               onSelectGA={onSelectGA}
+              onSelectFreeGA={() => onShowLadiesFree('dance_ga_free')}
             />
           ) : (
             <VenueMapSVG
