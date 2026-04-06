@@ -72,7 +72,7 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
 
     let cellClass = 'relative flex flex-col items-center justify-center p-2 min-h-[60px] rounded-[12px] transition-all duration-200 ';
 
-    if (isSunday) {
+    if (isSunday && !hasEvent) {
       cellClass += 'opacity-30 cursor-default';
     } else if (isPast) {
       cellClass += 'opacity-40 cursor-default';
@@ -91,7 +91,7 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
         <span className={`text-sm font-medium ${isClickable ? 'text-text-primary' : 'text-text-muted'}`}>
           {day}
         </span>
-        {hasEvent && !isSunday && (
+        {hasEvent && !(isSunday && !hasEvent) && (
           <>
             <div className={`w-2 h-2 rounded-full mt-1 ${getDotColor(pct)} animate-[dotPulse_2s_ease-in-out_infinite]`} />
             {urgency && (
