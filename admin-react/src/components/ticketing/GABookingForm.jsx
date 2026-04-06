@@ -16,15 +16,13 @@ function getCurrentTier(availability) {
   return { tier: 3, price: 20, fee: 5, type: 'ga_tier3', remaining: 0 };
 }
 
-export default function GABookingForm({ date, availability, ticketOverride }) {
+export default function GABookingForm({ date, availability }) {
   const tierInfo = getCurrentTier(availability);
-  const isLadiesGroup = ticketOverride === 'ladies_group';
-  const isOpenBar = ticketOverride === 'ga_open_bar';
   const remaining = tierInfo.remaining;
-  const PRICE = isLadiesGroup ? 35 : isOpenBar ? 70 : tierInfo.price;
-  const FEE = isLadiesGroup ? 0 : isOpenBar ? 0 : tierInfo.fee;
+  const PRICE = tierInfo.price;
+  const FEE = tierInfo.fee;
   const TOTAL = PRICE + FEE;
-  const maxQty = isLadiesGroup ? 1 : Math.min(10, remaining);
+  const maxQty = Math.min(10, remaining);
   const { checkout, loading } = useCheckout();
 
   const [quantity, setQuantity] = useState(1);
@@ -33,14 +31,12 @@ export default function GABookingForm({ date, availability, ticketOverride }) {
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [promoCode, setPromoCode] = useState('');
-  const [addOpenBar, setAddOpenBar] = useState(false);
-  const showOpenBarAddon = !isLadiesGroup && !isOpenBar;
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     const payload = {
-      ticket_type: addOpenBar ? 'ga_open_bar' : (ticketOverride || tierInfo.type),
+      ticket_type: tierInfo.type,
       event_date: date,
       customer_name: name,
       customer_email: email,
@@ -55,10 +51,10 @@ export default function GABookingForm({ date, availability, ticketOverride }) {
   return (
     <form onSubmit={handleSubmit}>
       <h3 className="font-[family-name:var(--font-display)] text-accent-blue text-2xl tracking-[3px] mb-1">
-        {isLadiesGroup ? 'LADIES GROUP x4' : isOpenBar ? 'GA + OPEN BAR' : 'GENERAL ADMISSION'}
+        GENERAL ADMISSION
       </h3>
       <p className="text-text-secondary text-sm mb-4">
-        {isLadiesGroup ? '4 ladies entry for $35' : isOpenBar ? 'GA entry + open bar all night' : 'Full venue access, dance floor, bar area'}
+        Full venue access, dance floor, bar area
       </p>
 
       <div className="bg-bg-surface border border-accent-blue/15 rounded-lg p-4 mb-5">
@@ -107,21 +103,6 @@ export default function GABookingForm({ date, availability, ticketOverride }) {
         className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-gold focus:ring-[3px] focus:ring-accent-gold/20 transition-all duration-200 mb-2.5"
       />
 
-      {showOpenBarAddon && (
-        <label className="flex items-center gap-3 p-3.5 bg-bg-surface border border-accent-gold/20 rounded-[8px] mb-2.5 cursor-pointer hover:border-accent-gold/40 transition-all">
-          <input
-            type="checkbox"
-            checked={addOpenBar}
-            onChange={e => setAddOpenBar(e.target.checked)}
-            className="w-5 h-5 accent-accent-gold"
-          />
-          <div>
-            <span className="text-accent-gold font-medium text-sm">🍹 Add Open Bar — +$50</span>
-            <span className="text-text-muted text-xs block">Unlimited drinks all night</span>
-          </div>
-        </label>
-      )}
-
       {error && <p className="text-accent-coral text-sm mb-3">{error}</p>}
 
       <button
@@ -129,7 +110,7 @@ export default function GABookingForm({ date, availability, ticketOverride }) {
         disabled={loading || remaining === 0}
         className="w-full py-4 rounded-full font-[family-name:var(--font-display)] text-lg tracking-[3px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer border-none bg-accent-blue text-black disabled:opacity-50 disabled:cursor-not-allowed mt-2"
       >
-        {loading ? 'PROCESSING...' : `BUY ${isLadiesGroup ? 'LADIES x4' : isOpenBar ? 'GA + OPEN BAR' : addOpenBar ? 'GA + OPEN BAR' : 'GA'} — $${addOpenBar ? 70 * quantity : TOTAL * quantity}`}
+        {loading ? 'PROCESSING...' : `BUY GA — $${TOTAL * quantity}`}
       </button>
     </form>
   );

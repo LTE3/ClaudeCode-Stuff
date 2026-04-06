@@ -76,8 +76,8 @@ export default function TicketingSection() {
     }
   }
 
-  function handleSelectGA(overrideType) {
-    setBookingType(overrideType || 'ga');
+  function handleSelectGA() {
+    setBookingType('ga');
     setStep('booking');
   }
 

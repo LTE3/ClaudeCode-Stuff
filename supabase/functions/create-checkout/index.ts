@@ -49,10 +49,6 @@ Deno.serve(async (req) => {
         regular_high_top: { amount: 5000, name: "Regular High Top (Verano)" },
         // Dance night paid GA
         dance_ga: { amount: 2000, name: "Dance Night GA ($15 + $5 fee)" },
-        // Ladies group
-        ladies_group: { amount: 3500, name: "Ladies Group x4 ($35)" },
-        // GA + Open Bar
-        ga_open_bar: { amount: 7000, name: "GA + Open Bar All Night ($70)" },
         // Season passes
         season_pass_regular: { amount: 9900, name: "Bad Bunny Season Pass — All Access" },
         season_pass_vip: { amount: 24900, name: "VIP Season Pass — All Access VIP" },

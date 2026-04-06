@@ -18,8 +18,8 @@ export default function BookingPanel({ type, date, availability, tableInfo, onBa
       </button>
 
       {/* Render correct form */}
-      {(type === 'ga' || type === 'ladies_group' || type === 'ga_open_bar') && (
-        <GABookingForm date={date} availability={availability} ticketOverride={type !== 'ga' ? type : null} />
+      {type === 'ga' && (
+        <GABookingForm date={date} availability={availability} />
       )}
       {type === 'vip_ga' && (
         <VipGABookingForm date={date} availability={availability} />
