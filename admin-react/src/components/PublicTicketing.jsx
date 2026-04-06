@@ -77,7 +77,7 @@ function SeasonPasses() {
           type="season_pass_regular"
           title="BAD BUNNY PASS"
           emoji="🎟️"
-          desc="Every Fri & Sat all season"
+          desc="Unlimited access every Friday & Saturday all season"
           price={99}
           color="border-brand/20"
           bgColor="bg-brand text-white"
@@ -87,7 +87,7 @@ function SeasonPasses() {
           type="season_pass_vip"
           title="VIP SEASON PASS"
           emoji="👑"
-          desc="VIP + drink + backstage all season"
+          desc="VIP backstage access • Unlimited entry to all events • 1 drink per event"
           price={249}
           color="border-accent-gold/20"
           bgColor="bg-accent-gold text-black"
