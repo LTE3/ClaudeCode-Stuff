@@ -46,16 +46,25 @@ Deno.serve(async (req) => {
     const credentials = encoder.encode(STRIPE_SK + ":")
     const base64 = btoa(String.fromCharCode(...credentials))
 
-    const stripeResp = await fetch(
-      "https://api.stripe.com/v1/checkout/sessions?limit=100&status=complete&expand[]=data.line_items",
-      {
+    // Paginate through ALL Stripe sessions
+    let allSessions: any[] = []
+    let hasMore = true
+    let startingAfter = ""
+
+    while (hasMore) {
+      let url = "https://api.stripe.com/v1/checkout/sessions?limit=100&status=complete&expand[]=data.line_items"
+      if (startingAfter) url += "&starting_after=" + startingAfter
+
+      const stripeResp = await fetch(url, {
         headers: { "Authorization": "Basic " + base64 },
-      }
-    )
+      })
+      const page = await stripeResp.json()
+      allSessions = allSessions.concat(page.data || [])
+      hasMore = page.has_more || false
+      if (page.data?.length > 0) startingAfter = page.data[page.data.length - 1].id
+    }
 
-    const sessions = await stripeResp.json()
-
-    const orders = (sessions.data || [])
+    const orders = allSessions
       .filter((s: any) => s.payment_status === "paid")
       .map((s: any) => ({
         email: s.customer_details?.email || "N/A",
