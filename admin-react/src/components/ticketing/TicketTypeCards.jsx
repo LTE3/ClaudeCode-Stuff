@@ -168,7 +168,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
             <div className="text-xs text-accent-blue/70 mt-3">{card.subtitle}</div>
           )}
           {(card.key === 'free_ga' || (card.key === 'ga' && dance)) && (
-            <div className="text-[10px] text-accent-gold/70 mt-2">21+? Stay for the nightclub too</div>
+            <div className="text-[10px] text-accent-gold/70 mt-2">21+ are allowed to stay for the nightclub experience.</div>
           )}
           {card.key === 'vip_ga' && (
             <div className="text-xs text-accent-gold/70 mt-3">VIP area &bull; Priority entry</div>
