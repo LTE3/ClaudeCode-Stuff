@@ -3757,21 +3757,6 @@
             muteBtn.innerHTML = promoVideo.muted ? '&#128263;' : '&#128264;';
         });
 
-        // ─── Presale Auto-Switch ───
-        (function() {
-            const presaleDate = new Date('2026-04-05T18:00:00-04:00').getTime();
-            function checkPresale() {
-                const now = Date.now();
-                if (now >= presaleDate) {
-                    const announcement = document.getElementById('presale-announcement');
-                    const live = document.getElementById('presale-live');
-                    if (announcement) announcement.style.display = 'none';
-                    if (live) live.style.display = 'block';
-                }
-            }
-            checkPresale();
-            setInterval(checkPresale, 10000);
-        })();
 
         // ─── Smooth hover parallax on hero ───
         const hero = document.querySelector('.hero');
