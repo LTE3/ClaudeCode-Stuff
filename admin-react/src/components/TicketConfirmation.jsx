@@ -70,7 +70,8 @@ export default function TicketConfirmation({ sessionId }) {
 
   return (
     <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
-      <div className="bg-bg-elevated border border-border-default rounded-[20px] max-w-md w-full overflow-hidden">
+      <div className="max-w-md w-full flex flex-col items-stretch">
+      <div className="bg-bg-elevated border border-border-default rounded-[20px] w-full overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-brand to-accent-coral p-6 text-center">
           <div className="text-4xl mb-2">🎉</div>
@@ -135,16 +136,16 @@ export default function TicketConfirmation({ sessionId }) {
 
         </div>
       </div>
-
       {/* Merch button - outside the ticket card */}
       <a
         href="https://lacasitabk.com/#merch"
         target="_top"
         onClick={(e) => { e.preventDefault(); (window.top || window).location.href = 'https://lacasitabk.com/#merch'; }}
-        className="block mt-4 max-w-md w-full py-4 rounded-full font-[family-name:var(--font-display)] text-lg tracking-[3px] bg-gradient-to-r from-accent-gold to-accent-coral text-black font-bold text-center no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+        className="block mt-4 w-full py-4 rounded-full font-[family-name:var(--font-display)] text-lg tracking-[3px] bg-gradient-to-r from-accent-gold to-accent-coral text-black font-bold text-center no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
       >
         🛍️ SHOP MERCH
       </a>
+      </div>
     </div>
   );
 }
