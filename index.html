@@ -2813,7 +2813,7 @@
         <a href="#bottles" onclick="document.getElementById('hamburger').click()">VIP</a>
         <a href="#season-pass" onclick="document.getElementById('hamburger').click()">Season Pass</a>
         <a href="#faq" onclick="document.getElementById('hamburger').click()">FAQ</a>
-        <a href="#signup" onclick="document.getElementById('hamburger').click()">Early Access</a>
+        <a href="/admin/?lookup" style="color:var(--yellow);">Find My Ticket</a>
     </nav>
 
     <!-- Scrolling Ticker -->
@@ -3532,8 +3532,12 @@
     </main>
 
     <!-- ORDER LOOKUP -->
-    <section style="padding:40px 20px;text-align:center;">
-        <a href="/admin/?lookup" style="color:rgba(255,255,255,0.5);font-size:0.9rem;text-decoration:underline;letter-spacing:1px;">Look Up Your Order / QR Code</a>
+    <section style="padding:60px 20px;text-align:center;" id="lookup">
+        <div style="max-width:500px;margin:0 auto;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:40px 30px;">
+            <h2 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:4px;color:var(--hot-pink);margin-bottom:8px;">FIND YOUR TICKET</h2>
+            <p style="color:rgba(255,255,255,0.5);font-size:0.95rem;margin-bottom:24px;">Look up your QR code, tickets, or merch orders</p>
+            <a href="/admin/?lookup" style="display:inline-block;padding:16px 40px;background:linear-gradient(135deg, var(--yellow), var(--orange));color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;border-radius:50px;text-decoration:none;font-weight:700;transition:all 0.3s;">Look Up My Order</a>
+        </div>
     </section>
 
     <!-- FOOTER -->
