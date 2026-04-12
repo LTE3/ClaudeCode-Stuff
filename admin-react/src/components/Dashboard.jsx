@@ -9,6 +9,7 @@ import SignupsTable from './SignupsTable';
 import TicketCheckoutCards from './TicketCheckoutCards';
 import MerchSection from './MerchSection';
 import TicketingSection from './TicketingSection';
+import FailedPayments from './FailedPayments';
 
 export default function Dashboard() {
   const { password } = useAuth();
@@ -54,6 +55,7 @@ export default function Dashboard() {
         />
         <SignupsTable />
         <TicketCheckoutCards />
+        <FailedPayments />
         <MerchSection />
         <TicketingSection />
       </div>
