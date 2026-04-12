@@ -64,6 +64,27 @@ Deno.serve(async (req) => {
         })
       }
 
+      // Log every checkout attempt so we never lose a customer
+      if (SUPABASE_URL && SUPABASE_KEY) {
+        await fetch(`${SUPABASE_URL}/rest/v1/checkout_attempts`, {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${SUPABASE_KEY}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal",
+          },
+          body: JSON.stringify({
+            customer_name: data.customer_name || null,
+            customer_email: data.customer_email || null,
+            customer_phone: data.customer_phone || null,
+            ticket_type: data.ticket_type,
+            event_date: data.event_date || null,
+            amount: selected.amount,
+          }),
+        }).catch(() => {})
+      }
+
       // Check availability if event_date provided
       if (data.event_date && SUPABASE_URL && SUPABASE_KEY) {
         const availResp = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_event_availability`, {
@@ -178,6 +199,7 @@ Deno.serve(async (req) => {
         body.append("metadata[ticket_type]", data.ticket_type)
         body.append("metadata[customer_name]", data.customer_name || "")
         body.append("metadata[customer_email]", data.customer_email || "")
+        body.append("metadata[customer_phone]", data.customer_phone || "")
         body.append("metadata[quantity]", String(data.quantity || 1))
         if (data.table_id) body.append("metadata[table_id]", data.table_id)
       }
