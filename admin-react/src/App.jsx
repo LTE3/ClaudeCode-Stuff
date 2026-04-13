@@ -1,3 +1,4 @@
+import { createContext, useContext } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
 import LoginPage from './components/LoginPage';
@@ -6,6 +7,10 @@ import PublicTicketing from './components/PublicTicketing';
 import TicketConfirmation from './components/TicketConfirmation';
 import TicketVerify from './components/TicketVerify';
 import OrderLookup from './components/OrderLookup';
+
+// Preview mode — add ?preview=true to any URL to see upcoming changes
+export const PreviewContext = createContext(false);
+export const usePreview = () => useContext(PreviewContext);
 
 function AppContent() {
   const { isAuthenticated, loading } = useAuth();
@@ -49,10 +54,20 @@ function AppContent() {
 }
 
 function App() {
+  const isPreview = new URLSearchParams(window.location.search).has('preview');
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <PreviewContext.Provider value={isPreview}>
+      {isPreview && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, background: '#FF4D8D', color: '#fff', textAlign: 'center', padding: '6px', fontSize: '12px', fontWeight: 'bold', letterSpacing: '2px' }}>
+          PREVIEW MODE — Not visible to customers
+        </div>
+      )}
+      <AuthProvider>
+        <div style={isPreview ? { paddingTop: '30px' } : undefined}>
+          <AppContent />
+        </div>
+      </AuthProvider>
+    </PreviewContext.Provider>
   );
 }
 
