@@ -124,6 +124,10 @@ export default function TicketingSection() {
     if (gaSoldOutDates.includes(date)) {
       setSelectedTimeBlock('late');
       setStep('soldout');
+      // Auto scroll down so VIP button is visible
+      setTimeout(() => {
+        document.querySelector('[data-soldout]')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
       return;
     }
     if (event?.early_type) {
@@ -227,11 +231,13 @@ export default function TicketingSection() {
         ) : step === 'calendar' ? (
           <Calendar eventsByDate={eventsByDate} onSelectDate={handleSelectDate} />
         ) : step === 'soldout' ? (
+          <div data-soldout>
           <SoldOutPopup
             date={selectedDate}
             onViewTables={() => { setStep('floorplan'); }}
             onBack={() => { setStep('calendar'); setSelectedDate(null); }}
           />
+          </div>
         ) : step === 'timeblock' ? (
           <div>
             {/* Date badge + back */}
