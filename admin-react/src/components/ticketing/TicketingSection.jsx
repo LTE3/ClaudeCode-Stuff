@@ -16,6 +16,80 @@ function formatTime(t) {
   return (hour - 12) + 'PM';
 }
 
+function SoldOutPopup({ date, onViewTables, onBack }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function handleJoin(e) {
+    e.preventDefault();
+    setLoading(true);
+    const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
+    const ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+    await fetch(`${SUPABASE_URL}/rest/v1/ticket_waitlist`, {
+      method: 'POST',
+      headers: { 'apikey': ANON, 'Authorization': `Bearer ${ANON}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ customer_name: name, customer_email: email, customer_phone: phone, event_date: date, ticket_type: 'ga' }),
+    });
+    setSuccess(true);
+    setLoading(false);
+  }
+
+  if (success) {
+    return (
+      <div className="text-center py-8">
+        <div className="text-5xl mb-4">🔔</div>
+        <h3 className="font-[family-name:var(--font-display)] text-accent-teal text-2xl tracking-[3px] mb-2">YOU'RE ON THE LIST!</h3>
+        <p className="text-text-secondary text-sm mb-6">We'll notify you the moment more tickets drop.</p>
+        <button onClick={onViewTables}
+          className="w-full py-4 rounded-full font-[family-name:var(--font-display)] text-lg tracking-[3px] bg-accent-gold text-black cursor-pointer border-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg mb-3">
+          VIEW VIP TABLES & SEASON PASSES
+        </button>
+        <button onClick={onBack}
+          className="text-text-muted text-sm hover:text-text-primary transition-colors cursor-pointer bg-transparent border-none">
+          ← Back to Calendar
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <button onClick={onBack}
+        className="bg-bg-surface border border-border-default hover:border-brand/40 text-text-secondary hover:text-text-primary rounded-full px-4 py-2 text-sm transition-all duration-200 flex items-center gap-1.5 mb-5 cursor-pointer">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        Change Date
+      </button>
+      <div className="text-center mb-6">
+        <div className="text-4xl mb-3">🔥</div>
+        <h3 className="font-[family-name:var(--font-display)] text-brand text-2xl tracking-[3px] mb-2">THIS DATE IS ALMOST SOLD OUT</h3>
+        <p className="text-text-secondary text-sm">GA tickets are gone. Drop your info and we'll notify you when we release more.</p>
+      </div>
+      <form onSubmit={handleJoin}>
+        <input type="text" placeholder="Full Name" required value={name} onChange={e => setName(e.target.value)}
+          className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand focus:ring-[3px] focus:ring-brand-glow transition-all duration-200 mb-2.5" />
+        <input type="email" placeholder="Email" required value={email} onChange={e => setEmail(e.target.value)}
+          className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand focus:ring-[3px] focus:ring-brand-glow transition-all duration-200 mb-2.5" />
+        <input type="tel" placeholder="Phone" required value={phone} onChange={e => setPhone(e.target.value)}
+          className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand focus:ring-[3px] focus:ring-brand-glow transition-all duration-200 mb-2.5" />
+        <button type="submit" disabled={loading}
+          className="w-full py-4 rounded-full font-[family-name:var(--font-display)] text-lg tracking-[3px] bg-brand text-white cursor-pointer border-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 mt-1 mb-3">
+          {loading ? 'JOINING...' : '🔔 JOIN THE WAITLIST'}
+        </button>
+      </form>
+      <div className="text-center border-t border-border-default pt-5 mt-3">
+        <p className="font-[family-name:var(--font-display)] text-accent-gold text-lg tracking-[3px] mb-4">VIP TABLES & SEASON PASSES STILL AVAILABLE</p>
+        <button onClick={onViewTables}
+          className="w-full py-4 rounded-full font-[family-name:var(--font-display)] text-lg tracking-[3px] bg-accent-gold text-black cursor-pointer border-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+          VIEW AVAILABLE TABLES →
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function TicketingSection() {
   const { eventsByDate, loading: eventsLoading } = useEvents();
   const [step, setStep] = useState('calendar');
@@ -30,10 +104,9 @@ export default function TicketingSection() {
   const selectedEvent = selectedDate ? eventsByDate[selectedDate] : null;
   const hasEarlyType = selectedEvent?.early_type != null;
 
-  // GA sold out dates — PREVIEW ONLY, not live
-  const isPreview = new URLSearchParams(window.location.search).has('preview');
+  // GA sold out dates — LIVE
   const gaSoldOutDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09'];
-  const isGaSoldOut = isPreview && gaSoldOutDates.includes(selectedDate);
+  const isGaSoldOut = gaSoldOutDates.includes(selectedDate);
 
   // Determine event type based on time block selection
   let eventType = null;
@@ -49,6 +122,11 @@ export default function TicketingSection() {
     setSelectedDate(date);
     setSelectedTimeBlock(null);
     const event = eventsByDate[date];
+    if (gaSoldOutDates.includes(date)) {
+      setSelectedTimeBlock('late');
+      setStep('soldout');
+      return;
+    }
     if (event?.early_type) {
       setStep('timeblock');
     } else {
@@ -149,6 +227,12 @@ export default function TicketingSection() {
           </div>
         ) : step === 'calendar' ? (
           <Calendar eventsByDate={eventsByDate} onSelectDate={handleSelectDate} />
+        ) : step === 'soldout' ? (
+          <SoldOutPopup
+            date={selectedDate}
+            onViewTables={() => { setStep('floorplan'); }}
+            onBack={() => { setStep('calendar'); setSelectedDate(null); }}
+          />
         ) : step === 'timeblock' ? (
           <div>
             {/* Date badge + back */}

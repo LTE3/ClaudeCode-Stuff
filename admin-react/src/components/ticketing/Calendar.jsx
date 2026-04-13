@@ -14,7 +14,10 @@ function getSoldPercent(event) {
   return (totalSold / totalCap) * 100;
 }
 
-function getDotColor(pct) {
+const gaSoldOutDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09'];
+
+function getDotColor(pct, dateStr) {
+  if (gaSoldOutDates.includes(dateStr)) return 'bg-accent-coral';
   if (pct > 80) return 'bg-accent-coral';
   if (pct > 0) return 'bg-accent-gold';
   return 'bg-accent-teal';
@@ -93,7 +96,7 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
         </span>
         {hasEvent && !(isSunday && !hasEvent) && (
           <>
-            <div className={`w-2 h-2 rounded-full mt-1 ${getDotColor(pct)} animate-[dotPulse_2s_ease-in-out_infinite]`} />
+            <div className={`w-2 h-2 rounded-full mt-1 ${getDotColor(pct, dateStr)} animate-[dotPulse_2s_ease-in-out_infinite]`} />
             {urgency && (
               <span className="text-[9px] text-accent-coral mt-0.5 leading-none">{urgency}</span>
             )}
