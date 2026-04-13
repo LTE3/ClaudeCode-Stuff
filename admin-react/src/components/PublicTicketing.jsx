@@ -101,12 +101,12 @@ function SeasonPasses() {
 export default function PublicTicketing() {
   return (
     <div className="min-h-screen bg-bg-deep">
-      <div className="max-w-[960px] mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="font-[family-name:var(--font-display)] text-4xl md:text-5xl tracking-[6px] text-brand">
+      <div className="max-w-[960px] mx-auto px-4 py-4">
+        <div className="text-center mb-4">
+          <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-[5px] text-brand">
             LA CASITA
           </h1>
-          <p className="text-text-secondary mt-2 text-sm">Select a date to get tickets</p>
+          <p className="text-text-secondary mt-1 text-xs">Select a date to get tickets</p>
         </div>
         <TicketingSection />
         <SeasonPasses />
