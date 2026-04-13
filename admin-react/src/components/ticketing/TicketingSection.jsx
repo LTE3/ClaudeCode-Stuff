@@ -48,7 +48,11 @@ export default function TicketingSection() {
     setSelectedDate(date);
     setSelectedTimeBlock(null);
     const event = eventsByDate[date];
-    if (event?.early_type) {
+    // Skip time block selector on sold out dates — go straight to floor plan
+    if (gaSoldOutDates.includes(date)) {
+      setSelectedTimeBlock('late');
+      setStep('floorplan');
+    } else if (event?.early_type) {
       setStep('timeblock');
     } else {
       setStep('floorplan');
@@ -56,6 +60,13 @@ export default function TicketingSection() {
   }
 
   function handleSelectTimeBlock(block) {
+    // If GA sold out and they pick dance night, go straight to waitlist
+    if (isGaSoldOut && block === 'early') {
+      setSelectedTimeBlock(block);
+      setBookingType('waitlist');
+      setStep('booking');
+      return;
+    }
     setSelectedTimeBlock(block);
     setStep('floorplan');
   }
