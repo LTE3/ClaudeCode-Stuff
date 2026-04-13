@@ -121,7 +121,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
   const tier = getCurrentTier(availability);
   const allCards = dance ? danceCards : nightclubCards;
   // When GA sold out, hide GA/VIP GA/Ladies Free cards — only show table-related options
-  const gaKeys = ['ga', 'vip_ga', 'ladies_free', 'free_ga', 'ga_open_bar', 'ladies_group'];
+  const gaKeys = ['ga', 'vip_ga', 'ladies_free', 'free_ga'];
   const cards = gaSoldOut ? allCards.filter(c => !gaKeys.includes(c.key)) : allCards;
 
   const freeGaCapacity = availability?.free_ga_capacity ?? 150;
