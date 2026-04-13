@@ -82,10 +82,10 @@ function SoldOutPopup({ date, onViewTables, onBack }) {
         </button>
       </form>
 
-      <div className="text-center border-t border-border-default pt-4 mt-2">
-        <p className="text-text-muted text-xs mb-3">VIP tables and season passes are still available</p>
+      <div className="text-center border-t border-border-default pt-5 mt-3">
+        <p className="font-[family-name:var(--font-display)] text-accent-gold text-lg tracking-[3px] mb-4">VIP TABLES & SEASON PASSES STILL AVAILABLE</p>
         <button onClick={onViewTables}
-          className="w-full py-3 rounded-full font-[family-name:var(--font-display)] text-sm tracking-[2px] bg-accent-gold text-black cursor-pointer border-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+          className="w-full py-4 rounded-full font-[family-name:var(--font-display)] text-lg tracking-[3px] bg-accent-gold text-black cursor-pointer border-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
           VIEW AVAILABLE TABLES →
         </button>
       </div>
