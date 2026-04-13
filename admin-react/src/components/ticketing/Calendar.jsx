@@ -24,7 +24,7 @@ function getDotColor(pct, dateStr) {
 }
 
 function getUrgencyLabel(pct, dateStr) {
-  if (gaSoldOutDates.includes(dateStr)) return 'Running Low';
+  if (gaSoldOutDates.includes(dateStr)) return null;
   if (pct > 90) return 'Almost Full';
   if (pct > 70) return 'Selling Fast';
   return null;
