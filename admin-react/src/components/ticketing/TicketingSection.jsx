@@ -31,7 +31,7 @@ export default function TicketingSection() {
   const hasEarlyType = selectedEvent?.early_type != null;
 
   // GA sold out dates — first 3 weekends of May (FOMO wave)
-  const gaSoldOutDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09', '2026-05-15', '2026-05-16'];
+  const gaSoldOutDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09'];
   const isGaSoldOut = gaSoldOutDates.includes(selectedDate);
 
   // Determine event type based on time block selection

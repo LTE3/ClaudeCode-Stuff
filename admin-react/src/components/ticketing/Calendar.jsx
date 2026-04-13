@@ -14,7 +14,7 @@ function getSoldPercent(event) {
   return (totalSold / totalCap) * 100;
 }
 
-const gaSoldOutDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09', '2026-05-15', '2026-05-16'];
+const gaSoldOutDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09'];
 
 function getDotColor(pct, dateStr) {
   if (gaSoldOutDates.includes(dateStr)) return 'bg-accent-coral';
@@ -24,7 +24,7 @@ function getDotColor(pct, dateStr) {
 }
 
 function getUrgencyLabel(pct, dateStr) {
-  if (gaSoldOutDates.includes(dateStr)) return 'Sold Out';
+  if (gaSoldOutDates.includes(dateStr)) return 'Running Low';
   if (pct > 90) return 'Almost Full';
   if (pct > 70) return 'Selling Fast';
   return null;
