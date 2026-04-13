@@ -58,13 +58,12 @@ function SoldOutPopup({ date, onViewTables, onBack }) {
   return (
     <div>
       <button onClick={onBack}
-        className="bg-bg-surface border border-border-default hover:border-brand/40 text-text-secondary hover:text-text-primary rounded-full px-4 py-2 text-sm transition-all duration-200 flex items-center gap-1.5 mb-5 cursor-pointer">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        className="text-text-muted hover:text-text-primary text-xs transition-colors flex items-center gap-1 mb-3 cursor-pointer bg-transparent border-none">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         Change Date
       </button>
-      <div className="text-center mb-4">
-        <div className="text-3xl mb-2">🔥</div>
-        <h3 className="font-[family-name:var(--font-display)] text-brand text-xl tracking-[3px] mb-1">THIS DATE IS ALMOST SOLD OUT</h3>
+      <div className="text-center mb-3">
+        <h3 className="font-[family-name:var(--font-display)] text-brand text-xl tracking-[3px] mb-1">🔥 ALMOST SOLD OUT</h3>
         <p className="text-text-secondary text-xs">GA tickets are gone. Drop your info to get notified.</p>
       </div>
       <form onSubmit={handleJoin}>
