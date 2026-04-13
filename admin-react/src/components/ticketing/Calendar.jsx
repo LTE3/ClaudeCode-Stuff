@@ -14,13 +14,17 @@ function getSoldPercent(event) {
   return (totalSold / totalCap) * 100;
 }
 
-function getDotColor(pct) {
+const gaSoldOutDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09', '2026-05-15', '2026-05-16'];
+
+function getDotColor(pct, dateStr) {
+  if (gaSoldOutDates.includes(dateStr)) return 'bg-accent-coral';
   if (pct > 80) return 'bg-accent-coral';
   if (pct > 0) return 'bg-accent-gold';
   return 'bg-accent-teal';
 }
 
-function getUrgencyLabel(pct) {
+function getUrgencyLabel(pct, dateStr) {
+  if (gaSoldOutDates.includes(dateStr)) return 'Sold Out';
   if (pct > 90) return 'Almost Full';
   if (pct > 70) return 'Selling Fast';
   return null;
@@ -67,7 +71,7 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
     const event = eventsByDate[dateStr];
     const hasEvent = !!event;
     const pct = getSoldPercent(event);
-    const urgency = getUrgencyLabel(pct);
+    const urgency = getUrgencyLabel(pct, dateStr);
     const isClickable = hasEvent && !isPast;
 
     let cellClass = 'relative flex flex-col items-center justify-center p-2 min-h-[60px] rounded-[12px] transition-all duration-200 ';
@@ -93,7 +97,7 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
         </span>
         {hasEvent && !(isSunday && !hasEvent) && (
           <>
-            <div className={`w-2 h-2 rounded-full mt-1 ${getDotColor(pct)} animate-[dotPulse_2s_ease-in-out_infinite]`} />
+            <div className={`w-2 h-2 rounded-full mt-1 ${getDotColor(pct, dateStr)} animate-[dotPulse_2s_ease-in-out_infinite]`} />
             {urgency && (
               <span className="text-[9px] text-accent-coral mt-0.5 leading-none">{urgency}</span>
             )}
