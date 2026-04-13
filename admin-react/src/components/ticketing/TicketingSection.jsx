@@ -30,6 +30,10 @@ export default function TicketingSection() {
   const selectedEvent = selectedDate ? eventsByDate[selectedDate] : null;
   const hasEarlyType = selectedEvent?.early_type != null;
 
+  // GA sold out dates — first 3 weekends of May (FOMO wave)
+  const gaSoldOutDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09', '2026-05-15', '2026-05-16'];
+  const isGaSoldOut = gaSoldOutDates.includes(selectedDate);
+
   // Determine event type based on time block selection
   let eventType = null;
   if (hasEarlyType && selectedTimeBlock === 'early') {
@@ -77,6 +81,11 @@ export default function TicketingSection() {
   }
 
   function handleSelectGA() {
+    if (isGaSoldOut) {
+      setBookingType('waitlist');
+      setStep('booking');
+      return;
+    }
     setBookingType('ga');
     setStep('booking');
   }
@@ -221,6 +230,7 @@ export default function TicketingSection() {
               onShowLadiesFree={handleShowLadiesFree}
               onBuyTest={handleBuyTest}
               onSelectDirect={handleSelectDirect}
+              gaSoldOut={isGaSoldOut}
             />
           )
         ) : step === 'booking' ? (

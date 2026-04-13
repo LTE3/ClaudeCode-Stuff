@@ -116,10 +116,13 @@ function getCurrentTier(availability) {
   return { tier: 3, price: '$20', total: '$25', remaining: 0, soldOut: true };
 }
 
-export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, ladiesFreeRemaining, availability }) {
+export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, ladiesFreeRemaining, availability, gaSoldOut }) {
   const dance = isDanceNight(eventType);
   const tier = getCurrentTier(availability);
-  const cards = dance ? danceCards : nightclubCards;
+  const allCards = dance ? danceCards : nightclubCards;
+  // When GA sold out, hide GA/VIP GA/Ladies Free cards — only show table-related options
+  const gaKeys = ['ga', 'vip_ga', 'ladies_free', 'free_ga'];
+  const cards = gaSoldOut ? allCards.filter(c => !gaKeys.includes(c.key)) : allCards;
 
   const freeGaCapacity = availability?.free_ga_capacity ?? 150;
   const freeGaClaimed = availability?.free_ga_claimed ?? 0;

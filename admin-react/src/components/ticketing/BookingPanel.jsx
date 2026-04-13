@@ -4,6 +4,7 @@ import GABookingForm from './GABookingForm';
 import VipGABookingForm from './VipGABookingForm';
 import TableBookingForm from './TableBookingForm';
 import LadiesFreeForm from './LadiesFreeForm';
+import WaitlistForm from './WaitlistForm';
 
 const directTypes = {
   ga_open_bar: { title: 'GA + OPEN BAR', desc: 'GA entry + unlimited drinks all night', price: 70 },
@@ -103,6 +104,9 @@ export default function BookingPanel({ type, date, availability, tableInfo, onBa
       )}
       {(type === 'ga_open_bar' || type === 'ladies_group') && (
         <DirectBookingForm type={type} date={date} />
+      )}
+      {type === 'waitlist' && (
+        <WaitlistForm date={date} />
       )}
     </div>
   );

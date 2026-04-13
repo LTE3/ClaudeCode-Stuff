@@ -1,4 +1,4 @@
-export default function VenueMapSVG({ availability, onSelectTable, onSelectGA }) {
+export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, gaSoldOut }) {
   const tables = availability?.tables || [];
 
   function getTableStatus(type, num, tier) {
@@ -41,7 +41,8 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA })
   const actualRemaining = (availability?.ga_capacity - availability?.ga_sold) ?? 0;
   const gaRemaining = Math.min(actualRemaining, 94);
   let gaLabel = gaRemaining + ' OF 600 TICKETS LEFT';
-  if (actualRemaining <= 0) gaLabel = 'SOLD OUT';
+  if (gaSoldOut) gaLabel = 'SOLD OUT — Join Waitlist';
+  else if (actualRemaining <= 0) gaLabel = 'SOLD OUT';
   else if (gaRemaining <= 20) gaLabel = 'ALMOST SOLD OUT — ' + gaRemaining + ' OF 600 LEFT';
   else if (gaRemaining <= 50) gaLabel = 'SELLING FAST — ' + gaRemaining + ' OF 600 LEFT';
 
@@ -190,12 +191,13 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA })
 
       {/* GA Floor */}
       <rect x="80" y="735" width="505" height="200" rx="14"
-        fill="url(#gaGrad)" style={{ cursor: 'pointer' }} onClick={onSelectGA} />
+        fill={gaSoldOut ? "rgba(255,77,141,0.08)" : "url(#gaGrad)"} style={{ cursor: 'pointer' }} onClick={onSelectGA} opacity={gaSoldOut ? 0.6 : 1} />
       <rect x="80" y="735" width="505" height="200" rx="14"
-        fill="none" stroke="rgba(96,165,250,0.3)" strokeWidth="1.5" pointerEvents="none" />
-      <text x="332" y="820" textAnchor="middle" fill="#fff" fontFamily="'Bebas Neue',sans-serif" fontSize="42" letterSpacing="6" pointerEvents="none">GENERAL</text>
-      <text x="332" y="860" textAnchor="middle" fill="#fff" fontFamily="'Bebas Neue',sans-serif" fontSize="42" letterSpacing="6" pointerEvents="none">ADMISSION</text>
-      <text x="332" y="895" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontFamily="'Source Sans 3',sans-serif" fontSize="20" fontWeight="600" pointerEvents="none">{gaLabel}</text>
+        fill="none" stroke={gaSoldOut ? "rgba(255,77,141,0.3)" : "rgba(96,165,250,0.3)"} strokeWidth="1.5" pointerEvents="none" />
+      <text x="332" y="810" textAnchor="middle" fill={gaSoldOut ? "rgba(255,77,141,0.8)" : "#fff"} fontFamily="'Bebas Neue',sans-serif" fontSize="42" letterSpacing="6" pointerEvents="none">GENERAL</text>
+      <text x="332" y="850" textAnchor="middle" fill={gaSoldOut ? "rgba(255,77,141,0.8)" : "#fff"} fontFamily="'Bebas Neue',sans-serif" fontSize="42" letterSpacing="6" pointerEvents="none">ADMISSION</text>
+      <text x="332" y="885" textAnchor="middle" fill={gaSoldOut ? "#FF4D8D" : "rgba(255,255,255,0.7)"} fontFamily="'Source Sans 3',sans-serif" fontSize="18" fontWeight="700" pointerEvents="none">{gaLabel}</text>
+      {gaSoldOut && <text x="332" y="910" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontFamily="'Source Sans 3',sans-serif" fontSize="14" pointerEvents="none">Tap to join the waitlist</text>}
 
       {/* Entrance */}
       <rect x="200" y="960" width="200" height="45" rx="10" fill="#0a0a0c" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
