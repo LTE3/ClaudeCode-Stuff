@@ -63,7 +63,7 @@ function SoldOutPopup({ date, onViewTables, onBack }) {
         Change Date
       </button>
       <div className="text-center mb-3">
-        <h3 className="font-[family-name:var(--font-display)] text-brand text-xl tracking-[3px] mb-1">🔥 GA TICKETS ARE GONE FOR NOW</h3>
+        <h3 className="font-[family-name:var(--font-display)] text-brand text-xl tracking-[3px] mb-1">🔥 GENERAL ADMISSION SOLD OUT</h3>
         <p className="text-text-secondary text-xs">Drop your info to get notified.</p>
       </div>
       <form onSubmit={handleJoin}>
