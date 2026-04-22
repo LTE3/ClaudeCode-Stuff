@@ -104,7 +104,7 @@ export default function TicketingSection() {
   const hasEarlyType = selectedEvent?.early_type != null;
 
   // GA sold out dates — LIVE
-  const gaSoldOutDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09'];
+  const gaSoldOutDates = [];
   const isGaSoldOut = gaSoldOutDates.includes(selectedDate);
 
   // Determine event type based on time block selection

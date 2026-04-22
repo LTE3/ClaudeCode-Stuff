@@ -14,7 +14,7 @@ function getSoldPercent(event) {
   return (totalSold / totalCap) * 100;
 }
 
-const gaSoldOutDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09'];
+const gaSoldOutDates = [];
 
 function getDotColor(pct, dateStr) {
   if (gaSoldOutDates.includes(dateStr)) return 'bg-accent-coral';
