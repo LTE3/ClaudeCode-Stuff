@@ -4,9 +4,10 @@ import TicketTypeCards from './TicketTypeCards';
 
 function getUrgencyBadge(availability) {
   if (!availability) return null;
-  const gaRemaining = availability.ga_remaining ?? 0;
-  const gaCapacity = availability.ga_capacity ?? 1;
-  const pct = ((gaCapacity - gaRemaining) / gaCapacity) * 100;
+  const totalSold = (availability.ga_tier1_sold || 0) + (availability.ga_tier2_sold || 0) + (availability.ga_tier3_sold || 0) + (availability.ga_sold || 0);
+  const totalCapacity = (availability.ga_tier1_capacity || 0) + (availability.ga_tier2_capacity || 0) + (availability.ga_tier3_capacity || 0);
+  if (totalCapacity === 0) return null;
+  const pct = (totalSold / totalCapacity) * 100;
   if (pct > 90) return { text: 'ALMOST SOLD OUT', color: 'bg-accent-coral/10 text-accent-coral border-accent-coral/20' };
   if (pct > 70) return { text: 'SELLING FAST', color: 'bg-accent-gold/10 text-accent-gold border-accent-gold/20' };
   if (pct > 50) return { text: 'LIMITED AVAILABILITY', color: 'bg-accent-gold/10 text-accent-gold border-accent-gold/20' };
@@ -34,8 +35,8 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
   return (
     <div>
       {/* Date badge + back */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div className="flex items-center gap-2">
           <span className="bg-brand/10 text-brand border border-brand/20 rounded-full px-4 py-1.5 text-sm font-medium">
             {formatDate(date)}
           </span>
@@ -52,7 +53,7 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          Change Date
+          Back
         </button>
       </div>
 

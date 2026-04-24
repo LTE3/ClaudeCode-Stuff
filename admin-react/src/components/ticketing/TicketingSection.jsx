@@ -247,12 +247,12 @@ export default function TicketingSection() {
               </span>
               <button
                 onClick={handleBack}
-                className="text-text-secondary hover:text-text-primary text-sm transition-colors flex items-center gap-1"
+                className="bg-bg-surface border border-border-default hover:border-brand/40 text-text-secondary hover:text-text-primary rounded-full px-4 py-2 text-sm transition-all duration-200 flex items-center gap-1.5 cursor-pointer"
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                Change Date
+                Back
               </button>
             </div>
 
