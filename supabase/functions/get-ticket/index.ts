@@ -52,6 +52,21 @@ Deno.serve(async (req) => {
       "Prefer": "return=minimal",
     }
 
+    // Check if we already processed this session
+    const checkResp = await fetch(`${SUPABASE_URL}/rest/v1/checkout_attempts?stripe_session_id=eq.${session.id}&status=eq.processed&select=id`, {
+      headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` },
+    })
+    const existing = await checkResp.json()
+    const alreadyProcessed = Array.isArray(existing) && existing.length > 0
+
+    if (!alreadyProcessed) {
+    // Mark as processed
+    await fetch(`${SUPABASE_URL}/rest/v1/checkout_attempts`, {
+      method: "POST",
+      headers: { ...dbHeaders, "Prefer": "return=minimal" },
+      body: JSON.stringify({ stripe_session_id: session.id, customer_name: ticket.customer_name, customer_email: ticket.customer_email, ticket_type: ticket.ticket_type, event_date: ticket.event_date, status: "processed" }),
+    })
+
     // Increment sold count based on ticket type
     const qty = parseInt(ticket.quantity) || 1
     const tt = ticket.ticket_type
@@ -95,10 +110,10 @@ Deno.serve(async (req) => {
           const dbSlot = session.metadata?.time_slot === "before" ? "before_midnight"
             : session.metadata?.time_slot === "after" ? "after_midnight" : null
 
-          // Get event ID
           const evResp = await fetch(`${SUPABASE_URL}/rest/v1/events?event_date=eq.${ed}&select=id`, { headers: dbHeaders })
           const evData = await evResp.json()
           if (evData?.[0]?.id && tType && tNum) {
+            // Full-night booking (no time_slot): mark ALL slots for this table as booked
             let tableQuery = `${SUPABASE_URL}/rest/v1/vip_tables?event_id=eq.${evData[0].id}&table_type=eq.${tType}&table_number=eq.${tNum}`
             if (dbSlot) tableQuery += `&time_slot=eq.${dbSlot}`
             await fetch(tableQuery, {
@@ -110,8 +125,8 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Send QR ticket email
-    if (ticket.customer_email) {
+    // Send QR ticket email (skip merch orders — no ticket_type)
+    if (ticket.customer_email && ticket.ticket_type) {
     try {
       await fetch(`${SUPABASE_URL}/functions/v1/send-ticket-email`, {
         method: "POST",
@@ -128,6 +143,7 @@ Deno.serve(async (req) => {
       // Don't block ticket display if email fails
     }
     }
+    } // end alreadyProcessed check
   }
 
   return new Response(JSON.stringify(ticket), {

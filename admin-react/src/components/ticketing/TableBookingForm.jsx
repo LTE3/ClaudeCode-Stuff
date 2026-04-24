@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useCheckout } from '../../hooks/useCheckout';
 
 const VIP_COUCH_CONFIG = {
-  before: { price: 700, deposit: 100, label: '10PM - 1AM' },
-  after: { price: 800, deposit: 100, label: '1AM - 4AM' },
+  price: 800,
+  deposit: 100,
   partyMin: 5,
   partyMax: 10,
   package: '2 Premium Bottles, 1 House Champagne, 1 Hookah, $50 Merch Credit, Full Admission',
@@ -11,8 +11,8 @@ const VIP_COUCH_CONFIG = {
 };
 
 const VIP_HIGH_TOP_CONFIG = {
-  before: { price: 400, deposit: 50, label: '10PM - 1AM' },
-  after: { price: 450, deposit: 50, label: '1AM - 4AM' },
+  price: 450,
+  deposit: 50,
   partyMin: 1,
   partyMax: 4,
   package: '1 Premium Bottle, 1 House Champagne, 1 Hookah, $50 Merch Credit, Full Admission',
@@ -20,8 +20,8 @@ const VIP_HIGH_TOP_CONFIG = {
 };
 
 const REGULAR_COUCH_CONFIG = {
-  before: { price: 500, deposit: 100, label: '10PM - 1AM' },
-  after: { price: 600, deposit: 100, label: '1AM - 4AM' },
+  price: 600,
+  deposit: 100,
   partyMin: 5,
   partyMax: 10,
   package: '2 Bottles, 1 House Champagne, Admission Separate',
@@ -29,7 +29,8 @@ const REGULAR_COUCH_CONFIG = {
 };
 
 const REGULAR_HIGH_TOP_CONFIG = {
-  flat: { price: 300, deposit: 50 },
+  price: 300,
+  deposit: 50,
   partyMin: 1,
   partyMax: 4,
   package: '1 Casamigos Bottle, 1 Hookah, Admission Separate',
@@ -43,20 +44,9 @@ function getConfig(type, tier) {
   return type === 'couch' ? REGULAR_COUCH_CONFIG : REGULAR_HIGH_TOP_CONFIG;
 }
 
-function getSlotStatus(availability, tableType, tableNumber, slot) {
-  const tables = availability?.tables || [];
-  // Map "before"/"after" to DB format "before_midnight"/"after_midnight"
-  const dbSlot = slot === 'before' ? 'before_midnight' : slot === 'after' ? 'after_midnight' : slot;
-  const match = tables.find(
-    t => t.table_type === tableType && t.table_number === tableNumber && t.time_slot === dbSlot
-  );
-  return match ? match.is_booked : false;
-}
-
 export default function TableBookingForm({ date, type, number, availability, tier }) {
   const config = getConfig(type, tier || 'vip');
   const isVip = (tier || 'vip') === 'vip';
-  const isFlat = !!config.flat; // Regular high tops have no before/after split
   const displayName = isVip
     ? (type === 'couch' ? `VIP Couch ${number}` : `VIP High Top ${number}`)
     : (type === 'couch' ? `Couch ${number}` : `High Top ${number}`);
@@ -65,30 +55,17 @@ export default function TableBookingForm({ date, type, number, availability, tie
 
   const { checkout, loading } = useCheckout();
 
-  const [selectedSlot, setSelectedSlot] = useState(isFlat ? 'flat' : null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [partySize, setPartySize] = useState(config.partyMin);
   const [error, setError] = useState('');
-
-  const beforeBooked = !isFlat ? getSlotStatus(availability, type, number, 'before') : false;
-  const afterBooked = !isFlat ? getSlotStatus(availability, type, number, 'after') : false;
-
-  const slotConfig = isFlat
-    ? config.flat
-    : selectedSlot === 'before' ? config.before
-    : selectedSlot === 'after' ? config.after
-    : null;
+  const [promoCode, setPromoCode] = useState('');
 
   function getTicketType() {
-    const prefix = isVip
-      ? (type === 'couch' ? 'vip_couch' : 'vip_high_top')
-      : (type === 'couch' ? 'regular_couch' : 'regular_high_top');
-    return isFlat ? prefix : `${prefix}_${selectedSlot}`;
+    if (isVip) return type === 'couch' ? 'vip_couch' : 'vip_high_top';
+    return type === 'couch' ? 'regular_couch' : 'regular_high_top';
   }
-
-  const [promoCode, setPromoCode] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -97,7 +74,7 @@ export default function TableBookingForm({ date, type, number, availability, tie
       ticket_type: getTicketType(),
       event_date: date,
       table_id: `${type}_${number}`,
-      time_slot: isFlat ? null : selectedSlot,
+      time_slot: null,
       tier: tier || 'vip',
       customer_name: name,
       customer_email: email,
@@ -151,67 +128,15 @@ export default function TableBookingForm({ date, type, number, availability, tie
         ))}
       </div>
 
-      {/* Time slot buttons — only for configs with before/after */}
-      {!isFlat && (
-        <>
-          <div className="text-[10px] tracking-[2px] text-text-muted mb-2 font-medium">SELECT TIME SLOT</div>
-          <div className="grid grid-cols-2 gap-3 mb-5">
-            {/* Before midnight */}
-            {beforeBooked ? (
-              <div className="bg-bg-surface border border-border-default rounded-[12px] p-4 opacity-40 text-center">
-                <div className="text-text-muted text-xs mb-1">{config.before.label}</div>
-                <div className="text-accent-coral text-sm font-bold tracking-[2px]">BOOKED</div>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setSelectedSlot('before')}
-                className={`bg-bg-surface border rounded-[12px] p-4 text-center transition-all duration-200 cursor-pointer
-                  ${selectedSlot === 'before'
-                    ? `border-${accentColor} shadow-[0_0_15px_rgba(251,191,36,0.15)]`
-                    : `border-border-default hover:border-${accentColor}/40`}`}
-              >
-                <div className="text-text-secondary text-xs mb-1">{config.before.label}</div>
-                <div className={`text-${accentColor} text-lg font-bold`}>${config.before.price}++</div>
-                <div className="text-text-muted text-[10px] mt-1">${config.before.deposit} deposit</div>
-              </button>
-            )}
-
-            {/* After midnight */}
-            {afterBooked ? (
-              <div className="bg-bg-surface border border-border-default rounded-[12px] p-4 opacity-40 text-center">
-                <div className="text-text-muted text-xs mb-1">{config.after.label}</div>
-                <div className="text-accent-coral text-sm font-bold tracking-[2px]">BOOKED</div>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setSelectedSlot('after')}
-                className={`bg-bg-surface border rounded-[12px] p-4 text-center transition-all duration-200 cursor-pointer
-                  ${selectedSlot === 'after'
-                    ? `border-${accentColor} shadow-[0_0_15px_rgba(251,191,36,0.15)]`
-                    : `border-border-default hover:border-${accentColor}/40`}`}
-              >
-                <div className="text-text-secondary text-xs mb-1">{config.after.label}</div>
-                <div className={`text-${accentColor} text-lg font-bold`}>${config.after.price}++</div>
-                <div className="text-text-muted text-[10px] mt-1">${config.after.deposit} deposit</div>
-              </button>
-            )}
-          </div>
-        </>
-      )}
-
-      {/* Flat price display for regular high tops */}
-      {isFlat && (
-        <div className={`bg-bg-surface border border-${accentColor}/15 rounded-[12px] p-4 mb-5 text-center`}>
-          <div className={`text-${accentColor} text-2xl font-bold`}>${config.flat.price}++</div>
-          <div className="text-text-muted text-[10px] mt-1">${config.flat.deposit} deposit</div>
-        </div>
-      )}
+      {/* Price display */}
+      <div className={`bg-bg-surface border border-${accentColor}/15 rounded-[12px] p-4 mb-5 text-center`}>
+        <div className="text-text-muted text-xs mb-1">Full Night &bull; 10PM - 4AM</div>
+        <div className={`text-${accentColor} text-2xl font-bold`}>${config.price}++</div>
+        <div className="text-text-muted text-[10px] mt-1">${config.deposit} deposit to reserve</div>
+      </div>
 
       {/* Booking form */}
-      {(selectedSlot || isFlat) && slotConfig && (
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
           <input
             type="text" placeholder="Full Name" required value={name}
             onChange={e => setName(e.target.value)}
@@ -254,10 +179,9 @@ export default function TableBookingForm({ date, type, number, availability, tie
             disabled={loading}
             className={`w-full py-4 rounded-full font-[family-name:var(--font-display)] text-lg tracking-[3px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer border-none ${isVip ? 'bg-accent-gold text-black' : 'bg-accent-teal text-black'} disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            {loading ? 'PROCESSING...' : `PAY DEPOSIT — $${slotConfig.deposit}`}
+            {loading ? 'PROCESSING...' : `PAY DEPOSIT — $${config.deposit}`}
           </button>
         </form>
-      )}
     </div>
   );
 }

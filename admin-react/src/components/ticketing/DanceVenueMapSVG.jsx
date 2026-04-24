@@ -4,10 +4,8 @@ export default function DanceVenueMapSVG({ availability, onSelectTable, onSelect
   function getTableStatus(type, num) {
     const matching = tables.filter(t => t.table_type === type && t.table_number === num);
     if (matching.length === 0) return 'available';
-    const allBooked = matching.every(t => t.is_booked);
-    if (allBooked) return 'booked';
-    const someBooked = matching.some(t => t.is_booked);
-    if (someBooked) return 'partial';
+    const anyBooked = matching.some(t => t.is_booked);
+    if (anyBooked) return 'booked';
     return 'available';
   }
 
@@ -18,7 +16,6 @@ export default function DanceVenueMapSVG({ availability, onSelectTable, onSelect
   function tableStroke(type, num) {
     const s = getTableStatus(type, num);
     if (s === 'booked') return 'rgba(255,255,255,0.1)';
-    if (s === 'partial') return '#F87171';
     return 'rgba(45,212,191,0.5)';
   }
 

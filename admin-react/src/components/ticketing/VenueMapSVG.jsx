@@ -8,10 +8,8 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
       return matchType;
     });
     if (matching.length === 0) return 'available';
-    const allBooked = matching.every(t => t.is_booked);
-    if (allBooked) return 'booked';
-    const someBooked = matching.some(t => t.is_booked);
-    if (someBooked) return 'partial';
+    const anyBooked = matching.some(t => t.is_booked);
+    if (anyBooked) return 'booked';
     return 'available';
   }
 
@@ -22,7 +20,6 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
   function tableStroke(type, num, tier, accentColor) {
     const s = getTableStatus(type, num, tier);
     if (s === 'booked') return 'rgba(255,255,255,0.1)';
-    if (s === 'partial') return '#F87171';
     return accentColor || 'rgba(251,191,36,0.5)';
   }
 
@@ -38,13 +35,14 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
     if (getTableStatus(type, num, tier) !== 'booked') onSelectTable(type, num, tier);
   }
 
-  const actualRemaining = (availability?.ga_capacity - availability?.ga_sold) ?? 0;
-  const gaRemaining = Math.min(actualRemaining, 94);
-  let gaLabel = gaRemaining + ' OF 600 TICKETS LEFT';
+  const totalSold = (availability?.ga_tier1_sold || 0) + (availability?.ga_tier2_sold || 0) + (availability?.ga_tier3_sold || 0) + (availability?.ga_sold || 0);
+  const totalCapacity = (availability?.ga_tier1_capacity ?? 0) + (availability?.ga_tier2_capacity ?? 0) + (availability?.ga_tier3_capacity ?? 0);
+  const actualRemaining = Math.max(0, totalCapacity - totalSold);
+  let gaLabel = actualRemaining + ' TICKETS LEFT';
   if (gaSoldOut) gaLabel = 'SOLD OUT — Join Waitlist';
   else if (actualRemaining <= 0) gaLabel = 'SOLD OUT';
-  else if (gaRemaining <= 20) gaLabel = 'ALMOST SOLD OUT — ' + gaRemaining + ' OF 600 LEFT';
-  else if (gaRemaining <= 50) gaLabel = 'SELLING FAST — ' + gaRemaining + ' OF 600 LEFT';
+  else if (actualRemaining <= 20) gaLabel = 'ALMOST SOLD OUT — ' + actualRemaining + ' LEFT';
+  else if (actualRemaining <= 50) gaLabel = 'SELLING FAST — ' + actualRemaining + ' LEFT';
 
   return (
     <svg viewBox="0 0 600 1020" className="w-full md:max-w-[550px] md:mx-auto rounded-[20px] overflow-hidden">

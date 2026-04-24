@@ -39,14 +39,17 @@ Deno.serve(async (req) => {
         ga_tier2: { amount: 2000, name: "La Casita BK - GA Tier 2 ($15 + $5 fee)" },
         ga_tier3: { amount: 2500, name: "La Casita BK - GA Tier 3 ($20 + $5 fee)" },
         vip_ga: { amount: 4000, name: "La Casita BK - VIP GA ($35 + $5 fee)" },
+        vip_couch: { amount: 10000, name: "VIP Couch Deposit — Full Night" },
+        vip_high_top: { amount: 5000, name: "VIP High Top Deposit — Full Night" },
+        regular_couch: { amount: 10000, name: "Regular Couch (DTMF) — Full Night" },
+        regular_high_top: { amount: 5000, name: "Regular High Top (Verano) — Full Night" },
+        // Legacy before/after types (honor existing bookings)
         vip_couch_before: { amount: 10000, name: "VIP Couch Deposit - Before Midnight (10pm-1am)" },
         vip_couch_after: { amount: 10000, name: "VIP Couch Deposit - After Midnight (1am-4am)" },
         vip_high_top_before: { amount: 5000, name: "VIP High Top Deposit - Before Midnight (10pm-1am)" },
         vip_high_top_after: { amount: 5000, name: "VIP High Top Deposit - After Midnight (1am-4am)" },
-        // Regular (non-VIP) table deposits
         regular_couch_before: { amount: 10000, name: "Regular Couch (DTMF) — Before Midnight" },
         regular_couch_after: { amount: 10000, name: "Regular Couch (DTMF) — After Midnight" },
-        regular_high_top: { amount: 5000, name: "Regular High Top (Verano)" },
         // Dance night paid GA
         dance_ga: { amount: 2000, name: "Dance Night GA ($15 + $5 fee)" },
         ladies_group: { amount: 3500, name: "Ladies Group x4 ($35)" },
@@ -120,40 +123,42 @@ Deno.serve(async (req) => {
 
         // Check table availability and place hold
         if (data.table_id && (data.ticket_type.startsWith("vip_couch") || data.ticket_type.startsWith("vip_high_top") || data.ticket_type.startsWith("regular_couch") || data.ticket_type.startsWith("regular_high_top"))) {
-          // Parse table_id format "couch_1" or "high_top_1" into type + number
           const idParts = data.table_id.match(/^(couch|high_top)_(\d+)$/)
           const tType = idParts?.[1]
           const tNum = parseInt(idParts?.[2] || "0")
 
-          // Map time_slot from form ("before"/"after") to DB ("before_midnight"/"after_midnight")
+          // Map time_slot from form — null means full night (both slots)
           const dbSlot = data.time_slot === "before" ? "before_midnight"
             : data.time_slot === "after" ? "after_midnight"
-            : data.time_slot // pass through for flat/null
+            : null
 
-          const tableCheck = avail.tables?.find((t: any) =>
+          // Full-night booking: check that ALL slots for this table are available
+          const matchingSlots = avail.tables?.filter((t: any) =>
             t.table_type === tType && t.table_number === tNum &&
             (!dbSlot || t.time_slot === dbSlot)
-          )
-          if (!tableCheck || tableCheck.status !== "available") {
+          ) || []
+
+          const anyBooked = matchingSlots.some((t: any) => t.status !== "available")
+          if (matchingSlots.length === 0 || anyBooked) {
             return new Response(JSON.stringify({ error: "This table is no longer available" }), {
               status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
             })
           }
 
-          // Place 10-minute hold using the actual UUID
-          await fetch(`${SUPABASE_URL}/rest/v1/vip_tables?id=eq.${tableCheck.id}`, {
-            method: "PATCH",
-            headers: {
-              "apikey": SUPABASE_KEY,
-              "Authorization": `Bearer ${SUPABASE_KEY}`,
-              "Content-Type": "application/json",
-              "Prefer": "return=minimal",
-            },
-            body: JSON.stringify({
-              status: "held",
-              held_until: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
-            }),
-          })
+          // Place 10-minute hold on ALL matching slots
+          const holdUntil = new Date(Date.now() + 10 * 60 * 1000).toISOString()
+          for (const slot of matchingSlots) {
+            await fetch(`${SUPABASE_URL}/rest/v1/vip_tables?id=eq.${slot.id}`, {
+              method: "PATCH",
+              headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": `Bearer ${SUPABASE_KEY}`,
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal",
+              },
+              body: JSON.stringify({ status: "held", held_until: holdUntil }),
+            })
+          }
         }
 
         // Create booking record
