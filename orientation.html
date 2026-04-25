@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Casita — Staff Orientation</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #FF4D8D;
+    --gold: #FBBF24;
+    --teal: #2DD4BF;
+    --blue: #60A5FA;
+    --coral: #FF6B6B;
+    --purple: #A78BFA;
+    --orange: #FF9F43;
+    --dark: #020203;
+    --surface: #0A0A0F;
+    --card: #111118;
+    --border: #1A1A24;
+    --text: #E8E8F0;
+    --dim: #666677;
+    --muted: #44445A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    margin: 30px auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    page-break-after: always;
+  }
+
+  /* Decorative SVG leaves */
+  .leaf {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  /* =============================================
+     SLIDE: COVER
+     ============================================= */
+  .slide-cover {
+    background:
+      radial-gradient(ellipse 900px 600px at 30% 80%, rgba(255,77,141,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 700px 500px at 80% 20%, rgba(251,191,36,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 1200px 800px at 50% 50%, rgba(10,10,15,0.9) 0%, var(--dark) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cover-stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--pink), var(--gold), var(--teal), var(--pink));
+  }
+
+  .cover-stripe-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--pink), var(--gold), var(--teal), var(--pink));
+  }
+
+  .cover-label {
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .cover-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 130px;
+    letter-spacing: 12px;
+    color: white;
+    line-height: 0.9;
+    text-align: center;
+  }
+
+  .cover-accent {
+    width: 120px;
+    height: 3px;
+    background: var(--pink);
+    margin: 25px auto;
+  }
+
+  .cover-subtitle {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 10px;
+    color: var(--gold);
+  }
+
+  .cover-footer {
+    position: absolute;
+    bottom: 30px;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--muted);
+  }
+
+  .cover-glow {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+  }
+
+  /* =============================================
+     SLIDE: SECTION DIVIDER
+     ============================================= */
+  .slide-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .divider-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 140px;
+    line-height: 1;
+    opacity: 0.06;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+  }
+
+  .divider-line {
+    width: 60px;
+    height: 3px;
+    margin-bottom: 25px;
+  }
+
+  .divider-label {
+    font-size: 12px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .divider-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    letter-spacing: 8px;
+    text-align: center;
+  }
+
+  /* =============================================
+     SLIDE: CONTENT (with cards)
+     ============================================= */
+  .slide-content {
+    padding: 55px 70px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 8px;
+  }
+
+  .content-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .content-subtitle {
+    font-size: 14px;
+    color: var(--dim);
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+  }
+
+  .content-underline {
+    height: 3px;
+    width: 80px;
+    margin-bottom: 35px;
+  }
+
+  .content-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Card grid */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-5 { grid-template-columns: repeat(5, 1fr); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .card-icon {
+    font-size: 32px;
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .card-text {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--dim);
+    font-weight: 300;
+  }
+
+  /* Color variants for card tops */
+  .card-pink::before { background: var(--pink); }
+  .card-gold::before { background: var(--gold); }
+  .card-teal::before { background: var(--teal); }
+  .card-blue::before { background: var(--blue); }
+  .card-coral::before { background: var(--coral); }
+  .card-purple::before { background: var(--purple); }
+  .card-orange::before { background: var(--orange); }
+
+  /* =============================================
+     SLIDE: STATEMENT (big quote)
+     ============================================= */
+  .slide-statement {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px;
+  }
+
+  .statement-quote {
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 300px;
+    opacity: 0.04;
+    line-height: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    color: white;
+  }
+
+  .statement-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    letter-spacing: 6px;
+    line-height: 1.2;
+    position: relative;
+    z-index: 2;
+  }
+
+  .statement-sub {
+    font-size: 16px;
+    color: var(--dim);
+    letter-spacing: 3px;
+    margin-top: 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* =============================================
+     SLIDE: TIMELINE
+     ============================================= */
+  .timeline-track {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin-top: 20px;
+    position: relative;
+  }
+
+  .timeline-track::before {
+    content: '';
+    position: absolute;
+    top: 38px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--teal), var(--blue), var(--gold), var(--orange), var(--coral));
+  }
+
+  .timeline-phase {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+
+  .timeline-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin: 30px auto 0;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 15px currentColor;
+  }
+
+  .timeline-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 20px 8px 0;
+    padding: 18px 14px;
+  }
+
+  .timeline-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .timeline-desc {
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+
+  /* =============================================
+     SLIDE: BULLET LIST (for denser content)
+     ============================================= */
+  .bullet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 40px;
+  }
+
+  .bullet-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--card);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .bullet-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .bullet-content h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 17px;
+    letter-spacing: 1.5px;
+    margin-bottom: 3px;
+  }
+
+  .bullet-content p {
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+
+  /* =============================================
+     SLIDE: CLOSING HERO
+     ============================================= */
+  .slide-closing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .closing-emoji {
+    font-size: 60px;
+    margin-bottom: 20px;
+  }
+
+  .closing-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 90px;
+    letter-spacing: 8px;
+    text-align: center;
+    line-height: 1.05;
+  }
+
+  .closing-line {
+    width: 100px;
+    height: 3px;
+    margin: 25px auto;
+  }
+
+  .closing-sub {
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--dim);
+  }
+
+  /* Background utilities */
+  .bg-dark {
+    background:
+      radial-gradient(ellipse 800px 500px at 80% 80%, rgba(255,77,141,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 600px 400px at 20% 20%, rgba(45,212,191,0.03) 0%, transparent 60%),
+      var(--dark);
+  }
+
+  .bg-glow-pink {
+    background:
+      radial-gradient(ellipse 600px 400px at 70% 70%, rgba(255,77,141,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 500px 300px at 20% 30%, rgba(251,191,36,0.04) 0%, transparent 60%),
+      var(--dark);
+  }
+
+  .bg-glow-teal {
+    background:
+      radial-gradient(ellipse 600px 400px at 30% 70%, rgba(45,212,191,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 500px 300px at 80% 20%, rgba(96,165,250,0.04) 0%, transparent 60%),
+      var(--dark);
+  }
+
+  .bg-glow-gold {
+    background:
+      radial-gradient(ellipse 600px 400px at 50% 60%, rgba(251,191,36,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 500px 300px at 20% 30%, rgba(255,77,141,0.04) 0%, transparent 60%),
+      var(--dark);
+  }
+
+  .bg-glow-coral {
+    background:
+      radial-gradient(ellipse 600px 400px at 60% 50%, rgba(255,107,107,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 400px 300px at 30% 80%, rgba(255,159,67,0.04) 0%, transparent 60%),
+      var(--dark);
+  }
+
+  .bg-glow-blue {
+    background:
+      radial-gradient(ellipse 600px 400px at 40% 40%, rgba(96,165,250,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 400px 300px at 80% 80%, rgba(167,139,250,0.04) 0%, transparent 60%),
+      var(--dark);
+  }
+
+  .bg-glow-purple {
+    background:
+      radial-gradient(ellipse 600px 400px at 50% 50%, rgba(167,139,250,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 400px 300px at 20% 20%, rgba(255,77,141,0.04) 0%, transparent 60%),
+      var(--dark);
+  }
+
+  /* Side accent bar */
+  .side-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+  }
+
+  /* Corner decorations */
+  .corner-tl, .corner-br {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+  }
+  .corner-tl {
+    top: 20px;
+    left: 20px;
+    border-top: 2px solid;
+    border-left: 2px solid;
+    opacity: 0.15;
+  }
+  .corner-br {
+    bottom: 20px;
+    right: 20px;
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+    opacity: 0.15;
+  }
+
+  /* Section badge */
+  .section-badge {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+    opacity: 0.4;
+  }
+
+  /* Speaker notes (hidden by default, visible in print) */
+  .speaker-notes {
+    display: none;
+  }
+
+  @media print {
+    .slide {
+      margin: 0;
+      box-shadow: none;
+      border-radius: 0;
+      page-break-inside: avoid;
+    }
+    body { background: white; }
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 1320px) {
+    .slide {
+      width: 95vw;
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 16/9;
+      margin: 15px auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .slide {
+      width: 100vw;
+      height: auto;
+      min-height: auto;
+      aspect-ratio: auto;
+      margin: 10px 0;
+      border-radius: 0;
+      padding: 30px 20px !important;
+    }
+
+    .slide-content { padding: 30px 20px !important; }
+
+    .content-title { font-size: 28px !important; }
+    .content-subtitle { font-size: 11px !important; margin-bottom: 16px; }
+
+    .card-grid { display: flex !important; flex-direction: column !important; gap: 12px !important; }
+    .card-grid-3, .card-grid-4, .card-grid-5 { grid-template-columns: 1fr !important; }
+
+    .card { padding: 20px 18px; }
+    .card-icon { font-size: 24px; margin-bottom: 8px; }
+    .card-title { font-size: 18px; }
+    .card-text { font-size: 12px; }
+
+    .cover-title { font-size: 60px !important; }
+    .cover-subtitle { font-size: 24px !important; }
+    .cover-label { font-size: 10px; }
+
+    .statement-text { font-size: 32px !important; }
+    .statement-sub { font-size: 12px !important; }
+    .statement-quote { font-size: 150px !important; }
+
+    .divider-title { font-size: 40px !important; }
+    .divider-num { font-size: 80px !important; }
+
+    .timeline-track { flex-direction: column !important; gap: 10px; }
+    .timeline-track::before { display: none; }
+    .timeline-dot { display: none; }
+    .timeline-card { margin: 0; }
+
+    .bullet-grid { grid-template-columns: 1fr !important; }
+
+    .corner-tl, .corner-br, .section-badge { display: none; }
+    .side-accent { display: none; }
+    .cover-glow { display: none; }
+
+    .closing-title { font-size: 48px !important; }
+
+    /* Fix two-column layouts on mobile */
+    .slide-content > .content-body > div[style*="grid-template-columns: 1fr 1fr"] {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- ==========================================
+     SLIDE 1: COVER
+     ========================================== -->
+<div class="slide slide-cover">
+  <div class="cover-stripe"></div>
+  <div class="cover-stripe-bottom"></div>
+  <div class="cover-glow" style="background: var(--pink); top: -100px; left: -50px;"></div>
+  <div class="cover-glow" style="background: var(--gold); bottom: -80px; right: -50px; opacity: 0.1;"></div>
+  <div class="cover-label">PULSE HOSPITALITY GROUP</div>
+  <div class="cover-title">LA CASITA</div>
+  <div class="cover-accent"></div>
+  <div class="cover-subtitle">STAFF ORIENTATION</div>
+  <div class="cover-footer">BROOKLYN, NY &bull; SUMMER 2026</div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 2: WHAT IS LA CASITA + INSPIRATION
+     ========================================== -->
+<div class="slide slide-content bg-glow-teal">
+  <div class="side-accent" style="background: var(--teal);"></div>
+  <div class="corner-tl" style="border-color: var(--teal);"></div>
+  <div class="corner-br" style="border-color: var(--teal);"></div>
+  <div class="section-badge" style="color: var(--teal); border-color: var(--teal);">OPENING</div>
+
+  <div class="content-header">
+    <div class="content-title" style="color: var(--teal);">WHAT IS LA CASITA?</div>
+  </div>
+  <div class="content-subtitle">INSPIRED BY LA PLACITA DE SANTURCE, SAN JUAN PR</div>
+  <div class="content-underline" style="background: var(--teal);"></div>
+
+  <div class="content-body">
+    <div class="card-grid card-grid-3">
+      <div class="card card-teal">
+        <div class="card-icon">🇵🇷</div>
+        <div class="card-title" style="color: var(--teal);">PUERTO RICAN NIGHTLIFE</div>
+        <div class="card-text">We're recreating the feeling of a real night in Puerto Rico — the music, the energy, the way people move, everything.</div>
+      </div>
+      <div class="card card-gold">
+        <div class="card-icon">🌴</div>
+        <div class="card-title" style="color: var(--gold);">REAL CULTURE</div>
+        <div class="card-text">If you've ever been to La Placita — music everywhere, people dancing in the streets, high energy all night. That's what we're building.</div>
+      </div>
+      <div class="card card-pink">
+        <div class="card-icon">⚡</div>
+        <div class="card-title" style="color: var(--pink);">NOT A REGULAR CLUB</div>
+        <div class="card-text">If this feels like a normal Brooklyn party, we failed. People come here to feel like they left New York for the night.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 3: WHAT GUESTS SHOULD FEEL
+     ========================================== -->
+<div class="slide slide-statement bg-glow-purple">
+  <div class="side-accent" style="background: var(--purple);"></div>
+  <div class="corner-tl" style="border-color: var(--purple);"></div>
+  <div class="corner-br" style="border-color: var(--purple);"></div>
+  <div class="section-badge" style="color: var(--purple); border-color: var(--purple);">OPENING</div>
+  <div class="statement-quote">&ldquo;</div>
+  <div style="position: relative; z-index: 2;">
+    <div class="statement-text" style="color: var(--purple);">WHEN THEY LEAVE, THEY<br>SHOULD BE SAYING:<br><span style="color: var(--gold);">&ldquo;THAT FELT LIKE PUERTO RICO&rdquo;</span></div>
+    <div class="statement-sub">ENERGY &bull; CULTURE &bull; ESCAPE &bull; CONNECTION</div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 4: THE NIGHT FLOW + TIMELINE
+     ========================================== -->
+<div class="slide slide-content bg-glow-gold">
+  <div class="side-accent" style="background: var(--gold);"></div>
+  <div class="corner-tl" style="border-color: var(--gold);"></div>
+  <div class="corner-br" style="border-color: var(--gold);"></div>
+  <div class="section-badge" style="color: var(--gold); border-color: var(--gold);">OPENING</div>
+
+  <div class="content-header">
+    <div class="content-title" style="color: var(--gold);">THE NIGHT FLOW</div>
+  </div>
+  <div class="content-subtitle">THIS ISN'T ONE FLAT NIGHT — IT EVOLVES. EARLY IS CULTURAL, THEN IT BUILDS INTO FULL NIGHTLIFE.</div>
+  <div class="content-underline" style="background: var(--gold);"></div>
+
+  <div class="content-body">
+    <div class="timeline-track">
+      <div class="timeline-phase">
+        <div class="timeline-dot" style="background: var(--teal); color: var(--teal);"></div>
+        <div class="timeline-card">
+          <div class="timeline-time" style="color: var(--teal);">6 – 8PM</div>
+          <div class="timeline-desc">Warm-up. Doors open, chill vibes, early guests settle in.</div>
+        </div>
+      </div>
+      <div class="timeline-phase">
+        <div class="timeline-dot" style="background: var(--blue); color: var(--blue);"></div>
+        <div class="timeline-card">
+          <div class="timeline-time" style="color: var(--blue);">8 – 10PM</div>
+          <div class="timeline-desc">Build. Energy rises, dance lessons, crowd filling in.</div>
+        </div>
+      </div>
+      <div class="timeline-phase">
+        <div class="timeline-dot" style="background: var(--gold); color: var(--gold);"></div>
+        <div class="timeline-card">
+          <div class="timeline-time" style="color: var(--gold);">10PM – 12AM</div>
+          <div class="timeline-desc">Transition. Full nightlife kicks in, volume up.</div>
+        </div>
+      </div>
+      <div class="timeline-phase">
+        <div class="timeline-dot" style="background: var(--orange); color: var(--orange);"></div>
+        <div class="timeline-card">
+          <div class="timeline-time" style="color: var(--orange);">12 – 2AM</div>
+          <div class="timeline-desc">Peak. Maximum energy, fastest service needed.</div>
+        </div>
+      </div>
+      <div class="timeline-phase">
+        <div class="timeline-dot" style="background: var(--coral); color: var(--coral);"></div>
+        <div class="timeline-card">
+          <div class="timeline-time" style="color: var(--coral);">2 – 3AM</div>
+          <div class="timeline-desc">Close. Controlled wind-down, last call, cleanup.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 5: YOUR ROLE + WHY THIS WORKS
+     ========================================== -->
+<div class="slide slide-content bg-glow-pink">
+  <div class="side-accent" style="background: var(--pink);"></div>
+  <div class="corner-tl" style="border-color: var(--pink);"></div>
+  <div class="corner-br" style="border-color: var(--pink);"></div>
+  <div class="section-badge" style="color: var(--pink); border-color: var(--pink);">OPENING</div>
+
+  <div class="content-header">
+    <div class="content-title" style="color: var(--pink);">YOUR ROLE</div>
+  </div>
+  <div class="content-subtitle">YOU'RE NOT JUST WORKING — YOU'RE CREATING THE EXPERIENCE PEOPLE REMEMBER</div>
+  <div class="content-underline" style="background: var(--pink);"></div>
+
+  <div class="content-body">
+    <div class="card-grid card-grid-3">
+      <div class="card card-pink">
+        <div class="card-icon">⚡</div>
+        <div class="card-title" style="color: var(--pink);">CREATE ENERGY</div>
+        <div class="card-text">This is high energy, fast-paced, and demanding every night. If staff looks dead, the room feels dead. Energy starts with you.</div>
+      </div>
+      <div class="card card-gold">
+        <div class="card-icon">🎯</div>
+        <div class="card-title" style="color: var(--gold);">CONTROL THE EXPERIENCE</div>
+        <div class="card-text">People don't just come once — they come back, they bring friends, they post it. The concept wins because it's not basic.</div>
+      </div>
+      <div class="card card-teal">
+        <div class="card-icon">💰</div>
+        <div class="card-title" style="color: var(--teal);">DRIVE SPENDING</div>
+        <div class="card-text">You are guiding what people drink, increasing order sizes, and pushing key items. This is how the business — and your tips — grow.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 6: WE SET THE STANDARD
+     ========================================== -->
+<div class="slide slide-statement bg-glow-gold">
+  <div class="side-accent" style="background: var(--gold);"></div>
+  <div class="statement-quote" style="color: var(--gold);">★</div>
+  <div style="position: relative; z-index: 2;">
+    <div class="statement-text" style="color: var(--gold);">WE SET THE STANDARD</div>
+    <div class="statement-sub">WHAT WE DO FROM DAY ONE SETS THE TONE FOR EVERYTHING.<br>THIS ORIENTATION ISN'T JUST INFORMATION — IT'S THE STANDARD.</div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 7: MEET THE TEAM (transition)
+     ========================================== -->
+<div class="slide slide-divider bg-glow-teal">
+  <div class="divider-num" style="color: var(--teal);">01</div>
+  <div class="divider-line" style="background: var(--teal);"></div>
+  <div class="divider-label" style="color: var(--teal);">TRANSITION</div>
+  <div class="divider-title" style="color: white;">LET'S MEET THE TEAM</div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 8: SECTION DIVIDER — OPERATIONS
+     ========================================== -->
+<div class="slide slide-divider" style="background: radial-gradient(ellipse 800px 500px at 50% 50%, rgba(255,77,141,0.1) 0%, transparent 60%), var(--dark);">
+  <div class="cover-stripe"></div>
+  <div class="cover-stripe-bottom"></div>
+  <div class="divider-num" style="color: var(--pink);">02</div>
+  <div class="divider-line" style="background: var(--pink);"></div>
+  <div class="divider-label" style="color: var(--pink);">SECTION TWO</div>
+  <div class="divider-title" style="color: white;">OPERATIONS</div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 9: HOW THE NIGHT RUNS + EXPECTATION SHIFT
+     ========================================== -->
+<div class="slide slide-content bg-glow-pink">
+  <div class="side-accent" style="background: var(--pink);"></div>
+  <div class="corner-tl" style="border-color: var(--pink);"></div>
+  <div class="corner-br" style="border-color: var(--pink);"></div>
+  <div class="section-badge" style="color: var(--pink); border-color: var(--pink);">OPERATIONS</div>
+
+  <div class="content-header">
+    <div class="content-title" style="color: var(--pink);">EXPECTATION SHIFT</div>
+  </div>
+  <div class="content-subtitle">YOUR ENERGY AND FOCUS SHOULD CHANGE WITH THE NIGHT — IF YOU TREAT 7PM THE SAME AS 1AM, YOU'RE DOING IT WRONG</div>
+  <div class="content-underline" style="background: var(--pink);"></div>
+
+  <div class="content-body">
+    <div class="card-grid card-grid-4">
+      <div class="card card-teal">
+        <div class="card-icon">😊</div>
+        <div class="card-title" style="color: var(--teal);">EARLY = WELCOMING</div>
+        <div class="card-text">Guide guests in, set the tone, make people feel at home. This is tone-setting time.</div>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon">🗣️</div>
+        <div class="card-title" style="color: var(--blue);">MID = ENGAGING</div>
+        <div class="card-text">Energy rises, crowd fills in. Be active, be present, build the room's momentum.</div>
+      </div>
+      <div class="card card-orange">
+        <div class="card-icon">⚡</div>
+        <div class="card-title" style="color: var(--orange);">PEAK = FAST & SHARP</div>
+        <div class="card-text">Maximum energy. This is execution time — speed, accuracy, no wasted movement.</div>
+      </div>
+      <div class="card card-coral">
+        <div class="card-icon">🛡️</div>
+        <div class="card-title" style="color: var(--coral);">LATE = CONTROLLED</div>
+        <div class="card-text">Wind down safely. Last call, maintain order, clean transitions. Stay professional.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 10: BAR + UPSELLING + KEY ITEMS
+     ========================================== -->
+<div class="slide slide-content bg-glow-coral">
+  <div class="side-accent" style="background: var(--coral);"></div>
+  <div class="corner-tl" style="border-color: var(--coral);"></div>
+  <div class="corner-br" style="border-color: var(--coral);"></div>
+  <div class="section-badge" style="color: var(--coral); border-color: var(--coral);">OPERATIONS</div>
+
+  <div class="content-header">
+    <div class="content-title" style="color: var(--coral);">BAR = MONEY CENTER</div>
+  </div>
+  <div class="content-subtitle">THE BAR IS WHERE MOST OF THE MONEY IS MADE. IF THE BAR IS SLOW OR LOW ENERGY, WE LOSE MONEY.</div>
+  <div class="content-underline" style="background: var(--coral);"></div>
+
+  <div class="content-body">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div>
+        <div class="card card-coral" style="margin-bottom: 16px;">
+          <div class="card-icon">⏱️</div>
+          <div class="card-title" style="color: var(--coral);">SPEED & AWARENESS</div>
+          <div class="card-text">Fast service, read the room, anticipate orders. No standing around. If there's a line, move faster.</div>
+        </div>
+        <div class="card card-gold">
+          <div class="card-icon">📈</div>
+          <div class="card-title" style="color: var(--gold);">UPSELLING IS REQUIRED</div>
+          <div class="card-text">You are not just taking orders — you are guiding what people drink. Increase every order size. This is expected, not optional.</div>
+        </div>
+      </div>
+      <div>
+        <div class="card card-teal" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+          <div class="card-title" style="color: var(--teal); font-size: 18px; margin-bottom: 16px;">KEY ITEMS TO PUSH</div>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 28px;">🍧</span>
+              <div>
+                <div style="font-family: 'Bebas Neue'; font-size: 17px; letter-spacing: 1px; color: var(--teal);">FROZEN DRINKS</div>
+                <div style="font-size: 12px; color: var(--dim);">Highest margin, crowd favorite</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 28px;">🪣</span>
+              <div>
+                <div style="font-family: 'Bebas Neue'; font-size: 17px; letter-spacing: 1px; color: var(--teal);">RUM BUCKETS</div>
+                <div style="font-size: 12px; color: var(--dim);">Group orders, high ticket</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 28px;">🍹</span>
+              <div>
+                <div style="font-family: 'Bebas Neue'; font-size: 17px; letter-spacing: 1px; color: var(--teal);">SIGNATURE COCKTAILS</div>
+                <div style="font-size: 12px; color: var(--dim);">Brand experience, premium pricing</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 11: ENERGY + TEAMWORK + GUEST EXPERIENCE
+     ========================================== -->
+<div class="slide slide-content bg-glow-blue">
+  <div class="side-accent" style="background: var(--blue);"></div>
+  <div class="corner-tl" style="border-color: var(--blue);"></div>
+  <div class="corner-br" style="border-color: var(--blue);"></div>
+  <div class="section-badge" style="color: var(--blue); border-color: var(--blue);">OPERATIONS</div>
+
+  <div class="content-header">
+    <div class="content-title" style="color: var(--blue);">FLOOR STANDARDS</div>
+  </div>
+  <div class="content-subtitle">IF STAFF LOOKS DEAD, THE ROOM FEELS DEAD. ENERGY STARTS WITH YOU.</div>
+  <div class="content-underline" style="background: var(--blue);"></div>
+
+  <div class="content-body">
+    <div class="bullet-grid">
+      <div class="bullet-item">
+        <div class="bullet-icon">🚶</div>
+        <div class="bullet-content">
+          <h4 style="color: var(--blue);">NO STANDING STILL</h4>
+          <p>Keep movement, engage guests, stay active on the floor at all times.</p>
+        </div>
+      </div>
+      <div class="bullet-item">
+        <div class="bullet-icon">🤝</div>
+        <div class="bullet-content">
+          <h4 style="color: var(--teal);">TEAM > INDIVIDUAL</h4>
+          <p>If one area gets hit, we all adjust. No "not my job." Stay aware of your teammates.</p>
+        </div>
+      </div>
+      <div class="bullet-item">
+        <div class="bullet-icon">👋</div>
+        <div class="bullet-content">
+          <h4 style="color: var(--gold);">ACKNOWLEDGE EVERY GUEST</h4>
+          <p>No guest should feel ignored — that's how you lose business. Quick eye contact, a nod, something.</p>
+        </div>
+      </div>
+      <div class="bullet-item">
+        <div class="bullet-icon">🧘</div>
+        <div class="bullet-content">
+          <h4 style="color: var(--purple);">HANDLE ISSUES FAST</h4>
+          <p>Don't argue, escalate if needed, stay calm. How you handle problems matters more than the problem.</p>
+        </div>
+      </div>
+      <div class="bullet-item">
+        <div class="bullet-icon">📵</div>
+        <div class="bullet-content">
+          <h4 style="color: var(--coral);">NO PHONES, NO ATTITUDE</h4>
+          <p>This is not a hangout. Guests are watching everything. Stay focused and professional.</p>
+        </div>
+      </div>
+      <div class="bullet-item">
+        <div class="bullet-icon">🧹</div>
+        <div class="bullet-content">
+          <h4 style="color: var(--orange);">CLEAN = BETTER EXPERIENCE</h4>
+          <p>Bar, floors, bathrooms — people notice more than you think. Clean space, better vibe.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 12: TIPS + SCHEDULING + RULES
+     ========================================== -->
+<div class="slide slide-content bg-glow-gold">
+  <div class="side-accent" style="background: var(--gold);"></div>
+  <div class="corner-tl" style="border-color: var(--gold);"></div>
+  <div class="corner-br" style="border-color: var(--gold);"></div>
+  <div class="section-badge" style="color: var(--gold); border-color: var(--gold);">OPERATIONS</div>
+
+  <div class="content-header">
+    <div class="content-title" style="color: var(--gold);">PAY, TIPS & SCHEDULING</div>
+  </div>
+  <div class="content-subtitle">TIPS ARE POOLED AND DISTRIBUTED BY POINTS — THIS KEEPS EVERYTHING TEAM-BASED</div>
+  <div class="content-underline" style="background: var(--gold);"></div>
+
+  <div class="content-body">
+    <div class="card-grid card-grid-3">
+      <div class="card card-gold">
+        <div class="card-icon">💰</div>
+        <div class="card-title" style="color: var(--gold);">TIP STRUCTURE</div>
+        <div class="card-text">Point-based team pool. Tips distributed by role and points earned. Everyone benefits when we all perform.</div>
+      </div>
+      <div class="card card-blue">
+        <div class="card-icon">📅</div>
+        <div class="card-title" style="color: var(--blue);">SCHEDULING</div>
+        <div class="card-text">Schedule managed via 7shifts. Time-off requests need 2–3 weeks notice. Running late? 2-hour notice minimum.</div>
+      </div>
+      <div class="card card-coral">
+        <div class="card-icon">⚠️</div>
+        <div class="card-title" style="color: var(--coral);">CONSEQUENCES</div>
+        <div class="card-text">Don't meet standard? Fewer shifts. Keep underperforming? Removed from schedule. If you don't perform, you don't stay.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 13: NON-NEGOTIABLES
+     ========================================== -->
+<div class="slide slide-statement bg-glow-coral">
+  <div class="side-accent" style="background: var(--coral);"></div>
+  <div class="corner-tl" style="border-color: var(--coral);"></div>
+  <div class="corner-br" style="border-color: var(--coral);"></div>
+  <div class="section-badge" style="color: var(--coral); border-color: var(--coral);">OPERATIONS</div>
+  <div style="position: relative; z-index: 2; text-align: center;">
+    <div style="font-family: 'Bebas Neue'; font-size: 52px; letter-spacing: 4px; color: var(--coral); margin-bottom: 40px;">NON-NEGOTIABLES</div>
+    <div style="display: flex; gap: 30px; justify-content: center;">
+      <div style="background: var(--card); border: 1px solid rgba(255,107,107,0.2); border-radius: 16px; padding: 30px 40px; min-width: 200px;">
+        <div style="font-size: 40px; margin-bottom: 10px;">🚫</div>
+        <div style="font-family: 'Bebas Neue'; font-size: 24px; letter-spacing: 2px; color: var(--coral);">NO LOW ENERGY</div>
+      </div>
+      <div style="background: var(--card); border: 1px solid rgba(255,107,107,0.2); border-radius: 16px; padding: 30px 40px; min-width: 200px;">
+        <div style="font-size: 40px; margin-bottom: 10px;">⏰</div>
+        <div style="font-family: 'Bebas Neue'; font-size: 24px; letter-spacing: 2px; color: var(--coral);">NO LATENESS</div>
+      </div>
+      <div style="background: var(--card); border: 1px solid rgba(255,107,107,0.2); border-radius: 16px; padding: 30px 40px; min-width: 200px;">
+        <div style="font-size: 40px; margin-bottom: 10px;">✋</div>
+        <div style="font-family: 'Bebas Neue'; font-size: 24px; letter-spacing: 2px; color: var(--coral);">NO EXCUSES</div>
+      </div>
+    </div>
+    <div style="font-size: 14px; color: var(--dim); margin-top: 30px; letter-spacing: 2px;">THESE ARE NOT SUGGESTIONS. THESE ARE STANDARDS.</div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 14: A GREAT NIGHT
+     ========================================== -->
+<div class="slide slide-content bg-glow-teal">
+  <div class="side-accent" style="background: var(--teal);"></div>
+  <div class="corner-tl" style="border-color: var(--teal);"></div>
+  <div class="corner-br" style="border-color: var(--teal);"></div>
+  <div class="section-badge" style="color: var(--teal); border-color: var(--teal);">OPERATIONS</div>
+
+  <div class="content-header">
+    <div class="content-title" style="color: var(--teal);">A GREAT NIGHT LOOKS LIKE</div>
+  </div>
+  <div class="content-subtitle">THIS IS WHAT WE'RE AIMING FOR EVERY SINGLE WEEKEND</div>
+  <div class="content-underline" style="background: var(--teal);"></div>
+
+  <div class="content-body">
+    <div class="card-grid card-grid-4">
+      <div class="card card-teal">
+        <div class="card-icon">🏟️</div>
+        <div class="card-title" style="color: var(--teal);">PACKED VENUE</div>
+        <div class="card-text">Full room, energy high, everyone having a great time from door to close.</div>
+      </div>
+      <div class="card card-orange">
+        <div class="card-icon">🔥</div>
+        <div class="card-title" style="color: var(--orange);">HIGH ENERGY</div>
+        <div class="card-text">Staff matching the room's energy — moving, engaging, keeping the momentum alive.</div>
+      </div>
+      <div class="card card-gold">
+        <div class="card-icon">💵</div>
+        <div class="card-title" style="color: var(--gold);">STRONG SALES</div>
+        <div class="card-text">Bar crushing it, upsells landing, bottle service flowing. Numbers that reflect the work.</div>
+      </div>
+      <div class="card card-pink">
+        <div class="card-icon">😁</div>
+        <div class="card-title" style="color: var(--pink);">HAPPY GUESTS</div>
+        <div class="card-text">People posting, coming back, bringing friends. The kind of night they talk about all week.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 15: QUESTIONS? (transition)
+     ========================================== -->
+<div class="slide slide-divider bg-glow-blue">
+  <div class="divider-num" style="color: var(--blue);">?</div>
+  <div class="divider-line" style="background: var(--blue);"></div>
+  <div class="divider-label" style="color: var(--blue);">PAUSE</div>
+  <div class="divider-title" style="color: white;">QUESTIONS?</div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 16: SECTION DIVIDER — CLOSING
+     ========================================== -->
+<div class="slide slide-divider" style="background: radial-gradient(ellipse 800px 500px at 50% 50%, rgba(251,191,36,0.1) 0%, transparent 60%), var(--dark);">
+  <div class="cover-stripe"></div>
+  <div class="cover-stripe-bottom"></div>
+  <div class="divider-num" style="color: var(--gold);">03</div>
+  <div class="divider-line" style="background: var(--gold);"></div>
+  <div class="divider-label" style="color: var(--gold);">SECTION THREE</div>
+  <div class="divider-title" style="color: white;">CLOSING</div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 17: WHAT TO EXPECT + HOW TO WIN
+     ========================================== -->
+<div class="slide slide-content bg-glow-coral">
+  <div class="side-accent" style="background: var(--orange);"></div>
+  <div class="corner-tl" style="border-color: var(--orange);"></div>
+  <div class="corner-br" style="border-color: var(--orange);"></div>
+  <div class="section-badge" style="color: var(--orange); border-color: var(--orange);">CLOSING</div>
+
+  <div class="content-header">
+    <div class="content-title" style="color: var(--orange);">EXPECT CHAOS. HERE'S HOW YOU WIN.</div>
+  </div>
+  <div class="content-subtitle">OPENING WEEKEND WILL BE INTENSE — BUSY, LOUD, FAST, NON-STOP. THAT'S NORMAL.</div>
+  <div class="content-underline" style="background: var(--orange);"></div>
+
+  <div class="content-body">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div class="card card-coral" style="padding: 30px;">
+        <div style="font-family: 'Bebas Neue'; font-size: 28px; letter-spacing: 2px; color: var(--coral); margin-bottom: 16px;">🌊 WHAT TO EXPECT</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-size: 14px; color: var(--text); padding: 8px 14px; background: rgba(255,107,107,0.06); border-radius: 8px;">Busy — standing room only, lines at the bar</div>
+          <div style="font-size: 14px; color: var(--text); padding: 8px 14px; background: rgba(255,107,107,0.06); border-radius: 8px;">Loud — DJ, crowd, energy all at max</div>
+          <div style="font-size: 14px; color: var(--text); padding: 8px 14px; background: rgba(255,107,107,0.06); border-radius: 8px;">Fast-paced — no downtime during peak</div>
+          <div style="font-size: 14px; color: var(--text); padding: 8px 14px; background: rgba(255,107,107,0.06); border-radius: 8px;">Non-stop — from open to close, it's on</div>
+        </div>
+      </div>
+      <div class="card card-teal" style="padding: 30px;">
+        <div style="font-family: 'Bebas Neue'; font-size: 28px; letter-spacing: 2px; color: var(--teal); margin-bottom: 16px;">🏆 HOW YOU WIN</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-size: 14px; color: var(--text); padding: 8px 14px; background: rgba(45,212,191,0.06); border-radius: 8px;">Stay calm — don't panic when it gets overwhelming</div>
+          <div style="font-size: 14px; color: var(--text); padding: 8px 14px; background: rgba(45,212,191,0.06); border-radius: 8px;">Stay focused — know your role, execute it</div>
+          <div style="font-size: 14px; color: var(--text); padding: 8px 14px; background: rgba(45,212,191,0.06); border-radius: 8px;">Stay moving — motion creates momentum</div>
+          <div style="font-size: 14px; color: var(--text); padding: 8px 14px; background: rgba(45,212,191,0.06); border-radius: 8px;">Communicate — talk to your team constantly</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 18: OPPORTUNITY + THE STANDARD
+     ========================================== -->
+<div class="slide slide-content bg-glow-gold">
+  <div class="side-accent" style="background: var(--gold);"></div>
+  <div class="corner-tl" style="border-color: var(--gold);"></div>
+  <div class="corner-br" style="border-color: var(--gold);"></div>
+  <div class="section-badge" style="color: var(--gold); border-color: var(--gold);">CLOSING</div>
+
+  <div class="content-header">
+    <div class="content-title" style="color: var(--gold);">THE OPPORTUNITY & THE STANDARD</div>
+  </div>
+  <div class="content-subtitle">THIS IS BUILT TO BE A HIGH-VOLUME, HIGH-MONEY ENVIRONMENT. TAKE IT SERIOUSLY AND THERE'S REAL OPPORTUNITY.</div>
+  <div class="content-underline" style="background: var(--gold);"></div>
+
+  <div class="content-body">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div class="card card-gold" style="padding: 30px;">
+        <div style="font-family: 'Bebas Neue'; font-size: 24px; letter-spacing: 2px; color: var(--gold); margin-bottom: 16px;">💰 THIS CAN BE BIG</div>
+        <div class="card-text" style="font-size: 14px; line-height: 2;">
+          <div>▸ High volume = strong tips every weekend</div>
+          <div>▸ Growth opportunities as we scale</div>
+          <div>▸ We'll see who's locked in — very quickly</div>
+          <div>▸ Effort shows. Energy shows. Results show.</div>
+        </div>
+      </div>
+      <div class="card card-pink" style="padding: 30px;">
+        <div style="font-family: 'Bebas Neue'; font-size: 24px; letter-spacing: 2px; color: var(--pink); margin-bottom: 16px;">📋 THE STANDARD — EVERY NIGHT</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 12px; font-size: 16px;">
+            <span style="color: var(--pink); font-size: 20px;">✓</span>
+            <span>Be on time</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; font-size: 16px;">
+            <span style="color: var(--pink); font-size: 20px;">✓</span>
+            <span>Bring energy</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; font-size: 16px;">
+            <span style="color: var(--pink); font-size: 20px;">✓</span>
+            <span>Work as a team</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; font-size: 16px;">
+            <span style="color: var(--pink); font-size: 20px;">✓</span>
+            <span>Make money</span>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: var(--dim); margin-top: 14px; letter-spacing: 1px;">NO EXCEPTIONS.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 19: MAKE IT FEEL LIKE PUERTO RICO
+     ========================================== -->
+<div class="slide slide-statement" style="background: radial-gradient(ellipse 800px 500px at 50% 50%, rgba(251,191,36,0.1) 0%, transparent 60%), radial-gradient(ellipse 600px 400px at 20% 80%, rgba(255,77,141,0.06) 0%, transparent 60%), var(--dark);">
+  <div class="cover-stripe" style="background: linear-gradient(90deg, var(--gold), var(--pink), var(--gold));"></div>
+  <div class="cover-stripe-bottom" style="background: linear-gradient(90deg, var(--gold), var(--pink), var(--gold));"></div>
+  <div class="statement-quote" style="color: var(--gold);">&ldquo;</div>
+  <div style="position: relative; z-index: 2;">
+    <div style="font-size: 60px; margin-bottom: 20px;">🇵🇷</div>
+    <div class="statement-text" style="color: var(--gold); font-size: 58px;">MAKE IT FEEL<br>LIKE PUERTO RICO</div>
+    <div class="statement-sub" style="max-width: 600px; margin: 20px auto 0; line-height: 1.8;">WHEN PEOPLE LEAVE HERE, THEY SHOULD FEEL LIKE THEY<br>JUST SPENT THE NIGHT IN PUERTO RICO.<br>IF WE DO THAT RIGHT — EVERYTHING ELSE TAKES CARE OF ITSELF.</div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     SLIDE 20: LET'S GET TO WORK
+     ========================================== -->
+<div class="slide slide-closing" style="background: radial-gradient(ellipse 900px 600px at 50% 50%, rgba(255,77,141,0.12) 0%, transparent 60%), var(--dark);">
+  <div class="cover-stripe"></div>
+  <div class="cover-stripe-bottom"></div>
+  <div class="cover-glow" style="background: var(--pink); top: -100px; right: -50px;"></div>
+  <div class="cover-glow" style="background: var(--teal); bottom: -80px; left: -50px; opacity: 0.1;"></div>
+  <div class="closing-title" style="color: white;">LET'S GET<br><span style="color: var(--pink);">TO WORK</span></div>
+  <div class="closing-line" style="background: var(--pink);"></div>
+  <div class="closing-sub">PULSE HOSPITALITY GROUP &bull; LA CASITA BK &bull; SUMMER 2026</div>
+</div>
+
+
+</body>
+</html>
