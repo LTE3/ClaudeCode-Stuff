@@ -17,21 +17,23 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
 
   function tableFill(type, num, defaultFill, tier) {
     const s = getTableStatus(type, num, tier);
-    return (s === 'booked' || s === 'fomo') ? '#101014' : defaultFill;
+    if (s === 'booked' || s === 'fomo') return '#050506';
+    return defaultFill;
   }
 
   function tableStroke(type, num, tier, accentColor) {
     const s = getTableStatus(type, num, tier);
-    if (s === 'booked') return 'rgba(255,255,255,0.1)';
-    if (s === 'fomo') return 'rgba(251,191,36,0.7)';
+    if (s === 'booked') return 'rgba(255,255,255,0.08)';
+    if (s === 'fomo') return '#FBBF24';
     return accentColor || 'rgba(251,191,36,0.5)';
   }
 
+  function tableStrokeWidth(type, num, tier) {
+    return getTableStatus(type, num, tier) === 'fomo' ? 2 : 1.5;
+  }
+
   function tableOpacity(type, num, tier) {
-    const s = getTableStatus(type, num, tier);
-    if (s === 'booked') return 0.3;
-    if (s === 'fomo') return 0.45;
-    return 1;
+    return getTableStatus(type, num, tier) === 'booked' ? 0.3 : 1;
   }
 
   function tableCursor(type, num, tier) {
@@ -115,9 +117,9 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
           onClick={() => handleTableClick('couch', c.n, 'vip')}
         >
           <rect x={c.x} y={c.y} width="130" height="95" rx="12"
-            fill={tableFill('couch', c.n, 'url(#vipGrad)', 'vip')} filter="url(#softGlow)" />
+            fill={tableFill('couch', c.n, 'url(#vipGrad)', 'vip')} filter={getTableStatus('couch', c.n, 'vip') === 'available' ? "url(#softGlow)" : undefined} />
           <rect x={c.x} y={c.y} width="130" height="95" rx="12"
-            fill="none" stroke={tableStroke('couch', c.n, 'vip', 'rgba(251,191,36,0.5)')} strokeWidth="1.5" pointerEvents="none" />
+            fill="none" stroke={tableStroke('couch', c.n, 'vip', 'rgba(251,191,36,0.5)')} strokeWidth={tableStrokeWidth('couch', c.n, 'vip')} pointerEvents="none" />
           <text x={c.x + 65} y={c.y + 40} textAnchor="middle" fill="#fff" fontFamily="'Bebas Neue',sans-serif" fontSize="24" letterSpacing="3" pointerEvents="none">COUCH {c.n}</text>
           <text x={c.x + 65} y={c.y + 70} textAnchor="middle" fill="rgba(255,255,255,0.55)" fontFamily="'Source Sans 3',sans-serif" fontSize="15" pointerEvents="none">5-10 guests</text>
         </g>
@@ -136,9 +138,9 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
           onClick={() => handleTableClick('high_top', h.n, 'vip')}
         >
           <rect x={h.x} y={h.y} width="130" height="80" rx="12"
-            fill={tableFill('high_top', h.n, 'url(#vipGrad)', 'vip')} opacity="0.75" />
+            fill={tableFill('high_top', h.n, 'url(#vipGrad)', 'vip')} opacity={getTableStatus('high_top', h.n, 'vip') === 'available' ? 0.75 : 1} />
           <rect x={h.x} y={h.y} width="130" height="80" rx="12"
-            fill="none" stroke={tableStroke('high_top', h.n, 'vip', 'rgba(251,191,36,0.5)')} strokeWidth="1" pointerEvents="none" />
+            fill="none" stroke={tableStroke('high_top', h.n, 'vip', 'rgba(251,191,36,0.5)')} strokeWidth={tableStrokeWidth('high_top', h.n, 'vip')} pointerEvents="none" />
           <text x={h.x + 65} y={h.y + 38} textAnchor="middle" fill="#fff" fontFamily="'Bebas Neue',sans-serif" fontSize="22" letterSpacing="2" pointerEvents="none">HIGH TOP {h.n}</text>
           <text x={h.x + 65} y={h.y + 60} textAnchor="middle" fill="rgba(255,255,255,0.45)" fontFamily="'Source Sans 3',sans-serif" fontSize="14" pointerEvents="none">1-4 guests</text>
         </g>
@@ -160,9 +162,9 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
           onClick={() => handleTableClick('couch', c.n, 'regular')}
         >
           <rect x={c.x} y={c.y} width="130" height="95" rx="12"
-            fill={tableFill('couch', c.n, 'url(#bottleGrad)', 'regular')} filter="url(#softGlow)" />
+            fill={tableFill('couch', c.n, 'url(#bottleGrad)', 'regular')} filter={getTableStatus('couch', c.n, 'regular') === 'available' ? "url(#softGlow)" : undefined} />
           <rect x={c.x} y={c.y} width="130" height="95" rx="12"
-            fill="none" stroke={tableStroke('couch', c.n, 'regular', 'rgba(45,212,191,0.5)')} strokeWidth="1.5" pointerEvents="none" />
+            fill="none" stroke={tableStroke('couch', c.n, 'regular', 'rgba(45,212,191,0.5)')} strokeWidth={tableStrokeWidth('couch', c.n, 'regular')} pointerEvents="none" />
           <text x={c.x + 65} y={c.y + 40} textAnchor="middle" fill="#fff" fontFamily="'Bebas Neue',sans-serif" fontSize="24" letterSpacing="3" pointerEvents="none">COUCH {c.n}</text>
           <text x={c.x + 65} y={c.y + 70} textAnchor="middle" fill="rgba(255,255,255,0.55)" fontFamily="'Source Sans 3',sans-serif" fontSize="15" pointerEvents="none">5-10 guests</text>
         </g>
@@ -180,9 +182,9 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
           onClick={() => handleTableClick('high_top', h.n, 'regular')}
         >
           <rect x={h.x} y={h.y} width="130" height="80" rx="12"
-            fill={tableFill('high_top', h.n, 'url(#bottleGrad)', 'regular')} opacity="0.75" />
+            fill={tableFill('high_top', h.n, 'url(#bottleGrad)', 'regular')} opacity={getTableStatus('high_top', h.n, 'regular') === 'available' ? 0.75 : 1} />
           <rect x={h.x} y={h.y} width="130" height="80" rx="12"
-            fill="none" stroke={tableStroke('high_top', h.n, 'regular', 'rgba(45,212,191,0.5)')} strokeWidth="1" pointerEvents="none" />
+            fill="none" stroke={tableStroke('high_top', h.n, 'regular', 'rgba(45,212,191,0.5)')} strokeWidth={tableStrokeWidth('high_top', h.n, 'regular')} pointerEvents="none" />
           <text x={h.x + 65} y={h.y + 38} textAnchor="middle" fill="#fff" fontFamily="'Bebas Neue',sans-serif" fontSize="22" letterSpacing="2" pointerEvents="none">HIGH TOP {h.n}</text>
           <text x={h.x + 65} y={h.y + 60} textAnchor="middle" fill="rgba(255,255,255,0.45)" fontFamily="'Source Sans 3',sans-serif" fontSize="14" pointerEvents="none">1-4 guests</text>
         </g>
