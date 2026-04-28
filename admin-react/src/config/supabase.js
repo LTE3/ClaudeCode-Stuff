@@ -26,7 +26,10 @@ export async function supabaseGet(table, query = '') {
 export async function supabaseEdge(fnName, body) {
   const res = await fetch(`${SUPABASE_URL}/functions/v1/${fnName}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+    },
     body: JSON.stringify(body)
   });
   return res.json();
