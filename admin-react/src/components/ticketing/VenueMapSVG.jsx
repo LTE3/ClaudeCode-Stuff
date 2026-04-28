@@ -1,6 +1,7 @@
 export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, gaSoldOut }) {
   const tables = availability?.tables || [];
 
+  // Returns 'available', 'booked' (real), or 'fomo' (fake sold)
   function getTableStatus(type, num, tier) {
     const matching = tables.filter(t => {
       const matchType = t.table_type === type && t.table_number === num;
@@ -9,30 +10,36 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
     });
     if (matching.length === 0) return 'available';
     const anyBooked = matching.some(t => t.is_booked);
-    if (anyBooked) return 'booked';
-    return 'available';
+    if (!anyBooked) return 'available';
+    const anyReal = matching.some(t => t.is_booked && t.has_real_booking);
+    return anyReal ? 'booked' : 'fomo';
   }
 
   function tableFill(type, num, defaultFill, tier) {
-    return getTableStatus(type, num, tier) === 'booked' ? '#101014' : defaultFill;
+    const s = getTableStatus(type, num, tier);
+    return (s === 'booked' || s === 'fomo') ? '#101014' : defaultFill;
   }
 
   function tableStroke(type, num, tier, accentColor) {
     const s = getTableStatus(type, num, tier);
     if (s === 'booked') return 'rgba(255,255,255,0.1)';
+    if (s === 'fomo') return 'rgba(251,191,36,0.7)';
     return accentColor || 'rgba(251,191,36,0.5)';
   }
 
   function tableOpacity(type, num, tier) {
-    return getTableStatus(type, num, tier) === 'booked' ? 0.3 : 1;
+    const s = getTableStatus(type, num, tier);
+    return (s === 'booked' || s === 'fomo') ? 0.3 : 1;
   }
 
   function tableCursor(type, num, tier) {
-    return getTableStatus(type, num, tier) === 'booked' ? 'default' : 'pointer';
+    const s = getTableStatus(type, num, tier);
+    return (s === 'booked' || s === 'fomo') ? 'default' : 'pointer';
   }
 
   function handleTableClick(type, num, tier) {
-    if (getTableStatus(type, num, tier) !== 'booked') onSelectTable(type, num, tier);
+    const s = getTableStatus(type, num, tier);
+    if (s === 'available') onSelectTable(type, num, tier);
   }
 
   const totalSold = (availability?.ga_tier1_sold || 0) + (availability?.ga_tier2_sold || 0) + (availability?.ga_tier3_sold || 0) + (availability?.ga_sold || 0);

@@ -72,6 +72,15 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Confirm booking in bookings table
+    const bookingId = session.metadata?.booking_id
+    if (bookingId) {
+      await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}`, {
+        method: "PATCH", headers: dbHeaders,
+        body: JSON.stringify({ status: "confirmed", stripe_session_id: session.id }),
+      })
+    }
+
     // Mark table as booked
     if (tableId && (ticketType.includes("couch") || ticketType.includes("high_top"))) {
       const [tType, tNum] = tableId.match(/^(couch|high_top)_(\d+)$/)?.slice(1) || []
