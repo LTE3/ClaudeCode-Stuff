@@ -29,17 +29,18 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
 
   function tableOpacity(type, num, tier) {
     const s = getTableStatus(type, num, tier);
-    return (s === 'booked' || s === 'fomo') ? 0.3 : 1;
+    if (s === 'booked') return 0.3;
+    if (s === 'fomo') return 0.45;
+    return 1;
   }
 
   function tableCursor(type, num, tier) {
-    const s = getTableStatus(type, num, tier);
-    return (s === 'booked' || s === 'fomo') ? 'default' : 'pointer';
+    return getTableStatus(type, num, tier) === 'booked' ? 'default' : 'pointer';
   }
 
   function handleTableClick(type, num, tier) {
     const s = getTableStatus(type, num, tier);
-    if (s === 'available') onSelectTable(type, num, tier);
+    if (s !== 'booked') onSelectTable(type, num, tier);
   }
 
   const totalSold = (availability?.ga_tier1_sold || 0) + (availability?.ga_tier2_sold || 0) + (availability?.ga_tier3_sold || 0) + (availability?.ga_sold || 0);
