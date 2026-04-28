@@ -45,8 +45,8 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
     if (s !== 'booked') onSelectTable(type, num, tier);
   }
 
-  const totalSold = (availability?.ga_tier1_sold || 0) + (availability?.ga_tier2_sold || 0) + (availability?.ga_tier3_sold || 0) + (availability?.ga_sold || 0);
-  const totalCapacity = (availability?.ga_tier1_capacity ?? 0) + (availability?.ga_tier2_capacity ?? 0) + (availability?.ga_tier3_capacity ?? 0);
+  const totalSold = (availability?.ga_tier1_sold || 0) + (availability?.ga_tier2_sold || 0) + (availability?.ga_tier3_sold || 0) + (availability?.ga_tier4_sold || 0) + (availability?.ga_sold || 0);
+  const totalCapacity = (availability?.ga_tier1_capacity ?? 0) + (availability?.ga_tier2_capacity ?? 0) + (availability?.ga_tier3_capacity ?? 0) + (availability?.ga_tier4_capacity ?? 0);
   const actualRemaining = Math.max(0, totalCapacity - totalSold);
   let gaLabel = actualRemaining + ' TICKETS LEFT';
   if (gaSoldOut) gaLabel = 'SOLD OUT — Join Waitlist';

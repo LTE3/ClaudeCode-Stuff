@@ -102,18 +102,35 @@ function isDanceNight(eventType) {
 }
 
 function getCurrentTier(availability) {
-  if (!availability) return { tier: 1, price: '$10', total: '$15', remaining: 100 };
+  if (!availability) return { tier: 1, price: '$10', total: '$15', remaining: 100, label: 'Tier 1' };
   const t1sold = availability.ga_tier1_sold || 0;
-  const t1cap = availability.ga_tier1_capacity || 100;
+  const t1cap = availability.ga_tier1_capacity ?? 100;
   const t2sold = availability.ga_tier2_sold || 0;
-  const t2cap = availability.ga_tier2_capacity || 100;
+  const t2cap = availability.ga_tier2_capacity ?? 100;
   const t3sold = availability.ga_tier3_sold || 0;
-  const t3cap = availability.ga_tier3_capacity || 100;
+  const t3cap = availability.ga_tier3_capacity ?? 0;
+  const t4sold = availability.ga_tier4_sold || 0;
+  const t4cap = availability.ga_tier4_capacity ?? 0;
 
-  if (t1sold < t1cap) return { tier: 1, price: '$10', total: '$15', remaining: t1cap - t1sold, soldOut: false };
-  if (t2sold < t2cap) return { tier: 2, price: '$15', total: '$20', remaining: t2cap - t2sold, soldOut: false };
-  if (t3sold < t3cap) return { tier: 3, price: '$20', total: '$25', remaining: t3cap - t3sold, soldOut: false };
-  return { tier: 3, price: '$20', total: '$25', remaining: 0, soldOut: true };
+  const t1price = Math.round((availability.ga_tier1_price || 1000) / 100);
+  const t2price = Math.round((availability.ga_tier2_price || 1500) / 100);
+  const t3price = Math.round((availability.ga_tier3_price || 2000) / 100);
+  const t4price = Math.round((availability.ga_tier4_price || 3000) / 100);
+
+  if (t1sold < t1cap) {
+    const isLast = t2cap === 0 && t3cap === 0 && t4cap === 0;
+    return { tier: 1, price: '$' + t1price, total: '$' + (t1price + 5), remaining: t1cap - t1sold, soldOut: false, label: isLast ? 'Last Tier' : 'Tier 1' };
+  }
+  if (t2sold < t2cap) {
+    const isLast = t3cap === 0 && t4cap === 0;
+    return { tier: 2, price: '$' + t2price, total: '$' + (t2price + 5), remaining: t2cap - t2sold, soldOut: false, label: isLast ? 'Last Tier' : 'Tier 2' };
+  }
+  if (t3cap > 0 && t3sold < t3cap) {
+    const isLast = t4cap === 0;
+    return { tier: 3, price: '$' + t3price, total: '$' + (t3price + 5), remaining: t3cap - t3sold, soldOut: false, label: isLast ? 'Last Tier' : 'Tier 3' };
+  }
+  if (t4cap > 0 && t4sold < t4cap) return { tier: 4, price: '$' + t4price, total: '$' + (t4price + 5), remaining: t4cap - t4sold, soldOut: false, label: 'Last Tier' };
+  return { tier: 4, price: '$' + t4price, total: '$' + (t4price + 5), remaining: 0, soldOut: true, label: 'Sold Out' };
 }
 
 export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, ladiesFreeRemaining, availability, gaSoldOut }) {
@@ -160,8 +177,8 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           )}
           {card.key === 'ga' && !dance && (
             <div className="mt-3">
-              <div className="text-xs text-accent-blue/70">Tier {tier.tier} &bull; {tier.remaining} left</div>
-              {tier.tier < 3 && <div className="text-[10px] text-text-muted mt-1">Price increases after this tier sells out</div>}
+              <div className="text-xs text-accent-blue/70">{tier.label} &bull; {tier.remaining} left</div>
+              {tier.label !== 'Last Tier' && !tier.soldOut && <div className="text-[10px] text-text-muted mt-1">Price increases after this tier sells out</div>}
               {tier.soldOut && <div className="text-xs text-accent-coral font-bold mt-1">SOLD OUT</div>}
             </div>
           )}

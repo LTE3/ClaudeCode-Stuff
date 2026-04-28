@@ -9,11 +9,14 @@ function getCurrentTier(availability) {
   const t2cap = availability.ga_tier2_capacity || 100;
   const t3sold = availability.ga_tier3_sold || 0;
   const t3cap = availability.ga_tier3_capacity || 100;
+  const t4sold = availability.ga_tier4_sold || 0;
+  const t4cap = availability.ga_tier4_capacity || 0;
 
   if (t1sold < t1cap) return { tier: 1, price: 10, fee: 5, type: 'ga_tier1', remaining: t1cap - t1sold };
   if (t2sold < t2cap) return { tier: 2, price: 15, fee: 5, type: 'ga_tier2', remaining: t2cap - t2sold };
   if (t3sold < t3cap) return { tier: 3, price: 20, fee: 5, type: 'ga_tier3', remaining: t3cap - t3sold };
-  return { tier: 3, price: 20, fee: 5, type: 'ga_tier3', remaining: 0 };
+  if (t4cap > 0 && t4sold < t4cap) return { tier: 4, price: 25, fee: 5, type: 'ga_tier4', remaining: t4cap - t4sold };
+  return { tier: 4, price: 25, fee: 5, type: 'ga_tier4', remaining: 0 };
 }
 
 export default function GABookingForm({ date, availability }) {

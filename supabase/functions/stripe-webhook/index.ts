@@ -56,6 +56,7 @@ Deno.serve(async (req) => {
     if (ticketType.startsWith("ga_tier1")) updateField = "ga_tier1_sold"
     else if (ticketType.startsWith("ga_tier2")) updateField = "ga_tier2_sold"
     else if (ticketType.startsWith("ga_tier3")) updateField = "ga_tier3_sold"
+    else if (ticketType.startsWith("ga_tier4")) updateField = "ga_tier4_sold"
     else if (ticketType === "vip_ga") updateField = "vip_ga_sold"
     else if (ticketType === "dance_ga") updateField = "ga_sold"
 

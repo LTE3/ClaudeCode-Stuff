@@ -8,22 +8,23 @@ const DAY_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 function getSoldPercent(event) {
   if (!event) return 0;
-  const totalSold = (event.ga_tier1_sold || 0) + (event.ga_tier2_sold || 0) + (event.ga_tier3_sold || 0) + (event.ga_sold || 0);
-  const totalCap = (event.ga_tier1_capacity || 100) + (event.ga_tier2_capacity || 100) + (event.ga_tier3_capacity || 100);
+  const totalSold = (event.ga_tier1_sold || 0) + (event.ga_tier2_sold || 0) + (event.ga_tier3_sold || 0) + (event.ga_tier4_sold || 0) + (event.ga_sold || 0);
+  const totalCap = (event.ga_tier1_capacity ?? 100) + (event.ga_tier2_capacity ?? 100) + (event.ga_tier3_capacity ?? 100) + (event.ga_tier4_capacity ?? 0);
   if (totalCap === 0) return 0;
   return (totalSold / totalCap) * 100;
 }
 
-const gaSoldOutDates = [];
+const almostFullDates = ['2026-05-01', '2026-05-02'];
 
 function getDotColor(pct, dateStr) {
-  if (gaSoldOutDates.includes(dateStr)) return 'bg-accent-coral';
+  if (almostFullDates.includes(dateStr)) return 'bg-accent-coral';
   if (pct > 80) return 'bg-accent-coral';
   if (pct > 0) return 'bg-accent-gold';
   return 'bg-accent-teal';
 }
 
-function getUrgencyLabel(pct) {
+function getUrgencyLabel(pct, dateStr) {
+  if (almostFullDates.includes(dateStr)) return 'Almost Full';
   if (pct > 90) return 'Almost Full';
   if (pct > 70) return 'Selling Fast';
   return null;
@@ -70,7 +71,7 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
     const event = eventsByDate[dateStr];
     const hasEvent = !!event;
     const pct = getSoldPercent(event);
-    const urgency = getUrgencyLabel(pct);
+    const urgency = getUrgencyLabel(pct, dateStr);
     const isClickable = hasEvent && !isPast;
 
     let cellClass = 'relative flex flex-col items-center justify-center p-2 min-h-[60px] rounded-[12px] transition-all duration-200 ';

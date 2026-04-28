@@ -4,8 +4,8 @@ import TicketTypeCards from './TicketTypeCards';
 
 function getUrgencyBadge(availability) {
   if (!availability) return null;
-  const totalSold = (availability.ga_tier1_sold || 0) + (availability.ga_tier2_sold || 0) + (availability.ga_tier3_sold || 0) + (availability.ga_sold || 0);
-  const totalCapacity = (availability.ga_tier1_capacity || 0) + (availability.ga_tier2_capacity || 0) + (availability.ga_tier3_capacity || 0);
+  const totalSold = (availability.ga_tier1_sold || 0) + (availability.ga_tier2_sold || 0) + (availability.ga_tier3_sold || 0) + (availability.ga_tier4_sold || 0) + (availability.ga_sold || 0);
+  const totalCapacity = (availability.ga_tier1_capacity || 0) + (availability.ga_tier2_capacity || 0) + (availability.ga_tier3_capacity || 0) + (availability.ga_tier4_capacity || 0);
   if (totalCapacity === 0) return null;
   const pct = (totalSold / totalCapacity) * 100;
   if (pct > 90) return { text: 'ALMOST SOLD OUT', color: 'bg-accent-coral/10 text-accent-coral border-accent-coral/20' };
