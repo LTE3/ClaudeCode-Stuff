@@ -115,7 +115,7 @@ function getCurrentTier(availability) {
   const t1price = Math.round((availability.ga_tier1_price || 1000) / 100);
   const t2price = Math.round((availability.ga_tier2_price || 1500) / 100);
   const t3price = Math.round((availability.ga_tier3_price || 2000) / 100);
-  const t4price = Math.round((availability.ga_tier4_price || 3000) / 100);
+  const t4price = Math.round((availability.ga_tier4_price || 2500) / 100);
 
   if (t1sold < t1cap) {
     const isLast = t2cap === 0 && t3cap === 0 && t4cap === 0;
