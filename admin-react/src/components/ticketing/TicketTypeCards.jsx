@@ -13,6 +13,19 @@ const nightclubCards = [
     shadow: 'hover:shadow-[0_0_20px_rgba(96,165,250,0.15)]',
   },
   {
+    key: 'ladies_free',
+    emoji: '\u{1F483}',
+    title: 'LADIES FREE',
+    price: 'FREE',
+    fee: null,
+    color: 'teal',
+    borderColor: 'border-accent-teal/15',
+    hoverBorder: 'hover:border-accent-teal/40',
+    textColor: 'text-accent-teal',
+    accentBg: 'bg-accent-teal',
+    shadow: 'hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]',
+  },
+  {
     key: 'vip_ga',
     emoji: '\u2B50',
     title: 'VIP GA',
@@ -50,19 +63,6 @@ const nightclubCards = [
     textColor: 'text-brand',
     accentBg: 'bg-brand',
     shadow: 'hover:shadow-[0_0_20px_rgba(255,77,141,0.15)]',
-  },
-  {
-    key: 'ladies_free',
-    emoji: '\u{1F483}',
-    title: 'LADIES FREE',
-    price: 'FREE',
-    fee: null,
-    color: 'teal',
-    borderColor: 'border-accent-teal/15',
-    hoverBorder: 'hover:border-accent-teal/40',
-    textColor: 'text-accent-teal',
-    accentBg: 'bg-accent-teal',
-    shadow: 'hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]',
   },
 ];
 
@@ -206,7 +206,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           )}
           {card.key === 'ladies_free' && ladiesFreeRemaining != null && (
             <div className="text-sm text-accent-teal mt-3 font-semibold">
-              {ladiesFreeRemaining} of 25 spots left
+              {ladiesFreeRemaining > 0 ? `${ladiesFreeRemaining} spots left` : 'ALL CLAIMED'}
             </div>
           )}
           {card.key === 'ladies_free' && (
