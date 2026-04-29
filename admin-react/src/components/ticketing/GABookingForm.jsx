@@ -2,31 +2,45 @@ import { useState } from 'react';
 import { useCheckout } from '../../hooks/useCheckout';
 
 function getCurrentTier(availability) {
-  if (!availability) return { tier: 1, price: 10, fee: 5, type: 'ga_tier1', remaining: 100 };
+  if (!availability) return null;
   const t1sold = availability.ga_tier1_sold || 0;
-  const t1cap = availability.ga_tier1_capacity || 100;
+  const t1cap = availability.ga_tier1_capacity ?? 100;
   const t2sold = availability.ga_tier2_sold || 0;
-  const t2cap = availability.ga_tier2_capacity || 100;
+  const t2cap = availability.ga_tier2_capacity ?? 100;
   const t3sold = availability.ga_tier3_sold || 0;
-  const t3cap = availability.ga_tier3_capacity || 100;
+  const t3cap = availability.ga_tier3_capacity ?? 0;
   const t4sold = availability.ga_tier4_sold || 0;
-  const t4cap = availability.ga_tier4_capacity || 0;
+  const t4cap = availability.ga_tier4_capacity ?? 0;
 
-  if (t1sold < t1cap) return { tier: 1, price: 10, fee: 5, type: 'ga_tier1', remaining: t1cap - t1sold };
-  if (t2sold < t2cap) return { tier: 2, price: 15, fee: 5, type: 'ga_tier2', remaining: t2cap - t2sold };
-  if (t3sold < t3cap) return { tier: 3, price: 20, fee: 5, type: 'ga_tier3', remaining: t3cap - t3sold };
-  if (t4cap > 0 && t4sold < t4cap) return { tier: 4, price: 25, fee: 5, type: 'ga_tier4', remaining: t4cap - t4sold };
-  return { tier: 4, price: 25, fee: 5, type: 'ga_tier4', remaining: 0 };
+  const t1price = Math.round((availability.ga_tier1_price || 1000) / 100);
+  const t2price = Math.round((availability.ga_tier2_price || 1500) / 100);
+  const t3price = Math.round((availability.ga_tier3_price || 2000) / 100);
+  const t4price = Math.round((availability.ga_tier4_price || 2500) / 100);
+
+  if (t1sold < t1cap) return { tier: 1, price: t1price, fee: 5, type: 'ga_tier1', remaining: t1cap - t1sold };
+  if (t2sold < t2cap) return { tier: 2, price: t2price, fee: 5, type: 'ga_tier2', remaining: t2cap - t2sold };
+  if (t3cap > 0 && t3sold < t3cap) return { tier: 3, price: t3price, fee: 5, type: 'ga_tier3', remaining: t3cap - t3sold };
+  if (t4cap > 0 && t4sold < t4cap) return { tier: 4, price: t4price, fee: 5, type: 'ga_tier4', remaining: t4cap - t4sold };
+  return { tier: 4, price: t4price, fee: 5, type: 'ga_tier4', remaining: 0 };
 }
 
 export default function GABookingForm({ date, availability }) {
   const tierInfo = getCurrentTier(availability);
+  const { checkout, loading } = useCheckout();
+
+  if (!tierInfo) {
+    return (
+      <div className="text-center py-10">
+        <div className="text-text-muted text-sm">Loading ticket info...</div>
+      </div>
+    );
+  }
+
   const remaining = tierInfo.remaining;
   const PRICE = tierInfo.price;
   const FEE = tierInfo.fee;
   const TOTAL = PRICE + FEE;
   const maxQty = Math.min(10, remaining);
-  const { checkout, loading } = useCheckout();
 
   const [quantity, setQuantity] = useState(1);
   const [name, setName] = useState('');

@@ -61,7 +61,7 @@ Deno.serve(async (req) => {
         test_ticket: { amount: 100, name: "Test Ticket ($1)" },
       }
 
-      const selected = ticketPrices[data.ticket_type]
+      let selected = ticketPrices[data.ticket_type]
       if (!selected) {
         return new Response(JSON.stringify({ error: "Invalid ticket type" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -106,6 +106,31 @@ Deno.serve(async (req) => {
           return new Response(JSON.stringify({ error: avail.error }), {
             status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
           })
+        }
+
+        // Auto-resolve GA tier from availability (handles stale frontend builds)
+        if (data.ticket_type.startsWith("ga_tier")) {
+          const t1rem = (avail.ga_tier1_capacity ?? 100) - (avail.ga_tier1_sold ?? 0)
+          const t2rem = (avail.ga_tier2_capacity ?? 100) - (avail.ga_tier2_sold ?? 0)
+          const t3rem = (avail.ga_tier3_capacity ?? 0) - (avail.ga_tier3_sold ?? 0)
+          const t4rem = (avail.ga_tier4_capacity ?? 0) - (avail.ga_tier4_sold ?? 0)
+          const qty = data.quantity || 1
+
+          let resolvedType = "ga_tier4"
+          if (t1rem >= qty) resolvedType = "ga_tier1"
+          else if (t2rem >= qty) resolvedType = "ga_tier2"
+          else if (t3rem >= qty) resolvedType = "ga_tier3"
+          else if (t4rem >= qty) resolvedType = "ga_tier4"
+          else {
+            return new Response(JSON.stringify({ error: "GA tickets sold out" }), {
+              status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+            })
+          }
+
+          if (resolvedType !== data.ticket_type) {
+            data.ticket_type = resolvedType
+            selected = ticketPrices[resolvedType]
+          }
         }
 
         // Check GA capacity
