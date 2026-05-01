@@ -85,7 +85,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const MENU = [
   { name: 'Burrito', amount: 800 },
-  { name: 'Empanadas', amount: 600 },
+  { name: 'Empanadas', amount: 600, noService: true },
   { name: 'Quesadilla', amount: 700 },
   { name: 'Tacos', amount: 1600 },
   { name: 'Vez', amount: 1600 },
@@ -151,8 +151,9 @@ function updateUI() {
   ).join('');
 
   const subtotal = cart.reduce((s, i) => s + i.amount, 0);
+  const serviceBase = cart.filter(i => !i.noService).reduce((s, i) => s + i.amount, 0);
   const tax = Math.round(subtotal * 0.09);
-  const service = Math.round(subtotal * 0.20);
+  const service = Math.round(serviceBase * 0.20);
   const total = subtotal + tax + service;
 
   document.getElementById('subtotal').textContent = '$' + (subtotal / 100).toFixed(2);
