@@ -76,6 +76,7 @@
 <div class="actions">
   <button class="charge-btn" id="chargeBtn" disabled onclick="charge()">CHARGE $0.00</button>
   <button class="clear-btn" onclick="clearCart()">CLEAR ORDER</button>
+  <button class="clear-btn" style="margin-top:8px;color:#f87171;border-color:#f87171/30;" onclick="voidPayment()">VOID / CANCEL TERMINAL</button>
 </div>
 
 <script>
@@ -209,6 +210,39 @@ function clearCart() {
   cart = [];
   updateUI();
   document.getElementById('statusBar').style.display = 'none';
+}
+
+async function voidPayment() {
+  const readerId = document.getElementById('readerSelect').value;
+  const status = document.getElementById('statusBar');
+  status.style.display = 'block';
+  status.className = 'status processing';
+  status.textContent = 'Canceling payment on terminal...';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify({ reader_id: readerId, action: 'void' }),
+    });
+    const data = await res.json();
+    if (data.error) {
+      status.className = 'status error';
+      status.textContent = data.error.message;
+    } else {
+      status.className = 'status success';
+      status.textContent = 'Payment canceled. Terminal reset.';
+      cart = [];
+      updateUI();
+      setTimeout(() => { status.style.display = 'none'; }, 3000);
+    }
+  } catch (err) {
+    status.className = 'status error';
+    status.textContent = 'Error: ' + err.message;
+  }
 }
 
 renderMenu();
