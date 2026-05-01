@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Casita POS</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; }
+  .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 16px; text-align: center; }
+  .header h1 { font-size: 18px; letter-spacing: 3px; }
+  .reader-select { padding: 12px; background: #111; border-bottom: 1px solid #222; }
+  .reader-select select { width: 100%; padding: 10px; background: #1a1a1a; color: #fff; border: 1px solid #333; border-radius: 8px; font-size: 16px; }
+  .menu { padding: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .menu-item { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+  .menu-item:active { transform: scale(0.95); background: #252525; }
+  .menu-item .name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .menu-item .price { font-size: 22px; font-weight: 700; color: #FF4D8D; }
+  .menu-item .qty-badge { display: inline-block; background: #FF4D8D; color: #fff; border-radius: 50%; width: 24px; height: 24px; line-height: 24px; font-size: 13px; font-weight: 700; margin-top: 6px; }
+  .cart { padding: 12px; border-top: 1px solid #222; background: #111; }
+  .cart h3 { font-size: 14px; color: #888; margin-bottom: 8px; letter-spacing: 1px; }
+  .cart-item { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
+  .cart-item .remove { color: #FF4D8D; cursor: pointer; margin-left: 8px; }
+  .totals { padding: 12px; background: #111; border-top: 1px solid #222; }
+  .total-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; color: #aaa; }
+  .total-row.grand { font-size: 20px; font-weight: 700; color: #fff; padding: 8px 0; }
+  .actions { padding: 12px; background: #111; }
+  .charge-btn { width: 100%; padding: 16px; background: #FF4D8D; color: #fff; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
+  .charge-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .charge-btn:active:not(:disabled) { background: #e0437a; }
+  .clear-btn { width: 100%; padding: 12px; background: transparent; color: #888; border: 1px solid #333; border-radius: 12px; font-size: 14px; cursor: pointer; margin-top: 8px; }
+  .status { padding: 12px; text-align: center; font-size: 14px; }
+  .status.success { color: #34d399; }
+  .status.error { color: #f87171; }
+  .status.processing { color: #fbbf24; }
+  .custom-amount { padding: 12px; }
+  .custom-amount input { width: 100%; padding: 12px; background: #1a1a1a; color: #fff; border: 1px solid #333; border-radius: 8px; font-size: 18px; text-align: center; }
+  .custom-amount button { width: 100%; padding: 10px; background: #333; color: #fff; border: none; border-radius: 8px; font-size: 14px; margin-top: 8px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>LA CASITA POS</h1>
+</div>
+
+<div class="reader-select">
+  <select id="readerSelect">
+    <option value="tmr_GfHNkQJenrFEdK">POS3</option>
+    <option value="tmr_GfGuAiK0SPXHK3">POS 2</option>
+    <option value="tmr_GfG68gbsEpD3Tl">POS1</option>
+  </select>
+</div>
+
+<div id="statusBar" class="status" style="display:none;"></div>
+
+<div class="menu" id="menuGrid"></div>
+
+<div class="custom-amount">
+  <input type="number" id="customAmount" placeholder="Custom amount $" step="0.01" min="0">
+  <button onclick="addCustom()">Add Custom Item</button>
+</div>
+
+<div class="cart" id="cartSection" style="display:none;">
+  <h3>ORDER</h3>
+  <div id="cartItems"></div>
+</div>
+
+<div class="totals" id="totalsSection" style="display:none;">
+  <div class="total-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+  <div class="total-row"><span>Service Charge (20%)</span><span id="serviceCharge">$0.00</span></div>
+  <div class="total-row grand"><span>Total</span><span id="grandTotal">$0.00</span></div>
+</div>
+
+<div class="actions">
+  <button class="charge-btn" id="chargeBtn" disabled onclick="charge()">CHARGE $0.00</button>
+  <button class="clear-btn" onclick="clearCart()">CLEAR ORDER</button>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+const MENU = [
+  { name: 'Burrito', amount: 800 },
+  { name: 'Empanadas', amount: 500 },
+  { name: 'Quesadilla', amount: 700 },
+  { name: 'Tacos', amount: 1600 },
+  { name: 'Vez', amount: 1600 },
+  { name: 'Rez', amount: 1600 },
+  { name: 'Pineapple', amount: 2000 },
+  { name: 'Mole', amount: 1600 },
+];
+
+let cart = [];
+
+function renderMenu() {
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = MENU.map(item => {
+    const inCart = cart.filter(c => c.name === item.name).length;
+    return `<div class="menu-item" onclick="addItem('${item.name}', ${item.amount})">
+      <div class="name">${item.name}</div>
+      <div class="price">$${(item.amount / 100).toFixed(2)}</div>
+      ${inCart ? `<div class="qty-badge">${inCart}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function addItem(name, amount) {
+  cart.push({ name, amount, qty: 1 });
+  updateUI();
+}
+
+function addCustom() {
+  const input = document.getElementById('customAmount');
+  const val = parseFloat(input.value);
+  if (!val || val <= 0) return;
+  cart.push({ name: 'Custom', amount: Math.round(val * 100), qty: 1 });
+  input.value = '';
+  updateUI();
+}
+
+function removeItem(idx) {
+  cart.splice(idx, 1);
+  updateUI();
+}
+
+function updateUI() {
+  renderMenu();
+  const cartSection = document.getElementById('cartSection');
+  const totalsSection = document.getElementById('totalsSection');
+  const cartItems = document.getElementById('cartItems');
+  const chargeBtn = document.getElementById('chargeBtn');
+
+  if (cart.length === 0) {
+    cartSection.style.display = 'none';
+    totalsSection.style.display = 'none';
+    chargeBtn.disabled = true;
+    chargeBtn.textContent = 'CHARGE $0.00';
+    return;
+  }
+
+  cartSection.style.display = 'block';
+  totalsSection.style.display = 'block';
+
+  cartItems.innerHTML = cart.map((item, i) =>
+    `<div class="cart-item"><span>${item.name} — $${(item.amount / 100).toFixed(2)}</span><span class="remove" onclick="removeItem(${i})">✕</span></div>`
+  ).join('');
+
+  const subtotal = cart.reduce((s, i) => s + i.amount, 0);
+  const service = Math.round(subtotal * 0.20);
+  const total = subtotal + service;
+
+  document.getElementById('subtotal').textContent = '$' + (subtotal / 100).toFixed(2);
+  document.getElementById('serviceCharge').textContent = '$' + (service / 100).toFixed(2);
+  document.getElementById('grandTotal').textContent = '$' + (total / 100).toFixed(2);
+
+  chargeBtn.disabled = false;
+  chargeBtn.textContent = `CHARGE $${(total / 100).toFixed(2)}`;
+}
+
+async function charge() {
+  const btn = document.getElementById('chargeBtn');
+  const status = document.getElementById('statusBar');
+  const readerId = document.getElementById('readerSelect').value;
+
+  btn.disabled = true;
+  btn.textContent = 'SENDING TO READER...';
+  status.style.display = 'block';
+  status.className = 'status processing';
+  status.textContent = 'Sending payment to terminal...';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify({ reader_id: readerId, items: cart }),
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      status.className = 'status error';
+      status.textContent = 'Error: ' + data.error;
+      btn.disabled = false;
+      btn.textContent = `CHARGE $${((cart.reduce((s,i) => s + i.amount, 0) * 1.2) / 100).toFixed(2)}`;
+    } else {
+      status.className = 'status success';
+      status.textContent = `Sent! Total: $${(data.total / 100).toFixed(2)} (incl. $${(data.service_charge / 100).toFixed(2)} service charge)`;
+      cart = [];
+      updateUI();
+      setTimeout(() => { status.style.display = 'none'; }, 5000);
+    }
+  } catch (err) {
+    status.className = 'status error';
+    status.textContent = 'Network error: ' + err.message;
+    btn.disabled = false;
+    btn.textContent = `CHARGE $${((cart.reduce((s,i) => s + i.amount, 0) * 1.2) / 100).toFixed(2)}`;
+  }
+}
+
+function clearCart() {
+  cart = [];
+  updateUI();
+  document.getElementById('statusBar').style.display = 'none';
+}
+
+renderMenu();
+</script>
+
+</body>
+</html>
