@@ -68,6 +68,7 @@
 
 <div class="totals" id="totalsSection" style="display:none;">
   <div class="total-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+  <div class="total-row"><span>Tax (9%)</span><span id="tax">$0.00</span></div>
   <div class="total-row"><span>Service Charge (20%)</span><span id="serviceCharge">$0.00</span></div>
   <div class="total-row grand"><span>Total</span><span id="grandTotal">$0.00</span></div>
 </div>
@@ -148,10 +149,12 @@ function updateUI() {
   ).join('');
 
   const subtotal = cart.reduce((s, i) => s + i.amount, 0);
+  const tax = Math.round(subtotal * 0.09);
   const service = Math.round(subtotal * 0.20);
-  const total = subtotal + service;
+  const total = subtotal + tax + service;
 
   document.getElementById('subtotal').textContent = '$' + (subtotal / 100).toFixed(2);
+  document.getElementById('tax').textContent = '$' + (tax / 100).toFixed(2);
   document.getElementById('serviceCharge').textContent = '$' + (service / 100).toFixed(2);
   document.getElementById('grandTotal').textContent = '$' + (total / 100).toFixed(2);
 
@@ -185,7 +188,7 @@ async function charge() {
       status.className = 'status error';
       status.textContent = 'Error: ' + data.error;
       btn.disabled = false;
-      btn.textContent = `CHARGE $${((cart.reduce((s,i) => s + i.amount, 0) * 1.2) / 100).toFixed(2)}`;
+      btn.textContent = `CHARGE $${((cart.reduce((s,i) => s + i.amount, 0) * 1.29) / 100).toFixed(2)}`;
     } else {
       status.className = 'status success';
       status.textContent = `Sent! Total: $${(data.total / 100).toFixed(2)} (incl. $${(data.service_charge / 100).toFixed(2)} service charge)`;
@@ -197,7 +200,7 @@ async function charge() {
     status.className = 'status error';
     status.textContent = 'Network error: ' + err.message;
     btn.disabled = false;
-    btn.textContent = `CHARGE $${((cart.reduce((s,i) => s + i.amount, 0) * 1.2) / 100).toFixed(2)}`;
+    btn.textContent = `CHARGE $${((cart.reduce((s,i) => s + i.amount, 0) * 1.29) / 100).toFixed(2)}`;
   }
 }
 
