@@ -197,7 +197,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           {card.key === 'free_ga' && (
             <>
               <div className="text-sm text-accent-teal mt-3 font-semibold">
-                {freeGaRemaining > 0 ? `${freeGaRemaining} of ${freeGaCapacity} spots left` : 'ALL CLAIMED'}
+                {freeGaRemaining > 0 ? `${Math.min(freeGaRemaining, 50)} spots left` : 'ALL CLAIMED'}
               </div>
               <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
                 CLAIM FREE ENTRY
@@ -206,7 +206,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           )}
           {card.key === 'ladies_free' && ladiesFreeRemaining != null && (
             <div className="text-sm text-accent-teal mt-3 font-semibold">
-              {ladiesFreeRemaining > 0 ? `${ladiesFreeRemaining} spots left` : 'ALL CLAIMED'}
+              {ladiesFreeRemaining > 0 ? `${Math.min(ladiesFreeRemaining, 50)} spots left` : 'ALL CLAIMED'}
             </div>
           )}
           {card.key === 'ladies_free' && (
