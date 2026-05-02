@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Casita Door</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+  .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 16px; text-align: center; width: 100%; }
+  .header h1 { font-size: 18px; letter-spacing: 3px; }
+  .content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+  .price { font-size: 48px; font-weight: 700; color: #FF4D8D; margin-bottom: 8px; }
+  .label { font-size: 18px; color: #aaa; letter-spacing: 2px; margin-bottom: 30px; }
+  .qr { background: #fff; padding: 16px; border-radius: 16px; margin-bottom: 20px; }
+  .qr img { width: 250px; height: 250px; }
+  .instructions { color: #888; font-size: 14px; line-height: 1.6; max-width: 300px; }
+  .scan-text { font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 16px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>LA CASITA BK</h1>
+</div>
+
+<div class="content">
+  <div class="price">$20</div>
+  <div class="label">GENERAL ADMISSION</div>
+  <div class="scan-text">SCAN TO PAY</div>
+  <div class="qr">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://buy.stripe.com/8x2aEZdvOf7rbkJc3j0Jq0c" alt="QR Code">
+  </div>
+  <div class="instructions">
+    Scan with your phone camera to pay.<br>
+    Select quantity for your group.
+  </div>
+</div>
+
+</body>
+</html>
