@@ -33,6 +33,12 @@
   .status.success { color: #34d399; }
   .status.error { color: #f87171; }
   .status.processing { color: #fbbf24; }
+  .qr-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
+  .qr-overlay .qr-box { background: #fff; padding: 20px; border-radius: 16px; margin-bottom: 20px; }
+  .qr-overlay .qr-box img { width: 280px; height: 280px; }
+  .qr-overlay .qr-total { font-size: 36px; font-weight: 700; color: #2DD4BF; margin-bottom: 12px; }
+  .qr-overlay .qr-label { font-size: 16px; color: #aaa; margin-bottom: 24px; letter-spacing: 2px; }
+  .qr-overlay .qr-close { padding: 14px 40px; background: #333; color: #fff; border: none; border-radius: 12px; font-size: 16px; cursor: pointer; }
   .custom-amount { padding: 12px; }
   .custom-amount input { width: 100%; padding: 12px; background: #1a1a1a; color: #fff; border: 1px solid #333; border-radius: 8px; font-size: 18px; text-align: center; }
   .custom-amount button { width: 100%; padding: 10px; background: #333; color: #fff; border: none; border-radius: 8px; font-size: 14px; margin-top: 8px; cursor: pointer; }
@@ -75,6 +81,7 @@
 
 <div class="actions">
   <button class="charge-btn" id="chargeBtn" disabled onclick="charge()">CHARGE $0.00</button>
+  <button class="charge-btn" id="qrBtn" disabled onclick="qrPay()" style="background:#2DD4BF;margin-top:8px;">QR PAY $0.00</button>
   <button class="clear-btn" onclick="clearCart()">CLEAR ORDER</button>
   <button class="clear-btn" style="margin-top:8px;color:#f87171;border-color:#f87171/30;" onclick="voidPayment()">VOID / CANCEL TERMINAL</button>
 </div>
@@ -143,11 +150,15 @@ function updateUI() {
   const cartItems = document.getElementById('cartItems');
   const chargeBtn = document.getElementById('chargeBtn');
 
+  const qrBtn = document.getElementById('qrBtn');
+
   if (cart.length === 0) {
     cartSection.style.display = 'none';
     totalsSection.style.display = 'none';
     chargeBtn.disabled = true;
     chargeBtn.textContent = 'CHARGE $0.00';
+    qrBtn.disabled = true;
+    qrBtn.textContent = 'QR PAY $0.00';
     return;
   }
 
@@ -171,6 +182,8 @@ function updateUI() {
 
   chargeBtn.disabled = false;
   chargeBtn.textContent = `CHARGE $${(total / 100).toFixed(2)}`;
+  qrBtn.disabled = false;
+  qrBtn.textContent = `QR PAY $${(total / 100).toFixed(2)}`;
 }
 
 async function charge() {
@@ -251,6 +264,55 @@ async function voidPayment() {
   } catch (err) {
     status.className = 'status error';
     status.textContent = 'Error: ' + err.message;
+  }
+}
+
+async function qrPay() {
+  const btn = document.getElementById('qrBtn');
+  const status = document.getElementById('statusBar');
+  btn.disabled = true;
+  btn.textContent = 'GENERATING QR...';
+  status.style.display = 'block';
+  status.className = 'status processing';
+  status.textContent = 'Creating checkout link...';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify({ items: cart, action: 'qr' }),
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      status.className = 'status error';
+      status.textContent = 'Error: ' + data.error;
+      btn.disabled = false;
+      updateUI();
+    } else {
+      status.style.display = 'none';
+      const overlay = document.createElement('div');
+      overlay.className = 'qr-overlay';
+      overlay.innerHTML = `
+        <div class="qr-total">$${(data.total / 100).toFixed(2)}</div>
+        <div class="qr-label">SCAN TO PAY</div>
+        <div class="qr-box">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(data.checkout_url)}" alt="QR Code">
+        </div>
+        <button class="qr-close" onclick="this.parentElement.remove()">DONE</button>
+      `;
+      document.body.appendChild(overlay);
+      cart = [];
+      updateUI();
+    }
+  } catch (err) {
+    status.className = 'status error';
+    status.textContent = 'Error: ' + err.message;
+    btn.disabled = false;
+    updateUI();
   }
 }
 
