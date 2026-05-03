@@ -38,6 +38,7 @@
   <button class="filter-btn active" onclick="setFilter('all')">ALL</button>
   <button class="filter-btn" onclick="setFilter('tips')">TIPS ONLY</button>
   <button class="filter-btn" onclick="setFilter('today')">TODAY</button>
+  <button class="filter-btn" onclick="setFilter('week')">THIS WEEK</button>
 </div>
 
 <div class="list" id="tipList"><div class="loading">LOADING...</div></div>
@@ -51,7 +52,7 @@ let allPayments = [], currentFilter = 'all';
 function setFilter(f) {
   currentFilter = f;
   document.querySelectorAll('.filter-btn').forEach(b => {
-    b.classList.toggle('active', (f==='all'&&b.textContent==='ALL')||(f==='tips'&&b.textContent==='TIPS ONLY')||(f==='today'&&b.textContent==='TODAY'));
+    b.classList.toggle('active', (f==='all'&&b.textContent==='ALL')||(f==='tips'&&b.textContent==='TIPS ONLY')||(f==='today'&&b.textContent==='TODAY')||(f==='week'&&b.textContent==='THIS WEEK'));
   });
   render();
 }
@@ -62,6 +63,14 @@ function render() {
   if (currentFilter === 'today') {
     const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' });
     filtered = filtered.filter(p => new Date(p.created * 1000).toLocaleDateString('en-US', { timeZone: 'America/New_York' }) === today);
+  }
+  if (currentFilter === 'week') {
+    const now = new Date();
+    const day = now.getDay();
+    const start = new Date(now);
+    start.setDate(now.getDate() - day);
+    start.setHours(0, 0, 0, 0);
+    filtered = filtered.filter(p => new Date(p.created * 1000) >= start);
   }
 
   const tipped = filtered.filter(p => p.tip > 0);
