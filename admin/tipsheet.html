@@ -178,8 +178,17 @@ async function pullPool() {
     });
     const data = await res.json();
     if (data.payments) {
-      const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' });
-      const todays = data.payments.filter(p => new Date(p.created * 1000).toLocaleDateString('en-US', { timeZone: 'America/New_York' }) === today);
+      // Party night = 4AM to 4AM ET
+      const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      const cutoff = new Date(nowET);
+      if (nowET.getHours() < 4) cutoff.setDate(cutoff.getDate() - 1);
+      cutoff.setHours(4, 0, 0, 0);
+      const cutoffEnd = new Date(cutoff);
+      cutoffEnd.setDate(cutoffEnd.getDate() + 1);
+      const todays = data.payments.filter(p => {
+        const t = new Date(new Date(p.created * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        return t >= cutoff && t < cutoffEnd;
+      });
       const service = todays.reduce((s, p) => s + p.service_charge, 0);
       const tips = todays.reduce((s, p) => s + p.tip, 0);
       document.getElementById('poolAmount').value = ((service + tips) / 100).toFixed(2);

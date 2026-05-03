@@ -15,18 +15,31 @@ Deno.serve(async (req) => {
 
     // Tips dashboard: return terminal payments with tip breakdown
     if (action === "tips") {
-      const resp = await fetch("https://api.stripe.com/v1/payment_intents?limit=100", {
-        headers: { "Authorization": auth },
-      })
-      const page = await resp.json()
-      const allPIs = (page.data || []).filter((pi: any) => pi.payment_method_types?.includes("card_present") && pi.status === "succeeded")
+      // Paginate through all recent payments (last 7 days)
+      const weekAgo = Math.floor(Date.now() / 1000) - 7 * 86400
+      let allPIs: any[] = []
+      let startingAfter = ""
+      for (let page = 0; page < 50; page++) {
+        const url = `https://api.stripe.com/v1/payment_intents?limit=100&created[gte]=${weekAgo}` + (startingAfter ? `&starting_after=${startingAfter}` : "")
+        const resp = await fetch(url, { headers: { "Authorization": auth } })
+        const data = await resp.json()
+        const items = data.data || []
+        if (!items.length) break
+        allPIs = allPIs.concat(items)
+        if (!data.has_more) break
+        startingAfter = items[items.length - 1].id
+      }
 
-      const results = allPIs.map((pi: any) => {
+      // Include all succeeded payments that have service_charge metadata (terminal + QR pay)
+      const filtered = allPIs.filter((pi: any) => pi.status === "succeeded" && pi.metadata?.service_charge)
+
+      const results = filtered.map((pi: any) => {
         const subtotal = parseInt(pi.metadata?.subtotal || "0")
         const tax = parseInt(pi.metadata?.tax || "0")
         const serviceCharge = parseInt(pi.metadata?.service_charge || "0")
         const baseTotal = subtotal + tax + serviceCharge
         const tip = pi.amount - baseTotal
+        const isTerminal = pi.payment_method_types?.includes("card_present")
         return {
           id: pi.id,
           created: pi.created,
@@ -34,6 +47,7 @@ Deno.serve(async (req) => {
           subtotal, tax, service_charge: serviceCharge,
           tip: tip > 0 ? tip : 0,
           total: pi.amount,
+          source: isTerminal ? "terminal" : "qr",
         }
       })
 
