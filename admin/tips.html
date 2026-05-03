@@ -10,8 +10,12 @@
   .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 18px; text-align: center; }
   .header h1 { font-size: 18px; letter-spacing: 4px; }
   .stats { display: flex; justify-content: space-around; padding: 20px 16px; border-bottom: 1px solid #1a1a1a; }
-  .stat .value { font-size: 24px; font-weight: 800; color: #FF4D8D; text-align: center; }
-  .stat .label { font-size: 10px; color: #555; letter-spacing: 2px; text-align: center; margin-top: 4px; }
+  .stat .value { font-size: 22px; font-weight: 800; color: #FF4D8D; text-align: center; }
+  .stat .label { font-size: 9px; color: #555; letter-spacing: 2px; text-align: center; margin-top: 4px; }
+  .pool { padding: 16px; text-align: center; border-bottom: 1px solid #1a1a1a; }
+  .pool .pool-value { font-size: 36px; font-weight: 800; color: #FF4D8D; }
+  .pool .pool-label { font-size: 10px; color: #555; letter-spacing: 3px; margin-top: 4px; }
+  .pool .pool-breakdown { font-size: 12px; color: #444; margin-top: 8px; }
   .controls { padding: 12px 16px; display: flex; gap: 8px; }
   .filter-btn { padding: 7px 14px; background: #111; color: #555; border: 1px solid #222; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 600; }
   .filter-btn.active { background: #FF4D8D; color: #fff; border-color: #FF4D8D; }
@@ -28,10 +32,16 @@
 
 <div class="header"><h1>LA CASITA TIPS</h1></div>
 
+<div class="pool">
+  <div class="pool-value" id="tipPool">--</div>
+  <div class="pool-label">TOTAL TIP POOL</div>
+  <div class="pool-breakdown" id="poolBreakdown"></div>
+</div>
+
 <div class="stats">
-  <div class="stat"><div class="value" id="totalTips">--</div><div class="label">TOTAL</div></div>
+  <div class="stat"><div class="value" id="totalService">--</div><div class="label">SERVICE (20%)</div></div>
+  <div class="stat"><div class="value" id="totalTips">--</div><div class="label">EXTRA TIPS</div></div>
   <div class="stat"><div class="value" id="tipCount">--</div><div class="label">TIPPED</div></div>
-  <div class="stat"><div class="value" id="avgTip">--</div><div class="label">AVERAGE</div></div>
 </div>
 
 <div class="controls">
@@ -74,10 +84,15 @@ function render() {
   }
 
   const tipped = filtered.filter(p => p.tip > 0);
-  const total = tipped.reduce((s, p) => s + p.tip, 0);
-  document.getElementById('totalTips').textContent = '$' + (total / 100).toFixed(2);
+  const extraTips = tipped.reduce((s, p) => s + p.tip, 0);
+  const serviceTotal = filtered.reduce((s, p) => s + p.service_charge, 0);
+  const pool = serviceTotal + extraTips;
+
+  document.getElementById('tipPool').textContent = '$' + (pool / 100).toFixed(2);
+  document.getElementById('poolBreakdown').textContent = '$' + (serviceTotal / 100).toFixed(2) + ' service + $' + (extraTips / 100).toFixed(2) + ' extra tips';
+  document.getElementById('totalService').textContent = '$' + (serviceTotal / 100).toFixed(2);
+  document.getElementById('totalTips').textContent = '$' + (extraTips / 100).toFixed(2);
   document.getElementById('tipCount').textContent = tipped.length + '/' + filtered.length;
-  document.getElementById('avgTip').textContent = tipped.length ? '$' + (total / tipped.length / 100).toFixed(2) : '--';
 
   const list = document.getElementById('tipList');
   if (!filtered.length) { list.innerHTML = '<div class="loading">NO TRANSACTIONS</div>'; return; }
