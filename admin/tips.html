@@ -16,9 +16,11 @@
   .pool .pool-value { font-size: 36px; font-weight: 800; color: #FF4D8D; }
   .pool .pool-label { font-size: 10px; color: #555; letter-spacing: 3px; margin-top: 4px; }
   .pool .pool-breakdown { font-size: 12px; color: #444; margin-top: 8px; }
-  .controls { padding: 12px 16px; display: flex; gap: 8px; }
+  .controls { padding: 12px 16px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
   .filter-btn { padding: 7px 14px; background: #111; color: #555; border: 1px solid #222; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 600; }
   .filter-btn.active { background: #FF4D8D; color: #fff; border-color: #FF4D8D; }
+  .date-pick { padding: 7px 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .date-pick.active { border-color: #FF4D8D; color: #FF4D8D; }
   .list { padding: 0 12px 60px; }
   .item { border-bottom: 1px solid #151515; padding: 12px 4px; display: flex; justify-content: space-between; align-items: center; }
   .item .left .name { font-size: 14px; color: #ccc; }
@@ -47,8 +49,9 @@
 <div class="controls">
   <button class="filter-btn active" onclick="setFilter('all')">ALL</button>
   <button class="filter-btn" onclick="setFilter('tips')">TIPS ONLY</button>
-  <button class="filter-btn" onclick="setFilter('today')">TODAY</button>
+  <button class="filter-btn" onclick="setFilter('tonight')">TONIGHT</button>
   <button class="filter-btn" onclick="setFilter('week')">THIS WEEK</button>
+  <input type="date" class="date-pick" id="datePicker" onchange="setFilter('date')" />
 </div>
 
 <div class="list" id="tipList"><div class="loading">LOADING...</div></div>
@@ -59,32 +62,62 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 let allPayments = [], currentFilter = 'all';
 
+function getPartyNightRange(dateStr) {
+  const d = new Date(dateStr + 'T04:00:00');
+  const start = new Date(d);
+  const end = new Date(d);
+  end.setDate(end.getDate() + 1);
+  return { start, end };
+}
+
+function getTonightRange() {
+  const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  const base = new Date(nowET);
+  if (nowET.getHours() < 4) base.setDate(base.getDate() - 1);
+  base.setHours(4, 0, 0, 0);
+  const end = new Date(base);
+  end.setDate(end.getDate() + 1);
+  return { start: base, end };
+}
+
 function setFilter(f) {
   currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => {
-    b.classList.toggle('active', (f==='all'&&b.textContent==='ALL')||(f==='tips'&&b.textContent==='TIPS ONLY')||(f==='today'&&b.textContent==='TODAY')||(f==='week'&&b.textContent==='THIS WEEK'));
-  });
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('datePicker').classList.remove('active');
+  if (f === 'all') document.querySelector('.filter-btn:nth-child(1)').classList.add('active');
+  if (f === 'tips') document.querySelector('.filter-btn:nth-child(2)').classList.add('active');
+  if (f === 'tonight') document.querySelector('.filter-btn:nth-child(3)').classList.add('active');
+  if (f === 'week') document.querySelector('.filter-btn:nth-child(4)').classList.add('active');
+  if (f === 'date') document.getElementById('datePicker').classList.add('active');
   render();
 }
 
 function render() {
   let filtered = allPayments;
-  if (currentFilter === 'tips') filtered = filtered.filter(p => p.tip > 0);
-  if (currentFilter === 'today') {
-    // Party night runs 4AM to 4AM ET
-    const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
-    const cutoff = new Date(nowET);
-    if (nowET.getHours() < 4) {
-      cutoff.setDate(cutoff.getDate() - 1);
-    }
-    cutoff.setHours(4, 0, 0, 0);
-    const cutoffEnd = new Date(cutoff);
-    cutoffEnd.setDate(cutoffEnd.getDate() + 1);
+
+  if (currentFilter === 'tips') {
+    filtered = filtered.filter(p => p.tip > 0);
+  }
+
+  if (currentFilter === 'tonight') {
+    const { start, end } = getTonightRange();
     filtered = filtered.filter(p => {
       const t = new Date(new Date(p.created * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }));
-      return t >= cutoff && t < cutoffEnd;
+      return t >= start && t < end;
     });
   }
+
+  if (currentFilter === 'date') {
+    const dateVal = document.getElementById('datePicker').value;
+    if (dateVal) {
+      const { start, end } = getPartyNightRange(dateVal);
+      filtered = filtered.filter(p => {
+        const t = new Date(new Date(p.created * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        return t >= start && t < end;
+      });
+    }
+  }
+
   if (currentFilter === 'week') {
     const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
     if (nowET.getHours() < 4) nowET.setDate(nowET.getDate() - 1);
