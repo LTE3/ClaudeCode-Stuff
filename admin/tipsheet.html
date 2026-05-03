@@ -30,6 +30,9 @@
   .add-role input { flex: 1; padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
   .add-role button { padding: 10px 18px; background: #FF4D8D; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
   .pull-hours-btn { width: 100%; padding: 12px; background: #1a1a1a; color: #34d399; border: 1px solid #34d39940; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; letter-spacing: 1px; margin-bottom: 12px; }
+  .btn-loading { pointer-events: none; opacity: 0.7; }
+  .btn-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #FF4D8D40; border-top-color: #FF4D8D; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   .calc-btn { width: 100%; padding: 16px; background: #FF4D8D; color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; letter-spacing: 2px; cursor: pointer; margin-bottom: 12px; }
   .calc-btn:active { background: #e0437a; }
@@ -59,7 +62,7 @@
   <h2>TIP POOL</h2>
   <div class="pool-input">
     <input type="number" id="poolAmount" placeholder="0.00" step="0.01" />
-    <button onclick="pullPool()">PULL FROM<br/>TONIGHT</button>
+    <button onclick="pullPool()">PULL FROM<br/>THIS DATE</button>
   </div>
 </section>
 
@@ -263,6 +266,9 @@ async function savePayouts() {
 }
 
 async function pullPool() {
+  const btn = document.querySelector('.pool-input button');
+  btn.classList.add('btn-loading');
+  btn.innerHTML = '<span class="btn-spinner"></span>LOADING...';
   try {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
       method: 'POST',
@@ -271,11 +277,8 @@ async function pullPool() {
     });
     const data = await res.json();
     if (data.payments) {
-      // Party night = 4AM to 4AM ET
-      const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
-      const cutoff = new Date(nowET);
-      if (nowET.getHours() < 4) cutoff.setDate(cutoff.getDate() - 1);
-      cutoff.setHours(4, 0, 0, 0);
+      const dateStr = document.getElementById('sheetDate').value;
+      const cutoff = new Date(dateStr + 'T04:00:00');
       const cutoffEnd = new Date(cutoff);
       cutoffEnd.setDate(cutoffEnd.getDate() + 1);
       const todays = data.payments.filter(p => {
@@ -287,6 +290,8 @@ async function pullPool() {
       document.getElementById('poolAmount').value = ((service + tips) / 100).toFixed(2);
     }
   } catch {}
+  btn.classList.remove('btn-loading');
+  btn.innerHTML = 'PULL FROM<br/>THIS DATE';
 }
 
 function getPartyDate() {
