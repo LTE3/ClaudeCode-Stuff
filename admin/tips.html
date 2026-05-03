@@ -28,6 +28,11 @@
   .item .tip { font-size: 16px; font-weight: 700; color: #FF4D8D; }
   .item .no-tip { font-size: 12px; color: #2a2a2a; }
   .loading { text-align: center; padding: 50px; color: #444; font-size: 13px; letter-spacing: 2px; }
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-top-color: #FF4D8D; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,10,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; flex-direction: column; gap: 12px; }
+  .loading-overlay .spinner { width: 36px; height: 36px; border-width: 3px; }
+  .loading-overlay .load-text { color: #666; font-size: 12px; letter-spacing: 3px; }
 </style>
 </head>
 <body>
@@ -60,7 +65,7 @@
 const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
 
-let allPayments = [], currentFilter = 'all';
+let allPayments = [], currentFilter = 'all', isLoading = true;
 
 function getPartyNightRange(dateStr) {
   const d = new Date(dateStr + 'T04:00:00');
@@ -159,7 +164,25 @@ function render() {
   }).join('');
 }
 
+function showLoader() {
+  let overlay = document.getElementById('loadOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'loadOverlay';
+    overlay.className = 'loading-overlay';
+    overlay.innerHTML = '<div class="spinner"></div><div class="load-text">LOADING PAYMENTS...</div>';
+    document.body.appendChild(overlay);
+  }
+  overlay.style.display = 'flex';
+}
+
+function hideLoader() {
+  const overlay = document.getElementById('loadOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
 async function loadTips() {
+  if (isLoading) showLoader();
   try {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
       method: 'POST',
@@ -169,6 +192,8 @@ async function loadTips() {
     const data = await res.json();
     if (data.payments) { allPayments = data.payments; render(); }
   } catch {}
+  isLoading = false;
+  hideLoader();
 }
 
 loadTips();
