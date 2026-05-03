@@ -7,34 +7,42 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; }
-  .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 16px; text-align: center; }
-  .header h1 { font-size: 18px; letter-spacing: 3px; }
-  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 12px; }
-  .stat { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 16px; text-align: center; }
-  .stat .value { font-size: 28px; font-weight: 700; color: #2DD4BF; }
-  .stat .label { font-size: 11px; color: #888; letter-spacing: 1px; margin-top: 4px; }
-  .filters { padding: 8px 12px; display: flex; gap: 8px; }
-  .filter-btn { padding: 8px 16px; background: #1a1a1a; color: #888; border: 1px solid #333; border-radius: 8px; font-size: 13px; cursor: pointer; }
-  .filter-btn.active { background: #2DD4BF; color: #000; border-color: #2DD4BF; font-weight: 700; }
-  .list { padding: 0 12px 12px; }
-  .item { background: #1a1a1a; border: 1px solid #222; border-radius: 10px; padding: 12px; margin-bottom: 8px; }
-  .item.has-tip { border-color: #2DD4BF40; }
-  .item .row { display: flex; justify-content: space-between; align-items: center; }
-  .item .items-name { font-size: 14px; font-weight: 600; color: #fff; flex: 1; }
-  .item .tip-badge { background: #2DD4BF20; color: #2DD4BF; font-size: 14px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
-  .item .no-tip { color: #555; font-size: 12px; }
-  .item .details { display: flex; gap: 12px; margin-top: 6px; font-size: 12px; color: #666; }
-  .item .time { font-size: 12px; color: #555; }
-  .loading { text-align: center; padding: 40px; color: #888; }
-  .refresh { padding: 12px; text-align: center; }
-  .refresh button { padding: 10px 24px; background: #2DD4BF; color: #000; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
-  .auto-label { color: #555; font-size: 11px; margin-top: 6px; }
+  .header { background: linear-gradient(135deg, #2DD4BF, #0D9488); padding: 20px; text-align: center; }
+  .header h1 { font-size: 20px; letter-spacing: 4px; font-weight: 700; }
+  .header .sub { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 4px; letter-spacing: 1px; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 16px; }
+  .stat { background: linear-gradient(135deg, #111, #1a1a1a); border: 1px solid #2DD4BF20; border-radius: 14px; padding: 18px 12px; text-align: center; }
+  .stat .value { font-size: 26px; font-weight: 800; color: #2DD4BF; }
+  .stat .label { font-size: 10px; color: #666; letter-spacing: 2px; margin-top: 6px; font-weight: 600; }
+  .controls { padding: 4px 16px 12px; display: flex; gap: 8px; align-items: center; }
+  .filter-btn { padding: 8px 16px; background: #111; color: #666; border: 1px solid #222; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 600; letter-spacing: 1px; transition: all 0.2s; }
+  .filter-btn.active { background: #2DD4BF; color: #000; border-color: #2DD4BF; }
+  .refresh-btn { margin-left: auto; padding: 8px 16px; background: #111; color: #2DD4BF; border: 1px solid #2DD4BF30; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 600; letter-spacing: 1px; }
+  .refresh-btn:active { background: #2DD4BF; color: #000; }
+  .live-dot { display: inline-block; width: 6px; height: 6px; background: #2DD4BF; border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .list { padding: 0 16px 80px; }
+  .item { background: #111; border: 1px solid #1a1a1a; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; transition: all 0.2s; }
+  .item.has-tip { border-color: #2DD4BF30; background: linear-gradient(135deg, #0a1a18, #111); }
+  .item .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .item .items-name { font-size: 14px; font-weight: 600; color: #eee; flex: 1; margin-right: 10px; }
+  .item .tip-badge { background: linear-gradient(135deg, #2DD4BF, #0D9488); color: #000; font-size: 15px; font-weight: 800; padding: 5px 12px; border-radius: 8px; white-space: nowrap; }
+  .item .no-tip { color: #333; font-size: 12px; font-weight: 500; }
+  .item .bottom-row { display: flex; gap: 16px; font-size: 11px; color: #555; }
+  .item .bottom-row span { white-space: nowrap; }
+  .item .time-col { color: #444; }
+  .loading { text-align: center; padding: 60px 20px; }
+  .loading .spinner { font-size: 14px; color: #2DD4BF; letter-spacing: 2px; }
+  .summary-bar { padding: 12px 16px; background: #111; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; }
+  .summary-bar .left { font-size: 12px; color: #555; }
+  .summary-bar .right { font-size: 12px; color: #2DD4BF; font-weight: 600; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>LA CASITA TIPS</h1>
+  <h1>TIPS DASHBOARD</h1>
+  <div class="sub">LA CASITA BK</div>
 </div>
 
 <div class="stats">
@@ -52,19 +60,20 @@
   </div>
 </div>
 
-<div class="filters">
+<div class="controls">
   <button class="filter-btn active" onclick="setFilter('all')">ALL</button>
   <button class="filter-btn" onclick="setFilter('tips')">TIPS ONLY</button>
   <button class="filter-btn" onclick="setFilter('today')">TODAY</button>
+  <button class="refresh-btn" onclick="loadTips()"><span class="live-dot"></span>REFRESH</button>
 </div>
 
-<div class="refresh">
-  <button onclick="loadTips()">REFRESH</button>
-  <div class="auto-label">Auto-refreshes every 30s</div>
+<div class="summary-bar">
+  <div class="left" id="summaryLeft">Loading...</div>
+  <div class="right" id="summaryRight"></div>
 </div>
 
 <div class="list" id="tipList">
-  <div class="loading">Loading tips...</div>
+  <div class="loading"><div class="spinner">LOADING TIPS...</div></div>
 </div>
 
 <script>
@@ -76,30 +85,40 @@ let currentFilter = 'all';
 
 function setFilter(f) {
   currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.textContent === f.toUpperCase() || (f === 'tips' && b.textContent === 'TIPS ONLY')));
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    const match = (f === 'all' && b.textContent === 'ALL') || (f === 'tips' && b.textContent === 'TIPS ONLY') || (f === 'today' && b.textContent === 'TODAY');
+    b.classList.toggle('active', match);
+  });
   render();
 }
 
-function render() {
+function getFiltered() {
   let filtered = allPayments;
   if (currentFilter === 'tips') filtered = allPayments.filter(p => p.tip > 0);
   if (currentFilter === 'today') {
     const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' });
-    filtered = allPayments.filter(p => {
-      const d = new Date(p.created * 1000).toLocaleDateString('en-US', { timeZone: 'America/New_York' });
-      return d === today;
-    });
+    filtered = allPayments.filter(p => new Date(p.created * 1000).toLocaleDateString('en-US', { timeZone: 'America/New_York' }) === today);
   }
+  return filtered;
+}
 
+function render() {
+  const filtered = getFiltered();
   const tipped = filtered.filter(p => p.tip > 0);
   const totalTips = tipped.reduce((s, p) => s + p.tip, 0);
+  const totalRevenue = filtered.reduce((s, p) => s + p.total, 0);
+  const totalService = filtered.reduce((s, p) => s + p.service_charge, 0);
+
   document.getElementById('totalTips').textContent = '$' + (totalTips / 100).toFixed(2);
   document.getElementById('tipCount').textContent = tipped.length + '/' + filtered.length;
   document.getElementById('avgTip').textContent = tipped.length ? '$' + (totalTips / tipped.length / 100).toFixed(2) : '--';
 
+  document.getElementById('summaryLeft').textContent = filtered.length + ' transactions | $' + (totalRevenue / 100).toFixed(2) + ' total revenue';
+  document.getElementById('summaryRight').textContent = 'Service: $' + (totalService / 100).toFixed(2) + ' | Tips: $' + (totalTips / 100).toFixed(2);
+
   const list = document.getElementById('tipList');
   if (filtered.length === 0) {
-    list.innerHTML = '<div class="loading">No transactions found</div>';
+    list.innerHTML = '<div class="loading"><div class="spinner">NO TRANSACTIONS</div></div>';
     return;
   }
 
@@ -108,15 +127,15 @@ function render() {
     const date = new Date(p.created * 1000).toLocaleDateString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric' });
     const hasTip = p.tip > 0;
     return `<div class="item ${hasTip ? 'has-tip' : ''}">
-      <div class="row">
+      <div class="top-row">
         <span class="items-name">${p.items}</span>
         ${hasTip ? `<span class="tip-badge">+$${(p.tip / 100).toFixed(2)}</span>` : '<span class="no-tip">No tip</span>'}
       </div>
-      <div class="details">
-        <span>${date} ${time}</span>
-        <span>Sub: $${(p.subtotal / 100).toFixed(2)}</span>
-        <span>Svc: $${(p.service_charge / 100).toFixed(2)}</span>
-        <span>Total: $${(p.total / 100).toFixed(2)}</span>
+      <div class="bottom-row">
+        <span class="time-col">${date} ${time}</span>
+        <span>Sub $${(p.subtotal / 100).toFixed(2)}</span>
+        <span>Svc $${(p.service_charge / 100).toFixed(2)}</span>
+        <span>Total $${(p.total / 100).toFixed(2)}</span>
       </div>
     </div>`;
   }).join('');
@@ -126,19 +145,18 @@ async function loadTips() {
   try {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
       body: JSON.stringify({ action: 'tips' }),
     });
     const data = await res.json();
     if (data.payments) {
       allPayments = data.payments;
       render();
+    } else {
+      document.getElementById('tipList').innerHTML = '<div class="loading"><div class="spinner">ERROR: ' + (data.error || 'Unknown') + '</div></div>';
     }
   } catch (err) {
-    document.getElementById('tipList').innerHTML = '<div class="loading">Error loading tips</div>';
+    document.getElementById('tipList').innerHTML = '<div class="loading"><div class="spinner">CONNECTION ERROR</div></div>';
   }
 }
 

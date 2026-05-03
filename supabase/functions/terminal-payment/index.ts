@@ -13,22 +13,13 @@ Deno.serve(async (req) => {
 
     const auth = "Basic " + btoa(STRIPE_SK + ":")
 
-    // Tips dashboard: return all terminal payments with tip breakdown
+    // Tips dashboard: return terminal payments with tip breakdown
     if (action === "tips") {
-      let allPIs: any[] = []
-      let hasMore = true
-      let startingAfter = ""
-      while (hasMore) {
-        let url = "https://api.stripe.com/v1/payment_intents?limit=100"
-        if (startingAfter) url += "&starting_after=" + startingAfter
-        const resp = await fetch(url, { headers: { "Authorization": auth } })
-        const page = await resp.json()
-        const terminal = (page.data || []).filter((pi: any) => pi.payment_method_types?.includes("card_present") && pi.status === "succeeded")
-        allPIs = allPIs.concat(terminal)
-        hasMore = page.has_more
-        if (page.data?.length) startingAfter = page.data[page.data.length - 1].id
-        if (allPIs.length > 500) break
-      }
+      const resp = await fetch("https://api.stripe.com/v1/payment_intents?limit=100", {
+        headers: { "Authorization": auth },
+      })
+      const page = await resp.json()
+      const allPIs = (page.data || []).filter((pi: any) => pi.payment_method_types?.includes("card_present") && pi.status === "succeeded")
 
       const results = allPIs.map((pi: any) => {
         const subtotal = parseInt(pi.metadata?.subtotal || "0")
