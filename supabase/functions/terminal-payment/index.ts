@@ -20,6 +20,71 @@ Deno.serve(async (req) => {
       "Content-Type": "application/json",
     }
 
+    // Clock in
+    if (action === "clock_in") {
+      const { name, role, party_date } = data
+      if (!name || !role || !party_date) {
+        return new Response(JSON.stringify({ error: "name, role, party_date required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/clock_records`, {
+        method: "POST",
+        headers: { ...sbHeaders, "Prefer": "return=representation" },
+        body: JSON.stringify({ name, role, party_date }),
+      })
+      const inserted = await r.json()
+      return new Response(JSON.stringify({ success: true, record: inserted?.[0] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    // Clock out
+    if (action === "clock_out") {
+      const { record_id } = data
+      if (!record_id) {
+        return new Response(JSON.stringify({ error: "record_id required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+      // Get the record to calculate hours
+      const getR = await fetch(`${SUPABASE_URL}/rest/v1/clock_records?id=eq.${record_id}`, { headers: sbHeaders })
+      const records = await getR.json()
+      if (!records?.length) {
+        return new Response(JSON.stringify({ error: "record not found" }), {
+          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+      const clockIn = new Date(records[0].clock_in)
+      const clockOut = new Date()
+      const hours = Math.round((clockOut.getTime() - clockIn.getTime()) / 1000 / 60 / 30) / 2 // round to nearest 0.5
+
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/clock_records?id=eq.${record_id}`, {
+        method: "PATCH",
+        headers: { ...sbHeaders, "Prefer": "return=representation" },
+        body: JSON.stringify({ clock_out: clockOut.toISOString(), hours }),
+      })
+      const updated = await r.json()
+      return new Response(JSON.stringify({ success: true, record: updated?.[0] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    // Get clock records for a date
+    if (action === "clock_records") {
+      const { party_date } = data
+      if (!party_date) {
+        return new Response(JSON.stringify({ error: "party_date required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/clock_records?party_date=eq.${party_date}&order=clock_in.asc`, { headers: sbHeaders })
+      const records = await r.json()
+      return new Response(JSON.stringify({ records: records || [] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
     // Cash payment: log to Supabase
     if (action === "cash") {
       if (!items?.length) {

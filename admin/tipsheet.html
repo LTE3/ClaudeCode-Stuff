@@ -28,6 +28,7 @@
   .add-role { display: flex; gap: 8px; margin-top: 12px; }
   .add-role input { flex: 1; padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
   .add-role button { padding: 10px 18px; background: #FF4D8D; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .pull-hours-btn { width: 100%; padding: 12px; background: #1a1a1a; color: #34d399; border: 1px solid #34d39940; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; letter-spacing: 1px; margin-bottom: 12px; }
 
   .calc-btn { width: 100%; padding: 16px; background: #FF4D8D; color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; letter-spacing: 2px; cursor: pointer; margin-bottom: 12px; }
   .calc-btn:active { background: #e0437a; }
@@ -62,6 +63,7 @@
 
 <section>
   <h2>ROLES</h2>
+  <button class="pull-hours-btn" onclick="pullFromClockIn()">PULL HOURS FROM CLOCK-IN</button>
   <div id="rolesList"></div>
   <div class="add-role">
     <input type="text" id="newRoleName" placeholder="New role name" />
@@ -196,11 +198,54 @@ async function pullPool() {
   } catch {}
 }
 
-const today = new Date();
-const yyyy = today.getFullYear();
-const mm = String(today.getMonth() + 1).padStart(2, '0');
-const dd = String(today.getDate()).padStart(2, '0');
-document.getElementById('sheetDate').value = `${yyyy}-${mm}-${dd}`;
+function getPartyDate() {
+  const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  if (nowET.getHours() < 4) nowET.setDate(nowET.getDate() - 1);
+  const yyyy = nowET.getFullYear();
+  const mm = String(nowET.getMonth() + 1).padStart(2, '0');
+  const dd = String(nowET.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+document.getElementById('sheetDate').value = getPartyDate();
+
+const ROLE_POINTS = JSON.parse(localStorage.getItem('lc_role_points') || 'null') || {
+  'Barback': 5, 'Bartender': 8, 'Bottle Girl': 8,
+  'Security': 3, 'DJ': 5, 'Host': 3, 'Manager': 8, 'Server': 5,
+};
+function saveRolePoints() { localStorage.setItem('lc_role_points', JSON.stringify(ROLE_POINTS)); }
+
+async function pullFromClockIn() {
+  const date = document.getElementById('sheetDate').value;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+      body: JSON.stringify({ action: 'clock_records', party_date: date }),
+    });
+    const data = await res.json();
+    if (!data.records?.length) { alert('No clock-in records for ' + date); return; }
+
+    // Group by role, average hours per role
+    const byRole = {};
+    for (const r of data.records) {
+      if (!byRole[r.role]) byRole[r.role] = { count: 0, totalHours: 0 };
+      byRole[r.role].count++;
+      const hrs = r.hours ? parseFloat(r.hours) : 0;
+      byRole[r.role].totalHours += hrs;
+    }
+
+    roles = Object.entries(byRole).map(([name, info]) => ({
+      name: name + 's',
+      count: info.count,
+      points: ROLE_POINTS[name] || 5,
+      hours: info.count > 0 ? Math.round(info.totalHours / info.count * 2) / 2 : 0,
+    }));
+
+    save();
+    renderRoles();
+  } catch (e) { alert('Error loading clock records'); }
+}
 
 renderRoles();
 </script>
