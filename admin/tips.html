@@ -27,6 +27,7 @@
   .item .left .meta { font-size: 11px; color: #444; margin-top: 3px; }
   .item .tip { font-size: 16px; font-weight: 700; color: #FF4D8D; }
   .item .no-tip { font-size: 12px; color: #2a2a2a; }
+  .item .cash-badge { font-size: 10px; color: #34d399; border: 1px solid #34d39940; border-radius: 4px; padding: 2px 6px; margin-left: 6px; }
   .loading { text-align: center; padding: 50px; color: #444; font-size: 13px; letter-spacing: 2px; }
   .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-top-color: #FF4D8D; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -156,7 +157,7 @@ function render() {
     const date = t.toLocaleDateString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric' });
     return `<div class="item">
       <div class="left">
-        <div class="name">${p.items}</div>
+        <div class="name">${p.items}${p.source === 'cash' ? '<span class="cash-badge">CASH</span>' : ''}</div>
         <div class="meta">${date} ${time} &middot; $${(p.total / 100).toFixed(2)}</div>
       </div>
       ${p.tip > 0 ? `<div class="tip">+$${(p.tip / 100).toFixed(2)}</div>` : '<div class="no-tip">--</div>'}

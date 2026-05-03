@@ -12,6 +12,54 @@ Deno.serve(async (req) => {
     const { reader_id, items, action } = data
 
     const auth = "Basic " + btoa(STRIPE_SK + ":")
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!
+    const SUPABASE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    const sbHeaders = {
+      "apikey": SUPABASE_KEY,
+      "Authorization": `Bearer ${SUPABASE_KEY}`,
+      "Content-Type": "application/json",
+    }
+
+    // Cash payment: log to Supabase
+    if (action === "cash") {
+      if (!items?.length) {
+        return new Response(JSON.stringify({ error: "items required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+
+      const SERVICE_CHARGE_RATE = 0.20
+      const TAX_RATE = 0.09
+      const subtotal = items.reduce((sum: number, item: any) => sum + (item.amount * (item.qty || 1)), 0)
+      const serviceBase = items.filter((i: any) => !i.noService).reduce((sum: number, item: any) => sum + (item.amount * (item.qty || 1)), 0)
+      const tax = Math.round(subtotal * TAX_RATE)
+      const serviceCharge = Math.round(serviceBase * SERVICE_CHARGE_RATE)
+      const total = subtotal + tax + serviceCharge
+      const itemDesc = items.map((i: any) => `${i.name} x${i.qty || 1}`).join(", ")
+
+      const cashRow = {
+        items: itemDesc,
+        subtotal, tax, service_charge: serviceCharge,
+        tip: data.tip || 0,
+        total: total + (data.tip || 0),
+        staff: data.staff || "",
+      }
+
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/cash_transactions`, {
+        method: "POST",
+        headers: { ...sbHeaders, "Prefer": "return=representation" },
+        body: JSON.stringify(cashRow),
+      })
+      const inserted = await r.json()
+
+      return new Response(JSON.stringify({
+        success: true,
+        subtotal, tax, service_charge: serviceCharge, total,
+        cash_id: inserted?.[0]?.id,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
 
     // Tips dashboard: return terminal payments with tip breakdown
     if (action === "tips") {
@@ -50,6 +98,30 @@ Deno.serve(async (req) => {
           source: isTerminal ? "terminal" : "qr",
         }
       })
+
+      // Also fetch cash transactions from Supabase
+      const weekAgoISO = new Date(weekAgo * 1000).toISOString()
+      const cashResp = await fetch(`${SUPABASE_URL}/rest/v1/cash_transactions?created_at=gte.${weekAgoISO}&order=created_at.desc`, {
+        headers: sbHeaders,
+      })
+      const cashRows = await cashResp.json()
+      if (Array.isArray(cashRows)) {
+        for (const c of cashRows) {
+          results.push({
+            id: c.id,
+            created: Math.floor(new Date(c.created_at).getTime() / 1000),
+            items: c.items || "N/A",
+            subtotal: c.subtotal,
+            tax: c.tax,
+            service_charge: c.service_charge,
+            tip: c.tip || 0,
+            total: c.total,
+            source: "cash",
+          })
+        }
+      }
+
+      results.sort((a: any, b: any) => b.created - a.created)
 
       return new Response(JSON.stringify({ payments: results }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },

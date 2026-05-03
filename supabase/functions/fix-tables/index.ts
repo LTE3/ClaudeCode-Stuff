@@ -18,6 +18,30 @@ Deno.serve(async (_req) => {
   let body: any = {}
   try { body = await _req.json() } catch {}
 
+  if (body.action === "run_sql" && body.sql) {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/exec_sql`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ query: body.sql }),
+    })
+    // Fallback: use the pg endpoint directly
+    if (!r.ok) {
+      const pgR = await fetch(`${SUPABASE_URL}/pg`, {
+        method: "POST",
+        headers: { ...headers, "Content-Type": "application/json" },
+        body: JSON.stringify({ query: body.sql }),
+      })
+      const pgData = await pgR.text()
+      return new Response(JSON.stringify({ result: pgData, status: pgR.status }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+    const data = await r.json()
+    return new Response(JSON.stringify({ result: data }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    })
+  }
+
   if (body.action === "update_event" && body.event_id && body.updates) {
     const r = await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${body.event_id}`, {
       method: "PATCH",

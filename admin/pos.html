@@ -82,6 +82,7 @@
 <div class="actions">
   <button class="charge-btn" id="chargeBtn" disabled onclick="charge()">CHARGE $0.00</button>
   <button class="charge-btn" id="qrBtn" disabled onclick="qrPay()" style="background:#2DD4BF;margin-top:8px;">QR PAY $0.00</button>
+  <button class="charge-btn" id="cashBtn" disabled onclick="cashPay()" style="background:#34d399;margin-top:8px;">CASH $0.00</button>
   <button class="clear-btn" onclick="clearCart()">CLEAR ORDER</button>
   <button class="clear-btn" style="margin-top:8px;color:#f87171;border-color:#f87171/30;" onclick="voidPayment()">VOID / CANCEL TERMINAL</button>
 </div>
@@ -151,6 +152,7 @@ function updateUI() {
   const chargeBtn = document.getElementById('chargeBtn');
 
   const qrBtn = document.getElementById('qrBtn');
+  const cashBtn = document.getElementById('cashBtn');
 
   if (cart.length === 0) {
     cartSection.style.display = 'none';
@@ -159,6 +161,8 @@ function updateUI() {
     chargeBtn.textContent = 'CHARGE $0.00';
     qrBtn.disabled = true;
     qrBtn.textContent = 'QR PAY $0.00';
+    cashBtn.disabled = true;
+    cashBtn.textContent = 'CASH $0.00';
     return;
   }
 
@@ -184,6 +188,8 @@ function updateUI() {
   chargeBtn.textContent = `CHARGE $${(total / 100).toFixed(2)}`;
   qrBtn.disabled = false;
   qrBtn.textContent = `QR PAY $${(total / 100).toFixed(2)}`;
+  cashBtn.disabled = false;
+  cashBtn.textContent = `CASH $${(total / 100).toFixed(2)}`;
 }
 
 async function charge() {
@@ -305,6 +311,45 @@ async function qrPay() {
         <button class="qr-close" onclick="this.parentElement.remove()">DONE</button>
       `;
       document.body.appendChild(overlay);
+      cart = [];
+      updateUI();
+    }
+  } catch (err) {
+    status.className = 'status error';
+    status.textContent = 'Error: ' + err.message;
+    btn.disabled = false;
+    updateUI();
+  }
+}
+
+async function cashPay() {
+  const btn = document.getElementById('cashBtn');
+  const status = document.getElementById('statusBar');
+  btn.disabled = true;
+  btn.textContent = 'LOGGING...';
+  status.style.display = 'block';
+  status.className = 'status processing';
+  status.textContent = 'Recording cash payment...';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify({ items: cart, action: 'cash' }),
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      status.className = 'status error';
+      status.textContent = 'Error: ' + data.error;
+      btn.disabled = false;
+      updateUI();
+    } else {
+      status.className = 'status success';
+      status.textContent = 'Cash payment logged — $' + (data.total / 100).toFixed(2);
       cart = [];
       updateUI();
     }
