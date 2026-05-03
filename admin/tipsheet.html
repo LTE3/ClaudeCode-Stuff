@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Casita Tip Sheet</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; }
+  .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 18px; text-align: center; }
+  .header h1 { font-size: 18px; letter-spacing: 4px; }
+  section { padding: 16px; border-bottom: 1px solid #151515; }
+  section h2 { font-size: 12px; color: #666; letter-spacing: 3px; margin-bottom: 12px; }
+  .pool-input { display: flex; gap: 10px; align-items: center; }
+  .pool-input input { flex: 1; padding: 14px; background: #111; color: #FF4D8D; border: 1px solid #222; border-radius: 10px; font-size: 28px; font-weight: 800; text-align: center; }
+  .pool-input button { padding: 14px 16px; background: #1a1a1a; color: #FF4D8D; border: 1px solid #FF4D8D30; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; white-space: nowrap; }
+  .positions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pos-tag { display: flex; align-items: center; gap: 6px; background: #111; border: 1px solid #222; border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+  .pos-tag .pos-name { color: #ccc; font-weight: 600; }
+  .pos-tag input { width: 40px; background: #0a0a0a; color: #FF4D8D; border: 1px solid #222; border-radius: 4px; padding: 4px; text-align: center; font-size: 13px; font-weight: 700; }
+  .pos-tag .pts { color: #555; font-size: 11px; }
+  .add-pos { display: flex; gap: 6px; margin-top: 10px; }
+  .add-pos input { flex: 1; padding: 8px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 13px; }
+  .add-pos button { padding: 8px 14px; background: #FF4D8D; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .staff-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .staff-row input { padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
+  .staff-row input.name-input { flex: 2; }
+  .staff-row input.hrs-input { width: 60px; text-align: center; }
+  .staff-row select { flex: 1; padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
+  .staff-row .remove { color: #FF4D8D; cursor: pointer; font-size: 18px; padding: 0 4px; background: none; border: none; }
+  .add-staff { width: 100%; padding: 12px; background: #111; color: #666; border: 1px dashed #333; border-radius: 10px; font-size: 14px; cursor: pointer; text-align: center; margin-top: 4px; }
+  .result { background: #111; border: 1px solid #FF4D8D20; border-radius: 12px; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .result .info .rname { font-size: 15px; font-weight: 600; color: #eee; }
+  .result .info .rdetail { font-size: 11px; color: #555; margin-top: 3px; }
+  .result .payout { font-size: 22px; font-weight: 800; color: #FF4D8D; }
+  .calc-btn { width: 100%; padding: 16px; background: #FF4D8D; color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; letter-spacing: 2px; cursor: pointer; margin-bottom: 12px; }
+  .calc-btn:active { background: #e0437a; }
+  .summary { text-align: center; padding: 12px; color: #555; font-size: 12px; }
+  .date-input { padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header"><h1>LA CASITA TIP SHEET</h1></div>
+
+<section>
+  <h2>DATE</h2>
+  <input type="date" class="date-input" id="sheetDate" />
+</section>
+
+<section>
+  <h2>TIP POOL</h2>
+  <div class="pool-input">
+    <input type="number" id="poolAmount" placeholder="0.00" step="0.01" />
+    <button onclick="pullPool()">PULL FROM<br/>TONIGHT</button>
+  </div>
+</section>
+
+<section>
+  <h2>POSITIONS &amp; POINTS</h2>
+  <div class="positions" id="positionsList"></div>
+  <div class="add-pos">
+    <input type="text" id="newPosName" placeholder="New position" />
+    <input type="number" id="newPosPoints" placeholder="Pts" style="width:60px" step="0.5" />
+    <button onclick="addPosition()">ADD</button>
+  </div>
+</section>
+
+<section>
+  <h2>STAFF</h2>
+  <div id="staffList"></div>
+  <button class="add-staff" onclick="addStaff()">+ ADD STAFF</button>
+</section>
+
+<section>
+  <button class="calc-btn" onclick="calculate()">CALCULATE SPLIT</button>
+  <div id="results"></div>
+  <div class="summary" id="summary"></div>
+</section>
+
+<script>
+const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+let positions = JSON.parse(localStorage.getItem('lc_positions') || 'null') || [
+  { name: 'Server', points: 1 },
+  { name: 'Bartender', points: 1.5 },
+  { name: 'Barback', points: 0.75 },
+  { name: 'Host', points: 0.5 },
+  { name: 'Manager', points: 1.5 },
+  { name: 'DJ', points: 1 },
+  { name: 'Security', points: 0.5 },
+];
+
+let staff = JSON.parse(localStorage.getItem('lc_staff') || 'null') || [];
+
+function savePositions() { localStorage.setItem('lc_positions', JSON.stringify(positions)); }
+function saveStaff() { localStorage.setItem('lc_staff', JSON.stringify(staff)); }
+
+function renderPositions() {
+  document.getElementById('positionsList').innerHTML = positions.map((p, i) =>
+    `<div class="pos-tag">
+      <span class="pos-name">${p.name}</span>
+      <input type="number" value="${p.points}" step="0.25" onchange="updatePoints(${i}, this.value)" />
+      <span class="pts">pts</span>
+      <button class="remove" onclick="removePosition(${i})">x</button>
+    </div>`
+  ).join('');
+}
+
+function updatePoints(i, val) {
+  positions[i].points = parseFloat(val) || 0;
+  savePositions();
+}
+
+function removePosition(i) {
+  positions.splice(i, 1);
+  savePositions();
+  renderPositions();
+}
+
+function addPosition() {
+  const name = document.getElementById('newPosName').value.trim();
+  const pts = parseFloat(document.getElementById('newPosPoints').value) || 1;
+  if (!name) return;
+  positions.push({ name, points: pts });
+  savePositions();
+  document.getElementById('newPosName').value = '';
+  document.getElementById('newPosPoints').value = '';
+  renderPositions();
+  renderStaff();
+}
+
+function renderStaff() {
+  const opts = positions.map(p => `<option value="${p.name}">${p.name} (${p.points}pts)</option>`).join('');
+  document.getElementById('staffList').innerHTML = staff.map((s, i) =>
+    `<div class="staff-row">
+      <input class="name-input" value="${s.name}" placeholder="Name" onchange="updateStaff(${i}, 'name', this.value)" />
+      <select onchange="updateStaff(${i}, 'position', this.value)">${opts.replace('value="'+s.position+'"', 'value="'+s.position+'" selected')}</select>
+      <input class="hrs-input" type="number" value="${s.hours || ''}" placeholder="Hrs" step="0.5" onchange="updateStaff(${i}, 'hours', this.value)" />
+      <button class="remove" onclick="removeStaff(${i})">x</button>
+    </div>`
+  ).join('');
+}
+
+function addStaff() {
+  staff.push({ name: '', position: positions[0]?.name || '', hours: '' });
+  saveStaff();
+  renderStaff();
+}
+
+function updateStaff(i, field, val) {
+  staff[i][field] = field === 'hours' ? parseFloat(val) || 0 : val;
+  saveStaff();
+}
+
+function removeStaff(i) {
+  staff.splice(i, 1);
+  saveStaff();
+  renderStaff();
+}
+
+function calculate() {
+  const pool = parseFloat(document.getElementById('poolAmount').value) || 0;
+  if (!pool || !staff.length) return;
+
+  const rows = staff.filter(s => s.name && s.hours > 0).map(s => {
+    const pos = positions.find(p => p.name === s.position);
+    const pts = pos ? pos.points : 1;
+    const weighted = pts * s.hours;
+    return { ...s, pts, weighted };
+  });
+
+  const totalWeighted = rows.reduce((s, r) => s + r.weighted, 0);
+  if (totalWeighted === 0) return;
+
+  const rate = pool / totalWeighted;
+
+  rows.sort((a, b) => b.weighted - a.weighted);
+
+  let distributed = 0;
+  document.getElementById('results').innerHTML = rows.map(r => {
+    const payout = Math.round(r.weighted * rate * 100) / 100;
+    distributed += payout;
+    return `<div class="result">
+      <div class="info">
+        <div class="rname">${r.name}</div>
+        <div class="rdetail">${r.position} (${r.pts}pts) x ${r.hours}hrs = ${r.weighted.toFixed(2)} shares</div>
+      </div>
+      <div class="payout">$${payout.toFixed(2)}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('summary').textContent =
+    'Pool: $' + pool.toFixed(2) + ' | Rate: $' + rate.toFixed(2) + '/point-hr | Distributed: $' + distributed.toFixed(2);
+}
+
+async function pullPool() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+      body: JSON.stringify({ action: 'tips' }),
+    });
+    const data = await res.json();
+    if (data.payments) {
+      const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' });
+      const todays = data.payments.filter(p => new Date(p.created * 1000).toLocaleDateString('en-US', { timeZone: 'America/New_York' }) === today);
+      const service = todays.reduce((s, p) => s + p.service_charge, 0);
+      const tips = todays.reduce((s, p) => s + p.tip, 0);
+      document.getElementById('poolAmount').value = ((service + tips) / 100).toFixed(2);
+    }
+  } catch {}
+}
+
+// Set today's date
+const today = new Date();
+const yyyy = today.getFullYear();
+const mm = String(today.getMonth() + 1).padStart(2, '0');
+const dd = String(today.getDate()).padStart(2, '0');
+document.getElementById('sheetDate').value = `${yyyy}-${mm}-${dd}`;
+
+renderPositions();
+renderStaff();
+</script>
+</body>
+</html>

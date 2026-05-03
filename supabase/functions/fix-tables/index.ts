@@ -15,6 +15,45 @@ Deno.serve(async (_req) => {
 
   const results: string[] = []
 
+  let body: any = {}
+  try { body = await _req.json() } catch {}
+
+  if (body.action === "update_event" && body.event_id && body.updates) {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${body.event_id}`, {
+      method: "PATCH",
+      headers: { ...headers, "Prefer": "return=representation" },
+      body: JSON.stringify(body.updates),
+    })
+    const data = await r.json()
+    return new Response(JSON.stringify({ updated: data }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    })
+  }
+
+  if (body.action === "insert_booking" && body.booking) {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
+      method: "POST",
+      headers: { ...headers, "Prefer": "return=representation" },
+      body: JSON.stringify(body.booking),
+    })
+    const data = await r.json()
+    return new Response(JSON.stringify({ inserted: data }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    })
+  }
+
+  if (body.action === "update_booking" && body.filter && body.updates) {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/bookings?${body.filter}`, {
+      method: "PATCH",
+      headers: { ...headers, "Prefer": "return=representation" },
+      body: JSON.stringify(body.updates),
+    })
+    const data = await r.json()
+    return new Response(JSON.stringify({ updated: data }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    })
+  }
+
   // 1. Release all holds
   const holdResp = await fetch(`${SUPABASE_URL}/rest/v1/vip_tables?status=eq.held`, {
     method: "PATCH",
