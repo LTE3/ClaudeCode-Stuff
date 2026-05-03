@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Casita Tips</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; }
+  .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 16px; text-align: center; }
+  .header h1 { font-size: 18px; letter-spacing: 3px; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 12px; }
+  .stat { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 16px; text-align: center; }
+  .stat .value { font-size: 28px; font-weight: 700; color: #2DD4BF; }
+  .stat .label { font-size: 11px; color: #888; letter-spacing: 1px; margin-top: 4px; }
+  .filters { padding: 8px 12px; display: flex; gap: 8px; }
+  .filter-btn { padding: 8px 16px; background: #1a1a1a; color: #888; border: 1px solid #333; border-radius: 8px; font-size: 13px; cursor: pointer; }
+  .filter-btn.active { background: #2DD4BF; color: #000; border-color: #2DD4BF; font-weight: 700; }
+  .list { padding: 0 12px 12px; }
+  .item { background: #1a1a1a; border: 1px solid #222; border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+  .item.has-tip { border-color: #2DD4BF40; }
+  .item .row { display: flex; justify-content: space-between; align-items: center; }
+  .item .items-name { font-size: 14px; font-weight: 600; color: #fff; flex: 1; }
+  .item .tip-badge { background: #2DD4BF20; color: #2DD4BF; font-size: 14px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
+  .item .no-tip { color: #555; font-size: 12px; }
+  .item .details { display: flex; gap: 12px; margin-top: 6px; font-size: 12px; color: #666; }
+  .item .time { font-size: 12px; color: #555; }
+  .loading { text-align: center; padding: 40px; color: #888; }
+  .refresh { padding: 12px; text-align: center; }
+  .refresh button { padding: 10px 24px; background: #2DD4BF; color: #000; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .auto-label { color: #555; font-size: 11px; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>LA CASITA TIPS</h1>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="value" id="totalTips">--</div>
+    <div class="label">TOTAL TIPS</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="tipCount">--</div>
+    <div class="label">TIPPED</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="avgTip">--</div>
+    <div class="label">AVG TIP</div>
+  </div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="setFilter('all')">ALL</button>
+  <button class="filter-btn" onclick="setFilter('tips')">TIPS ONLY</button>
+  <button class="filter-btn" onclick="setFilter('today')">TODAY</button>
+</div>
+
+<div class="refresh">
+  <button onclick="loadTips()">REFRESH</button>
+  <div class="auto-label">Auto-refreshes every 30s</div>
+</div>
+
+<div class="list" id="tipList">
+  <div class="loading">Loading tips...</div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+let allPayments = [];
+let currentFilter = 'all';
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.textContent === f.toUpperCase() || (f === 'tips' && b.textContent === 'TIPS ONLY')));
+  render();
+}
+
+function render() {
+  let filtered = allPayments;
+  if (currentFilter === 'tips') filtered = allPayments.filter(p => p.tip > 0);
+  if (currentFilter === 'today') {
+    const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' });
+    filtered = allPayments.filter(p => {
+      const d = new Date(p.created * 1000).toLocaleDateString('en-US', { timeZone: 'America/New_York' });
+      return d === today;
+    });
+  }
+
+  const tipped = filtered.filter(p => p.tip > 0);
+  const totalTips = tipped.reduce((s, p) => s + p.tip, 0);
+  document.getElementById('totalTips').textContent = '$' + (totalTips / 100).toFixed(2);
+  document.getElementById('tipCount').textContent = tipped.length + '/' + filtered.length;
+  document.getElementById('avgTip').textContent = tipped.length ? '$' + (totalTips / tipped.length / 100).toFixed(2) : '--';
+
+  const list = document.getElementById('tipList');
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="loading">No transactions found</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(p => {
+    const time = new Date(p.created * 1000).toLocaleString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', hour12: true });
+    const date = new Date(p.created * 1000).toLocaleDateString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric' });
+    const hasTip = p.tip > 0;
+    return `<div class="item ${hasTip ? 'has-tip' : ''}">
+      <div class="row">
+        <span class="items-name">${p.items}</span>
+        ${hasTip ? `<span class="tip-badge">+$${(p.tip / 100).toFixed(2)}</span>` : '<span class="no-tip">No tip</span>'}
+      </div>
+      <div class="details">
+        <span>${date} ${time}</span>
+        <span>Sub: $${(p.subtotal / 100).toFixed(2)}</span>
+        <span>Svc: $${(p.service_charge / 100).toFixed(2)}</span>
+        <span>Total: $${(p.total / 100).toFixed(2)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadTips() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify({ action: 'tips' }),
+    });
+    const data = await res.json();
+    if (data.payments) {
+      allPayments = data.payments;
+      render();
+    }
+  } catch (err) {
+    document.getElementById('tipList').innerHTML = '<div class="loading">Error loading tips</div>';
+  }
+}
+
+loadTips();
+setInterval(loadTips, 30000);
+</script>
+
+</body>
+</html>

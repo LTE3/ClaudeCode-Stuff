@@ -13,6 +13,44 @@ Deno.serve(async (req) => {
 
     const auth = "Basic " + btoa(STRIPE_SK + ":")
 
+    // Tips dashboard: return all terminal payments with tip breakdown
+    if (action === "tips") {
+      let allPIs: any[] = []
+      let hasMore = true
+      let startingAfter = ""
+      while (hasMore) {
+        let url = "https://api.stripe.com/v1/payment_intents?limit=100"
+        if (startingAfter) url += "&starting_after=" + startingAfter
+        const resp = await fetch(url, { headers: { "Authorization": auth } })
+        const page = await resp.json()
+        const terminal = (page.data || []).filter((pi: any) => pi.payment_method_types?.includes("card_present") && pi.status === "succeeded")
+        allPIs = allPIs.concat(terminal)
+        hasMore = page.has_more
+        if (page.data?.length) startingAfter = page.data[page.data.length - 1].id
+        if (allPIs.length > 500) break
+      }
+
+      const results = allPIs.map((pi: any) => {
+        const subtotal = parseInt(pi.metadata?.subtotal || "0")
+        const tax = parseInt(pi.metadata?.tax || "0")
+        const serviceCharge = parseInt(pi.metadata?.service_charge || "0")
+        const baseTotal = subtotal + tax + serviceCharge
+        const tip = pi.amount - baseTotal
+        return {
+          id: pi.id,
+          created: pi.created,
+          items: pi.metadata?.items || "N/A",
+          subtotal, tax, service_charge: serviceCharge,
+          tip: tip > 0 ? tip : 0,
+          total: pi.amount,
+        }
+      })
+
+      return new Response(JSON.stringify({ payments: results }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
     // QR Pay: create Checkout Session instead of terminal payment
     if (action === "qr") {
       if (!items?.length) {
@@ -43,6 +81,7 @@ Deno.serve(async (req) => {
       csBody.append("payment_intent_data[metadata][tax]", String(tax))
       csBody.append("payment_intent_data[metadata][service_charge]", String(serviceCharge))
       csBody.append("payment_intent_data[metadata][items]", itemDesc)
+      csBody.append("customer_email", "guest@lacasitabk.com")
 
       const csResp = await fetch("https://api.stripe.com/v1/checkout/sessions", {
         method: "POST",
