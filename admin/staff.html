@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Casita Staff Manager</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; padding-bottom: 40px; }
+  .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 18px; text-align: center; }
+  .header h1 { font-size: 18px; letter-spacing: 4px; }
+  section { padding: 16px; border-bottom: 1px solid #151515; }
+  section h2 { font-size: 12px; color: #666; letter-spacing: 3px; margin-bottom: 12px; }
+
+  .add-form { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .add-form input, .add-form select { padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; flex: 1; min-width: 100px; }
+  .add-form button { padding: 10px 20px; background: #FF4D8D; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+  .staff-card { background: #111; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+  .staff-card .info .sname { font-size: 16px; font-weight: 700; color: #eee; }
+  .staff-card .info .srole { font-size: 12px; color: #FF4D8D; margin-top: 2px; }
+  .staff-card .info .sphone { font-size: 11px; color: #555; margin-top: 2px; }
+  .staff-card .actions { display: flex; gap: 8px; }
+  .staff-card .actions button { padding: 6px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .edit-btn { background: #222; color: #aaa; }
+  .del-btn { background: #FF4D8D20; color: #FF4D8D; }
+
+  .count-bar { display: flex; justify-content: space-around; padding: 14px; background: #111; border: 1px solid #222; border-radius: 12px; margin-bottom: 16px; }
+  .count-bar .cv { font-size: 22px; font-weight: 800; color: #FF4D8D; text-align: center; }
+  .count-bar .cl { font-size: 9px; color: #555; letter-spacing: 2px; text-align: center; margin-top: 4px; }
+
+  /* Schedule builder */
+  .sched-date { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .sched-date input { padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
+  .sched-date button { padding: 10px 16px; background: #FF4D8D; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .sched-staff { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .sched-chip { padding: 8px 14px; background: #111; border: 1px solid #222; border-radius: 8px; font-size: 13px; cursor: pointer; }
+  .sched-chip.selected { background: #FF4D8D20; border-color: #FF4D8D; color: #FF4D8D; }
+  .sched-chip .sc-name { font-weight: 600; }
+  .sched-chip .sc-role { font-size: 10px; color: #666; }
+  .sched-current { margin-top: 12px; }
+  .sched-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #151515; }
+  .sched-row .sr-name { font-size: 14px; color: #eee; }
+  .sched-row .sr-role { font-size: 11px; color: #FF4D8D; }
+  .sched-row .sr-remove { color: #FF4D8D; cursor: pointer; background: none; border: none; font-size: 16px; }
+
+  .links { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .links a { display: block; padding: 12px; background: #111; border: 1px solid #222; border-radius: 10px; color: #aaa; text-decoration: none; text-align: center; font-size: 13px; font-weight: 600; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+<div class="header"><h1>STAFF MANAGER</h1></div>
+
+<section>
+  <h2>ADD STAFF</h2>
+  <div class="add-form">
+    <input type="text" id="newName" placeholder="Name" />
+    <select id="newRole">
+      <option>Barback</option>
+      <option>Bartender</option>
+      <option>Bottle Girl</option>
+      <option>Security</option>
+      <option>DJ</option>
+      <option>Host</option>
+      <option>Manager</option>
+      <option>Server</option>
+    </select>
+    <input type="tel" id="newPhone" placeholder="Phone" />
+    <button onclick="addStaff()">ADD</button>
+  </div>
+</section>
+
+<section>
+  <h2>ROSTER</h2>
+  <div class="count-bar" id="countBar"></div>
+  <div id="staffList"></div>
+</section>
+
+<section>
+  <h2>SCHEDULE</h2>
+  <div class="sched-date">
+    <input type="date" id="schedDate" />
+    <button onclick="saveSchedule()">SAVE SCHEDULE</button>
+  </div>
+  <div class="sched-staff" id="schedStaff"></div>
+  <div class="sched-current" id="schedCurrent"></div>
+</section>
+
+<div class="links">
+  <a href="clockin.html">CLOCK IN/OUT</a>
+  <a href="tips.html">TIPS DASHBOARD</a>
+  <a href="tipsheet.html">TIP SHEET</a>
+  <a href="portal.html">STAFF PORTAL</a>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+let allStaff = [];
+let schedSelected = [];
+
+async function apiCall(body) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+    body: JSON.stringify(body),
+  });
+  return res.json();
+}
+
+async function loadStaff() {
+  const data = await apiCall({ action: 'get_staff' });
+  allStaff = (data.staff || []).filter(s => s.active !== false);
+  renderStaff();
+  renderSchedPicker();
+}
+
+function renderStaff() {
+  const byRole = {};
+  allStaff.forEach(s => { byRole[s.role] = (byRole[s.role] || 0) + 1; });
+
+  document.getElementById('countBar').innerHTML = `
+    <div><div class="cv">${allStaff.length}</div><div class="cl">TOTAL STAFF</div></div>
+    ${Object.entries(byRole).map(([r, c]) => `<div><div class="cv">${c}</div><div class="cl">${r.toUpperCase()}S</div></div>`).join('')}
+  `;
+
+  document.getElementById('staffList').innerHTML = allStaff.map(s =>
+    `<div class="staff-card">
+      <div class="info">
+        <div class="sname">${s.name}</div>
+        <div class="srole">${s.role}</div>
+        ${s.phone ? `<div class="sphone">${s.phone}</div>` : ''}
+      </div>
+      <div class="actions">
+        <button class="del-btn" onclick="deleteStaff('${s.id}','${s.name}')">REMOVE</button>
+      </div>
+    </div>`
+  ).join('') || '<div style="text-align:center;color:#444;padding:30px;">No staff added</div>';
+}
+
+async function addStaff() {
+  const name = document.getElementById('newName').value.trim();
+  const role = document.getElementById('newRole').value;
+  const phone = document.getElementById('newPhone').value.trim();
+  if (!name) return;
+
+  await apiCall({ action: 'add_staff', name, role, phone });
+  document.getElementById('newName').value = '';
+  document.getElementById('newPhone').value = '';
+  await loadStaff();
+}
+
+async function deleteStaff(id, name) {
+  if (!confirm('Remove ' + name + '?')) return;
+  await apiCall({ action: 'delete_staff', staff_id: id });
+  await loadStaff();
+}
+
+function renderSchedPicker() {
+  document.getElementById('schedStaff').innerHTML = allStaff.map(s => {
+    const sel = schedSelected.find(x => x.name === s.name);
+    return `<div class="sched-chip${sel ? ' selected' : ''}" onclick="toggleSched('${s.name}','${s.role}')">
+      <span class="sc-name">${s.name}</span>
+      <span class="sc-role">${s.role}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('schedCurrent').innerHTML = schedSelected.length ?
+    schedSelected.map(s => `<div class="sched-row">
+      <div><span class="sr-name">${s.name}</span> <span class="sr-role">${s.role}</span></div>
+      <button class="sr-remove" onclick="removeSched('${s.name}')">x</button>
+    </div>`).join('') : '';
+}
+
+function toggleSched(name, role) {
+  const idx = schedSelected.findIndex(s => s.name === name);
+  if (idx >= 0) schedSelected.splice(idx, 1);
+  else schedSelected.push({ name, role });
+  renderSchedPicker();
+}
+
+function removeSched(name) {
+  schedSelected = schedSelected.filter(s => s.name !== name);
+  renderSchedPicker();
+}
+
+async function saveSchedule() {
+  const date = document.getElementById('schedDate').value;
+  if (!date || !schedSelected.length) { alert('Pick a date and select staff'); return; }
+
+  const entries = schedSelected.map(s => ({
+    staff_name: s.name,
+    role: s.role,
+    party_date: date,
+    start_time: '9:00 PM',
+    end_time: '4:00 AM',
+  }));
+
+  await apiCall({ action: 'set_schedule', entries });
+  alert('Schedule saved for ' + date);
+}
+
+async function loadScheduleForDate() {
+  const date = document.getElementById('schedDate').value;
+  if (!date) return;
+  const data = await apiCall({ action: 'get_schedule', party_date: date });
+  schedSelected = (data.schedules || []).map(s => ({ name: s.staff_name, role: s.role }));
+  renderSchedPicker();
+}
+
+// Set date and load
+const now = new Date();
+document.getElementById('schedDate').value = now.toISOString().split('T')[0];
+document.getElementById('schedDate').addEventListener('change', loadScheduleForDate);
+
+loadStaff().then(() => loadScheduleForDate());
+</script>
+</body>
+</html>

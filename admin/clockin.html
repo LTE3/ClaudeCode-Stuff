@@ -44,6 +44,14 @@
   }
   .clock-out-btn:active { background: #e0437a; }
 
+  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .quick-btn { padding: 14px 10px; background: #111; border: 1px solid #222; border-radius: 10px; text-align: center; cursor: pointer; }
+  .quick-btn:active { border-color: #34d399; background: #1a1a1a; }
+  .quick-btn .qname { font-size: 15px; font-weight: 700; color: #eee; }
+  .quick-btn .qrole { font-size: 11px; color: #FF4D8D; margin-top: 2px; }
+  .quick-btn.clocked { opacity: 0.3; pointer-events: none; }
+  .or-divider { text-align: center; color: #333; font-size: 11px; letter-spacing: 3px; margin: 12px 0; }
+
   .live-dot { display: inline-block; width: 8px; height: 8px; background: #34d399; border-radius: 50%; margin-right: 6px; animation: pulse 1.5s infinite; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
@@ -70,7 +78,9 @@
 </section>
 
 <section>
-  <h2>CLOCK IN</h2>
+  <h2>TAP TO CLOCK IN</h2>
+  <div class="quick-grid" id="quickGrid"></div>
+  <div class="or-divider">OR ADD MANUALLY</div>
   <div class="clock-form">
     <input type="text" id="staffName" placeholder="Name" />
     <select id="staffRole">
@@ -102,6 +112,7 @@ const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
 
 let records = [];
+let staffList = [];
 
 function getPartyDate() {
   const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
@@ -149,6 +160,7 @@ async function clockOut(id) {
 }
 
 function renderStaff() {
+  renderQuickGrid();
   const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
   const onShift = records.filter(r => !r.clock_out);
   const offShift = records.filter(r => r.clock_out);
@@ -194,8 +206,35 @@ function renderStaff() {
   document.getElementById('staffList').innerHTML = html || '<div style="text-align:center;color:#444;padding:30px;font-size:13px;letter-spacing:2px;">NO STAFF CLOCKED IN</div>';
 }
 
+async function loadStaff() {
+  const data = await apiCall({ action: 'get_staff' });
+  staffList = (data.staff || []).filter(s => s.active !== false);
+  renderQuickGrid();
+}
+
+function renderQuickGrid() {
+  const clockedNames = records.filter(r => !r.clock_out).map(r => r.name);
+  document.getElementById('quickGrid').innerHTML = staffList.map(s => {
+    const clocked = clockedNames.includes(s.name);
+    return `<div class="quick-btn${clocked ? ' clocked' : ''}" onclick="quickClockIn('${s.name}','${s.role}')">
+      <div class="qname">${s.name}</div>
+      <div class="qrole">${s.role}</div>
+    </div>`;
+  }).join('') || '';
+}
+
+async function quickClockIn(name, role) {
+  await apiCall({
+    action: 'clock_in',
+    name, role,
+    party_date: document.getElementById('partyDate').value,
+  });
+  await loadRecords();
+}
+
 // Set party date (4AM cutoff)
 document.getElementById('partyDate').value = getPartyDate();
+loadStaff();
 loadRecords();
 
 // Update live hours every 30 seconds

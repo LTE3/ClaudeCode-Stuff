@@ -20,6 +20,131 @@ Deno.serve(async (req) => {
       "Content-Type": "application/json",
     }
 
+    // Staff management
+    if (action === "get_staff") {
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/staff?order=name.asc`, { headers: sbHeaders })
+      const staff = await r.json()
+      return new Response(JSON.stringify({ staff: staff || [] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    if (action === "add_staff") {
+      const { name, role, phone } = data
+      if (!name || !role) {
+        return new Response(JSON.stringify({ error: "name and role required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/staff`, {
+        method: "POST",
+        headers: { ...sbHeaders, "Prefer": "return=representation" },
+        body: JSON.stringify({ name, role, phone: phone || "" }),
+      })
+      const inserted = await r.json()
+      return new Response(JSON.stringify({ success: true, staff: inserted?.[0] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    if (action === "update_staff") {
+      const { staff_id, updates } = data
+      if (!staff_id || !updates) {
+        return new Response(JSON.stringify({ error: "staff_id and updates required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/staff?id=eq.${staff_id}`, {
+        method: "PATCH",
+        headers: { ...sbHeaders, "Prefer": "return=representation" },
+        body: JSON.stringify(updates),
+      })
+      const updated = await r.json()
+      return new Response(JSON.stringify({ success: true, staff: updated?.[0] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    if (action === "delete_staff") {
+      const { staff_id } = data
+      await fetch(`${SUPABASE_URL}/rest/v1/staff?id=eq.${staff_id}`, {
+        method: "DELETE", headers: sbHeaders,
+      })
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    // Schedules
+    if (action === "get_schedule") {
+      const { party_date, staff_name } = data
+      let url = `${SUPABASE_URL}/rest/v1/schedules?order=party_date.asc,staff_name.asc`
+      if (party_date) url += `&party_date=eq.${party_date}`
+      if (staff_name) url += `&staff_name=eq.${encodeURIComponent(staff_name)}`
+      const r = await fetch(url, { headers: sbHeaders })
+      const schedules = await r.json()
+      return new Response(JSON.stringify({ schedules: schedules || [] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    if (action === "set_schedule") {
+      const { entries } = data
+      if (!entries?.length) {
+        return new Response(JSON.stringify({ error: "entries required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+      // Delete existing for those dates then insert
+      const dates = [...new Set(entries.map((e: any) => e.party_date))]
+      for (const d of dates) {
+        await fetch(`${SUPABASE_URL}/rest/v1/schedules?party_date=eq.${d}`, {
+          method: "DELETE", headers: sbHeaders,
+        })
+      }
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/schedules`, {
+        method: "POST",
+        headers: { ...sbHeaders, "Prefer": "return=representation" },
+        body: JSON.stringify(entries),
+      })
+      const inserted = await r.json()
+      return new Response(JSON.stringify({ success: true, count: inserted?.length || 0 }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    // Save tip payouts
+    if (action === "save_payouts") {
+      const { payouts } = data
+      if (!payouts?.length) {
+        return new Response(JSON.stringify({ error: "payouts required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/tip_payouts`, {
+        method: "POST",
+        headers: { ...sbHeaders, "Prefer": "return=representation" },
+        body: JSON.stringify(payouts),
+      })
+      const inserted = await r.json()
+      return new Response(JSON.stringify({ success: true, count: inserted?.length || 0 }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    // Get tip payouts for a staff member or date
+    if (action === "get_payouts") {
+      const { staff_name, party_date } = data
+      let url = `${SUPABASE_URL}/rest/v1/tip_payouts?order=party_date.desc`
+      if (staff_name) url += `&staff_name=eq.${encodeURIComponent(staff_name)}`
+      if (party_date) url += `&party_date=eq.${party_date}`
+      const r = await fetch(url, { headers: sbHeaders })
+      const payouts = await r.json()
+      return new Response(JSON.stringify({ payouts: payouts || [] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
     // Clock in
     if (action === "clock_in") {
       const { name, role, party_date } = data

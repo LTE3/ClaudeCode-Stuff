@@ -73,6 +73,7 @@
 
 <section>
   <button class="calc-btn" onclick="calculate()">CALCULATE SPLIT</button>
+  <button class="calc-btn" id="saveBtn" onclick="savePayouts()" style="display:none;background:#34d399;margin-top:8px;">SAVE TO STAFF RECORDS</button>
   <div id="results"></div>
   <div class="summary" id="summary"></div>
 </section>
@@ -169,6 +170,94 @@ function calculate() {
   document.getElementById('summary').innerHTML =
     `<div class="total-line">$${pool.toFixed(2)} pool / ${grandTotal} total shares = $${(pool / grandTotal).toFixed(2)} per share</div>
      ${totalStaff} staff &middot; Distributed: $${totalDistributed.toFixed(2)}`;
+
+  // Store for saving
+  window._lastCalc = { rows, pool, grandTotal };
+  document.getElementById('saveBtn').style.display = 'block';
+}
+
+async function savePayouts() {
+  const calc = window._lastCalc;
+  if (!calc) return;
+  const date = document.getElementById('sheetDate').value;
+  const payouts = [];
+
+  for (const r of calc.rows) {
+    const roleTotal = Math.round(r.totalShares / calc.grandTotal * calc.pool * 100) / 100;
+    const perPerson = Math.round(roleTotal / r.count * 100) / 100;
+    for (let i = 0; i < r.count; i++) {
+      payouts.push({
+        staff_name: r.name + ' #' + (i + 1),
+        role: r.name,
+        party_date: date,
+        hours: r.hours,
+        points: r.points,
+        shares: r.points * r.hours,
+        amount: perPerson,
+        pool_total: calc.pool,
+      });
+    }
+  }
+
+  // If clock records exist, use real names
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+      body: JSON.stringify({ action: 'clock_records', party_date: date }),
+    });
+    const data = await res.json();
+    if (data.records?.length) {
+      const realPayouts = [];
+      for (const r of calc.rows) {
+        const roleTotal = Math.round(r.totalShares / calc.grandTotal * calc.pool * 100) / 100;
+        const perPerson = Math.round(roleTotal / r.count * 100) / 100;
+        // Match role name (strip trailing 's' for matching)
+        const roleName = r.name.replace(/s$/, '');
+        const matched = data.records.filter(cr => cr.role === roleName || cr.role === r.name);
+        if (matched.length > 0) {
+          for (const m of matched) {
+            realPayouts.push({
+              staff_name: m.name,
+              role: m.role,
+              party_date: date,
+              hours: m.hours || r.hours,
+              points: r.points,
+              shares: r.points * (m.hours || r.hours),
+              amount: perPerson,
+              pool_total: calc.pool,
+            });
+          }
+        } else {
+          for (let i = 0; i < r.count; i++) {
+            realPayouts.push({
+              staff_name: r.name + ' #' + (i + 1),
+              role: r.name,
+              party_date: date,
+              hours: r.hours,
+              points: r.points,
+              shares: r.points * r.hours,
+              amount: perPerson,
+              pool_total: calc.pool,
+            });
+          }
+        }
+      }
+      payouts.length = 0;
+      payouts.push(...realPayouts);
+    }
+  } catch {}
+
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+    body: JSON.stringify({ action: 'save_payouts', payouts }),
+  });
+  const result = await res.json();
+  if (result.success) {
+    document.getElementById('saveBtn').textContent = 'SAVED ' + result.count + ' RECORDS';
+    document.getElementById('saveBtn').disabled = true;
+  }
 }
 
 async function pullPool() {
