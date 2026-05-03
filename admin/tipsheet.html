@@ -6,7 +6,7 @@
 <title>La Casita Tip Sheet</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; padding-bottom: 40px; }
   .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 18px; text-align: center; }
   .header h1 { font-size: 18px; letter-spacing: 4px; }
   section { padding: 16px; border-bottom: 1px solid #151515; }
@@ -14,29 +14,33 @@
   .pool-input { display: flex; gap: 10px; align-items: center; }
   .pool-input input { flex: 1; padding: 14px; background: #111; color: #FF4D8D; border: 1px solid #222; border-radius: 10px; font-size: 28px; font-weight: 800; text-align: center; }
   .pool-input button { padding: 14px 16px; background: #1a1a1a; color: #FF4D8D; border: 1px solid #FF4D8D30; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; white-space: nowrap; }
-  .positions { display: flex; flex-wrap: wrap; gap: 8px; }
-  .pos-tag { display: flex; align-items: center; gap: 6px; background: #111; border: 1px solid #222; border-radius: 8px; padding: 8px 12px; font-size: 13px; }
-  .pos-tag .pos-name { color: #ccc; font-weight: 600; }
-  .pos-tag input { width: 40px; background: #0a0a0a; color: #FF4D8D; border: 1px solid #222; border-radius: 4px; padding: 4px; text-align: center; font-size: 13px; font-weight: 700; }
-  .pos-tag .pts { color: #555; font-size: 11px; }
-  .add-pos { display: flex; gap: 6px; margin-top: 10px; }
-  .add-pos input { flex: 1; padding: 8px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 13px; }
-  .add-pos button { padding: 8px 14px; background: #FF4D8D; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
-  .staff-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
-  .staff-row input { padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
-  .staff-row input.name-input { flex: 2; }
-  .staff-row input.hrs-input { width: 60px; text-align: center; }
-  .staff-row select { flex: 1; padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
-  .staff-row .remove { color: #FF4D8D; cursor: pointer; font-size: 18px; padding: 0 4px; background: none; border: none; }
-  .add-staff { width: 100%; padding: 12px; background: #111; color: #666; border: 1px dashed #333; border-radius: 10px; font-size: 14px; cursor: pointer; text-align: center; margin-top: 4px; }
-  .result { background: #111; border: 1px solid #FF4D8D20; border-radius: 12px; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-  .result .info .rname { font-size: 15px; font-weight: 600; color: #eee; }
-  .result .info .rdetail { font-size: 11px; color: #555; margin-top: 3px; }
-  .result .payout { font-size: 22px; font-weight: 800; color: #FF4D8D; }
+  .date-input { padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
+
+  .role-row { background: #111; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+  .role-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .role-name { font-size: 16px; font-weight: 700; color: #eee; }
+  .role-remove { color: #FF4D8D; cursor: pointer; font-size: 18px; padding: 0 6px; background: none; border: none; }
+  .role-fields { display: flex; gap: 8px; }
+  .role-field { flex: 1; text-align: center; }
+  .role-field label { display: block; font-size: 9px; color: #555; letter-spacing: 2px; margin-bottom: 4px; }
+  .role-field input { width: 100%; padding: 10px; background: #0a0a0a; color: #FF4D8D; border: 1px solid #222; border-radius: 8px; font-size: 18px; font-weight: 700; text-align: center; }
+
+  .add-role { display: flex; gap: 8px; margin-top: 12px; }
+  .add-role input { flex: 1; padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
+  .add-role button { padding: 10px 18px; background: #FF4D8D; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+
   .calc-btn { width: 100%; padding: 16px; background: #FF4D8D; color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; letter-spacing: 2px; cursor: pointer; margin-bottom: 12px; }
   .calc-btn:active { background: #e0437a; }
-  .summary { text-align: center; padding: 12px; color: #555; font-size: 12px; }
-  .date-input { padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; margin-bottom: 12px; }
+
+  .result { background: #111; border: 1px solid #FF4D8D20; border-radius: 12px; padding: 14px; margin-bottom: 8px; }
+  .result-header { display: flex; justify-content: space-between; align-items: center; }
+  .result .rname { font-size: 16px; font-weight: 700; color: #eee; }
+  .result .rperson { font-size: 22px; font-weight: 800; color: #FF4D8D; }
+  .result .rdetail { font-size: 11px; color: #555; margin-top: 6px; }
+  .result .rdetail span { color: #777; }
+
+  .summary { text-align: center; padding: 14px; color: #555; font-size: 12px; line-height: 1.8; }
+  .summary .total-line { font-size: 14px; color: #FF4D8D; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -57,19 +61,12 @@
 </section>
 
 <section>
-  <h2>POSITIONS &amp; POINTS</h2>
-  <div class="positions" id="positionsList"></div>
-  <div class="add-pos">
-    <input type="text" id="newPosName" placeholder="New position" />
-    <input type="number" id="newPosPoints" placeholder="Pts" style="width:60px" step="0.5" />
-    <button onclick="addPosition()">ADD</button>
+  <h2>ROLES</h2>
+  <div id="rolesList"></div>
+  <div class="add-role">
+    <input type="text" id="newRoleName" placeholder="New role name" />
+    <button onclick="addRole()">ADD ROLE</button>
   </div>
-</section>
-
-<section>
-  <h2>STAFF</h2>
-  <div id="staffList"></div>
-  <button class="add-staff" onclick="addStaff()">+ ADD STAFF</button>
 </section>
 
 <section>
@@ -82,117 +79,94 @@
 const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
 
-let positions = JSON.parse(localStorage.getItem('lc_positions') || 'null') || [
-  { name: 'Server', points: 1 },
-  { name: 'Bartender', points: 1.5 },
-  { name: 'Barback', points: 0.75 },
-  { name: 'Host', points: 0.5 },
-  { name: 'Manager', points: 1.5 },
-  { name: 'DJ', points: 1 },
-  { name: 'Security', points: 0.5 },
+let roles = JSON.parse(localStorage.getItem('lc_roles') || 'null') || [
+  { name: 'Barbacks', count: 2, points: 5, hours: 10 },
+  { name: 'Bartenders', count: 3, points: 8, hours: 10 },
+  { name: 'Bottle Girls', count: 3, points: 8, hours: 8 },
 ];
 
-let staff = JSON.parse(localStorage.getItem('lc_staff') || 'null') || [];
+function save() { localStorage.setItem('lc_roles', JSON.stringify(roles)); }
 
-function savePositions() { localStorage.setItem('lc_positions', JSON.stringify(positions)); }
-function saveStaff() { localStorage.setItem('lc_staff', JSON.stringify(staff)); }
-
-function renderPositions() {
-  document.getElementById('positionsList').innerHTML = positions.map((p, i) =>
-    `<div class="pos-tag">
-      <span class="pos-name">${p.name}</span>
-      <input type="number" value="${p.points}" step="0.25" onchange="updatePoints(${i}, this.value)" />
-      <span class="pts">pts</span>
-      <button class="remove" onclick="removePosition(${i})">x</button>
+function renderRoles() {
+  document.getElementById('rolesList').innerHTML = roles.map((r, i) =>
+    `<div class="role-row">
+      <div class="role-header">
+        <span class="role-name">${r.name}</span>
+        <button class="role-remove" onclick="removeRole(${i})">x</button>
+      </div>
+      <div class="role-fields">
+        <div class="role-field">
+          <label>STAFF</label>
+          <input type="number" value="${r.count}" min="1" onchange="updateRole(${i},'count',this.value)" />
+        </div>
+        <div class="role-field">
+          <label>POINTS</label>
+          <input type="number" value="${r.points}" step="0.5" onchange="updateRole(${i},'points',this.value)" />
+        </div>
+        <div class="role-field">
+          <label>HOURS</label>
+          <input type="number" value="${r.hours}" step="0.5" onchange="updateRole(${i},'hours',this.value)" />
+        </div>
+      </div>
     </div>`
   ).join('');
 }
 
-function updatePoints(i, val) {
-  positions[i].points = parseFloat(val) || 0;
-  savePositions();
+function updateRole(i, field, val) {
+  roles[i][field] = parseFloat(val) || 0;
+  save();
 }
 
-function removePosition(i) {
-  positions.splice(i, 1);
-  savePositions();
-  renderPositions();
+function removeRole(i) {
+  roles.splice(i, 1);
+  save();
+  renderRoles();
 }
 
-function addPosition() {
-  const name = document.getElementById('newPosName').value.trim();
-  const pts = parseFloat(document.getElementById('newPosPoints').value) || 1;
+function addRole() {
+  const name = document.getElementById('newRoleName').value.trim();
   if (!name) return;
-  positions.push({ name, points: pts });
-  savePositions();
-  document.getElementById('newPosName').value = '';
-  document.getElementById('newPosPoints').value = '';
-  renderPositions();
-  renderStaff();
-}
-
-function renderStaff() {
-  const opts = positions.map(p => `<option value="${p.name}">${p.name} (${p.points}pts)</option>`).join('');
-  document.getElementById('staffList').innerHTML = staff.map((s, i) =>
-    `<div class="staff-row">
-      <input class="name-input" value="${s.name}" placeholder="Name" onchange="updateStaff(${i}, 'name', this.value)" />
-      <select onchange="updateStaff(${i}, 'position', this.value)">${opts.replace('value="'+s.position+'"', 'value="'+s.position+'" selected')}</select>
-      <input class="hrs-input" type="number" value="${s.hours || ''}" placeholder="Hrs" step="0.5" onchange="updateStaff(${i}, 'hours', this.value)" />
-      <button class="remove" onclick="removeStaff(${i})">x</button>
-    </div>`
-  ).join('');
-}
-
-function addStaff() {
-  staff.push({ name: '', position: positions[0]?.name || '', hours: '' });
-  saveStaff();
-  renderStaff();
-}
-
-function updateStaff(i, field, val) {
-  staff[i][field] = field === 'hours' ? parseFloat(val) || 0 : val;
-  saveStaff();
-}
-
-function removeStaff(i) {
-  staff.splice(i, 1);
-  saveStaff();
-  renderStaff();
+  roles.push({ name, count: 1, points: 1, hours: 8 });
+  save();
+  document.getElementById('newRoleName').value = '';
+  renderRoles();
 }
 
 function calculate() {
   const pool = parseFloat(document.getElementById('poolAmount').value) || 0;
-  if (!pool || !staff.length) return;
+  if (!pool || !roles.length) return;
 
-  const rows = staff.filter(s => s.name && s.hours > 0).map(s => {
-    const pos = positions.find(p => p.name === s.position);
-    const pts = pos ? pos.points : 1;
-    const weighted = pts * s.hours;
-    return { ...s, pts, weighted };
+  const rows = roles.filter(r => r.count > 0 && r.points > 0 && r.hours > 0).map(r => {
+    const totalShares = r.count * r.points * r.hours;
+    return { ...r, totalShares };
   });
 
-  const totalWeighted = rows.reduce((s, r) => s + r.weighted, 0);
-  if (totalWeighted === 0) return;
+  const grandTotal = rows.reduce((s, r) => s + r.totalShares, 0);
+  if (grandTotal === 0) return;
 
-  const rate = pool / totalWeighted;
+  let totalDistributed = 0;
+  let totalStaff = 0;
 
-  rows.sort((a, b) => b.weighted - a.weighted);
-
-  let distributed = 0;
   document.getElementById('results').innerHTML = rows.map(r => {
-    const payout = Math.round(r.weighted * rate * 100) / 100;
-    distributed += payout;
+    const roleTotal = Math.round(r.totalShares / grandTotal * pool * 100) / 100;
+    const perPerson = Math.round(roleTotal / r.count * 100) / 100;
+    totalDistributed += perPerson * r.count;
+    totalStaff += r.count;
     return `<div class="result">
-      <div class="info">
-        <div class="rname">${r.name}</div>
-        <div class="rdetail">${r.position} (${r.pts}pts) x ${r.hours}hrs = ${r.weighted.toFixed(2)} shares</div>
+      <div class="result-header">
+        <div class="rname">${r.name} (${r.count})</div>
+        <div class="rperson">$${perPerson.toFixed(2)} <span style="font-size:12px;color:#666">each</span></div>
       </div>
-      <div class="payout">$${payout.toFixed(2)}</div>
+      <div class="rdetail">
+        ${r.count} staff x ${r.points} pts x ${r.hours} hrs = <span>${r.totalShares} shares</span>
+        &middot; Role total: <span>$${roleTotal.toFixed(2)}</span>
+      </div>
     </div>`;
   }).join('');
 
-  document.getElementById('summary').textContent =
-    'Pool: $' + pool.toFixed(2) + ' | Rate: $' + rate.toFixed(2) + '/point-hr | Distributed: $' + distributed.toFixed(2);
+  document.getElementById('summary').innerHTML =
+    `<div class="total-line">$${pool.toFixed(2)} pool / ${grandTotal} total shares = $${(pool / grandTotal).toFixed(2)} per share</div>
+     ${totalStaff} staff &middot; Distributed: $${totalDistributed.toFixed(2)}`;
 }
 
 async function pullPool() {
@@ -213,15 +187,13 @@ async function pullPool() {
   } catch {}
 }
 
-// Set today's date
 const today = new Date();
 const yyyy = today.getFullYear();
 const mm = String(today.getMonth() + 1).padStart(2, '0');
 const dd = String(today.getDate()).padStart(2, '0');
 document.getElementById('sheetDate').value = `${yyyy}-${mm}-${dd}`;
 
-renderPositions();
-renderStaff();
+renderRoles();
 </script>
 </body>
 </html>
