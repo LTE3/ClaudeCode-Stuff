@@ -3670,70 +3670,7 @@
             }
         }
 
-        // ─── Signup Form ───
-        document.getElementById('signupForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Honeypot check — bots fill hidden fields
-            if (document.getElementById('signupHoneypot').value) return;
-
-            const firstName = this.querySelector('input[aria-label="First name"]').value.trim();
-            const lastName = this.querySelector('input[aria-label="Last name"]').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const phone = document.getElementById('signupPhone').value.trim();
-
-            if (!firstName || !lastName) {
-                alert('Please enter your first and last name.');
-                return;
-            }
-            if (!phone || phone.length < 7) {
-                alert('Please enter a valid phone number.');
-                return;
-            }
-            if (!/^[0-9+\-() ]+$/.test(phone)) {
-                alert('Phone number can only contain digits, +, -, (, ) and spaces.');
-                return;
-            }
-            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                alert('Please enter a valid email address.');
-                return;
-            }
-
-            const submitBtn = this.querySelector('button[type="submit"]');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
-
-            try {
-                const res = await fetch(SUPABASE_URL + '/rest/v1/signups', {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify({
-                        first_name: firstName,
-                        last_name: lastName,
-                        phone: phone,
-                        email: email || null
-                    })
-                });
-                if (res.status === 409 || (res.status === 400 && (await res.text()).includes('uniq_phone'))) {
-                    this.style.display = 'none';
-                    document.getElementById('successMsg').classList.add('show');
-                    document.getElementById('successMsg').textContent = "You're already on the list! We'll hit you up soon.";
-                    return;
-                }
-                if (!res.ok) throw new Error('Signup failed');
-                this.style.display = 'none';
-                document.getElementById('successMsg').classList.add('show');
-            } catch (err) {
-                alert('Something went wrong. Please try again.');
-                submitBtn.disabled = false;
-                submitBtn.textContent = "I'm In";
-            }
-        });
+        // ─── Signup Form (disabled — form removed) ───
 
         // ─── Cinco de Mayo RSVP ───
         document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
