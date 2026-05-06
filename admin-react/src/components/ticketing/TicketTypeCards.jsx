@@ -119,7 +119,7 @@ function getCurrentTier(availability) {
 
   if (t1sold < t1cap) {
     const isLast = t2cap === 0 && t3cap === 0 && t4cap === 0;
-    return { tier: 1, price: '$' + t1price, total: '$' + (t1price + 5), remaining: t1cap - t1sold, soldOut: false, label: isLast ? 'Last Tier' : 'Tier 1' };
+    return { tier: 1, price: '$' + t1price, total: '$' + t1price, remaining: t1cap - t1sold, soldOut: false, label: isLast ? 'Last Tier' : 'Tier 1', noFee: true };
   }
   if (t2sold < t2cap) {
     const isLast = t3cap === 0 && t4cap === 0;
@@ -172,7 +172,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           <div className={`text-4xl md:text-5xl font-bold text-text-primary mb-1`}>
             {card.key === 'ga' && !dance ? tier.price : card.price}
           </div>
-          {card.key === 'ga' && !dance && (
+          {card.key === 'ga' && !dance && !tier.noFee && (
             <div className="text-sm text-text-muted mt-1">+ $5 fee = {tier.total} total</div>
           )}
           {card.key === 'ga' && !dance && (
