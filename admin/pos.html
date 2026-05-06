@@ -133,6 +133,15 @@ function addItem(name, amount) {
 }
 
 function addCustom() {
+  const code = prompt('Enter 4-digit manager code:');
+  if (!code || code !== '7742') {
+    const status = document.getElementById('statusBar');
+    status.style.display = 'block';
+    status.className = 'status error';
+    status.textContent = 'Invalid manager code.';
+    setTimeout(() => { status.style.display = 'none'; }, 3000);
+    return;
+  }
   const input = document.getElementById('customAmount');
   const val = parseFloat(input.value);
   if (!val || val <= 0) return;
@@ -273,9 +282,8 @@ async function voidPayment() {
       status.textContent = data.error.message;
     } else {
       status.className = 'status success';
-      status.textContent = 'Payment canceled. Terminal reset.';
-      cart = [];
-      updateUI();
+      status.textContent = 'Payment voided. Order kept.';
+
       setTimeout(() => { status.style.display = 'none'; }, 3000);
     }
   } catch (err) {
