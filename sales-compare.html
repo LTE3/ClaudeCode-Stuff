@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 30px; background: #111; font-family: -apple-system, BlinkMacSystemFont, sans-serif; color: #fff; }
+  h1 { text-align: center; color: #FFD700; font-size: 24px; letter-spacing: 2px; margin-bottom: 5px; }
+  h2 { text-align: center; color: #FF4D8D; font-size: 14px; margin-bottom: 25px; font-weight: 400; }
+  table { width: 100%; max-width: 700px; margin: 0 auto; border-collapse: collapse; }
+  th { background: #FFD700; color: #111; padding: 10px 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+  th:first-child { text-align: left; border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+  td { padding: 9px 12px; text-align: center; font-size: 14px; border-bottom: 1px solid #222; }
+  td:first-child { text-align: left; color: #aaa; font-size: 13px; }
+  tr.total td { border-top: 2px solid #FFD700; font-weight: 700; font-size: 15px; color: #FFD700; }
+  tr.total td:first-child { color: #FFD700; }
+  .opening { color: #4ade80; }
+  .current { color: #60a5fa; }
+  .dim { color: #555; }
+  .footer { text-align: center; color: #555; font-size: 11px; margin-top: 20px; }
+</style>
+</head>
+<body>
+  <h1>LA CASITA BK — SALES COMPARISON</h1>
+  <h2>Opening Weekend vs. Week 2 (Real Stripe Sales Only)</h2>
+  <table>
+    <tr>
+      <th></th>
+      <th class="opening">Fri 5/1</th>
+      <th class="opening">Sat 5/2</th>
+      <th class="current">Fri 5/8</th>
+      <th class="current">Sat 5/9</th>
+    </tr>
+    <tr>
+      <td>Tier 1</td>
+      <td>89</td>
+      <td>96</td>
+      <td>33</td>
+      <td>37</td>
+    </tr>
+    <tr>
+      <td>Tier 2</td>
+      <td>12</td>
+      <td>20</td>
+      <td class="dim">0</td>
+      <td class="dim">0</td>
+    </tr>
+    <tr>
+      <td>Tier 3</td>
+      <td>1</td>
+      <td>8</td>
+      <td>3</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <td>Tier 4</td>
+      <td>17</td>
+      <td>43</td>
+      <td class="dim">0</td>
+      <td class="dim">0</td>
+    </tr>
+    <tr>
+      <td>Open Bar</td>
+      <td>6</td>
+      <td>8</td>
+      <td>6</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Ladies Group</td>
+      <td>3</td>
+      <td>5</td>
+      <td>1</td>
+      <td class="dim">0</td>
+    </tr>
+    <tr>
+      <td>Tables</td>
+      <td>15</td>
+      <td>6</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr class="total">
+      <td>TICKETS</td>
+      <td>143</td>
+      <td>200</td>
+      <td>44</td>
+      <td>54</td>
+    </tr>
+    <tr class="total">
+      <td>REVENUE</td>
+      <td>$4,630</td>
+      <td>$4,695</td>
+      <td>$1,125</td>
+      <td>$1,170</td>
+    </tr>
+  </table>
+  <div class="footer">Excludes BUNNY promo, test orders (Daniel Maurrasse, Manuel Ruiz) • As of May 5, 2026</div>
+</body>
+</html>
