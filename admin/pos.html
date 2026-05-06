@@ -243,6 +243,15 @@ function clearCart() {
 }
 
 async function voidPayment() {
+  const code = prompt('Enter 4-digit manager code:');
+  if (!code || code !== '7742') {
+    const status = document.getElementById('statusBar');
+    status.style.display = 'block';
+    status.className = 'status error';
+    status.textContent = 'Invalid manager code.';
+    setTimeout(() => { status.style.display = 'none'; }, 3000);
+    return;
+  }
   const readerId = document.getElementById('readerSelect').value;
   const status = document.getElementById('statusBar');
   status.style.display = 'block';
