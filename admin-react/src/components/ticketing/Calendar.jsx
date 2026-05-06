@@ -14,7 +14,7 @@ function getSoldPercent(event) {
   return (totalSold / totalCap) * 100;
 }
 
-const almostFullDates = ['2026-05-01', '2026-05-02'];
+const almostFullDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09'];
 
 function getDotColor(pct, dateStr) {
   if (almostFullDates.includes(dateStr)) return 'bg-accent-coral';
