@@ -43,6 +43,10 @@
   .custom-amount { padding: 12px; }
   .custom-amount input { width: 100%; padding: 12px; background: #1a1a1a; color: #fff; border: 1px solid #333; border-radius: 8px; font-size: 18px; text-align: center; }
   .custom-amount button { width: 100%; padding: 10px; background: #333; color: #fff; border: none; border-radius: 8px; font-size: 14px; margin-top: 8px; cursor: pointer; }
+  .mgr-bar { padding: 8px 12px; text-align: center; font-size: 12px; letter-spacing: 1px; cursor: pointer; }
+  .mgr-bar.locked { background: #1a1a1a; color: #555; }
+  .mgr-bar.unlocked { background: #FF4D8D; color: #fff; animation: mgr-pulse 2s infinite; }
+  @keyframes mgr-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
 </style>
 </head>
 <body>
@@ -89,6 +93,8 @@
   <button class="clear-btn" style="margin-top:8px;color:#f87171;border-color:#f87171/30;" onclick="voidPayment()">VOID / CANCEL TERMINAL</button>
 </div>
 
+<div id="mgrBar" class="mgr-bar locked" onclick="toggleManager()">🔒 MANAGER MODE — TAP TO UNLOCK</div>
+
 <script>
 const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
@@ -114,6 +120,60 @@ const MENU = [
 ];
 
 let cart = [];
+let managerMode = false;
+let mgrTimeout = null;
+
+function toggleManager() {
+  if (managerMode) {
+    lockManager();
+    return;
+  }
+  const code = prompt('Enter 4-digit manager code:');
+  if (code === '7742') {
+    managerMode = true;
+    document.getElementById('mgrBar').className = 'mgr-bar unlocked';
+    document.getElementById('mgrBar').textContent = '🔓 MANAGER MODE ACTIVE — 2:00';
+    resetMgrTimeout();
+  } else {
+    const status = document.getElementById('statusBar');
+    status.style.display = 'block';
+    status.className = 'status error';
+    status.textContent = 'Invalid manager code.';
+    setTimeout(() => { status.style.display = 'none'; }, 3000);
+  }
+}
+
+function lockManager() {
+  managerMode = false;
+  clearInterval(mgrTimeout);
+  document.getElementById('mgrBar').className = 'mgr-bar locked';
+  document.getElementById('mgrBar').textContent = '🔒 MANAGER MODE — TAP TO UNLOCK';
+}
+
+function resetMgrTimeout() {
+  clearInterval(mgrTimeout);
+  let remaining = 120;
+  document.getElementById('mgrBar').textContent = '🔓 MANAGER MODE ACTIVE — 2:00';
+  mgrTimeout = setInterval(() => {
+    remaining--;
+    const m = Math.floor(remaining / 60);
+    const s = String(remaining % 60).padStart(2, '0');
+    document.getElementById('mgrBar').textContent = '🔓 MANAGER MODE ACTIVE — ' + m + ':' + s;
+    if (remaining <= 0) lockManager();
+  }, 1000);
+}
+
+function requireManager() {
+  if (managerMode) { resetMgrTimeout(); return true; }
+  const code = prompt('Enter 4-digit manager code:');
+  if (code === '7742') return true;
+  const status = document.getElementById('statusBar');
+  status.style.display = 'block';
+  status.className = 'status error';
+  status.textContent = 'Invalid manager code.';
+  setTimeout(() => { status.style.display = 'none'; }, 3000);
+  return false;
+}
 
 function renderMenu() {
   const grid = document.getElementById('menuGrid');
@@ -133,15 +193,7 @@ function addItem(name, amount) {
 }
 
 function addCustom() {
-  const code = prompt('Enter 4-digit manager code:');
-  if (!code || code !== '7742') {
-    const status = document.getElementById('statusBar');
-    status.style.display = 'block';
-    status.className = 'status error';
-    status.textContent = 'Invalid manager code.';
-    setTimeout(() => { status.style.display = 'none'; }, 3000);
-    return;
-  }
+  if (!requireManager()) return;
   const input = document.getElementById('customAmount');
   const val = parseFloat(input.value);
   if (!val || val <= 0) return;
@@ -252,15 +304,7 @@ function clearCart() {
 }
 
 async function voidPayment() {
-  const code = prompt('Enter 4-digit manager code:');
-  if (!code || code !== '7742') {
-    const status = document.getElementById('statusBar');
-    status.style.display = 'block';
-    status.className = 'status error';
-    status.textContent = 'Invalid manager code.';
-    setTimeout(() => { status.style.display = 'none'; }, 3000);
-    return;
-  }
+  if (!requireManager()) return;
   const readerId = document.getElementById('readerSelect').value;
   const status = document.getElementById('statusBar');
   status.style.display = 'block';
