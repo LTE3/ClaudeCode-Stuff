@@ -2973,32 +2973,6 @@
         <a href="#tickets" class="cta-btn">Get Tickets Now</a>
     </section>
 
-    <!-- CINCO DE MAYO RSVP -->
-    <section id="cinco-rsvp" style="padding:30px 20px;background:linear-gradient(135deg,#FFD700,#FF8C00);text-align:center;">
-        <div style="max-width:500px;margin:0 auto;">
-            <div style="font-size:2.5rem;margin-bottom:4px;">&#127798;&#127790;&#127880;</div>
-            <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:#000;letter-spacing:4px;margin-bottom:4px;">CINCO DE MAYO</h2>
-            <p style="color:#000;font-weight:700;font-size:1.1rem;margin-bottom:2px;">FREE RSVP — TONIGHT</p>
-            <p style="color:rgba(0,0,0,0.6);font-size:0.9rem;margin-bottom:16px;">Tuesday May 5th &bull; 10PM &bull; La Casita Brooklyn &bull; 428 Johnson Ave</p>
-            <form id="rsvpForm" style="display:flex;flex-direction:column;gap:10px;">
-                <input type="text" id="rsvpName" placeholder="Your Name" required style="padding:14px;border:2px solid rgba(0,0,0,0.15);border-radius:12px;font-size:16px;background:#fff;color:#000;text-align:center;" />
-                <input type="email" id="rsvpEmail" placeholder="Email" required style="padding:14px;border:2px solid rgba(0,0,0,0.15);border-radius:12px;font-size:16px;background:#fff;color:#000;text-align:center;" />
-                <input type="tel" id="rsvpPhone" placeholder="Phone (optional)" style="padding:14px;border:2px solid rgba(0,0,0,0.15);border-radius:12px;font-size:16px;background:#fff;color:#000;text-align:center;" />
-                <button type="submit" id="rsvpBtn" style="padding:16px;background:#000;color:#FFD700;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:4px;cursor:pointer;font-weight:700;">RSVP — FREE ENTRY</button>
-            </form>
-            <div id="rsvpSuccess" style="display:none;padding:20px 0;">
-                <div style="font-size:2rem;margin-bottom:8px;">&#10003;</div>
-                <p style="color:#000;font-weight:800;font-size:1.4rem;margin-bottom:4px;">YOU'RE ON THE LIST!</p>
-                <p id="rsvpConfirmName" style="color:rgba(0,0,0,0.7);font-size:1rem;margin-bottom:16px;"></p>
-                <div style="background:#fff;border-radius:16px;padding:20px;display:inline-block;margin-bottom:12px;">
-                    <img id="rsvpQR" src="" alt="RSVP QR Code" style="width:180px;height:180px;" />
-                </div>
-                <p style="color:rgba(0,0,0,0.6);font-size:0.85rem;">Screenshot this QR code &bull; Show at the door</p>
-                <p style="color:#000;font-weight:700;font-size:1.1rem;margin-top:12px;">TONIGHT 10PM &bull; LA CASITA BK &bull; 428 JOHNSON AVE</p>
-            </div>
-        </div>
-    </section>
-
     <!-- GRAND OPENING -->
     <div class="checkered-divider"></div>
     <section class="grand-opening" id="grand-opening">
@@ -3671,34 +3645,6 @@
         }
 
         // ─── Signup Form (disabled — form removed) ───
-
-        // ─── Cinco de Mayo RSVP ───
-        document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const name = document.getElementById('rsvpName').value.trim();
-            const email = document.getElementById('rsvpEmail').value.trim();
-            const phone = document.getElementById('rsvpPhone').value.trim();
-            if (!name || !email) return;
-            const btn = document.getElementById('rsvpBtn');
-            btn.disabled = true;
-            btn.textContent = 'SUBMITTING...';
-            try {
-                await fetch(SUPABASE_URL + '/functions/v1/terminal-payment', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                    },
-                    body: JSON.stringify({ action: 'rsvp', name: name, email: email, phone: phone })
-                });
-            } catch(ignored) {}
-            var qrData = encodeURIComponent('LACASITA-CINCO|' + name + '|' + email);
-            var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + qrData;
-            document.getElementById('rsvpQR').src = qrUrl;
-            document.getElementById('rsvpConfirmName').textContent = name + ' — ' + email;
-            this.style.display = 'none';
-            document.getElementById('rsvpSuccess').style.display = 'block';
-        });
 
         // ─── Analytics (privacy-friendly page view) ───
         if (!sessionStorage.getItem('lacasita_viewed')) {
