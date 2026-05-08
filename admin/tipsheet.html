@@ -59,11 +59,29 @@
 </section>
 
 <section>
-  <h2>TIP POOL</h2>
+  <h2>CARD TIPS</h2>
   <div class="pool-input">
-    <input type="number" id="poolAmount" placeholder="0.00" step="0.01" />
+    <input type="number" id="cardAmount" placeholder="0.00" step="0.01" oninput="updateTotal()" />
     <button onclick="pullPool()">PULL FROM<br/>THIS DATE</button>
   </div>
+</section>
+
+<section>
+  <h2>CASH TIPS</h2>
+  <div class="pool-input">
+    <input type="number" id="cashAmount" placeholder="0.00" step="0.01" oninput="updateTotal()" />
+  </div>
+</section>
+
+<section>
+  <h2>TOTAL TIP POOL</h2>
+  <div style="text-align:center;padding:10px 0;">
+    <span id="totalPool" style="font-size:36px;font-weight:800;color:#FF4D8D;">$0.00</span>
+    <div style="font-size:11px;color:#555;margin-top:6px;letter-spacing:1px;">
+      <span id="totalBreakdown">CARD $0.00 + CASH $0.00</span>
+    </div>
+  </div>
+  <input type="hidden" id="poolAmount" />
 </section>
 
 <section>
@@ -86,6 +104,15 @@
 <script>
 const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+function updateTotal() {
+  const card = parseFloat(document.getElementById('cardAmount').value) || 0;
+  const cash = parseFloat(document.getElementById('cashAmount').value) || 0;
+  const total = card + cash;
+  document.getElementById('poolAmount').value = total.toFixed(2);
+  document.getElementById('totalPool').textContent = '$' + total.toFixed(2);
+  document.getElementById('totalBreakdown').textContent = 'CARD $' + card.toFixed(2) + ' + CASH $' + cash.toFixed(2);
+}
 
 let roles = JSON.parse(localStorage.getItem('lc_roles') || 'null') || [
   { name: 'Barbacks', count: 2, points: 5, hours: 10 },
@@ -287,7 +314,8 @@ async function pullPool() {
       });
       const service = todays.reduce((s, p) => s + p.service_charge, 0);
       const tips = todays.reduce((s, p) => s + p.tip, 0);
-      document.getElementById('poolAmount').value = ((service + tips) / 100).toFixed(2);
+      document.getElementById('cardAmount').value = ((service + tips) / 100).toFixed(2);
+      updateTotal();
     }
   } catch {}
   btn.classList.remove('btn-loading');
