@@ -17,10 +17,18 @@
   .pool-input button { padding: 14px 16px; background: #1a1a1a; color: #FF4D8D; border: 1px solid #FF4D8D30; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; white-space: nowrap; }
   .date-input { padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
 
-  .role-row { background: #111; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+  .role-row { background: #111; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 10px; position: relative; }
+  .role-row.voided { opacity: 0.4; }
+  .role-row.voided .role-fields input { pointer-events: none; }
   .role-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .role-name { font-size: 16px; font-weight: 700; color: #eee; }
   .role-remove { color: #FF4D8D; cursor: pointer; font-size: 18px; padding: 0 6px; background: none; border: none; }
+  .void-btn { padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: 1px solid; margin-right: 6px; }
+  .void-btn.active { background: #f87171; color: #fff; border-color: #f87171; }
+  .void-btn.inactive { background: transparent; color: #555; border-color: #333; }
+  .void-tag { color: #f87171; font-size: 10px; font-weight: 700; letter-spacing: 2px; margin-left: 8px; }
+  .result.voided { opacity: 0.35; }
+  .result.voided .rperson { text-decoration: line-through; }
   .role-fields { display: flex; gap: 8px; }
   .role-field { flex: 1; text-align: center; }
   .role-field label { display: block; font-size: 9px; color: #555; letter-spacing: 2px; margin-bottom: 4px; }
@@ -124,10 +132,13 @@ function save() { localStorage.setItem('lc_roles', JSON.stringify(roles)); }
 
 function renderRoles() {
   document.getElementById('rolesList').innerHTML = roles.map((r, i) =>
-    `<div class="role-row">
+    `<div class="role-row${r.voided ? ' voided' : ''}">
       <div class="role-header">
-        <span class="role-name">${r.name}</span>
-        <button class="role-remove" onclick="removeRole(${i})">x</button>
+        <span class="role-name">${r.name}${r.voided ? '<span class="void-tag">VOID</span>' : ''}</span>
+        <div>
+          <button class="void-btn ${r.voided ? 'active' : 'inactive'}" onclick="toggleVoid(${i})">${r.voided ? 'VOIDED' : 'VOID'}</button>
+          <button class="role-remove" onclick="removeRole(${i})">x</button>
+        </div>
       </div>
       <div class="role-fields">
         <div class="role-field">
@@ -145,6 +156,12 @@ function renderRoles() {
       </div>
     </div>`
   ).join('');
+}
+
+function toggleVoid(i) {
+  roles[i].voided = !roles[i].voided;
+  save();
+  renderRoles();
 }
 
 function updateRole(i, field, val) {
@@ -171,18 +188,30 @@ function calculate() {
   const pool = parseFloat(document.getElementById('poolAmount').value) || 0;
   if (!pool || !roles.length) return;
 
-  const rows = roles.filter(r => r.count > 0 && r.points > 0 && r.hours > 0).map(r => {
+  const allRows = roles.filter(r => r.count > 0 && r.points > 0 && r.hours > 0).map(r => {
     const totalShares = r.count * r.points * r.hours;
     return { ...r, totalShares };
   });
 
-  const grandTotal = rows.reduce((s, r) => s + r.totalShares, 0);
+  const activeRows = allRows.filter(r => !r.voided);
+  const grandTotal = activeRows.reduce((s, r) => s + r.totalShares, 0);
   if (grandTotal === 0) return;
 
   let totalDistributed = 0;
   let totalStaff = 0;
 
-  document.getElementById('results').innerHTML = rows.map(r => {
+  document.getElementById('results').innerHTML = allRows.map(r => {
+    if (r.voided) {
+      return `<div class="result voided">
+        <div class="result-header">
+          <div class="rname">${r.name} (${r.count}) <span class="void-tag">VOID</span></div>
+          <div class="rperson">$0.00 <span style="font-size:12px;color:#666">each</span></div>
+        </div>
+        <div class="rdetail">
+          ${r.count} staff x ${r.points} pts x ${r.hours} hrs = <span>${r.totalShares} shares (excluded)</span>
+        </div>
+      </div>`;
+    }
     const roleTotal = Math.round(r.totalShares / grandTotal * pool * 100) / 100;
     const perPerson = Math.round(roleTotal / r.count * 100) / 100;
     totalDistributed += perPerson * r.count;
@@ -200,11 +229,10 @@ function calculate() {
   }).join('');
 
   document.getElementById('summary').innerHTML =
-    `<div class="total-line">$${pool.toFixed(2)} pool / ${grandTotal} total shares = $${(pool / grandTotal).toFixed(2)} per share</div>
+    `<div class="total-line">$${pool.toFixed(2)} pool / ${grandTotal} active shares = $${(pool / grandTotal).toFixed(2)} per share</div>
      ${totalStaff} staff &middot; Distributed: $${totalDistributed.toFixed(2)}`;
 
-  // Store for saving
-  window._lastCalc = { rows, pool, grandTotal };
+  window._lastCalc = { rows: activeRows, pool, grandTotal };
   document.getElementById('saveBtn').style.display = 'block';
 }
 
