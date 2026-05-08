@@ -17,18 +17,24 @@
   .pool-input button { padding: 14px 16px; background: #1a1a1a; color: #FF4D8D; border: 1px solid #FF4D8D30; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; white-space: nowrap; }
   .date-input { padding: 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; font-size: 14px; }
 
-  .role-row { background: #111; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 10px; position: relative; }
-  .role-row.voided { opacity: 0.4; }
-  .role-row.voided .role-fields input { pointer-events: none; }
+  .role-row { background: #111; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 10px; }
   .role-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .role-name { font-size: 16px; font-weight: 700; color: #eee; }
   .role-remove { color: #FF4D8D; cursor: pointer; font-size: 18px; padding: 0 6px; background: none; border: none; }
-  .void-btn { padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: 1px solid; margin-right: 6px; }
-  .void-btn.active { background: #f87171; color: #fff; border-color: #f87171; }
-  .void-btn.inactive { background: transparent; color: #555; border-color: #333; }
+  .role-meta { display: flex; gap: 8px; margin-bottom: 10px; }
+  .role-meta .role-field { flex: 1; }
+  .staff-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; padding: 8px; background: #0a0a0a; border-radius: 8px; }
+  .staff-row.paid { opacity: 0.35; }
+  .staff-row input[type="text"] { flex: 2; padding: 8px; background: transparent; color: #eee; border: 1px solid #222; border-radius: 6px; font-size: 13px; }
+  .staff-row input[type="number"] { width: 60px; padding: 8px; background: transparent; color: #FF4D8D; border: 1px solid #222; border-radius: 6px; font-size: 16px; font-weight: 700; text-align: center; }
+  .staff-row .hrs-label { font-size: 9px; color: #555; letter-spacing: 1px; }
+  .paid-btn { padding: 4px 8px; border-radius: 6px; font-size: 9px; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: 1px solid; white-space: nowrap; }
+  .paid-btn.yes { background: #34d399; color: #000; border-color: #34d399; }
+  .paid-btn.no { background: transparent; color: #555; border-color: #333; }
+  .add-staff-btn { width: 100%; padding: 8px; background: transparent; color: #555; border: 1px dashed #333; border-radius: 8px; font-size: 11px; cursor: pointer; margin-top: 4px; }
   .void-tag { color: #f87171; font-size: 10px; font-weight: 700; letter-spacing: 2px; margin-left: 8px; }
-  .result.voided { opacity: 0.35; }
-  .result.voided .rperson { text-decoration: line-through; }
+  .result.paid-result { opacity: 0.35; }
+  .result.paid-result .rperson { text-decoration: line-through; }
   .role-fields { display: flex; gap: 8px; }
   .role-field { flex: 1; text-align: center; }
   .role-field label { display: block; font-size: 9px; color: #555; letter-spacing: 2px; margin-bottom: 4px; }
@@ -122,51 +128,79 @@ function updateTotal() {
   document.getElementById('totalBreakdown').textContent = 'CARD $' + card.toFixed(2) + ' + CASH $' + cash.toFixed(2);
 }
 
-let roles = JSON.parse(localStorage.getItem('lc_roles') || 'null') || [
-  { name: 'Barbacks', count: 2, points: 5, hours: 10 },
-  { name: 'Bartenders', count: 3, points: 8, hours: 10 },
-  { name: 'Bottle Girls', count: 3, points: 8, hours: 8 },
+let roles = JSON.parse(localStorage.getItem('lc_roles_v2') || 'null') || [
+  { name: 'Barbacks', points: 5, staff: [
+    { name: '', hours: 10, paid: false },
+    { name: '', hours: 10, paid: false },
+  ]},
+  { name: 'Bartenders', points: 8, staff: [
+    { name: '', hours: 10, paid: false },
+    { name: '', hours: 10, paid: false },
+    { name: '', hours: 10, paid: false },
+  ]},
+  { name: 'Bottle Girls', points: 8, staff: [
+    { name: '', hours: 8, paid: false },
+    { name: '', hours: 8, paid: false },
+    { name: '', hours: 8, paid: false },
+  ]},
 ];
 
-function save() { localStorage.setItem('lc_roles', JSON.stringify(roles)); }
+function save() { localStorage.setItem('lc_roles_v2', JSON.stringify(roles)); }
 
 function renderRoles() {
-  document.getElementById('rolesList').innerHTML = roles.map((r, i) =>
-    `<div class="role-row${r.voided ? ' voided' : ''}">
+  document.getElementById('rolesList').innerHTML = roles.map((r, i) => {
+    const staffHtml = r.staff.map((s, j) =>
+      `<div class="staff-row${s.paid ? ' paid' : ''}">
+        <input type="text" value="${s.name}" placeholder="Staff ${j+1}" onchange="updateStaff(${i},${j},'name',this.value)" />
+        <div style="text-align:center">
+          <span class="hrs-label">HRS</span>
+          <input type="number" value="${s.hours}" step="0.5" onchange="updateStaff(${i},${j},'hours',this.value)" />
+        </div>
+        <button class="paid-btn ${s.paid ? 'yes' : 'no'}" onclick="togglePaid(${i},${j})">${s.paid ? 'PAID' : 'OWED'}</button>
+      </div>`
+    ).join('');
+
+    const unpaidCount = r.staff.filter(s => !s.paid).length;
+    const totalCount = r.staff.length;
+
+    return `<div class="role-row">
       <div class="role-header">
-        <span class="role-name">${r.name}${r.voided ? '<span class="void-tag">VOID</span>' : ''}</span>
-        <div>
-          <button class="void-btn ${r.voided ? 'active' : 'inactive'}" onclick="toggleVoid(${i})">${r.voided ? 'VOIDED' : 'VOID'}</button>
-          <button class="role-remove" onclick="removeRole(${i})">x</button>
-        </div>
+        <span class="role-name">${r.name} <span style="font-size:11px;color:#555">(${unpaidCount}/${totalCount} owed)</span></span>
+        <button class="role-remove" onclick="removeRole(${i})">x</button>
       </div>
-      <div class="role-fields">
-        <div class="role-field">
-          <label>STAFF</label>
-          <input type="number" value="${r.count}" min="1" onchange="updateRole(${i},'count',this.value)" />
-        </div>
+      <div class="role-meta">
         <div class="role-field">
           <label>POINTS</label>
-          <input type="number" value="${r.points}" step="0.5" onchange="updateRole(${i},'points',this.value)" />
-        </div>
-        <div class="role-field">
-          <label>HOURS</label>
-          <input type="number" value="${r.hours}" step="0.5" onchange="updateRole(${i},'hours',this.value)" />
+          <input type="number" value="${r.points}" step="0.5" onchange="updateRolePoints(${i},this.value)" />
         </div>
       </div>
-    </div>`
-  ).join('');
+      ${staffHtml}
+      <button class="add-staff-btn" onclick="addStaff(${i})">+ ADD STAFF</button>
+    </div>`;
+  }).join('');
 }
 
-function toggleVoid(i) {
-  roles[i].voided = !roles[i].voided;
+function updateRolePoints(i, val) {
+  roles[i].points = parseFloat(val) || 0;
+  save();
+}
+
+function updateStaff(i, j, field, val) {
+  if (field === 'hours') roles[i].staff[j].hours = parseFloat(val) || 0;
+  else roles[i].staff[j][field] = val;
+  save();
+}
+
+function togglePaid(i, j) {
+  roles[i].staff[j].paid = !roles[i].staff[j].paid;
   save();
   renderRoles();
 }
 
-function updateRole(i, field, val) {
-  roles[i][field] = parseFloat(val) || 0;
+function addStaff(i) {
+  roles[i].staff.push({ name: '', hours: 8, paid: false });
   save();
+  renderRoles();
 }
 
 function removeRole(i) {
@@ -178,7 +212,7 @@ function removeRole(i) {
 function addRole() {
   const name = document.getElementById('newRoleName').value.trim();
   if (!name) return;
-  roles.push({ name, count: 1, points: 1, hours: 8 });
+  roles.push({ name, points: 5, staff: [{ name: '', hours: 8, paid: false }] });
   save();
   document.getElementById('newRoleName').value = '';
   renderRoles();
@@ -188,51 +222,45 @@ function calculate() {
   const pool = parseFloat(document.getElementById('poolAmount').value) || 0;
   if (!pool || !roles.length) return;
 
-  const allRows = roles.filter(r => r.count > 0 && r.points > 0 && r.hours > 0).map(r => {
-    const totalShares = r.count * r.points * r.hours;
-    return { ...r, totalShares };
-  });
+  const allPeople = [];
+  for (const r of roles) {
+    for (const s of r.staff) {
+      if (s.hours > 0) {
+        const shares = r.points * s.hours;
+        allPeople.push({ role: r.name, name: s.name || 'Staff', hours: s.hours, points: r.points, shares, paid: s.paid });
+      }
+    }
+  }
 
-  const activeRows = allRows.filter(r => !r.voided);
-  const grandTotal = activeRows.reduce((s, r) => s + r.totalShares, 0);
+  const grandTotal = allPeople.reduce((s, p) => s + p.shares, 0);
   if (grandTotal === 0) return;
 
   let totalDistributed = 0;
-  let totalStaff = 0;
+  let totalOwed = 0;
+  let owedCount = 0;
 
-  document.getElementById('results').innerHTML = allRows.map(r => {
-    if (r.voided) {
-      return `<div class="result voided">
-        <div class="result-header">
-          <div class="rname">${r.name} (${r.count}) <span class="void-tag">VOID</span></div>
-          <div class="rperson">$0.00 <span style="font-size:12px;color:#666">each</span></div>
-        </div>
-        <div class="rdetail">
-          ${r.count} staff x ${r.points} pts x ${r.hours} hrs = <span>${r.totalShares} shares (excluded)</span>
-        </div>
-      </div>`;
-    }
-    const roleTotal = Math.round(r.totalShares / grandTotal * pool * 100) / 100;
-    const perPerson = Math.round(roleTotal / r.count * 100) / 100;
-    totalDistributed += perPerson * r.count;
-    totalStaff += r.count;
-    return `<div class="result">
+  document.getElementById('results').innerHTML = allPeople.map(p => {
+    const amount = Math.round(p.shares / grandTotal * pool * 100) / 100;
+    totalDistributed += amount;
+    if (!p.paid) { totalOwed += amount; owedCount++; }
+    const label = p.name || 'Staff';
+    return `<div class="result${p.paid ? ' paid-result' : ''}">
       <div class="result-header">
-        <div class="rname">${r.name} (${r.count})</div>
-        <div class="rperson">$${perPerson.toFixed(2)} <span style="font-size:12px;color:#666">each</span></div>
+        <div class="rname">${label} <span style="font-size:11px;color:#555">${p.role}</span>${p.paid ? ' <span class="void-tag">PAID</span>' : ''}</div>
+        <div class="rperson">$${amount.toFixed(2)}</div>
       </div>
       <div class="rdetail">
-        ${r.count} staff x ${r.points} pts x ${r.hours} hrs = <span>${r.totalShares} shares</span>
-        &middot; Role total: <span>$${roleTotal.toFixed(2)}</span>
+        ${p.points} pts x ${p.hours} hrs = <span>${p.shares} shares</span>
       </div>
     </div>`;
   }).join('');
 
   document.getElementById('summary').innerHTML =
-    `<div class="total-line">$${pool.toFixed(2)} pool / ${grandTotal} active shares = $${(pool / grandTotal).toFixed(2)} per share</div>
-     ${totalStaff} staff &middot; Distributed: $${totalDistributed.toFixed(2)}`;
+    `<div class="total-line">$${pool.toFixed(2)} pool / ${grandTotal} total shares = $${(pool / grandTotal).toFixed(4)} per share</div>
+     ${allPeople.length} staff &middot; Distributed: $${totalDistributed.toFixed(2)}<br/>
+     <span style="color:#FF4D8D;font-weight:700">${owedCount} still owed: $${totalOwed.toFixed(2)}</span>`;
 
-  window._lastCalc = { rows: activeRows, pool, grandTotal };
+  window._lastCalc = { people: allPeople, pool, grandTotal };
   document.getElementById('saveBtn').style.display = 'block';
 }
 
@@ -240,73 +268,17 @@ async function savePayouts() {
   const calc = window._lastCalc;
   if (!calc) return;
   const date = document.getElementById('sheetDate').value;
-  const payouts = [];
-
-  for (const r of calc.rows) {
-    const roleTotal = Math.round(r.totalShares / calc.grandTotal * calc.pool * 100) / 100;
-    const perPerson = Math.round(roleTotal / r.count * 100) / 100;
-    for (let i = 0; i < r.count; i++) {
-      payouts.push({
-        staff_name: r.name + ' #' + (i + 1),
-        role: r.name,
-        party_date: date,
-        hours: r.hours,
-        points: r.points,
-        shares: r.points * r.hours,
-        amount: perPerson,
-        pool_total: calc.pool,
-      });
-    }
-  }
-
-  // If clock records exist, use real names
-  try {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
-      body: JSON.stringify({ action: 'clock_records', party_date: date }),
-    });
-    const data = await res.json();
-    if (data.records?.length) {
-      const realPayouts = [];
-      for (const r of calc.rows) {
-        const roleTotal = Math.round(r.totalShares / calc.grandTotal * calc.pool * 100) / 100;
-        const perPerson = Math.round(roleTotal / r.count * 100) / 100;
-        // Match role name (strip trailing 's' for matching)
-        const roleName = r.name.replace(/s$/, '');
-        const matched = data.records.filter(cr => cr.role === roleName || cr.role === r.name);
-        if (matched.length > 0) {
-          for (const m of matched) {
-            realPayouts.push({
-              staff_name: m.name,
-              role: m.role,
-              party_date: date,
-              hours: m.hours || r.hours,
-              points: r.points,
-              shares: r.points * (m.hours || r.hours),
-              amount: perPerson,
-              pool_total: calc.pool,
-            });
-          }
-        } else {
-          for (let i = 0; i < r.count; i++) {
-            realPayouts.push({
-              staff_name: r.name + ' #' + (i + 1),
-              role: r.name,
-              party_date: date,
-              hours: r.hours,
-              points: r.points,
-              shares: r.points * r.hours,
-              amount: perPerson,
-              pool_total: calc.pool,
-            });
-          }
-        }
-      }
-      payouts.length = 0;
-      payouts.push(...realPayouts);
-    }
-  } catch {}
+  const payouts = calc.people.map(p => ({
+    staff_name: p.name,
+    role: p.role,
+    party_date: date,
+    hours: p.hours,
+    points: p.points,
+    shares: p.shares,
+    amount: Math.round(p.shares / calc.grandTotal * calc.pool * 100) / 100,
+    pool_total: calc.pool,
+    paid: p.paid,
+  }));
 
   const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
     method: 'POST',
@@ -378,20 +350,21 @@ async function pullFromClockIn() {
     const data = await res.json();
     if (!data.records?.length) { alert('No clock-in records for ' + date); return; }
 
-    // Group by role, average hours per role
     const byRole = {};
     for (const r of data.records) {
-      if (!byRole[r.role]) byRole[r.role] = { count: 0, totalHours: 0 };
-      byRole[r.role].count++;
-      const hrs = r.hours ? parseFloat(r.hours) : 0;
-      byRole[r.role].totalHours += hrs;
+      const roleName = r.role + 's';
+      if (!byRole[roleName]) byRole[roleName] = { points: ROLE_POINTS[r.role] || 5, staff: [] };
+      byRole[roleName].staff.push({
+        name: r.name || '',
+        hours: r.hours ? parseFloat(r.hours) : 0,
+        paid: false,
+      });
     }
 
     roles = Object.entries(byRole).map(([name, info]) => ({
-      name: name + 's',
-      count: info.count,
-      points: ROLE_POINTS[name] || 5,
-      hours: info.count > 0 ? Math.round(info.totalHours / info.count * 2) / 2 : 0,
+      name,
+      points: info.points,
+      staff: info.staff,
     }));
 
     save();
