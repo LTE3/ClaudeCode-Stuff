@@ -14,7 +14,8 @@ function getSoldPercent(event) {
   return (totalSold / totalCap) * 100;
 }
 
-const almostFullDates = ['2026-05-01', '2026-05-02', '2026-05-08', '2026-05-09'];
+const almostFullDates = ['2026-05-01', '2026-05-02'];
+const cancelledDates = ['2026-05-08', '2026-05-09'];
 
 function getDotColor(pct, dateStr) {
   if (almostFullDates.includes(dateStr)) return 'bg-accent-coral';
@@ -70,13 +71,16 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
     const isPast = dateObj < today;
     const event = eventsByDate[dateStr];
     const hasEvent = !!event;
+    const isCancelled = cancelledDates.includes(dateStr);
     const pct = getSoldPercent(event);
     const urgency = getUrgencyLabel(pct, dateStr);
-    const isClickable = hasEvent && !isPast;
+    const isClickable = hasEvent && !isPast && !isCancelled;
 
     let cellClass = 'relative flex flex-col items-center justify-center p-2 min-h-[60px] rounded-[12px] transition-all duration-200 ';
 
-    if (isSunday && !hasEvent) {
+    if (isCancelled) {
+      cellClass += 'bg-bg-surface border border-red-500/30 cursor-default';
+    } else if (isSunday && !hasEvent) {
       cellClass += 'opacity-30 cursor-default';
     } else if (isPast) {
       cellClass += 'opacity-40 cursor-default';
@@ -92,17 +96,27 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
         className={cellClass}
         onClick={isClickable ? () => onSelectDate(dateStr) : undefined}
       >
-        <span className={`text-sm font-medium ${isClickable ? 'text-text-primary' : 'text-text-muted'}`}>
+        {isCancelled && (
+          <>
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 60 60" preserveAspectRatio="none">
+              <line x1="8" y1="8" x2="52" y2="52" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
+              <line x1="52" y1="8" x2="8" y2="52" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
+            </svg>
+          </>
+        )}
+        <span className={`text-sm font-medium ${isCancelled ? 'text-red-400/60' : isClickable ? 'text-text-primary' : 'text-text-muted'}`}>
           {day}
         </span>
-        {hasEvent && !(isSunday && !hasEvent) && (
+        {isCancelled ? (
+          <span className="text-[8px] text-red-400 font-bold tracking-[1px] mt-0.5 leading-none relative z-10">CANCELLED</span>
+        ) : hasEvent && !(isSunday && !hasEvent) ? (
           <>
             <div className={`w-2 h-2 rounded-full mt-1 ${getDotColor(pct, dateStr)} animate-[dotPulse_2s_ease-in-out_infinite]`} />
             {urgency && (
               <span className="text-[9px] text-accent-coral mt-0.5 leading-none">{urgency}</span>
             )}
           </>
-        )}
+        ) : null}
       </div>
     );
   }
