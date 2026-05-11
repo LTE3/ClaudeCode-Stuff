@@ -41,9 +41,9 @@ const nightclubCards = [
   {
     key: 'vip_ga',
     emoji: '\u2B50',
-    title: 'VIP GA',
-    price: '$35',
-    fee: '+ $5 fee',
+    title: 'RESERVE A TABLE',
+    price: '',
+    fee: null,
     color: 'gold',
     borderColor: 'border-accent-gold/15',
     hoverBorder: 'hover:border-accent-gold/40',
@@ -115,7 +115,7 @@ function isDanceNight(eventType) {
 }
 
 function getCurrentTier(availability) {
-  if (!availability) return { tier: 1, price: '$10', total: '$15', remaining: 100, label: 'Tier 1' };
+  if (!availability) return { tier: 1, price: '$10', total: '$15', remaining: 22, label: 'Tier 1' };
   const t1sold = availability.ga_tier1_sold || 0;
   const t1cap = availability.ga_tier1_capacity ?? 100;
   const t2sold = availability.ga_tier2_sold || 0;
@@ -162,7 +162,9 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
     if (key === 'ga') onSelectGA();
     else if (key === 'free_ga') onShowLadiesFree('dance_ga_free');
     else if (key === 'free_before_12') onShowLadiesFree('free_before_12');
-    else if (key === 'vip_ga') onSelectVipGA();
+    else if (key === 'vip_ga') {
+      document.querySelector('[data-venue-map]')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
     else if (key === 'ladies_free') onShowLadiesFree();
     else if (key === 'ga_open_bar' || key === 'ladies_group') onSelectDirect(key);
   }
@@ -196,8 +198,8 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
               {tier.soldOut && <div className="text-xs text-accent-coral font-bold mt-1">SOLD OUT</div>}
             </div>
           )}
-          {card.fee && card.key !== 'ga' && (
-            <div className="text-sm text-text-muted mt-1">{card.fee} = {card.key === 'vip_ga' ? '$40' : card.fee} total</div>
+          {card.fee && card.key !== 'ga' && card.key !== 'vip_ga' && (
+            <div className="text-sm text-text-muted mt-1">{card.fee} = {card.fee} total</div>
           )}
           {card.key === 'ga' && dance && (
             <div className="text-xs text-accent-blue/70 mt-3">{card.subtitle}</div>
@@ -206,12 +208,17 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
             <div className="text-[10px] text-accent-gold/70 mt-2">21+ are allowed to stay for the nightclub experience.</div>
           )}
           {card.key === 'vip_ga' && (
-            <div className="text-xs text-accent-gold/70 mt-3">VIP area &bull; Priority entry</div>
+            <>
+              <div className="text-xs text-accent-gold/70 mt-3">VIP Tables &bull; Bottle Service</div>
+              <button className="mt-4 text-xs tracking-[1.5px] bg-accent-gold/10 text-accent-gold border border-accent-gold/25 rounded-full px-5 py-2.5 hover:bg-accent-gold/20 transition-colors font-semibold">
+                VIEW TABLES ↓
+              </button>
+            </>
           )}
           {card.key === 'free_ga' && (
             <>
               <div className="text-sm text-accent-teal mt-3 font-semibold">
-                {freeGaRemaining > 0 ? `${Math.min(freeGaRemaining, 50)} spots left` : 'ALL CLAIMED'}
+                {freeGaRemaining > 0 ? `${Math.min(freeGaRemaining, 47)} spots left` : 'ALL CLAIMED'}
               </div>
               <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
                 CLAIM FREE ENTRY
@@ -220,7 +227,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           )}
           {card.key === 'ladies_free' && ladiesFreeRemaining != null && (
             <div className="text-sm text-accent-teal mt-3 font-semibold">
-              {ladiesFreeRemaining > 0 ? `${Math.min(ladiesFreeRemaining, 50)} spots left` : 'ALL CLAIMED'}
+              {ladiesFreeRemaining > 0 ? `${Math.min(ladiesFreeRemaining, 33)} spots left` : 'ALL CLAIMED'}
             </div>
           )}
           {card.key === 'ladies_free' && (
@@ -231,7 +238,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           {card.key === 'free_before_12' && (
             <>
               <div className="text-sm text-accent-teal mt-3 font-semibold">
-                {freeGaRemaining > 0 ? `${Math.min(freeGaRemaining, 50)} spots left` : 'ALL CLAIMED'}
+                {freeGaRemaining > 0 ? `${Math.min(freeGaRemaining, 47)} spots left` : 'ALL CLAIMED'}
               </div>
               <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
                 CLAIM FREE ENTRY

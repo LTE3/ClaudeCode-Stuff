@@ -71,7 +71,7 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
       />
 
       {/* Venue Map — compact below the cards */}
-      <div className="bg-bg-surface rounded-[20px] border border-border-default p-2 mt-4">
+      <div data-venue-map className="bg-bg-surface rounded-[20px] border border-border-default p-2 mt-4">
         <div>
           {danceNight ? (
             <DanceVenueMapSVG
