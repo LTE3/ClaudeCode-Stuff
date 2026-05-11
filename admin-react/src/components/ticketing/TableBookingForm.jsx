@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useCheckout } from '../../hooks/useCheckout';
 
 const VIP_COUCH_CONFIG = {
-  price: 800,
+  price: 700,
   deposit: 100,
   partyMin: 5,
   partyMax: 10,
