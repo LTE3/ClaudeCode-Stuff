@@ -24,7 +24,7 @@ const REGULAR_COUCH_CONFIG = {
   deposit: 100,
   partyMin: 5,
   partyMax: 10,
-  package: '2 Bottles, 1 House Champagne, Admission Separate',
+  package: '2 Bottles, 1 House Champagne, Full Admission',
   packageName: 'DTMF Package',
 };
 
@@ -33,7 +33,7 @@ const REGULAR_HIGH_TOP_CONFIG = {
   deposit: 50,
   partyMin: 1,
   partyMax: 4,
-  package: '1 Casamigos Bottle, 1 Hookah, Admission Separate',
+  package: '1 Casamigos Bottle, 1 Hookah, Full Admission',
   packageName: 'Verano Package',
 };
 
