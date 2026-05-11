@@ -77,45 +77,39 @@ function isDanceNight(eventType) {
 
 function TablePickerPopup({ onSelectPackage, onClose }) {
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-start justify-center pt-16 px-4 pb-4 overflow-y-auto" onClick={onClose}>
-      <div className="bg-bg-elevated border border-border-default rounded-[20px] max-w-lg w-full p-5" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-[family-name:var(--font-display)] text-accent-gold text-xl tracking-[3px]">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-start justify-center pt-10 px-3 pb-3" onClick={onClose}>
+      <div className="bg-bg-elevated border border-border-default rounded-[20px] max-w-lg w-full p-4" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-[family-name:var(--font-display)] text-accent-gold text-lg tracking-[3px]">
             RESERVE A TABLE
           </h3>
           <button onClick={onClose} className="text-text-muted hover:text-text-primary transition-colors cursor-pointer bg-transparent border-none text-xl p-1">
             ✕
           </button>
         </div>
-        <p className="text-text-secondary text-sm mb-5">Select a bottle package to reserve your table.</p>
 
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-2">
           {TABLE_PACKAGES.map(pkg => (
             <div
               key={pkg.key}
               onClick={() => onSelectPackage(pkg)}
-              className={`bg-bg-surface border border-${pkg.color}/15 rounded-[16px] p-5 cursor-pointer
-                transition-all duration-200 hover:-translate-y-0.5 hover:border-${pkg.color}/40 hover:shadow-[0_0_20px_rgba(251,191,36,0.1)]
+              className={`bg-bg-surface border border-${pkg.color}/15 rounded-[12px] px-4 py-3 cursor-pointer
+                transition-all duration-200 hover:border-${pkg.color}/40
                 group relative overflow-hidden`}
             >
-              <div className={`absolute top-0 left-0 right-0 h-[2px] bg-${pkg.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
-
-              <div className="flex items-start justify-between mb-2">
+              <div className="flex items-center justify-between">
                 <div>
-                  <div className={`font-[family-name:var(--font-display)] text-${pkg.color} text-lg tracking-[2px]`}>
+                  <div className={`font-[family-name:var(--font-display)] text-${pkg.color} text-base tracking-[2px]`}>
                     {pkg.emoji} {pkg.title}
                   </div>
-                  <div className="text-text-muted text-xs mt-0.5">{pkg.guests}</div>
+                  <div className="text-text-muted text-[11px] mt-0.5">{pkg.guests} &bull; {pkg.deposit} deposit</div>
                 </div>
-                <div className="text-right">
-                  <div className={`text-${pkg.color} text-xl font-bold`}>{pkg.price}</div>
-                  <div className="text-text-muted text-xs">{pkg.deposit} deposit</div>
-                </div>
+                <div className={`text-${pkg.color} text-lg font-bold`}>{pkg.price}</div>
               </div>
 
-              <div className="flex flex-wrap gap-1.5 mt-3">
+              <div className="flex flex-wrap gap-1 mt-2">
                 {pkg.includes.map(item => (
-                  <span key={item} className={`text-xs bg-${pkg.color}/10 text-${pkg.color} rounded-full px-3 py-1.5`}>
+                  <span key={item} className={`text-[11px] bg-${pkg.color}/10 text-${pkg.color} rounded-full px-2 py-0.5`}>
                     {item}
                   </span>
                 ))}
