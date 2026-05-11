@@ -102,6 +102,15 @@ export default function BookingPanel({ type, date, availability, tableInfo, onBa
           subtitle="Free entry to the dance experience"
         />
       )}
+      {type === 'free_before_12' && (
+        <LadiesFreeForm
+          date={date}
+          remaining={availability?.free_ga_remaining}
+          claimType="dance_ga_free"
+          title="FREE BEFORE 12AM"
+          subtitle="Free admission before midnight. Must be on the guest list."
+        />
+      )}
       {(type === 'ga_open_bar' || type === 'ladies_group') && (
         <DirectBookingForm type={type} date={date} />
       )}

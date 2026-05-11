@@ -1,18 +1,5 @@
 const nightclubCards = [
   {
-    key: 'ga',
-    emoji: '\u{1F3AB}',
-    title: 'GENERAL ADMISSION',
-    price: '$15',
-    fee: '+ $5 fee',
-    color: 'blue',
-    borderColor: 'border-accent-blue/15',
-    hoverBorder: 'hover:border-accent-blue/40',
-    textColor: 'text-accent-blue',
-    accentBg: 'bg-accent-blue',
-    shadow: 'hover:shadow-[0_0_20px_rgba(96,165,250,0.15)]',
-  },
-  {
     key: 'ladies_free',
     emoji: '\u{1F483}',
     title: 'LADIES FREE',
@@ -24,6 +11,32 @@ const nightclubCards = [
     textColor: 'text-accent-teal',
     accentBg: 'bg-accent-teal',
     shadow: 'hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]',
+  },
+  {
+    key: 'free_before_12',
+    emoji: '\u{1F389}',
+    title: 'FREE BEFORE 12AM',
+    price: 'FREE',
+    fee: null,
+    color: 'teal',
+    borderColor: 'border-accent-teal/15',
+    hoverBorder: 'hover:border-accent-teal/40',
+    textColor: 'text-accent-teal',
+    accentBg: 'bg-accent-teal',
+    shadow: 'hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]',
+  },
+  {
+    key: 'ga',
+    emoji: '\u{1F3AB}',
+    title: 'GENERAL ADMISSION',
+    price: '$15',
+    fee: '+ $5 fee',
+    color: 'blue',
+    borderColor: 'border-accent-blue/15',
+    hoverBorder: 'hover:border-accent-blue/40',
+    textColor: 'text-accent-blue',
+    accentBg: 'bg-accent-blue',
+    shadow: 'hover:shadow-[0_0_20px_rgba(96,165,250,0.15)]',
   },
   {
     key: 'vip_ga',
@@ -138,7 +151,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
   const tier = getCurrentTier(availability);
   const allCards = dance ? danceCards : nightclubCards;
   // When GA sold out, hide GA/VIP GA/Ladies Free cards — only show table-related options
-  const gaKeys = ['ga', 'vip_ga', 'ladies_free', 'free_ga'];
+  const gaKeys = ['ga', 'vip_ga', 'ladies_free', 'free_ga', 'free_before_12'];
   const cards = gaSoldOut ? allCards.filter(c => !gaKeys.includes(c.key)) : allCards;
 
   const freeGaCapacity = availability?.free_ga_capacity ?? 150;
@@ -148,13 +161,14 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
   function handleClick(key) {
     if (key === 'ga') onSelectGA();
     else if (key === 'free_ga') onShowLadiesFree('dance_ga_free');
+    else if (key === 'free_before_12') onShowLadiesFree('free_before_12');
     else if (key === 'vip_ga') onSelectVipGA();
     else if (key === 'ladies_free') onShowLadiesFree();
     else if (key === 'ga_open_bar' || key === 'ladies_group') onSelectDirect(key);
   }
 
   return (
-    <div className={`grid ${dance ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'} gap-3 mt-6`}>
+    <div className={`grid ${dance ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'} gap-3`}>
       {cards.map(card => (
         <div
           key={card.key}
@@ -213,6 +227,16 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
             <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
               CLAIM FREE ENTRY
             </button>
+          )}
+          {card.key === 'free_before_12' && (
+            <>
+              <div className="text-sm text-accent-teal mt-3 font-semibold">
+                {freeGaRemaining > 0 ? `${Math.min(freeGaRemaining, 50)} spots left` : 'ALL CLAIMED'}
+              </div>
+              <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
+                CLAIM FREE ENTRY
+              </button>
+            </>
           )}
           {card.key === 'test' && (
             <div className="text-xs text-text-muted/60 mt-3">For testing checkout</div>

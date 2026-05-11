@@ -55,7 +55,7 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
   else if (actualRemaining <= 50) gaLabel = 'SELLING FAST — ' + actualRemaining + ' LEFT';
 
   return (
-    <svg viewBox="0 0 600 1020" className="w-full md:max-w-[550px] md:mx-auto rounded-[20px] overflow-hidden">
+    <svg viewBox="0 0 600 1020" className="w-full md:max-w-[380px] md:mx-auto rounded-[20px] overflow-hidden">
       <defs>
         <linearGradient id="stageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#FF4D8D" />

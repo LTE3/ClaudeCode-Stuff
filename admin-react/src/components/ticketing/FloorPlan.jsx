@@ -57,8 +57,21 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
         </button>
       </div>
 
-      {/* Venue Map */}
-      <div className="bg-bg-surface rounded-[20px] border border-border-default p-2 mb-4">
+      {/* Ticket Type Cards — shown first so free options are immediately visible */}
+      <TicketTypeCards
+        eventType={eventType}
+        onSelectGA={onSelectGA}
+        onSelectVipGA={onSelectVipGA}
+        onShowLadiesFree={onShowLadiesFree}
+        onBuyTest={onBuyTest}
+        onSelectDirect={onSelectDirect}
+        ladiesFreeRemaining={ladiesFreeRemaining}
+        availability={availability}
+        gaSoldOut={gaSoldOut}
+      />
+
+      {/* Venue Map — compact below the cards */}
+      <div className="bg-bg-surface rounded-[20px] border border-border-default p-2 mt-4">
         <div>
           {danceNight ? (
             <DanceVenueMapSVG
@@ -77,19 +90,6 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
           )}
         </div>
       </div>
-
-      {/* Ticket Type Cards */}
-      <TicketTypeCards
-        eventType={eventType}
-        onSelectGA={onSelectGA}
-        onSelectVipGA={onSelectVipGA}
-        onShowLadiesFree={onShowLadiesFree}
-        onBuyTest={onBuyTest}
-        onSelectDirect={onSelectDirect}
-        ladiesFreeRemaining={ladiesFreeRemaining}
-        availability={availability}
-        gaSoldOut={gaSoldOut}
-      />
     </div>
   );
 }
