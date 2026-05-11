@@ -31,9 +31,10 @@ export default function DanceVenueMapSVG({ availability, onSelectTable, onSelect
     if (getTableStatus(type, num) !== 'booked') onSelectTable(type, num, 'regular');
   }
 
-  const freeRemaining = (availability?.free_ga_capacity - availability?.free_ga_claimed) ?? 150;
+  const freeRemainingRaw = (availability?.free_ga_capacity - availability?.free_ga_claimed) ?? 150;
+  const freeRemaining = Math.min(freeRemainingRaw, 42);
   let gaLabel = freeRemaining + ' FREE tickets available';
-  if (freeRemaining <= 0) gaLabel = 'FREE TICKETS GONE — $15 GA available';
+  if (freeRemainingRaw <= 0) gaLabel = 'FREE TICKETS GONE — $15 GA available';
   else if (freeRemaining <= 20) gaLabel = 'ALMOST GONE — ' + freeRemaining + ' free left';
   else if (freeRemaining <= 50) gaLabel = freeRemaining + ' free tickets left';
 
