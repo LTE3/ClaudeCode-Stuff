@@ -77,7 +77,7 @@ function isDanceNight(eventType) {
 
 function TablePickerPopup({ onSelectPackage, onClose }) {
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-start justify-center pt-10 px-3 pb-3" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-start justify-center pt-3 px-3 pb-3" onClick={onClose}>
       <div className="bg-bg-elevated border border-border-default rounded-[20px] max-w-lg w-full p-4" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-[family-name:var(--font-display)] text-accent-gold text-lg tracking-[3px]">
