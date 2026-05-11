@@ -40,18 +40,6 @@ const TABLE_PACKAGES = [
     color: 'accent-teal',
     emoji: '\u{1F37E}',
   },
-  {
-    key: 'regular_high_top',
-    title: 'VERANO HIGH TOP',
-    type: 'high_top',
-    tier: 'regular',
-    price: '$300++',
-    deposit: '$50',
-    guests: '1-4 guests',
-    includes: ['1 Casamigos Bottle', '1 Hookah', 'Admission Separate'],
-    color: 'accent-teal',
-    emoji: '\u{1F378}',
-  },
 ];
 
 function getUrgencyBadge(availability) {
@@ -109,13 +97,13 @@ function TablePickerPopup({ onSelectPackage, onClose }) {
                 </div>
                 <div className="text-right">
                   <div className={`text-${pkg.color} text-xl font-bold`}>{pkg.price}</div>
-                  <div className="text-text-muted text-[10px]">{pkg.deposit} deposit</div>
+                  <div className="text-text-muted text-xs">{pkg.deposit} deposit</div>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {pkg.includes.map(item => (
-                  <span key={item} className={`text-[10px] bg-${pkg.color}/10 text-${pkg.color} rounded-full px-2.5 py-1`}>
+                  <span key={item} className={`text-xs bg-${pkg.color}/10 text-${pkg.color} rounded-full px-3 py-1.5`}>
                     {item}
                   </span>
                 ))}
