@@ -77,8 +77,8 @@ function isDanceNight(eventType) {
 
 function TablePickerPopup({ onSelectPackage, onClose }) {
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-bg-elevated border border-border-default rounded-[20px] max-w-lg w-full max-h-[85vh] overflow-y-auto p-5" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-start justify-center pt-16 px-4 pb-4 overflow-y-auto" onClick={onClose}>
+      <div className="bg-bg-elevated border border-border-default rounded-[20px] max-w-lg w-full p-5" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-[family-name:var(--font-display)] text-accent-gold text-xl tracking-[3px]">
             RESERVE A TABLE
