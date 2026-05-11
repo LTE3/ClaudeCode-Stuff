@@ -76,12 +76,6 @@ export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_fr
         {subtitle || 'Complimentary entry for ladies before midnight. Must be on the guest list.'}
       </p>
 
-      <div className="bg-bg-surface border border-accent-teal/15 rounded-lg p-4 mb-5">
-        <div className="flex justify-between items-center">
-          <span className="text-text-secondary text-sm">Spots Remaining</span>
-          <span className="text-accent-teal font-bold text-lg">{remaining ?? 0}</span>
-        </div>
-      </div>
 
       <input
         type="text" placeholder="Full Name" required value={name}
