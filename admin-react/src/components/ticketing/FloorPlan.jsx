@@ -40,6 +40,18 @@ const TABLE_PACKAGES = [
     color: 'accent-teal',
     emoji: '\u{1F37E}',
   },
+  {
+    key: 'regular_high_top',
+    title: 'VERANO HIGH TOP',
+    type: 'high_top',
+    tier: 'regular',
+    price: '$300++',
+    deposit: '$50',
+    guests: '1-4 guests',
+    includes: ['1 Casamigos Bottle', '1 Hookah', 'Admission Separate'],
+    color: 'accent-teal',
+    emoji: '\u{1F378}',
+  },
 ];
 
 function getUrgencyBadge(availability) {
