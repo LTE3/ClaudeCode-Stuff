@@ -146,7 +146,7 @@ function getCurrentTier(availability) {
   return { tier: 4, price: '$' + t4price, total: '$' + (t4price + 5), remaining: 0, soldOut: true, label: 'Sold Out' };
 }
 
-export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, ladiesFreeRemaining, availability, gaSoldOut }) {
+export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, onShowTablePicker, ladiesFreeRemaining, availability, gaSoldOut }) {
   const dance = isDanceNight(eventType);
   const tier = getCurrentTier(availability);
   const allCards = dance ? danceCards : nightclubCards;
@@ -162,9 +162,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
     if (key === 'ga') onSelectGA();
     else if (key === 'free_ga') onShowLadiesFree('dance_ga_free');
     else if (key === 'free_before_12') onShowLadiesFree('free_before_12');
-    else if (key === 'vip_ga') {
-      document.querySelector('[data-venue-map]')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    else if (key === 'vip_ga') onShowTablePicker();
     else if (key === 'ladies_free') onShowLadiesFree();
     else if (key === 'ga_open_bar' || key === 'ladies_group') onSelectDirect(key);
   }
