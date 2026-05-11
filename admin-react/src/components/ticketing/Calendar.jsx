@@ -14,21 +14,14 @@ function getSoldPercent(event) {
   return (totalSold / totalCap) * 100;
 }
 
-const almostFullDates = ['2026-05-01', '2026-05-02'];
 const cancelledDates = [];
 
-function getDotColor(pct, dateStr) {
-  if (almostFullDates.includes(dateStr)) return 'bg-accent-coral';
-  if (pct > 80) return 'bg-accent-coral';
-  if (pct > 0) return 'bg-accent-gold';
-  return 'bg-accent-teal';
+function getDotColor() {
+  return 'bg-accent-coral';
 }
 
-function getUrgencyLabel(pct, dateStr) {
-  if (almostFullDates.includes(dateStr)) return 'Almost Full';
-  if (pct > 90) return 'Almost Full';
-  if (pct > 70) return 'Selling Fast';
-  return null;
+function getUrgencyLabel() {
+  return 'Almost Full';
 }
 
 export default function Calendar({ eventsByDate, onSelectDate }) {
