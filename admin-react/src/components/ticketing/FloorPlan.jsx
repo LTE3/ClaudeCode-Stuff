@@ -186,12 +186,9 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
       )}
       {eventType === 'nightclub' && (
         <div className="rounded-[16px] overflow-hidden mb-4">
-          <video
-            src={import.meta.env.BASE_URL + (date === '2026-05-16' ? 'saturday-night-promo.mp4' : 'friday-night-promo.mp4')}
-            autoPlay
-            loop
-            muted
-            playsInline
+          <img
+            src={import.meta.env.BASE_URL + (date === '2026-05-16' ? 'saturday-night-flyer.png' : 'friday-night-flyer.png')}
+            alt={date === '2026-05-16' ? 'Noche en La Placita' : 'Old School Reggaeton'}
             className="w-full h-auto rounded-[16px]"
           />
         </div>
