@@ -59,6 +59,10 @@ Deno.serve(async (req) => {
         season_pass_regular: { amount: 9900, name: "Bad Bunny Season Pass — All Access" },
         season_pass_vip: { amount: 24900, name: "VIP Season Pass — All Access VIP" },
         test_ticket: { amount: 100, name: "Test Ticket ($1)" },
+        day_ladies_open_bar: { amount: 2500, name: "Day Party — Ladies Open Bar (10AM-11:30AM) $25" },
+        day_guys_open_bar: { amount: 4000, name: "Day Party — Guys Open Bar (10AM-11:30AM) $40" },
+        day_ladies_ga: { amount: 1000, name: "Day Party — Ladies GA $10" },
+        day_guys_ga: { amount: 2000, name: "Day Party — Guys GA $20" },
       }
 
       let selected = ticketPrices[data.ticket_type]
@@ -106,6 +110,22 @@ Deno.serve(async (req) => {
           return new Response(JSON.stringify({ error: avail.error }), {
             status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
           })
+        }
+
+        // Block ALL GA-type tickets when event is sold out
+        const gaTypes = ["ga", "ga_tier1", "ga_tier2", "ga_tier3", "ga_tier4", "vip_ga", "ga_open_bar", "ladies_group", "dance_ga"]
+        if (gaTypes.includes(data.ticket_type)) {
+          const t1rem = (avail.ga_tier1_capacity ?? 100) - (avail.ga_tier1_sold ?? 0)
+          const t2rem = (avail.ga_tier2_capacity ?? 100) - (avail.ga_tier2_sold ?? 0)
+          const t3rem = (avail.ga_tier3_capacity ?? 0) - (avail.ga_tier3_sold ?? 0)
+          const t4rem = (avail.ga_tier4_capacity ?? 0) - (avail.ga_tier4_sold ?? 0)
+          const gaRem = (avail.ga_capacity ?? 0) - (avail.ga_sold ?? 0)
+          const totalGaRem = t1rem + t2rem + t3rem + t4rem + gaRem
+          if (totalGaRem <= 0) {
+            return new Response(JSON.stringify({ error: "Tickets sold out for this date" }), {
+              status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+            })
+          }
         }
 
         // Auto-resolve GA tier from availability (handles stale frontend builds)

@@ -9,6 +9,10 @@ import WaitlistForm from './WaitlistForm';
 const directTypes = {
   ga_open_bar: { title: 'GA + OPEN BAR', desc: 'GA entry + unlimited drinks all night', price: 70 },
   ladies_group: { title: 'LADIES GROUP x4', desc: '4 ladies entry', price: 35 },
+  day_ladies_open_bar: { title: 'LADIES OPEN BAR', desc: 'Mojitos & Piña Coladas 10AM-11:30AM + Day Party Entry', price: 25 },
+  day_guys_open_bar: { title: 'GUYS OPEN BAR', desc: 'Mojitos & Piña Coladas 10AM-11:30AM + Day Party Entry', price: 40 },
+  day_ladies_ga: { title: 'LADIES GA', desc: 'Day Party general admission', price: 10 },
+  day_guys_ga: { title: 'GUYS GA', desc: 'Day Party general admission', price: 20 },
 };
 
 function DirectBookingForm({ type, date }) {
@@ -111,7 +115,25 @@ export default function BookingPanel({ type, date, availability, tableInfo, onBa
           subtitle="Free admission before midnight. Must be on the guest list."
         />
       )}
-      {(type === 'ga_open_bar' || type === 'ladies_group') && (
+      {type === 'day_free' && (
+        <LadiesFreeForm
+          date={date}
+          remaining={availability?.day_free_remaining}
+          claimType="day_free"
+          title="FREE BEFORE 12PM"
+          subtitle="Free day party entry before noon. First 100 people."
+        />
+      )}
+      {type === 'day_ladies_free' && (
+        <LadiesFreeForm
+          date={date}
+          remaining={availability?.day_ladies_free_remaining}
+          claimType="day_ladies_free"
+          title="LADIES FREE"
+          subtitle="Free day party entry for ladies before noon."
+        />
+      )}
+      {(type === 'ga_open_bar' || type === 'ladies_group' || type === 'day_ladies_open_bar' || type === 'day_guys_open_bar' || type === 'day_ladies_ga' || type === 'day_guys_ga') && (
         <DirectBookingForm type={type} date={date} />
       )}
       {type === 'waitlist' && (

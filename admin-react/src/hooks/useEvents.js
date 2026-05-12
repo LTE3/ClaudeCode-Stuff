@@ -10,7 +10,7 @@ export function useEvents() {
       setLoading(true);
       const data = await supabaseGet(
         'events',
-        'is_active=eq.true&select=event_date,title,ga_sold,ga_capacity,vip_ga_sold,vip_ga_capacity,ladies_free_claimed,ladies_free_capacity,early_type,early_start,early_end,free_ga_capacity,free_ga_claimed,ga_tier1_sold,ga_tier1_capacity,ga_tier2_sold,ga_tier2_capacity,ga_tier3_sold,ga_tier3_capacity'
+        'is_active=eq.true&select=event_date,title,ga_sold,ga_capacity,vip_ga_sold,vip_ga_capacity,ladies_free_claimed,ladies_free_capacity,early_type,early_start,early_end,free_ga_capacity,free_ga_claimed,ga_tier1_sold,ga_tier1_capacity,ga_tier2_sold,ga_tier2_capacity,ga_tier3_sold,ga_tier3_capacity,day_type,day_start,day_end'
       );
       const map = {};
       for (const event of data) {

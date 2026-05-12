@@ -110,6 +110,87 @@ const danceCards = [
   },
 ];
 
+const dayPartyCards = [
+  {
+    key: 'day_free',
+    emoji: '☀️',
+    title: 'FREE BEFORE 12PM',
+    price: 'FREE',
+    fee: null,
+    color: 'teal',
+    borderColor: 'border-accent-teal/15',
+    hoverBorder: 'hover:border-accent-teal/40',
+    textColor: 'text-accent-teal',
+    accentBg: 'bg-accent-teal',
+    shadow: 'hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]',
+  },
+  {
+    key: 'day_ladies_free',
+    emoji: '\u{1F483}',
+    title: 'LADIES FREE',
+    price: 'FREE',
+    fee: null,
+    color: 'teal',
+    borderColor: 'border-accent-teal/15',
+    hoverBorder: 'hover:border-accent-teal/40',
+    textColor: 'text-accent-teal',
+    accentBg: 'bg-accent-teal',
+    shadow: 'hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]',
+  },
+  {
+    key: 'day_ladies_open_bar',
+    emoji: '\u{1F379}',
+    title: 'LADIES OPEN BAR',
+    price: '$25',
+    fee: null,
+    color: 'gold',
+    borderColor: 'border-accent-gold/15',
+    hoverBorder: 'hover:border-accent-gold/40',
+    textColor: 'text-accent-gold',
+    accentBg: 'bg-accent-gold',
+    shadow: 'hover:shadow-[0_0_20px_rgba(251,191,36,0.15)]',
+  },
+  {
+    key: 'day_guys_open_bar',
+    emoji: '\u{1F378}',
+    title: 'GUYS OPEN BAR',
+    price: '$40',
+    fee: null,
+    color: 'gold',
+    borderColor: 'border-accent-gold/15',
+    hoverBorder: 'hover:border-accent-gold/40',
+    textColor: 'text-accent-gold',
+    accentBg: 'bg-accent-gold',
+    shadow: 'hover:shadow-[0_0_20px_rgba(251,191,36,0.15)]',
+  },
+  {
+    key: 'day_ladies_ga',
+    emoji: '\u{1F3AB}',
+    title: 'LADIES GA',
+    price: '$10',
+    fee: null,
+    color: 'blue',
+    borderColor: 'border-accent-blue/15',
+    hoverBorder: 'hover:border-accent-blue/40',
+    textColor: 'text-accent-blue',
+    accentBg: 'bg-accent-blue',
+    shadow: 'hover:shadow-[0_0_20px_rgba(96,165,250,0.15)]',
+  },
+  {
+    key: 'day_guys_ga',
+    emoji: '\u{1F3AB}',
+    title: 'GUYS GA',
+    price: '$20',
+    fee: null,
+    color: 'blue',
+    borderColor: 'border-accent-blue/15',
+    hoverBorder: 'hover:border-accent-blue/40',
+    textColor: 'text-accent-blue',
+    accentBg: 'bg-accent-blue',
+    shadow: 'hover:shadow-[0_0_20px_rgba(96,165,250,0.15)]',
+  },
+];
+
 function isDanceNight(eventType) {
   return eventType === 'salsa_night' || eventType === 'bachata_night';
 }
@@ -148,8 +229,9 @@ function getCurrentTier(availability) {
 
 export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, onShowTablePicker, ladiesFreeRemaining, availability, gaSoldOut }) {
   const dance = isDanceNight(eventType);
+  const dayParty = eventType === 'day_party';
   const tier = getCurrentTier(availability);
-  const allCards = dance ? danceCards : nightclubCards;
+  const allCards = dayParty ? dayPartyCards : dance ? danceCards : nightclubCards;
   // When GA sold out, hide GA/VIP GA/Ladies Free cards — only show table-related options
   const gaKeys = ['ga', 'vip_ga', 'ladies_free', 'free_ga', 'free_before_12'];
   const cards = gaSoldOut ? allCards.filter(c => !gaKeys.includes(c.key)) : allCards;
@@ -165,10 +247,13 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
     else if (key === 'vip_ga') onShowTablePicker();
     else if (key === 'ladies_free') onShowLadiesFree();
     else if (key === 'ga_open_bar' || key === 'ladies_group') onSelectDirect(key);
+    else if (key === 'day_free') onShowLadiesFree('day_free');
+    else if (key === 'day_ladies_free') onShowLadiesFree('day_ladies_free');
+    else if (key === 'day_ladies_open_bar' || key === 'day_guys_open_bar' || key === 'day_ladies_ga' || key === 'day_guys_ga') onSelectDirect(key);
   }
 
   return (
-    <div className={`grid ${dance ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'} gap-3`}>
+    <div className={`grid ${dayParty ? 'grid-cols-2 md:grid-cols-3' : dance ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'} gap-3`}>
       {cards.map(card => (
         <div
           key={card.key}
@@ -242,6 +327,29 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
                 CLAIM FREE ENTRY
               </button>
             </>
+          )}
+          {card.key === 'day_free' && (
+            <>
+              <div className="text-sm text-accent-teal mt-3 font-semibold">
+                {Math.min(availability?.day_free_remaining ?? 100, 38)} spots left
+              </div>
+              <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
+                CLAIM FREE ENTRY
+              </button>
+            </>
+          )}
+          {card.key === 'day_ladies_free' && (
+            <>
+              <div className="text-sm text-accent-teal mt-3 font-semibold">
+                {Math.min(availability?.day_ladies_free_remaining ?? 50, 27)} spots left
+              </div>
+              <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
+                CLAIM FREE ENTRY
+              </button>
+            </>
+          )}
+          {(card.key === 'day_ladies_open_bar' || card.key === 'day_guys_open_bar') && (
+            <div className="text-xs text-accent-gold/70 mt-3">Mojitos & Piña Coladas &bull; 10AM-11:30AM</div>
           )}
           {card.key === 'test' && (
             <div className="text-xs text-text-muted/60 mt-3">For testing checkout</div>

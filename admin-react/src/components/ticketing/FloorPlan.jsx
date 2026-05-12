@@ -192,26 +192,28 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
         gaSoldOut={gaSoldOut}
       />
 
-      {/* Venue Map — compact below the cards */}
-      <div data-venue-map className="bg-bg-surface rounded-[20px] border border-border-default p-2 mt-4">
-        <div>
-          {danceNight ? (
-            <DanceVenueMapSVG
-              availability={availability}
-              onSelectTable={handleSelectTable}
-              onSelectGA={onSelectGA}
-              onSelectFreeGA={() => onShowLadiesFree('dance_ga_free')}
-            />
-          ) : (
-            <VenueMapSVG
-              availability={availability}
-              onSelectTable={handleSelectTable}
-              onSelectGA={onSelectGA}
-              gaSoldOut={gaSoldOut}
-            />
-          )}
+      {/* Venue Map — compact below the cards (hidden for day party) */}
+      {eventType !== 'day_party' && (
+        <div data-venue-map className="bg-bg-surface rounded-[20px] border border-border-default p-2 mt-4">
+          <div>
+            {danceNight ? (
+              <DanceVenueMapSVG
+                availability={availability}
+                onSelectTable={handleSelectTable}
+                onSelectGA={onSelectGA}
+                onSelectFreeGA={() => onShowLadiesFree('dance_ga_free')}
+              />
+            ) : (
+              <VenueMapSVG
+                availability={availability}
+                onSelectTable={handleSelectTable}
+                onSelectGA={onSelectGA}
+                gaSoldOut={gaSoldOut}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

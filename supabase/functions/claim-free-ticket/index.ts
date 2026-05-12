@@ -34,7 +34,19 @@ Deno.serve(async (req) => {
     const evt = events[0]
 
     // Check capacity based on claim type (accounting for quantity)
-    if (type === "dance_ga_free") {
+    if (type === "day_free") {
+      if ((evt.day_free_claimed || 0) + qty > (evt.day_free_capacity || 0)) {
+        return new Response(JSON.stringify({ error: "Not enough free day party tickets remaining" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+    } else if (type === "day_ladies_free") {
+      if ((evt.day_ladies_free_claimed || 0) + qty > (evt.day_ladies_free_capacity || 0)) {
+        return new Response(JSON.stringify({ error: "Not enough free ladies day party tickets remaining" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+    } else if (type === "dance_ga_free") {
       if (evt.free_ga_claimed + qty > evt.free_ga_capacity) {
         return new Response(JSON.stringify({ error: "Not enough free GA tickets remaining" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -49,7 +61,7 @@ Deno.serve(async (req) => {
     }
 
     // Determine booking type
-    const bookingType = type === "dance_ga_free" ? "dance_ga_free" : "ladies_free"
+    const bookingType = type === "dance_ga_free" ? "dance_ga_free" : type === "day_free" ? "day_free" : type === "day_ladies_free" ? "day_ladies_free" : "ladies_free"
 
     // Check for duplicate (same email or phone for this event)
     const dupResp = await fetch(
@@ -87,9 +99,16 @@ Deno.serve(async (req) => {
     const bookingId = bookings?.[0]?.id || null
 
     // Increment the appropriate counter
-    const counterUpdate = type === "dance_ga_free"
-      ? { free_ga_claimed: evt.free_ga_claimed + qty }
-      : { ladies_free_claimed: evt.ladies_free_claimed + qty }
+    let counterUpdate: Record<string, number>
+    if (type === "day_free") {
+      counterUpdate = { day_free_claimed: (evt.day_free_claimed || 0) + qty }
+    } else if (type === "day_ladies_free") {
+      counterUpdate = { day_ladies_free_claimed: (evt.day_ladies_free_claimed || 0) + qty }
+    } else if (type === "dance_ga_free") {
+      counterUpdate = { free_ga_claimed: evt.free_ga_claimed + qty }
+    } else {
+      counterUpdate = { ladies_free_claimed: evt.ladies_free_claimed + qty }
+    }
 
     await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${evt.id}`, {
       method: "PATCH",
@@ -102,8 +121,11 @@ Deno.serve(async (req) => {
       body: JSON.stringify(counterUpdate),
     })
 
-    const capacity = type === "dance_ga_free" ? evt.free_ga_capacity : evt.ladies_free_capacity
-    const claimed = type === "dance_ga_free" ? evt.free_ga_claimed : evt.ladies_free_claimed
+    let capacity: number, claimed: number
+    if (type === "day_free") { capacity = evt.day_free_capacity || 0; claimed = evt.day_free_claimed || 0 }
+    else if (type === "day_ladies_free") { capacity = evt.day_ladies_free_capacity || 0; claimed = evt.day_ladies_free_claimed || 0 }
+    else if (type === "dance_ga_free") { capacity = evt.free_ga_capacity; claimed = evt.free_ga_claimed }
+    else { capacity = evt.ladies_free_capacity; claimed = evt.ladies_free_claimed }
 
     return new Response(JSON.stringify({
       status: "confirmed",

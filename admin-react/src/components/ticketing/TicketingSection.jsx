@@ -102,6 +102,8 @@ export default function TicketingSection() {
 
   const selectedEvent = selectedDate ? eventsByDate[selectedDate] : null;
   const hasEarlyType = selectedEvent?.early_type != null;
+  const hasDayType = selectedEvent?.day_type != null;
+  const hasMultipleBlocks = hasEarlyType || hasDayType;
 
   // GA sold out dates — LIVE
   const gaSoldOutDates = [];
@@ -109,11 +111,11 @@ export default function TicketingSection() {
 
   // Determine event type based on time block selection
   let eventType = null;
-  if (hasEarlyType && selectedTimeBlock === 'early') {
-    eventType = selectedEvent.early_type; // e.g. 'salsa_night', 'bachata_night'
-  } else if (hasEarlyType && selectedTimeBlock === 'late') {
-    eventType = 'nightclub';
-  } else if (!hasEarlyType) {
+  if (selectedTimeBlock === 'day') {
+    eventType = 'day_party';
+  } else if (hasEarlyType && selectedTimeBlock === 'early') {
+    eventType = selectedEvent.early_type;
+  } else if (selectedTimeBlock === 'late' || !hasMultipleBlocks) {
     eventType = 'nightclub';
   }
 
@@ -130,7 +132,7 @@ export default function TicketingSection() {
       }, 100);
       return;
     }
-    if (event?.early_type) {
+    if (event?.early_type || event?.day_type) {
       setStep('timeblock');
     } else {
       setStep('floorplan');
@@ -148,7 +150,7 @@ export default function TicketingSection() {
       setBookingType(null);
       setBookingInfo(null);
     } else if (step === 'floorplan') {
-      if (hasEarlyType) {
+      if (hasMultipleBlocks) {
         setStep('timeblock');
         setSelectedTimeBlock(null);
       } else {
@@ -258,30 +260,53 @@ export default function TicketingSection() {
 
             <div className="text-center mb-6">
               <h3 className="font-[family-name:var(--font-display)] text-text-primary text-2xl tracking-[3px] mb-2">SELECT EXPERIENCE</h3>
-              <p className="text-text-secondary text-sm">This event has two time blocks. Choose your vibe:</p>
+              <p className="text-text-secondary text-sm">Choose your vibe:</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
+            <div className={`grid grid-cols-1 ${hasDayType && hasEarlyType ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 max-w-2xl mx-auto`}>
+              {/* Day Party */}
+              {hasDayType && (
+                <button
+                  onClick={() => handleSelectTimeBlock('day')}
+                  className="bg-bg-surface border border-accent-gold/20 rounded-[16px] p-6 text-center cursor-pointer
+                    transition-all duration-200 hover:-translate-y-1 hover:border-accent-gold/50 hover:shadow-[0_0_25px_rgba(251,191,36,0.15)]
+                    group"
+                >
+                  <div className="text-4xl mb-3">{'☀️'}</div>
+                  <div className="font-[family-name:var(--font-display)] text-accent-gold text-xl tracking-[3px] mb-2">
+                    DAY PARTY
+                  </div>
+                  <div className="text-text-secondary text-sm mb-1">
+                    {formatTime(selectedEvent?.day_start) || '10AM'} - {formatTime(selectedEvent?.day_end) || '4PM'}
+                  </div>
+                  <div className="text-accent-gold text-xs mt-2 leading-relaxed">
+                    <span>Un Verano Sin Ti</span><br/><span>Day vibes, open bar specials, and good energy all afternoon.</span>
+                  </div>
+                </button>
+              )}
+
               {/* Dance Experience */}
-              <button
-                onClick={() => handleSelectTimeBlock('early')}
-                className="bg-bg-surface border border-accent-teal/20 rounded-[16px] p-6 text-center cursor-pointer
-                  transition-all duration-200 hover:-translate-y-1 hover:border-accent-teal/50 hover:shadow-[0_0_25px_rgba(45,212,191,0.15)]
-                  group"
-              >
-                <div className="text-4xl mb-3">{'\u{1F483}'}</div>
-                <div className="font-[family-name:var(--font-display)] text-accent-teal text-xl tracking-[3px] mb-2">
-                  {selectedEvent?.early_type === 'salsa_night' ? 'SALSA NIGHT 18+' : 'BACHATA NIGHT 18+'}
-                </div>
-                <div className="text-text-secondary text-sm mb-1">
-                  {formatTime(selectedEvent?.early_start) || '7PM'} - {formatTime(selectedEvent?.early_end) || '10PM'}
-                </div>
-                <div className="text-accent-teal text-xs mt-2 leading-relaxed">
-                  {selectedEvent?.early_type === 'salsa_night'
-                    ? <><span>Una noche de salsa en la casita 🇵🇷</span><br/><span>Good music, smooth drinks, and room to actually dance.</span></>
-                    : <><span>Bachata inside La Casita.</span><br/><span>Closer vibes, good music, and space to move how you want.</span></>}
-                </div>
-              </button>
+              {hasEarlyType && (
+                <button
+                  onClick={() => handleSelectTimeBlock('early')}
+                  className="bg-bg-surface border border-accent-teal/20 rounded-[16px] p-6 text-center cursor-pointer
+                    transition-all duration-200 hover:-translate-y-1 hover:border-accent-teal/50 hover:shadow-[0_0_25px_rgba(45,212,191,0.15)]
+                    group"
+                >
+                  <div className="text-4xl mb-3">{'\u{1F483}'}</div>
+                  <div className="font-[family-name:var(--font-display)] text-accent-teal text-xl tracking-[3px] mb-2">
+                    {selectedEvent?.early_type === 'salsa_night' ? 'SALSA NIGHT 18+' : 'BACHATA NIGHT 18+'}
+                  </div>
+                  <div className="text-text-secondary text-sm mb-1">
+                    {formatTime(selectedEvent?.early_start) || '7PM'} - {formatTime(selectedEvent?.early_end) || '10PM'}
+                  </div>
+                  <div className="text-accent-teal text-xs mt-2 leading-relaxed">
+                    {selectedEvent?.early_type === 'salsa_night'
+                      ? <><span>Una noche de salsa en la casita</span><br/><span>Good music, smooth drinks, and room to actually dance.</span></>
+                      : <><span>Bachata inside La Casita.</span><br/><span>Closer vibes, good music, and space to move how you want.</span></>}
+                  </div>
+                </button>
+              )}
 
               {/* Nightclub */}
               <button
