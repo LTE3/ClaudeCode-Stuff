@@ -178,6 +178,25 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
         </button>
       </div>
 
+      {/* Event flyer / promo */}
+      {eventType === 'day_party' && (
+        <div className="rounded-[16px] overflow-hidden mb-4">
+          <img src={import.meta.env.BASE_URL + 'day-party-flyer.jpg'} alt="Un Verano Sin Ti Day Party" className="w-full h-auto rounded-[16px]" />
+        </div>
+      )}
+      {eventType === 'nightclub' && (
+        <div className="rounded-[16px] overflow-hidden mb-4">
+          <video
+            src={import.meta.env.BASE_URL + 'saturday-night-promo.mp4'}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto rounded-[16px]"
+          />
+        </div>
+      )}
+
       {/* Ticket Type Cards — shown first so free options are immediately visible */}
       <TicketTypeCards
         eventType={eventType}
