@@ -159,23 +159,13 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
       </div>
 
       {/* Tickets drop message */}
-      {(() => {
-        const blockedDates = Object.keys(eventsByDate)
-          .filter(d => !eventsByDate[d].is_active && new Date(d + 'T00:00:00') >= today)
-          .sort();
-        if (blockedDates.length === 0) return null;
-        const nextBlocked = new Date(blockedDates[0] + 'T00:00:00');
-        const weekOf = new Date(nextBlocked);
-        weekOf.setDate(weekOf.getDate() - weekOf.getDay() + 1);
-        const weekLabel = weekOf.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
-        return (
-          <div className="text-center mt-4 bg-accent-gold/5 border border-accent-gold/15 rounded-[12px] px-4 py-3">
-            <span className="text-accent-gold text-sm font-medium tracking-[1px]">
-              Tickets drop the week of {weekLabel}
-            </span>
-          </div>
-        );
-      })()}
+      {Object.keys(eventsByDate).some(d => !eventsByDate[d].is_active && new Date(d + 'T00:00:00') >= today) && (
+        <div className="text-center mt-4 bg-accent-gold/5 border border-accent-gold/15 rounded-[12px] px-4 py-3">
+          <span className="text-accent-gold text-sm font-medium tracking-[1px]">
+            Tickets open every week on Monday 8PM
+          </span>
+        </div>
+      )}
 
       {/* Legend */}
       <div className="flex items-center gap-4 mt-4 justify-center">
