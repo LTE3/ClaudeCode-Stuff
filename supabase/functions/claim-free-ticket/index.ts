@@ -13,7 +13,7 @@ Deno.serve(async (req) => {
     const SUPABASE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     const { event_date, customer_name, customer_email, customer_phone, claim_type, quantity } = await req.json()
     const type = claim_type || "ladies_free"
-    const qty = Math.min(Math.max(parseInt(quantity) || 1, 1), 5) // Max 5 per person
+    const qty = Math.max(parseInt(quantity) || 1, 1)
 
     if (!event_date || !customer_name || !customer_email || !customer_phone) {
       return new Response(JSON.stringify({ error: "Name, email, phone, and event date required" }), {

@@ -103,7 +103,7 @@ export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_fr
             −
           </button>
           <span className="text-text-primary text-lg font-bold w-6 text-center">{quantity}</span>
-          <button type="button" onClick={() => setQuantity(q => Math.min(5, q + 1))}
+          <button type="button" onClick={() => setQuantity(q => q + 1)}
             className="w-8 h-8 rounded-full bg-bg-elevated border border-border-default text-text-primary flex items-center justify-center cursor-pointer hover:border-accent-teal/40 transition-colors text-lg font-bold">
             +
           </button>
