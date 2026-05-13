@@ -6,6 +6,7 @@ export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_fr
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState('');
 
   async function handleSubmit(e) {
@@ -17,6 +18,7 @@ export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_fr
       customer_name: name,
       customer_email: email,
       customer_phone: phone,
+      quantity,
     });
     if (err) setError(err);
   }
@@ -52,7 +54,7 @@ export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_fr
           </div>
           <div className="flex justify-between py-1 border-b border-border-default">
             <span className="text-text-muted text-sm">Ticket</span>
-            <span className="text-accent-teal text-sm font-medium">{ticketData?.ticket_type === 'ladies_free' ? 'Ladies Free Entry' : 'Free GA'}</span>
+            <span className="text-accent-teal text-sm font-medium">{ticketData?.ticket_type === 'ladies_free' ? 'Ladies Free Entry' : 'Free GA'}{quantity > 1 ? ` x${quantity}` : ''}</span>
           </div>
           <div className="flex justify-between py-1 border-b border-border-default">
             <span className="text-text-muted text-sm">Date</span>
@@ -93,6 +95,21 @@ export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_fr
         className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand focus:ring-[3px] focus:ring-brand-glow transition-all duration-200 mb-2.5"
       />
 
+      <div className="flex items-center justify-between bg-bg-surface border border-border-default rounded-[8px] p-3 mb-2.5">
+        <span className="text-text-secondary text-sm">Quantity</span>
+        <div className="flex items-center gap-3">
+          <button type="button" onClick={() => setQuantity(q => Math.max(1, q - 1))}
+            className="w-8 h-8 rounded-full bg-bg-elevated border border-border-default text-text-primary flex items-center justify-center cursor-pointer hover:border-accent-teal/40 transition-colors text-lg font-bold">
+            −
+          </button>
+          <span className="text-text-primary text-lg font-bold w-6 text-center">{quantity}</span>
+          <button type="button" onClick={() => setQuantity(q => Math.min(5, q + 1))}
+            className="w-8 h-8 rounded-full bg-bg-elevated border border-border-default text-text-primary flex items-center justify-center cursor-pointer hover:border-accent-teal/40 transition-colors text-lg font-bold">
+            +
+          </button>
+        </div>
+      </div>
+
       {error && <p className="text-accent-coral text-sm mb-3">{error}</p>}
 
       <button
@@ -100,7 +117,7 @@ export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_fr
         disabled={loading || remaining === 0}
         className="w-full py-4 rounded-full font-[family-name:var(--font-display)] text-lg tracking-[3px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer border-none bg-accent-teal text-black disabled:opacity-50 disabled:cursor-not-allowed mt-2"
       >
-        {loading ? 'CLAIMING...' : 'CLAIM FREE ENTRY'}
+        {loading ? 'CLAIMING...' : quantity > 1 ? `CLAIM ${quantity} FREE TICKETS` : 'CLAIM FREE ENTRY'}
       </button>
     </form>
   );
