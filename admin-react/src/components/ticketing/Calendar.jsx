@@ -64,15 +64,18 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
     const isPast = dateObj < today;
     const event = eventsByDate[dateStr];
     const hasEvent = !!event;
+    const isBlocked = hasEvent && !event.is_active;
     const isCancelled = cancelledDates.includes(dateStr);
     const pct = getSoldPercent(event);
     const urgency = getUrgencyLabel(pct, dateStr);
-    const isClickable = hasEvent && !isPast && !isCancelled;
+    const isClickable = hasEvent && event.is_active && !isPast && !isCancelled;
 
     let cellClass = 'relative flex flex-col items-center justify-center p-2 min-h-[60px] rounded-[12px] transition-all duration-200 ';
 
     if (isCancelled) {
       cellClass += 'bg-bg-surface border border-red-500/30 cursor-default';
+    } else if (isBlocked && !isPast) {
+      cellClass += 'bg-bg-surface border border-text-muted/20 opacity-60 cursor-default';
     } else if (isSunday && !hasEvent) {
       cellClass += 'opacity-30 cursor-default';
     } else if (isPast) {
@@ -97,12 +100,14 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
             </svg>
           </>
         )}
-        <span className={`text-sm font-medium ${isCancelled ? 'text-red-400/60' : isClickable ? 'text-text-primary' : 'text-text-muted'}`}>
+        <span className={`text-sm font-medium ${isCancelled ? 'text-red-400/60' : isBlocked && !isPast ? 'text-text-muted' : isClickable ? 'text-text-primary' : 'text-text-muted'}`}>
           {day}
         </span>
         {isCancelled ? (
           <span className="text-[8px] text-red-400 font-bold tracking-[1px] mt-0.5 leading-none relative z-10">CANCELLED</span>
-        ) : hasEvent && !(isSunday && !hasEvent) ? (
+        ) : isBlocked && !isPast ? (
+          <span className="text-[7px] text-text-muted font-bold tracking-[1px] mt-0.5 leading-none">BLOCKED</span>
+        ) : hasEvent && event.is_active && !(isSunday && !hasEvent) ? (
           <>
             <div className={`w-2 h-2 rounded-full mt-1 ${getDotColor(pct, dateStr)} animate-[dotPulse_2s_ease-in-out_infinite]`} />
             {urgency && (
@@ -152,6 +157,25 @@ export default function Calendar({ eventsByDate, onSelectDate }) {
       <div className="grid grid-cols-7 gap-1">
         {cells}
       </div>
+
+      {/* Tickets drop message */}
+      {(() => {
+        const blockedDates = Object.keys(eventsByDate)
+          .filter(d => !eventsByDate[d].is_active && new Date(d + 'T00:00:00') >= today)
+          .sort();
+        if (blockedDates.length === 0) return null;
+        const nextBlocked = new Date(blockedDates[0] + 'T00:00:00');
+        const weekOf = new Date(nextBlocked);
+        weekOf.setDate(weekOf.getDate() - weekOf.getDay() + 1);
+        const weekLabel = weekOf.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+        return (
+          <div className="text-center mt-4 bg-accent-gold/5 border border-accent-gold/15 rounded-[12px] px-4 py-3">
+            <span className="text-accent-gold text-sm font-medium tracking-[1px]">
+              Tickets drop the week of {weekLabel}
+            </span>
+          </div>
+        );
+      })()}
 
       {/* Legend */}
       <div className="flex items-center gap-4 mt-4 justify-center">
