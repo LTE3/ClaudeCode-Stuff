@@ -263,24 +263,21 @@ export default function TicketingSection() {
               <p className="text-text-secondary text-sm">Choose your vibe:</p>
             </div>
 
-            <div className={`grid grid-cols-1 ${hasDayType && hasEarlyType ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 max-w-2xl mx-auto`}>
+            <div className={`grid ${hasDayType && hasEarlyType ? 'grid-cols-3' : 'grid-cols-2'} gap-2 max-w-2xl mx-auto`}>
               {/* Day Party */}
               {hasDayType && (
                 <button
                   onClick={() => handleSelectTimeBlock('day')}
-                  className="bg-bg-surface border border-accent-gold/20 rounded-[16px] p-6 text-center cursor-pointer
+                  className="bg-bg-surface border border-accent-gold/20 rounded-[12px] px-2 py-4 text-center cursor-pointer
                     transition-all duration-200 hover:-translate-y-1 hover:border-accent-gold/50 hover:shadow-[0_0_25px_rgba(251,191,36,0.15)]
                     group"
                 >
-                  <div className="text-4xl mb-3">{'☀️'}</div>
-                  <div className="font-[family-name:var(--font-display)] text-accent-gold text-xl tracking-[3px] mb-2">
+                  <div className="text-2xl mb-1">{'☀️'}</div>
+                  <div className="font-[family-name:var(--font-display)] text-accent-gold text-sm tracking-[2px] mb-1">
                     DAY PARTY
                   </div>
-                  <div className="text-text-secondary text-sm mb-1">
+                  <div className="text-text-secondary text-xs">
                     {formatTime(selectedEvent?.day_start) || '10AM'} - {formatTime(selectedEvent?.day_end) || '4PM'}
-                  </div>
-                  <div className="text-accent-gold text-xs mt-2 leading-relaxed">
-                    <span>Un Verano Sin Ti</span><br/><span>Day vibes, open bar specials, and good energy all afternoon.</span>
                   </div>
                 </button>
               )}
@@ -289,21 +286,16 @@ export default function TicketingSection() {
               {hasEarlyType && (
                 <button
                   onClick={() => handleSelectTimeBlock('early')}
-                  className="bg-bg-surface border border-accent-teal/20 rounded-[16px] p-6 text-center cursor-pointer
+                  className="bg-bg-surface border border-accent-teal/20 rounded-[12px] px-2 py-4 text-center cursor-pointer
                     transition-all duration-200 hover:-translate-y-1 hover:border-accent-teal/50 hover:shadow-[0_0_25px_rgba(45,212,191,0.15)]
                     group"
                 >
-                  <div className="text-4xl mb-3">{'\u{1F483}'}</div>
-                  <div className="font-[family-name:var(--font-display)] text-accent-teal text-xl tracking-[3px] mb-2">
-                    {selectedEvent?.early_type === 'salsa_night' ? 'SALSA NIGHT 18+' : 'BACHATA NIGHT 18+'}
+                  <div className="text-2xl mb-1">{'\u{1F483}'}</div>
+                  <div className="font-[family-name:var(--font-display)] text-accent-teal text-sm tracking-[2px] mb-1">
+                    {selectedEvent?.early_type === 'salsa_night' ? 'SALSA 18+' : 'BACHATA 18+'}
                   </div>
-                  <div className="text-text-secondary text-sm mb-1">
+                  <div className="text-text-secondary text-xs">
                     {formatTime(selectedEvent?.early_start) || '7PM'} - {formatTime(selectedEvent?.early_end) || '10PM'}
-                  </div>
-                  <div className="text-accent-teal text-xs mt-2 leading-relaxed">
-                    {selectedEvent?.early_type === 'salsa_night'
-                      ? <><span>Una noche de salsa en la casita</span><br/><span>Good music, smooth drinks, and room to actually dance.</span></>
-                      : <><span>Bachata inside La Casita.</span><br/><span>Closer vibes, good music, and space to move how you want.</span></>}
                   </div>
                 </button>
               )}
@@ -311,19 +303,16 @@ export default function TicketingSection() {
               {/* Nightclub */}
               <button
                 onClick={() => handleSelectTimeBlock('late')}
-                className="bg-bg-surface border border-brand/20 rounded-[16px] p-6 text-center cursor-pointer
+                className="bg-bg-surface border border-brand/20 rounded-[12px] px-2 py-4 text-center cursor-pointer
                   transition-all duration-200 hover:-translate-y-1 hover:border-brand/50 hover:shadow-[0_0_25px_rgba(255,77,141,0.15)]
                   group"
               >
-                <div className="text-4xl mb-3">{'\u{1F386}'}</div>
-                <div className="font-[family-name:var(--font-display)] text-brand text-xl tracking-[3px] mb-2">
+                <div className="text-2xl mb-1">{'\u{1F386}'}</div>
+                <div className="font-[family-name:var(--font-display)] text-brand text-sm tracking-[2px] mb-1">
                   NIGHTCLUB 21+
                 </div>
-                <div className="text-text-secondary text-sm mb-1">
+                <div className="text-text-secondary text-xs">
                   10PM - 4AM
-                </div>
-                <div className="text-brand text-xs mt-2 leading-relaxed">
-                  <span>This is what everyone's coming for.</span><br/><span>Full reggaeton takeover inside La Casita — late night gets crazy.</span>
                 </div>
               </button>
             </div>
