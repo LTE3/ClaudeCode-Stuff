@@ -193,6 +193,16 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
           />
         </div>
       )}
+      {eventType === 'salsa_night' && (
+        <div className="rounded-[16px] overflow-hidden mb-4">
+          <img src={import.meta.env.BASE_URL + 'salsa-night-flyer.jpg'} alt="La Casita Salsa Night" className="w-full h-auto rounded-[16px]" />
+        </div>
+      )}
+      {eventType === 'bachata_night' && (
+        <div className="rounded-[16px] overflow-hidden mb-4">
+          <img src={import.meta.env.BASE_URL + 'bachata-night-flyer.png'} alt="La Casita Bachata Night" className="w-full h-auto rounded-[16px]" />
+        </div>
+      )}
 
       {/* Ticket Type Cards — shown first so free options are immediately visible */}
       <TicketTypeCards
