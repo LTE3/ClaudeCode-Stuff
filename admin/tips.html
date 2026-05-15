@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>La Casita Tips</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; }
+  .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 18px; text-align: center; }
+  .header h1 { font-size: 18px; letter-spacing: 4px; }
+  .stats { display: flex; justify-content: space-around; padding: 20px 16px; border-bottom: 1px solid #1a1a1a; }
+  .stat .value { font-size: 22px; font-weight: 800; color: #FF4D8D; text-align: center; }
+  .stat .label { font-size: 9px; color: #555; letter-spacing: 2px; text-align: center; margin-top: 4px; }
+  .pool { padding: 16px; text-align: center; border-bottom: 1px solid #1a1a1a; }
+  .pool .pool-value { font-size: 36px; font-weight: 800; color: #FF4D8D; }
+  .pool .pool-label { font-size: 10px; color: #555; letter-spacing: 3px; margin-top: 4px; }
+  .pool .pool-breakdown { font-size: 12px; color: #444; margin-top: 8px; }
+  .controls { padding: 12px 16px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .filter-btn { padding: 7px 14px; background: #111; color: #555; border: 1px solid #222; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 600; }
+  .filter-btn.active { background: #FF4D8D; color: #fff; border-color: #FF4D8D; }
+  .date-pick { padding: 7px 10px; background: #111; color: #fff; border: 1px solid #222; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .date-pick.active { border-color: #FF4D8D; color: #FF4D8D; }
+  .list { padding: 0 12px 60px; }
+  .item { border-bottom: 1px solid #151515; padding: 12px 4px; display: flex; justify-content: space-between; align-items: center; }
+  .item .left .name { font-size: 14px; color: #ccc; }
+  .item .left .meta { font-size: 11px; color: #444; margin-top: 3px; }
+  .item .tip { font-size: 16px; font-weight: 700; color: #FF4D8D; }
+  .item .no-tip { font-size: 12px; color: #2a2a2a; }
+  .item .cash-badge { font-size: 10px; color: #34d399; border: 1px solid #34d39940; border-radius: 4px; padding: 2px 6px; margin-left: 6px; }
+  .loading { text-align: center; padding: 50px; color: #444; font-size: 13px; letter-spacing: 2px; }
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-top-color: #FF4D8D; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,10,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; flex-direction: column; gap: 12px; }
+  .loading-overlay .spinner { width: 36px; height: 36px; border-width: 3px; }
+  .loading-overlay .load-text { color: #666; font-size: 12px; letter-spacing: 3px; }
+</style>
+</head>
+<body>
+
+<div class="header"><h1>LA CASITA TIPS</h1></div>
+<a href="app.html" style="display:block;padding:8px;text-align:center;font-size:11px;color:#444;text-decoration:none;letter-spacing:2px;background:#050505;">← BACK TO APP</a>
+
+<div class="pool">
+  <div class="pool-value" id="tipPool">--</div>
+  <div class="pool-label">TOTAL TIP POOL</div>
+  <div class="pool-breakdown" id="poolBreakdown"></div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="value" id="totalService">--</div><div class="label">SERVICE (20%)</div></div>
+  <div class="stat"><div class="value" id="totalTips">--</div><div class="label">EXTRA TIPS</div></div>
+  <div class="stat"><div class="value" id="tipCount">--</div><div class="label">TIPPED</div></div>
+</div>
+
+<div class="controls">
+  <button class="filter-btn active" onclick="setFilter('all')">ALL</button>
+  <button class="filter-btn" onclick="setFilter('tips')">TIPS ONLY</button>
+  <button class="filter-btn" onclick="setFilter('tonight')">TONIGHT</button>
+  <button class="filter-btn" onclick="setFilter('week')">THIS WEEK</button>
+  <input type="date" class="date-pick" id="datePicker" onchange="setFilter('date')" />
+</div>
+
+<div class="list" id="tipList"><div class="loading">LOADING...</div></div>
+
+<script>
+const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+let allPayments = [], currentFilter = 'all', isLoading = true;
+
+function getPartyNightRange(dateStr) {
+  const d = new Date(dateStr + 'T04:00:00');
+  const start = new Date(d);
+  const end = new Date(d);
+  end.setDate(end.getDate() + 1);
+  return { start, end };
+}
+
+function getTonightRange() {
+  const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  const base = new Date(nowET);
+  if (nowET.getHours() < 4) base.setDate(base.getDate() - 1);
+  base.setHours(4, 0, 0, 0);
+  const end = new Date(base);
+  end.setDate(end.getDate() + 1);
+  return { start: base, end };
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('datePicker').classList.remove('active');
+  if (f === 'all') document.querySelector('.filter-btn:nth-child(1)').classList.add('active');
+  if (f === 'tips') document.querySelector('.filter-btn:nth-child(2)').classList.add('active');
+  if (f === 'tonight') document.querySelector('.filter-btn:nth-child(3)').classList.add('active');
+  if (f === 'week') document.querySelector('.filter-btn:nth-child(4)').classList.add('active');
+  if (f === 'date') document.getElementById('datePicker').classList.add('active');
+  render();
+}
+
+function render() {
+  let filtered = allPayments;
+
+  if (currentFilter === 'tips') {
+    filtered = filtered.filter(p => p.tip > 0);
+  }
+
+  if (currentFilter === 'tonight') {
+    const { start, end } = getTonightRange();
+    filtered = filtered.filter(p => {
+      const t = new Date(new Date(p.created * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      return t >= start && t < end;
+    });
+  }
+
+  if (currentFilter === 'date') {
+    const dateVal = document.getElementById('datePicker').value;
+    if (dateVal) {
+      const { start, end } = getPartyNightRange(dateVal);
+      filtered = filtered.filter(p => {
+        const t = new Date(new Date(p.created * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        return t >= start && t < end;
+      });
+    }
+  }
+
+  if (currentFilter === 'week') {
+    const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+    if (nowET.getHours() < 4) nowET.setDate(nowET.getDate() - 1);
+    const day = nowET.getDay();
+    const start = new Date(nowET);
+    start.setDate(nowET.getDate() - day);
+    start.setHours(4, 0, 0, 0);
+    filtered = filtered.filter(p => {
+      const t = new Date(new Date(p.created * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      return t >= start;
+    });
+  }
+
+  const tipped = filtered.filter(p => p.tip > 0);
+  const extraTips = tipped.reduce((s, p) => s + p.tip, 0);
+  const serviceTotal = filtered.reduce((s, p) => s + p.service_charge, 0);
+  const pool = serviceTotal + extraTips;
+
+  document.getElementById('tipPool').textContent = '$' + (pool / 100).toFixed(2);
+  document.getElementById('poolBreakdown').textContent = '$' + (serviceTotal / 100).toFixed(2) + ' service + $' + (extraTips / 100).toFixed(2) + ' extra tips';
+  document.getElementById('totalService').textContent = '$' + (serviceTotal / 100).toFixed(2);
+  document.getElementById('totalTips').textContent = '$' + (extraTips / 100).toFixed(2);
+  document.getElementById('tipCount').textContent = tipped.length + '/' + filtered.length;
+
+  const list = document.getElementById('tipList');
+  if (!filtered.length) { list.innerHTML = '<div class="loading">NO TRANSACTIONS</div>'; return; }
+
+  list.innerHTML = filtered.map(p => {
+    const t = new Date(p.created * 1000);
+    const time = t.toLocaleString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', hour12: true });
+    const date = t.toLocaleDateString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric' });
+    return `<div class="item">
+      <div class="left">
+        <div class="name">${p.items}${p.source === 'cash' ? '<span class="cash-badge">CASH</span>' : ''}</div>
+        <div class="meta">${date} ${time} &middot; $${(p.total / 100).toFixed(2)}</div>
+      </div>
+      ${p.tip > 0 ? `<div class="tip">+$${(p.tip / 100).toFixed(2)}</div>` : '<div class="no-tip">--</div>'}
+    </div>`;
+  }).join('');
+}
+
+function showLoader() {
+  let overlay = document.getElementById('loadOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'loadOverlay';
+    overlay.className = 'loading-overlay';
+    overlay.innerHTML = '<div class="spinner"></div><div class="load-text">LOADING PAYMENTS...</div>';
+    document.body.appendChild(overlay);
+  }
+  overlay.style.display = 'flex';
+}
+
+function hideLoader() {
+  const overlay = document.getElementById('loadOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+async function loadTips() {
+  if (isLoading) showLoader();
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+      body: JSON.stringify({ action: 'tips' }),
+    });
+    const data = await res.json();
+    if (data.payments) { allPayments = data.payments; render(); }
+  } catch {}
+  isLoading = false;
+  hideLoader();
+}
+
+loadTips();
+setInterval(loadTips, 30000);
+</script>
+</body>
+</html>
