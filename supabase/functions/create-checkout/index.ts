@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
         ga_tier1: { amount: 1000, name: "La Casita BK - GA Tier 1 ($10)" },
         ga_tier2: { amount: 2000, name: "La Casita BK - GA Tier 2 ($15 + $5 fee)" },
         ga_tier3: { amount: 2500, name: "La Casita BK - GA Tier 3 ($20 + $5 fee)" },
-        ga_tier4: { amount: 3000, name: "La Casita BK - GA Tier 4 ($25 + $5 fee)" },
+        ga_tier4: { amount: 1500, name: "La Casita BK - GA Last Tier ($10 + $5 fee)" },
         vip_ga: { amount: 4000, name: "La Casita BK - VIP GA ($35 + $5 fee)" },
         vip_couch: { amount: 10000, name: "VIP Couch Deposit — Full Night" },
         vip_high_top: { amount: 5000, name: "VIP High Top Deposit — Full Night" },
@@ -115,8 +115,8 @@ Deno.serve(async (req) => {
         // Block ALL GA-type tickets when event is sold out
         const gaTypes = ["ga", "ga_tier1", "ga_tier2", "ga_tier3", "ga_tier4", "vip_ga", "ga_open_bar", "ladies_group", "dance_ga"]
         if (gaTypes.includes(data.ticket_type)) {
-          const t1rem = (avail.ga_tier1_capacity ?? 100) - (avail.ga_tier1_sold ?? 0)
-          const t2rem = (avail.ga_tier2_capacity ?? 100) - (avail.ga_tier2_sold ?? 0)
+          const t1rem = (avail.ga_tier1_capacity ?? 0) - (avail.ga_tier1_sold ?? 0)
+          const t2rem = (avail.ga_tier2_capacity ?? 0) - (avail.ga_tier2_sold ?? 0)
           const t3rem = (avail.ga_tier3_capacity ?? 0) - (avail.ga_tier3_sold ?? 0)
           const t4rem = (avail.ga_tier4_capacity ?? 0) - (avail.ga_tier4_sold ?? 0)
           const gaRem = (avail.ga_capacity ?? 0) - (avail.ga_sold ?? 0)
@@ -130,8 +130,8 @@ Deno.serve(async (req) => {
 
         // Auto-resolve GA tier from availability (handles stale frontend builds)
         if (data.ticket_type.startsWith("ga_tier")) {
-          const t1rem = (avail.ga_tier1_capacity ?? 100) - (avail.ga_tier1_sold ?? 0)
-          const t2rem = (avail.ga_tier2_capacity ?? 100) - (avail.ga_tier2_sold ?? 0)
+          const t1rem = (avail.ga_tier1_capacity ?? 0) - (avail.ga_tier1_sold ?? 0)
+          const t2rem = (avail.ga_tier2_capacity ?? 0) - (avail.ga_tier2_sold ?? 0)
           const t3rem = (avail.ga_tier3_capacity ?? 0) - (avail.ga_tier3_sold ?? 0)
           const t4rem = (avail.ga_tier4_capacity ?? 0) - (avail.ga_tier4_sold ?? 0)
           const qty = data.quantity || 1

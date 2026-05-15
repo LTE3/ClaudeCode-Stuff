@@ -198,9 +198,9 @@ function isDanceNight(eventType) {
 function getCurrentTier(availability) {
   if (!availability) return { tier: 1, price: '$10', total: '$15', remaining: 22, label: 'Tier 1' };
   const t1sold = availability.ga_tier1_sold || 0;
-  const t1cap = availability.ga_tier1_capacity ?? 100;
+  const t1cap = availability.ga_tier1_capacity ?? 0;
   const t2sold = availability.ga_tier2_sold || 0;
-  const t2cap = availability.ga_tier2_capacity ?? 100;
+  const t2cap = availability.ga_tier2_capacity ?? 0;
   const t3sold = availability.ga_tier3_sold || 0;
   const t3cap = availability.ga_tier3_capacity ?? 0;
   const t4sold = availability.ga_tier4_sold || 0;
