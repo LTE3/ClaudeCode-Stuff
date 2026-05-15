@@ -196,7 +196,7 @@ function isDanceNight(eventType) {
 }
 
 function getCurrentTier(availability) {
-  if (!availability) return { tier: 1, price: '$10', total: '$15', remaining: 22, label: 'Tier 1' };
+  if (!availability) return { tier: 4, price: '$10', total: '$15', remaining: 200, label: 'Last Tier' };
   const t1sold = availability.ga_tier1_sold || 0;
   const t1cap = availability.ga_tier1_capacity ?? 0;
   const t2sold = availability.ga_tier2_sold || 0;
@@ -206,10 +206,10 @@ function getCurrentTier(availability) {
   const t4sold = availability.ga_tier4_sold || 0;
   const t4cap = availability.ga_tier4_capacity ?? 0;
 
-  const t1price = Math.round((availability.ga_tier1_price || 1000) / 100);
-  const t2price = Math.round((availability.ga_tier2_price || 1500) / 100);
-  const t3price = Math.round((availability.ga_tier3_price || 2000) / 100);
-  const t4price = Math.round((availability.ga_tier4_price || 2500) / 100);
+  const t1price = Math.round((availability.ga_tier1_price ?? 1000) / 100);
+  const t2price = Math.round((availability.ga_tier2_price ?? 1500) / 100);
+  const t3price = Math.round((availability.ga_tier3_price ?? 2000) / 100);
+  const t4price = Math.round((availability.ga_tier4_price ?? 1000) / 100);
 
   if (t1sold < t1cap) {
     const isLast = t2cap === 0 && t3cap === 0 && t4cap === 0;
