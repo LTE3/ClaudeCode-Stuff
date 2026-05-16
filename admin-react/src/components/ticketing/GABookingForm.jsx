@@ -15,13 +15,13 @@ function getCurrentTier(availability) {
   const t1price = Math.round((availability.ga_tier1_price || 1000) / 100);
   const t2price = Math.round((availability.ga_tier2_price || 1500) / 100);
   const t3price = Math.round((availability.ga_tier3_price || 2000) / 100);
-  const t4price = Math.round((availability.ga_tier4_price || 2500) / 100);
+  const t4price = Math.round((availability.ga_tier4_price || 1000) / 100);
 
-  if (t1sold < t1cap) return { tier: 1, price: t1price, fee: 5, type: 'ga_tier1', remaining: t1cap - t1sold };
+  if (t1sold < t1cap) return { tier: 1, price: t1price, fee: 0, type: 'ga_tier1', remaining: t1cap - t1sold };
   if (t2sold < t2cap) return { tier: 2, price: t2price, fee: 5, type: 'ga_tier2', remaining: t2cap - t2sold };
   if (t3cap > 0 && t3sold < t3cap) return { tier: 3, price: t3price, fee: 5, type: 'ga_tier3', remaining: t3cap - t3sold };
-  if (t4cap > 0 && t4sold < t4cap) return { tier: 4, price: t4price, fee: 5, type: 'ga_tier4', remaining: t4cap - t4sold };
-  return { tier: 4, price: t4price, fee: 5, type: 'ga_tier4', remaining: 0 };
+  if (t4cap > 0 && t4sold < t4cap) return { tier: 4, price: t4price, fee: 0, type: 'ga_tier4', remaining: t4cap - t4sold };
+  return { tier: 4, price: t4price, fee: 0, type: 'ga_tier4', remaining: 0 };
 }
 
 export default function GABookingForm({ date, availability }) {
@@ -77,7 +77,7 @@ export default function GABookingForm({ date, availability }) {
       <div className="bg-bg-surface border border-accent-blue/15 rounded-lg p-4 mb-5">
         <div className="flex justify-between items-center mb-2">
           <span className="text-text-secondary text-sm">Price</span>
-          <span className="text-accent-blue font-bold text-lg">${PRICE} <span className="text-text-muted text-xs font-normal">+ ${FEE} fee</span></span>
+          <span className="text-accent-blue font-bold text-lg">${PRICE}{FEE > 0 && <span className="text-text-muted text-xs font-normal"> + ${FEE} fee</span>}</span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-text-secondary text-sm">Remaining</span>
