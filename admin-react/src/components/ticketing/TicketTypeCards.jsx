@@ -223,8 +223,8 @@ function getCurrentTier(availability) {
     const isLast = t4cap === 0;
     return { tier: 3, price: '$' + t3price, total: '$' + (t3price + 5), remaining: t3cap - t3sold, soldOut: false, label: isLast ? 'Last Tier' : 'Tier 3' };
   }
-  if (t4cap > 0 && t4sold < t4cap) return { tier: 4, price: '$' + t4price, total: '$' + (t4price + 5), remaining: t4cap - t4sold, soldOut: false, label: 'Last Tier' };
-  return { tier: 4, price: '$' + t4price, total: '$' + (t4price + 5), remaining: 0, soldOut: true, label: 'Sold Out' };
+  if (t4cap > 0 && t4sold < t4cap) return { tier: 4, price: '$' + t4price, total: '$' + t4price, remaining: t4cap - t4sold, soldOut: false, label: 'Tier 4', noFee: true };
+  return { tier: 4, price: '$' + t4price, total: '$' + t4price, remaining: 0, soldOut: true, label: 'Sold Out', noFee: true };
 }
 
 export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, onShowTablePicker, ladiesFreeRemaining, availability, gaSoldOut }) {

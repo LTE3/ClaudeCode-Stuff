@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
         ga_tier1: { amount: 1000, name: "La Casita BK - GA Tier 1 ($10)" },
         ga_tier2: { amount: 2000, name: "La Casita BK - GA Tier 2 ($15 + $5 fee)" },
         ga_tier3: { amount: 2500, name: "La Casita BK - GA Tier 3 ($20 + $5 fee)" },
-        ga_tier4: { amount: 1500, name: "La Casita BK - GA Last Tier ($10 + $5 fee)" },
+        ga_tier4: { amount: 1000, name: "La Casita BK - GA Tier 4 ($10)" },
         vip_ga: { amount: 4000, name: "La Casita BK - VIP GA ($35 + $5 fee)" },
         vip_couch: { amount: 10000, name: "VIP Couch Deposit — Full Night" },
         vip_high_top: { amount: 5000, name: "VIP High Top Deposit — Full Night" },
