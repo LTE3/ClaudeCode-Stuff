@@ -29,8 +29,8 @@ const nightclubCards = [
     key: 'ga',
     emoji: '\u{1F3AB}',
     title: 'GENERAL ADMISSION',
-    price: '$15',
-    fee: '+ $5 fee',
+    price: '$10',
+    fee: null,
     color: 'blue',
     borderColor: 'border-accent-blue/15',
     hoverBorder: 'hover:border-accent-blue/40',
@@ -97,9 +97,9 @@ const danceCards = [
   {
     key: 'ga',
     emoji: '\u{1F3AB}',
-    title: 'GA $15',
-    price: '$15',
-    fee: '+ $5 fee',
+    title: 'GA $10',
+    price: '$10',
+    fee: null,
     subtitle: 'After free tickets gone',
     color: 'blue',
     borderColor: 'border-accent-blue/15',
@@ -196,7 +196,7 @@ function isDanceNight(eventType) {
 }
 
 function getCurrentTier(availability) {
-  if (!availability) return { tier: 4, price: '$10', total: '$15', remaining: 200, label: 'Last Tier' };
+  if (!availability) return { tier: 4, price: '$10', total: '$10', remaining: 40, label: 'Tier 4', noFee: true };
   const t1sold = availability.ga_tier1_sold || 0;
   const t1cap = availability.ga_tier1_capacity ?? 0;
   const t2sold = availability.ga_tier2_sold || 0;
