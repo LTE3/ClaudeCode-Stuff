@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useEvents } from '../../hooks/useEvents';
 import { useAvailability } from '../../hooks/useAvailability';
 import { useCheckout } from '../../hooks/useCheckout';
@@ -99,6 +99,27 @@ export default function TicketingSection() {
 
   const { availability, loading: availLoading } = useAvailability(selectedDate);
   const { checkout: testCheckout } = useCheckout();
+
+  const initFromURL = useRef(false);
+  useEffect(() => {
+    if (initFromURL.current) return;
+    if (!eventsByDate || Object.keys(eventsByDate).length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const dateParam = params.get('date');
+    const blockParam = params.get('block');
+    if (!dateParam || !eventsByDate[dateParam]) return;
+    initFromURL.current = true;
+    const ev = eventsByDate[dateParam];
+    setSelectedDate(dateParam);
+    if (blockParam === 'late' || blockParam === 'early' || blockParam === 'day') {
+      setSelectedTimeBlock(blockParam);
+      setStep('floorplan');
+    } else if (ev.early_type || ev.day_type) {
+      setStep('timeblock');
+    } else {
+      setStep('floorplan');
+    }
+  }, [eventsByDate]);
 
   const selectedEvent = selectedDate ? eventsByDate[selectedDate] : null;
   const hasEarlyType = selectedEvent?.early_type != null;
