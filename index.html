@@ -2973,14 +2973,26 @@
         <a href="#tickets" class="cta-btn">Get Tickets Now</a>
     </section>
 
-    <!-- GRAND OPENING -->
+    <!-- GUEST LIST SIGNUP (this weekend) -->
     <div class="checkered-divider"></div>
-    <section class="grand-opening" id="grand-opening">
-        <div class="go-label reveal">Grand Opening</div>
-        <div class="go-title reveal">La CaSiTa</div>
-        <div class="go-date reveal">May 1st & 2nd, 2026</div>
-        <div class="go-location reveal">Brooklyn, <span>NYC</span></div>
-        <div class="reveal" style="color:rgba(255,255,255,0.5);font-size:0.95rem;margin-top:8px;letter-spacing:1px;">428 Johnson Ave, Brooklyn, NY 11237</div>
+    <section class="signup" id="guest-list" style="padding:40px 20px 20px;">
+        <div class="signup-box reveal" style="text-align:center;max-width:560px;">
+            <div style="font-family:'Bebas Neue',sans-serif;letter-spacing:4px;color:var(--hot-pink);font-size:1rem;margin-bottom:6px;">FREE GUEST LIST</div>
+            <h3 style="margin:0 0 6px;">This Weekend &mdash; Fri 5/22 &amp; Sat 5/23</h3>
+            <p style="margin:0 0 18px;">Free entry before midnight, both nights. Sign up by <strong>Mon 5/18 11:59PM ET</strong>.</p>
+            <div id="guestCountdown" style="font-family:'Bebas Neue',sans-serif;letter-spacing:3px;color:var(--yellow);font-size:1.1rem;margin-bottom:18px;"></div>
+            <form id="guestListForm" class="signup-form" autocomplete="on" novalidate>
+                <div class="name-row">
+                    <input type="text" name="first_name" placeholder="First name" required maxlength="60">
+                    <input type="text" name="last_name" placeholder="Last name" required maxlength="60">
+                </div>
+                <input type="tel" name="phone" placeholder="Phone (e.g. 917 555 0123)" required maxlength="20" inputmode="tel">
+                <input type="email" name="email" placeholder="Email (optional)" maxlength="120">
+                <button type="submit" id="guestListBtn">ADD ME TO THE LIST</button>
+            </form>
+            <div id="guestListStatus" role="status" aria-live="polite" style="margin-top:14px;font-size:0.95rem;min-height:1.4em;"></div>
+            <div style="color:rgba(255,255,255,0.4);font-size:0.8rem;margin-top:18px;letter-spacing:1px;">428 Johnson Ave, Brooklyn, NY 11237 &middot; 21+ w/ valid ID</div>
+        </div>
     </section>
 
     <!-- TICKETS -->
@@ -3644,7 +3656,92 @@
             }
         }
 
-        // ─── Signup Form (disabled — form removed) ───
+        // ─── Guest List Signup ───
+        (function initGuestList() {
+            const form = document.getElementById('guestListForm');
+            const status = document.getElementById('guestListStatus');
+            const btn = document.getElementById('guestListBtn');
+            const cd = document.getElementById('guestCountdown');
+            if (!form) return;
+
+            // Deadline: Tue 2026-05-19 00:00 America/New_York (EDT = UTC-4) = 2026-05-19T04:00:00Z
+            const DEADLINE_MS = Date.parse('2026-05-19T04:00:00Z');
+
+            function tick() {
+                const left = DEADLINE_MS - Date.now();
+                if (left <= 0) {
+                    cd.textContent = 'LIST CLOSED';
+                    cd.style.color = '#888';
+                    form.querySelectorAll('input, button').forEach(el => el.disabled = true);
+                    btn.textContent = 'CLOSED';
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                    return false;
+                }
+                const d = Math.floor(left / 86400000);
+                const h = Math.floor(left / 3600000) % 24;
+                const m = Math.floor(left / 60000) % 60;
+                const s = Math.floor(left / 1000) % 60;
+                cd.textContent = `CLOSES IN ${d}D ${h}H ${m}M ${s}S`;
+                return true;
+            }
+            if (tick()) setInterval(tick, 1000);
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                if (Date.now() >= DEADLINE_MS) return;
+                status.style.color = '';
+                status.textContent = '';
+
+                const data = new FormData(form);
+                const first_name = (data.get('first_name') || '').trim();
+                const last_name = (data.get('last_name') || '').trim();
+                const phone = (data.get('phone') || '').trim();
+                const email = (data.get('email') || '').trim();
+                if (!first_name || !last_name || !phone) {
+                    status.style.color = '#FF4D8D';
+                    status.textContent = 'First name, last name, and phone are required.';
+                    return;
+                }
+
+                btn.disabled = true;
+                const originalText = btn.textContent;
+                btn.textContent = 'ADDING...';
+
+                try {
+                    const body = { first_name, last_name, phone };
+                    if (email) body.email = email;
+                    const res = await fetch(SUPABASE_URL + '/rest/v1/signups', {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify(body)
+                    });
+                    if (res.status === 201 || res.status === 204) {
+                        form.style.display = 'none';
+                        status.style.color = '#00E5CC';
+                        status.innerHTML = "You're on the list, " + first_name + ". See you this weekend.";
+                    } else {
+                        const errText = await res.text();
+                        status.style.color = '#FF4D8D';
+                        status.textContent = 'Could not add you. Try again or text us.';
+                        console.error('Guest list insert failed:', res.status, errText);
+                        btn.disabled = false;
+                        btn.textContent = originalText;
+                    }
+                } catch (err) {
+                    status.style.color = '#FF4D8D';
+                    status.textContent = 'Network error. Try again.';
+                    console.error(err);
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            });
+        })();
 
         // ─── Analytics (privacy-friendly page view) ───
         if (!sessionStorage.getItem('lacasita_viewed')) {
