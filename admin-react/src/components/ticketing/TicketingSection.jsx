@@ -313,7 +313,7 @@ export default function TicketingSection() {
                 >
                   <div className="text-2xl mb-1">{'\u{1F483}'}</div>
                   <div className="font-[family-name:var(--font-display)] text-accent-teal text-sm tracking-[2px] mb-1">
-                    {selectedEvent?.early_type === 'salsa_night' ? 'SALSA 18+' : 'BACHATA 18+'}
+                    {selectedEvent?.early_type === 'salsa_night' ? 'SALSA 21+' : 'BACHATA 21+'}
                   </div>
                   <div className="text-text-secondary text-xs">
                     {formatTime(selectedEvent?.early_start) || '7PM'} - {formatTime(selectedEvent?.early_end) || '10PM'}
