@@ -2989,7 +2989,7 @@
             <div style="color:rgba(255,255,255,0.4);font-size:0.8rem;margin-top:18px;letter-spacing:1px;">428 Johnson Ave, Brooklyn, NY 11237 &middot; 21+ w/ valid ID</div>
         </div>
 
-        <a href="#tickets" class="cta-btn">Get Tickets Now</a>
+        <a href="#tickets" class="cta-btn" id="heroTicketsCta">Get Tickets Now</a>
     </section>
 
     <!-- TICKETS -->
@@ -3653,6 +3653,41 @@
             }
         }
 
+        // ─── Hero CTA: Ticket Drop Countdown ───
+        (function initTicketDrop() {
+            const cta = document.getElementById('heroTicketsCta');
+            if (!cta) return;
+            // Mon 2026-05-18 20:00 ET = 2026-05-19T00:00:00Z
+            const DROP_MS = Date.parse('2026-05-19T00:00:00Z');
+            const originalText = cta.textContent;
+            const originalHref = cta.getAttribute('href');
+
+            function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+            function tickDrop() {
+                const left = DROP_MS - Date.now();
+                if (left <= 0) {
+                    cta.textContent = originalText;
+                    cta.setAttribute('href', originalHref);
+                    cta.style.pointerEvents = '';
+                    cta.style.opacity = '';
+                    cta.removeAttribute('aria-disabled');
+                    return false;
+                }
+                const d = Math.floor(left / 86400000);
+                const h = Math.floor(left / 3600000) % 24;
+                const m = Math.floor(left / 60000) % 60;
+                const s = Math.floor(left / 1000) % 60;
+                cta.textContent = 'TICKETS DROP MON 8PM ET · ' + d + 'D ' + pad(h) + 'H ' + pad(m) + 'M ' + pad(s) + 'S';
+                cta.setAttribute('href', '#guest-list');
+                cta.style.pointerEvents = 'auto';
+                cta.style.opacity = '0.85';
+                cta.setAttribute('aria-disabled', 'true');
+                return true;
+            }
+            if (tickDrop()) setInterval(tickDrop, 1000);
+        })();
+
         // ─── Guest List Signup ───
         (function initGuestList() {
             const form = document.getElementById('guestListForm');
@@ -3667,12 +3702,8 @@
             function tick() {
                 const left = DEADLINE_MS - Date.now();
                 if (left <= 0) {
-                    cd.textContent = 'LIST CLOSED';
-                    cd.style.color = '#888';
-                    form.querySelectorAll('input, button').forEach(el => el.disabled = true);
-                    btn.textContent = 'CLOSED';
-                    btn.style.opacity = '0.5';
-                    btn.style.cursor = 'not-allowed';
+                    const box = form.closest('.signup-box');
+                    if (box) box.style.display = 'none';
                     return false;
                 }
                 const d = Math.floor(left / 86400000);
