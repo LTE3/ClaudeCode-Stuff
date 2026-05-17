@@ -2974,7 +2974,7 @@
         <div class="signup-box reveal" id="guest-list" style="text-align:center;max-width:560px;margin:30px auto 20px;">
             <div style="font-family:'Bebas Neue',sans-serif;letter-spacing:4px;color:var(--hot-pink);font-size:1rem;margin-bottom:6px;">FREE GUEST LIST</div>
             <h3 style="margin:0 0 6px;">This Weekend &mdash; Fri 5/22 &amp; Sat 5/23</h3>
-            <p style="margin:0 0 18px;">Free entry before midnight, both nights. Sign up by <strong>Mon 5/18 11:59PM ET</strong>.</p>
+            <p style="margin:0 0 18px;">Free entry before midnight, both nights. Sign up by <strong>Mon 5/18 8PM ET</strong> &mdash; closes when tickets drop.</p>
             <div id="guestCountdown" style="font-family:'Bebas Neue',sans-serif;letter-spacing:3px;color:var(--yellow);font-size:1.1rem;margin-bottom:18px;"></div>
             <form id="guestListForm" class="signup-form" autocomplete="on" novalidate>
                 <div class="name-row">
@@ -3696,8 +3696,8 @@
             const cd = document.getElementById('guestCountdown');
             if (!form) return;
 
-            // Deadline: Tue 2026-05-19 00:00 America/New_York (EDT = UTC-4) = 2026-05-19T04:00:00Z
-            const DEADLINE_MS = Date.parse('2026-05-19T04:00:00Z');
+            // Deadline: Mon 2026-05-18 20:00 ET (EDT = UTC-4) = 2026-05-19T00:00:00Z (synced w/ ticket drop)
+            const DEADLINE_MS = Date.parse('2026-05-19T00:00:00Z');
 
             function tick() {
                 const left = DEADLINE_MS - Date.now();
