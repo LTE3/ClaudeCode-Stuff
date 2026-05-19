@@ -178,10 +178,21 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
         </button>
       </div>
 
-      {/* Flier renders removed — re-add per event_type when new artwork lands.
-          Wrapper: rounded-[16px] overflow-hidden mb-4 / img: w-full h-auto rounded-[16px].
-          Files lived in admin-react/public/: day-party-flyer.jpg, friday-night-flyer.png,
-          saturday-night-flyer.png, salsa-night-flyer.jpg, bachata-night-flyer.png */}
+      {/* Event flyer / promo — suppressed for salsa_night, bachata_night, and nightclub 5/22+5/23 pending new artwork */}
+      {eventType === 'day_party' && (
+        <div className="rounded-[16px] overflow-hidden mb-4">
+          <img src={import.meta.env.BASE_URL + 'day-party-flyer.jpg'} alt="Un Verano Sin Ti Day Party" className="w-full h-auto rounded-[16px]" />
+        </div>
+      )}
+      {eventType === 'nightclub' && date !== '2026-05-22' && date !== '2026-05-23' && (
+        <div className="rounded-[16px] overflow-hidden mb-4">
+          <img
+            src={import.meta.env.BASE_URL + (date === '2026-05-16' ? 'saturday-night-flyer.png' : 'friday-night-flyer.png')}
+            alt={date === '2026-05-16' ? 'Noche en La Placita' : 'Old School Reggaeton'}
+            className="w-full h-auto rounded-[16px]"
+          />
+        </div>
+      )}
 
       {/* Ticket Type Cards — shown first so free options are immediately visible */}
       <TicketTypeCards
