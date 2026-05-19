@@ -276,7 +276,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           )}
           {card.key === 'ga' && !dance && (
             <div className="mt-3">
-              <div className="text-xs text-accent-blue/70">{tier.label} &bull; {tier.remaining} left</div>
+              <div className="text-xs text-accent-blue/70">{tier.label} &bull; {Math.min(tier.remaining, 45)} left</div>
               {tier.label !== 'Last Tier' && !tier.soldOut && <div className="text-[10px] text-text-muted mt-1">Price increases after this tier sells out</div>}
               {tier.soldOut && <div className="text-xs text-accent-coral font-bold mt-1">SOLD OUT</div>}
             </div>
