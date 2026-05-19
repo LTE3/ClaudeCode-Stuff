@@ -178,31 +178,10 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
         </button>
       </div>
 
-      {/* Event flyer / promo */}
-      {eventType === 'day_party' && (
-        <div className="rounded-[16px] overflow-hidden mb-4">
-          <img src={import.meta.env.BASE_URL + 'day-party-flyer.jpg'} alt="Un Verano Sin Ti Day Party" className="w-full h-auto rounded-[16px]" />
-        </div>
-      )}
-      {eventType === 'nightclub' && (
-        <div className="rounded-[16px] overflow-hidden mb-4">
-          <img
-            src={import.meta.env.BASE_URL + (date === '2026-05-16' ? 'saturday-night-flyer.png' : 'friday-night-flyer.png')}
-            alt={date === '2026-05-16' ? 'Noche en La Placita' : 'Old School Reggaeton'}
-            className="w-full h-auto rounded-[16px]"
-          />
-        </div>
-      )}
-      {eventType === 'salsa_night' && (
-        <div className="rounded-[16px] overflow-hidden mb-4">
-          <img src={import.meta.env.BASE_URL + 'salsa-night-flyer.jpg'} alt="La Casita Salsa Night" className="w-full h-auto rounded-[16px]" />
-        </div>
-      )}
-      {eventType === 'bachata_night' && (
-        <div className="rounded-[16px] overflow-hidden mb-4">
-          <img src={import.meta.env.BASE_URL + 'bachata-night-flyer.png'} alt="La Casita Bachata Night" className="w-full h-auto rounded-[16px]" />
-        </div>
-      )}
+      {/* Flier renders removed — re-add per event_type when new artwork lands.
+          Wrapper: rounded-[16px] overflow-hidden mb-4 / img: w-full h-auto rounded-[16px].
+          Files lived in admin-react/public/: day-party-flyer.jpg, friday-night-flyer.png,
+          saturday-night-flyer.png, salsa-night-flyer.jpg, bachata-night-flyer.png */}
 
       {/* Ticket Type Cards — shown first so free options are immediately visible */}
       <TicketTypeCards
