@@ -15,7 +15,23 @@ Deno.serve(async (req) => {
     const type = claim_type || "ladies_free"
     const qty = Math.max(parseInt(quantity) || 1, 1)
 
+    const logFailed = async (reason: string) => {
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/failed_claims`, {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${SUPABASE_KEY}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal",
+          },
+          body: JSON.stringify({ event_date, customer_name, customer_email, customer_phone, claim_type: type, quantity: qty, reason }),
+        })
+      } catch (_e) { /* logging must never block the claim flow */ }
+    }
+
     if (!event_date || !customer_name || !customer_email || !customer_phone) {
+      await logFailed("missing_fields")
       return new Response(JSON.stringify({ error: "Name, email, phone, and event date required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       })
@@ -27,6 +43,7 @@ Deno.serve(async (req) => {
     })
     const events = await eventResp.json()
     if (!events[0]) {
+      await logFailed("event_not_found")
       return new Response(JSON.stringify({ error: "Event not found" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       })
@@ -36,24 +53,28 @@ Deno.serve(async (req) => {
     // Check capacity based on claim type (accounting for quantity)
     if (type === "day_free") {
       if ((evt.day_free_claimed || 0) + qty > (evt.day_free_capacity || 0)) {
+        await logFailed("capacity_full")
         return new Response(JSON.stringify({ error: "Not enough free day party tickets remaining" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         })
       }
     } else if (type === "day_ladies_free") {
       if ((evt.day_ladies_free_claimed || 0) + qty > (evt.day_ladies_free_capacity || 0)) {
+        await logFailed("capacity_full")
         return new Response(JSON.stringify({ error: "Not enough free ladies day party tickets remaining" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         })
       }
     } else if (type === "dance_ga_free") {
       if (evt.free_ga_claimed + qty > evt.free_ga_capacity) {
+        await logFailed("capacity_full")
         return new Response(JSON.stringify({ error: "Not enough free GA tickets remaining" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         })
       }
     } else {
       if (evt.ladies_free_claimed + qty > evt.ladies_free_capacity) {
+        await logFailed("capacity_full")
         return new Response(JSON.stringify({ error: "Not enough free tickets remaining" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         })
@@ -70,6 +91,7 @@ Deno.serve(async (req) => {
     )
     const dups = await dupResp.json()
     if (dups.length > 0) {
+      await logFailed("duplicate")
       return new Response(JSON.stringify({ error: "You already claimed a free ticket for this event" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       })
