@@ -54,6 +54,11 @@ const TABLE_PACKAGES = [
   },
 ];
 
+const NIGHT_FLYERS = {
+  '2026-05-22': 'friday-night-flyer.png',
+  '2026-05-23': 'saturday-night-flyer.png',
+};
+
 function getUrgencyBadge(availability) {
   if (!availability) return null;
   const totalSold = (availability.ga_tier1_sold || 0) + (availability.ga_tier2_sold || 0) + (availability.ga_tier3_sold || 0) + (availability.ga_tier4_sold || 0) + (availability.ga_sold || 0);
@@ -178,12 +183,16 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
         </button>
       </div>
 
-      {/* Event flyer / promo — only day_party kept; nightclub/salsa/bachata fliers pending new artwork */}
-      {eventType === 'day_party' && (
+      {/* Event flyer / promo */}
+      {eventType === 'day_party' ? (
         <div className="rounded-[16px] overflow-hidden mb-4">
           <img src={import.meta.env.BASE_URL + 'day-party-flyer.jpg'} alt="Un Verano Sin Ti Day Party" className="w-full h-auto rounded-[16px]" />
         </div>
-      )}
+      ) : NIGHT_FLYERS[date] ? (
+        <div className="rounded-[16px] overflow-hidden mb-4">
+          <img src={import.meta.env.BASE_URL + NIGHT_FLYERS[date]} alt="La Casita Memorial Day Weekend" className="w-full h-auto rounded-[16px]" />
+        </div>
+      ) : null}
 
       {/* Ticket Type Cards — shown first so free options are immediately visible */}
       <TicketTypeCards
