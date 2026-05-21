@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
         // Dance night paid GA
         dance_ga: { amount: 2000, name: "Dance Night GA ($15 + $5 fee)" },
         ladies_group: { amount: 3500, name: "Ladies Group x4 ($35)" },
-        ga_open_bar: { amount: 7000, name: "GA + Open Bar All Night ($70)" },
+        ga_open_bar: { amount: 10000, name: "GA + Open Bar All Night ($100)" },
         // Season passes
         season_pass_regular: { amount: 9900, name: "Bad Bunny Season Pass — All Access" },
         season_pass_vip: { amount: 24900, name: "VIP Season Pass — All Access VIP" },

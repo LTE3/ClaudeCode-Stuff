@@ -7,7 +7,7 @@ import LadiesFreeForm from './LadiesFreeForm';
 import WaitlistForm from './WaitlistForm';
 
 const directTypes = {
-  ga_open_bar: { title: 'GA + OPEN BAR', desc: 'GA entry + unlimited drinks all night', price: 70 },
+  ga_open_bar: { title: 'GA + OPEN BAR', desc: 'GA entry + unlimited drinks all night', price: 100 },
   ladies_group: { title: 'LADIES GROUP x4', desc: '4 ladies entry', price: 35 },
   day_ladies_open_bar: { title: 'LADIES OPEN BAR', desc: 'Mojitos & Piña Coladas 10AM-11:30AM + Day Party Entry', price: 25 },
   day_guys_open_bar: { title: 'GUYS OPEN BAR', desc: 'Mojitos & Piña Coladas 10AM-11:30AM + Day Party Entry', price: 40 },

@@ -55,7 +55,7 @@ const nightclubCards = [
     key: 'ga_open_bar',
     emoji: '\u{1F378}',
     title: 'GA + OPEN BAR',
-    price: '$70',
+    price: '$100',
     fee: null,
     color: 'gold',
     borderColor: 'border-accent-gold/15',
