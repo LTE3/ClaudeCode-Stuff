@@ -57,6 +57,7 @@ const nightclubCards = [
     title: 'GA + OPEN BAR',
     price: '$100',
     fee: null,
+    subtitle: 'Open bar till 12 AM',
     color: 'gold',
     borderColor: 'border-accent-gold/15',
     hoverBorder: 'hover:border-accent-gold/40',
@@ -350,6 +351,9 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           )}
           {(card.key === 'day_ladies_open_bar' || card.key === 'day_guys_open_bar') && (
             <div className="text-xs text-accent-gold/70 mt-3">Mojitos & Piña Coladas &bull; 10AM-11:30AM</div>
+          )}
+          {card.key === 'ga_open_bar' && (
+            <div className="text-xs text-accent-gold/70 mt-3">{card.subtitle}</div>
           )}
           {card.key === 'test' && (
             <div className="text-xs text-text-muted/60 mt-3">For testing checkout</div>
