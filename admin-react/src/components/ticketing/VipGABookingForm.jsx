@@ -46,7 +46,7 @@ export default function VipGABookingForm({ date, availability }) {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-text-secondary text-sm">Remaining</span>
-          <span className="text-accent-gold text-sm">{remaining} tickets</span>
+          <span className="text-accent-gold text-sm">{Math.min(remaining, 12)} tickets</span>
         </div>
       </div>
 
