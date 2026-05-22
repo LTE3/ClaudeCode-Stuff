@@ -81,7 +81,7 @@ export default function GABookingForm({ date, availability }) {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-text-secondary text-sm">Remaining</span>
-          <span className="text-accent-blue text-sm">{Math.min(remaining, 45)} tickets</span>
+          <span className="text-accent-blue text-sm">{Math.min(remaining, 15)} tickets</span>
         </div>
       </div>
 
