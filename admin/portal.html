@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>La Casita Staff</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; padding-bottom: 80px; }
+  .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 18px; text-align: center; }
+  .header h1 { font-size: 18px; letter-spacing: 4px; }
+
+  .pick-screen { padding: 20px; }
+  .pick-screen h2 { font-size: 14px; color: #666; letter-spacing: 3px; margin-bottom: 16px; text-align: center; }
+  .staff-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .staff-pick-btn { padding: 20px 12px; background: #111; border: 1px solid #222; border-radius: 12px; text-align: center; cursor: pointer; }
+  .staff-pick-btn:active { background: #1a1a1a; border-color: #FF4D8D; }
+  .staff-pick-btn .sp-name { font-size: 16px; font-weight: 700; color: #eee; }
+  .staff-pick-btn .sp-role { font-size: 11px; color: #FF4D8D; margin-top: 4px; }
+
+  .portal { display: none; }
+  .profile-bar { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #111; border-bottom: 1px solid #1a1a1a; }
+  .profile-bar .pname { font-size: 18px; font-weight: 700; }
+  .profile-bar .prole { font-size: 12px; color: #FF4D8D; }
+  .profile-bar .logout { padding: 6px 14px; background: #222; color: #888; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; }
+
+  .nav-tabs { display: flex; border-bottom: 1px solid #1a1a1a; }
+  .nav-tab { flex: 1; padding: 14px; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; }
+  .nav-tab.active { color: #FF4D8D; border-bottom-color: #FF4D8D; }
+
+  .tab-content { display: none; padding: 16px; }
+  .tab-content.active { display: block; }
+
+  .pay-card { background: #111; border: 1px solid #222; border-radius: 12px; padding: 16px; margin-bottom: 10px; }
+  .pay-card .pay-date { font-size: 13px; color: #888; }
+  .pay-card .pay-amount { font-size: 28px; font-weight: 800; color: #FF4D8D; margin: 6px 0; }
+  .pay-card .pay-detail { font-size: 11px; color: #555; }
+
+  .pay-summary { display: flex; justify-content: space-around; padding: 16px; background: #111; border: 1px solid #222; border-radius: 12px; margin-bottom: 16px; }
+  .pay-summary .ps-val { font-size: 22px; font-weight: 800; color: #FF4D8D; text-align: center; }
+  .pay-summary .ps-label { font-size: 9px; color: #555; letter-spacing: 2px; text-align: center; margin-top: 4px; }
+
+  .shift-card { background: #111; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .shift-card .sh-date { font-size: 14px; font-weight: 600; color: #eee; }
+  .shift-card .sh-time { font-size: 11px; color: #555; margin-top: 3px; }
+  .shift-card .sh-hours { font-size: 18px; font-weight: 800; color: #34d399; }
+
+  .sched-card { background: #111; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 8px; }
+  .sched-card .sc-date { font-size: 15px; font-weight: 700; color: #eee; }
+  .sched-card .sc-time { font-size: 13px; color: #FF4D8D; margin-top: 4px; }
+  .sched-card .sc-role { font-size: 11px; color: #555; margin-top: 2px; }
+  .sched-card.today { border-color: #FF4D8D40; }
+
+  .empty { text-align: center; color: #333; font-size: 13px; letter-spacing: 2px; padding: 40px; }
+</style>
+</head>
+<body>
+
+<div class="header"><h1>LA CASITA STAFF</h1></div>
+<a href="app.html" style="display:block;padding:8px;text-align:center;font-size:11px;color:#444;text-decoration:none;letter-spacing:2px;background:#050505;">← BACK TO APP</a>
+
+<div class="pick-screen" id="pickScreen">
+  <h2>SELECT YOUR NAME</h2>
+  <div class="staff-pick" id="staffGrid"></div>
+</div>
+
+<div class="portal" id="portal">
+  <div class="profile-bar">
+    <div>
+      <div class="pname" id="portalName"></div>
+      <div class="prole" id="portalRole"></div>
+    </div>
+    <button class="logout" onclick="logout()">SWITCH</button>
+  </div>
+
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showTab('pay')">PAY</div>
+    <div class="nav-tab" onclick="showTab('shifts')">SHIFTS</div>
+    <div class="nav-tab" onclick="showTab('schedule')">SCHEDULE</div>
+  </div>
+
+  <div class="tab-content active" id="tab-pay">
+    <div class="pay-summary" id="paySummary"></div>
+    <div id="payList"></div>
+  </div>
+
+  <div class="tab-content" id="tab-shifts">
+    <div id="shiftList"></div>
+  </div>
+
+  <div class="tab-content" id="tab-schedule">
+    <div id="scheduleList"></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+let currentStaff = null;
+
+async function apiCall(body) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/terminal-payment`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+    body: JSON.stringify(body),
+  });
+  return res.json();
+}
+
+function getPartyDate() {
+  const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  if (nowET.getHours() < 4) nowET.setDate(nowET.getDate() - 1);
+  return nowET.toISOString().split('T')[0];
+}
+
+async function loadStaffPicker() {
+  const data = await apiCall({ action: 'get_staff' });
+  const staff = (data.staff || []).filter(s => s.active !== false);
+  document.getElementById('staffGrid').innerHTML = staff.length ? staff.map(s =>
+    `<div class="staff-pick-btn" onclick="selectStaff('${s.name}','${s.role}')">
+      <div class="sp-name">${s.name}</div>
+      <div class="sp-role">${s.role}</div>
+    </div>`
+  ).join('') : '<div class="empty">NO STAFF ADDED YET</div>';
+}
+
+function selectStaff(name, role) {
+  currentStaff = { name, role };
+  document.getElementById('pickScreen').style.display = 'none';
+  document.getElementById('portal').style.display = 'block';
+  document.getElementById('portalName').textContent = name;
+  document.getElementById('portalRole').textContent = role;
+  localStorage.setItem('lc_portal_staff', name);
+  loadPay();
+  loadShifts();
+  loadSchedule();
+}
+
+function logout() {
+  currentStaff = null;
+  localStorage.removeItem('lc_portal_staff');
+  document.getElementById('pickScreen').style.display = 'block';
+  document.getElementById('portal').style.display = 'none';
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.nav-tab:nth-child(${tab==='pay'?1:tab==='shifts'?2:3})`).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+async function loadPay() {
+  const data = await apiCall({ action: 'get_payouts', staff_name: currentStaff.name });
+  const payouts = data.payouts || [];
+
+  const total = payouts.reduce((s, p) => s + parseFloat(p.amount), 0);
+  const totalHrs = payouts.reduce((s, p) => s + (parseFloat(p.hours) || 0), 0);
+
+  document.getElementById('paySummary').innerHTML = `
+    <div><div class="ps-val">$${total.toFixed(2)}</div><div class="ps-label">TOTAL EARNED</div></div>
+    <div><div class="ps-val">${payouts.length}</div><div class="ps-label">SHIFTS PAID</div></div>
+    <div><div class="ps-val">${totalHrs.toFixed(1)}</div><div class="ps-label">TOTAL HOURS</div></div>
+  `;
+
+  document.getElementById('payList').innerHTML = payouts.length ? payouts.map(p => {
+    const d = new Date(p.party_date + 'T12:00:00');
+    const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    return `<div class="pay-card">
+      <div class="pay-date">${dateStr}</div>
+      <div class="pay-amount">$${parseFloat(p.amount).toFixed(2)}</div>
+      <div class="pay-detail">${p.role} &middot; ${p.hours || 0}hrs &middot; ${p.points || 0}pts &middot; ${p.shares || 0} shares &middot; Pool: $${parseFloat(p.pool_total || 0).toFixed(2)}</div>
+    </div>`;
+  }).join('') : '<div class="empty">NO PAY RECORDS YET</div>';
+}
+
+async function loadShifts() {
+  const data = await apiCall({ action: 'clock_records', party_date: getPartyDate() });
+  // Get all records for this person (we'll need a broader query)
+  // For now, show recent dates
+  const allDates = [];
+  const now = new Date();
+  for (let i = 0; i < 14; i++) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    allDates.push(d.toISOString().split('T')[0]);
+  }
+
+  let allShifts = [];
+  // Fetch last 3 dates to keep it fast
+  for (const date of allDates.slice(0, 7)) {
+    const d = await apiCall({ action: 'clock_records', party_date: date });
+    if (d.records) {
+      const mine = d.records.filter(r => r.name === currentStaff.name);
+      allShifts = allShifts.concat(mine.map(r => ({ ...r, party_date: date })));
+    }
+  }
+
+  document.getElementById('shiftList').innerHTML = allShifts.length ? allShifts.map(s => {
+    const d = new Date(s.party_date + 'T12:00:00');
+    const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    const inTime = new Date(s.clock_in).toLocaleString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', hour12: true });
+    const outTime = s.clock_out ? new Date(s.clock_out).toLocaleString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', hour12: true }) : 'On shift';
+    const hrs = s.hours ? parseFloat(s.hours).toFixed(1) : '--';
+    return `<div class="shift-card">
+      <div>
+        <div class="sh-date">${dateStr}</div>
+        <div class="sh-time">${inTime} — ${outTime}</div>
+      </div>
+      <div class="sh-hours">${hrs}h</div>
+    </div>`;
+  }).join('') : '<div class="empty">NO SHIFTS RECORDED</div>';
+}
+
+async function loadSchedule() {
+  // Get schedules for next 14 days
+  const today = getPartyDate();
+  const data = await apiCall({ action: 'get_schedule', staff_name: currentStaff.name });
+  const schedules = (data.schedules || []).filter(s => s.party_date >= today);
+
+  document.getElementById('scheduleList').innerHTML = schedules.length ? schedules.map(s => {
+    const d = new Date(s.party_date + 'T12:00:00');
+    const dateStr = d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+    const isToday = s.party_date === today;
+    return `<div class="sched-card${isToday ? ' today' : ''}">
+      <div class="sc-date">${isToday ? 'TONIGHT — ' : ''}${dateStr}</div>
+      <div class="sc-time">${s.start_time} — ${s.end_time}</div>
+      <div class="sc-role">${s.role}${s.notes ? ' &middot; ' + s.notes : ''}</div>
+    </div>`;
+  }).join('') : '<div class="empty">NO UPCOMING SHIFTS</div>';
+}
+
+// Auto-login if previously selected
+const saved = localStorage.getItem('lc_portal_staff');
+loadStaffPicker().then(() => {
+  if (saved) {
+    const btn = document.querySelector(`.staff-pick-btn .sp-name`);
+    // Find the right staff member
+    const allBtns = document.querySelectorAll('.staff-pick-btn');
+    for (const b of allBtns) {
+      if (b.querySelector('.sp-name')?.textContent === saved) {
+        const role = b.querySelector('.sp-role')?.textContent;
+        selectStaff(saved, role);
+        break;
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
