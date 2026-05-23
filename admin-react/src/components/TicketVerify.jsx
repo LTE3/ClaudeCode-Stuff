@@ -20,27 +20,8 @@ export default function TicketVerify({ sessionId }) {
   useEffect(() => {
     async function verify() {
       try {
-        if (sessionId.startsWith('free_')) {
-          // Free ticket — look up booking directly
-          const bookingId = sessionId.replace('free_', '');
-          const { supabaseGet } = await import('../config/supabase');
-          const bookings = await supabaseGet('bookings', `id=eq.${bookingId}&select=*`);
-          if (bookings?.[0]) {
-            const b = bookings[0];
-            setTicket({
-              status: 'paid',
-              customer_name: b.customer_name,
-              ticket_type: b.booking_type,
-              event_date: b.event_id,
-              quantity: b.party_size || 1,
-            });
-          } else {
-            setTicket({ error: 'Invalid ticket' });
-          }
-        } else {
-          const data = await supabaseEdge('get-ticket', { session_id: sessionId });
-          setTicket(data);
-        }
+        const data = await supabaseEdge('get-ticket', { session_id: sessionId });
+        setTicket(data);
       } catch {
         setTicket({ error: 'Invalid ticket' });
       }

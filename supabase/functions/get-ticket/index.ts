@@ -14,6 +14,33 @@ Deno.serve(async (req) => {
     })
   }
 
+  if (session_id.startsWith("free_")) {
+    const bookingId = session_id.replace("free_", "")
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!
+    const SUPABASE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    const bResp = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=*`, {
+      headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` },
+    })
+    const bookings = await bResp.json()
+    if (!Array.isArray(bookings) || bookings.length === 0) {
+      return new Response(JSON.stringify({ error: "Invalid ticket" }), {
+        status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+    const b = bookings[0]
+    return new Response(JSON.stringify({
+      id: b.id,
+      status: "paid",
+      customer_name: b.customer_name || "",
+      customer_email: b.customer_email || "",
+      ticket_type: b.booking_type || "",
+      event_date: b.event_id || "",
+      quantity: String(b.party_size || 1),
+    }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    })
+  }
+
   const encoder = new TextEncoder()
   const credentials = encoder.encode(STRIPE_SK + ":")
   const base64 = btoa(String.fromCharCode(...credentials))
