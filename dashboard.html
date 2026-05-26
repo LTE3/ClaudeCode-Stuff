@@ -39,6 +39,12 @@
   .row b { font-weight:700; }
   .rev { color:#3ddc84; }
 
+  .tbl-head { font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin:16px 0 8px; }
+  .tbl { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 12px; background:#0e0e0e; border:1px solid var(--line); border-radius:10px; margin-bottom:6px; }
+  .tbl-name { font-size:14px; font-weight:600; }
+  .tbl-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+  .tbl-amt { font-size:14px; font-weight:700; color:#3ddc84; white-space:nowrap; }
+
   .meta { text-align:center; color:var(--muted); font-size:12px; margin-top:18px; line-height:1.7; }
   .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#3ddc84; margin-right:5px; vertical-align:middle; animation:pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
@@ -82,6 +88,7 @@ let timer = null;
 
 const $ = id => document.getElementById(id);
 const money = n => "$" + (n||0).toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:0});
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
 function fmtAgo(iso){
   const s = Math.round((Date.now() - new Date(iso))/1000);
@@ -150,6 +157,18 @@ function render(d){
     const dayName = dt.toLocaleDateString("en-US",{weekday:"long"});
     const dateStr = dt.toLocaleDateString("en-US",{month:"long",day:"numeric"});
     const rev = (e.paid_net||0) + (e.table_rev||0);
+    let tablesBlock = "";
+    if ((e.table_list||[]).length){
+      const items = e.table_list.map(t => `
+        <div class="tbl">
+          <div class="tbl-l">
+            <div class="tbl-name">${esc(t.name)}</div>
+            <div class="tbl-sub">${esc(t.type)}${t.slot ? " · "+esc(t.slot) : ""}${t.party ? " · party "+t.party : ""}</div>
+          </div>
+          <div class="tbl-amt">${money(t.amount)}</div>
+        </div>`).join("");
+      tablesBlock = `<div class="tbl-head">Table reservations</div>${items}`;
+    }
     html += `
       <div class="card">
         <h2>${dayName} Night</h2>
@@ -164,6 +183,7 @@ function render(d){
           <div class="row"><span>Table revenue</span><b class="rev">${money(e.table_rev)}</b></div>
           <div class="row"><span>Total revenue</span><b class="rev">${money(rev)}</b></div>
         </div>
+        ${tablesBlock}
       </div>`;
   }
 

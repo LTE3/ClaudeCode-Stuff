@@ -16,6 +16,18 @@ const STRIPE_SK = Deno.env.get("STRIPE_SECRET_KEY")!;
 
 function money(cents: number) { return Math.round(cents) / 100; }
 
+const TABLE_LABELS: Record<string, string> = {
+  vip_couch: "VIP Couch",
+  regular_couch: "Regular Couch",
+  vip_high_top: "VIP High-Top",
+  regular_high_top: "Regular High-Top",
+};
+const SLOT_LABELS: Record<string, string> = {
+  before_midnight: "Before midnight",
+  after_midnight: "After midnight",
+  all_night: "All night",
+};
+
 async function sbGet(path: string) {
   const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
     headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
@@ -89,14 +101,24 @@ Deno.serve(async (req) => {
 
     for (const ev of events) {
       const bookings: any[] = await sbGet(
-        `bookings?event_id=eq.${ev.id}&status=eq.confirmed&select=booking_type,amount_paid`
+        `bookings?event_id=eq.${ev.id}&status=eq.confirmed&select=booking_type,amount_paid,customer_name,time_slot,party_size`
       );
       let freeGa = 0, freeLadies = 0, tables = 0, tableRev = 0;
+      const tableList: any[] = [];
       for (const b of bookings) {
         const t = b.booking_type || "";
         if (t === "dance_ga_free") freeGa++;
         else if (t === "ladies_free") freeLadies++;
-        else { tables++; tableRev += b.amount_paid || 0; } // couch / high_top reservations
+        else {
+          tables++; tableRev += b.amount_paid || 0; // couch / high_top reservations
+          tableList.push({
+            type: TABLE_LABELS[t] || t,
+            name: b.customer_name || "—",
+            amount: money(b.amount_paid || 0),
+            slot: b.time_slot ? (SLOT_LABELS[b.time_slot] || b.time_slot) : null,
+            party: b.party_size || null,
+          });
+        }
       }
       const st = stripeByDate[ev.event_date] || { tickets: 0, gross: 0 };
       const refunded = refundByDate[ev.event_date] || 0;
@@ -119,6 +141,7 @@ Deno.serve(async (req) => {
         paid_net: money(net),
         tables,
         table_rev: money(tableRev),
+        table_list: tableList,
         headcount,
       });
     }
