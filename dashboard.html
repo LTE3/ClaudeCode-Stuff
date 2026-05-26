@@ -4,77 +4,156 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>La Casita BK — Live Weekend Dashboard</title>
+<meta name="theme-color" content="#0c090b">
+<title>La Casita BK — Weekend</title>
 <style>
-  :root { --pink:#FF4D8D; --pink2:#FF6B9D; --bg:#0a0a0a; --card:#141414; --line:#262626; --muted:#888; }
-  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { margin:0; background:var(--bg); color:#fff; font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
-  .wrap { max-width:680px; margin:0 auto; padding:18px 16px 60px; }
-  .brand { text-align:center; padding:26px 16px; background:linear-gradient(135deg,var(--pink),var(--pink2)); border-radius:18px; margin-bottom:18px; }
-  .brand h1 { margin:0; font-size:21px; letter-spacing:3px; }
-  .brand p { margin:6px 0 0; font-size:12px; opacity:.9; letter-spacing:1px; }
+  /* Scene: club manager glancing at weekend heads + cash on their phone, mid-shift,
+     dim venue. Dark by necessity, number-first, hairline sections. Product register. */
+  :root {
+    --bg:        #0c090b;
+    --surface:   #151013;
+    --surface-2: #1c1519;
+    --line:      #271f25;
+    --line-2:    #3a2c34;
+    --hi:        #f6eef2;   /* off-white, tinted warm — never #fff */
+    --mid:       #b4a7ae;
+    --dim:       #7c7077;
+    --pink:      #ff4f8f;   /* brand accent — used sparingly */
+    --money:     #59d2a0;   /* semantic positive, money only */
 
-  /* gate */
-  #gate { max-width:340px; margin:60px auto; text-align:center; }
-  #gate input { width:100%; padding:14px; font-size:16px; border-radius:12px; border:1px solid var(--line); background:var(--card); color:#fff; text-align:center; letter-spacing:2px; }
-  #gate button, .btn { margin-top:12px; width:100%; padding:14px; font-size:15px; font-weight:600; border:none; border-radius:12px; background:linear-gradient(135deg,var(--pink),var(--pink2)); color:#fff; cursor:pointer; }
-  #gateErr { color:#ff5b5b; font-size:13px; min-height:18px; margin-top:10px; }
+    --e-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); }
+  body {
+    color: var(--hi);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 600px; margin: 0 auto; padding: 22px 18px 72px; }
 
-  .grand { background:linear-gradient(135deg,#1c1c1c,#141414); border:1px solid var(--pink); border-radius:18px; padding:20px; margin-bottom:18px; }
-  .grand .big { font-size:46px; font-weight:800; line-height:1; background:linear-gradient(135deg,var(--pink),var(--pink2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-  .grand .lbl { font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
-  .grow { display:flex; gap:14px; margin-top:16px; }
-  .grow > div { flex:1; background:#0e0e0e; border:1px solid var(--line); border-radius:12px; padding:12px; text-align:center; }
-  .grow .n { font-size:22px; font-weight:700; }
-  .grow .t { font-size:11px; color:var(--muted); margin-top:3px; }
+  /* ---------- header ---------- */
+  .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .brand { font-size: 15px; font-weight: 700; letter-spacing: .14em; color: var(--pink); }
+  .brand span { color: var(--dim); font-weight: 600; }
+  .live { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--dim); white-space: nowrap; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--money); }
 
-  .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px; margin-bottom:14px; }
-  .card h2 { margin:0 0 2px; font-size:17px; }
-  .card .date { font-size:12px; color:var(--muted); margin-bottom:14px; }
-  .head { font-size:40px; font-weight:800; line-height:1; }
-  .head small { font-size:13px; color:var(--muted); font-weight:500; letter-spacing:1px; }
-  .rows { margin-top:14px; }
-  .row { display:flex; justify-content:space-between; padding:9px 0; border-top:1px solid var(--line); font-size:14px; }
-  .row span:first-child { color:var(--muted); }
-  .row b { font-weight:700; }
-  .rev { color:#3ddc84; }
+  /* ---------- gate ---------- */
+  #gate { max-width: 320px; margin: 72px auto 0; }
+  #gate p { color: var(--mid); font-size: 14px; margin: 0 0 14px; text-align: center; }
+  #pin {
+    width: 100%; padding: 14px 16px; font-size: 16px; font-family: var(--mono);
+    letter-spacing: .12em; text-align: center; color: var(--hi);
+    background: var(--surface); border: 1px solid var(--line-2); border-radius: 12px;
+    transition: border-color 160ms var(--e-out);
+  }
+  #pin:focus { outline: none; border-color: var(--pink); }
+  .btn {
+    width: 100%; margin-top: 12px; padding: 14px; font-size: 15px; font-weight: 650;
+    font-family: var(--sans); color: #1a0a12; background: var(--pink);
+    border: none; border-radius: 12px; cursor: pointer;
+    transition: transform 140ms var(--e-out), filter 140ms var(--e-out);
+  }
+  .btn:hover { filter: brightness(1.06); }
+  .btn:active { transform: scale(.975); }
+  #gateErr { min-height: 18px; margin-top: 10px; text-align: center; font-size: 13px; color: #ff6b6b; }
 
-  .tbl-head { font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin:16px 0 8px; }
-  .tbl { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 12px; background:#0e0e0e; border:1px solid var(--line); border-radius:10px; margin-bottom:6px; }
-  .tbl-name { font-size:14px; font-weight:600; }
-  .tbl-sub { font-size:11px; color:var(--muted); margin-top:2px; }
-  .tbl-amt { font-size:14px; font-weight:700; color:#3ddc84; white-space:nowrap; }
+  /* ---------- summary ---------- */
+  .summary { margin-top: 26px; }
+  .summary .heads {
+    font-family: var(--mono); font-size: 64px; font-weight: 600; line-height: .92;
+    letter-spacing: -.03em; font-variant-numeric: tabular-nums; color: var(--hi);
+  }
+  .summary .heads-label { font-size: 13px; color: var(--dim); margin-top: 4px; letter-spacing: .02em; }
+  .summary .strip {
+    display: flex; gap: 26px; margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .summary .strip div { display: flex; flex-direction: column; }
+  .strip .v { font-family: var(--mono); font-size: 19px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .strip .k { font-size: 11px; color: var(--dim); margin-top: 3px; text-transform: uppercase; letter-spacing: .08em; }
+  .money { color: var(--money); }
 
-  .meta { text-align:center; color:var(--muted); font-size:12px; margin-top:18px; line-height:1.7; }
-  .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#3ddc84; margin-right:5px; vertical-align:middle; animation:pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-  .refresh { background:none; border:1px solid var(--line); color:var(--muted); padding:8px 16px; border-radius:10px; cursor:pointer; font-size:13px; margin-top:8px; }
-  .hidden { display:none !important; }
+  /* ---------- per-night section ---------- */
+  .night { margin-top: 34px; }
+  .night-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .night-day { font-size: 20px; font-weight: 680; letter-spacing: -.01em; }
+  .night-date { font-size: 12px; color: var(--dim); margin-top: 2px; }
+  .night-heads {
+    font-family: var(--mono); font-size: 34px; font-weight: 600; line-height: 1;
+    letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+  }
+  .night-heads small { display: block; text-align: right; font-family: var(--sans); font-size: 11px; font-weight: 500; color: var(--dim); letter-spacing: .04em; margin-top: 3px; }
+
+  .stats { margin-top: 16px; border-top: 1px solid var(--line); }
+  .stat { display: flex; justify-content: space-between; align-items: baseline; padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .stat .k { font-size: 14px; color: var(--mid); }
+  .stat .v { font-family: var(--mono); font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stat.total .k { color: var(--hi); font-weight: 600; }
+  .stat.total .v { font-size: 16px; }
+
+  /* table reservations */
+  .tables { margin-top: 18px; }
+  .tables-h { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+  .res { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); }
+  .res:first-of-type { border-top: none; }
+  .res-name { font-size: 15px; font-weight: 600; color: var(--hi); }
+  .res-sub { font-size: 12px; color: var(--dim); margin-top: 2px; }
+  .res-amt { font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--money); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* ---------- footer ---------- */
+  .foot { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .foot .stamp { font-size: 12px; color: var(--dim); }
+  .refresh {
+    font-family: var(--sans); font-size: 13px; color: var(--mid); background: transparent;
+    border: 1px solid var(--line-2); border-radius: 10px; padding: 8px 14px; cursor: pointer;
+    transition: transform 140ms var(--e-out), border-color 140ms var(--e-out);
+  }
+  .refresh:hover { border-color: var(--pink); }
+  .refresh:active { transform: scale(.975); }
+
+  .hidden { display: none !important; }
+
+  /* ---------- motion ---------- */
+  .rise { opacity: 0; transform: translateY(10px); animation: rise 460ms var(--e-out) forwards; animation-delay: calc(var(--i, 0) * 50ms); }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+  .dot { animation: blink 2.4s var(--e-out) infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise { animation: none; opacity: 1; transform: none; }
+    .dot { animation: none; }
+    .btn:active, .refresh:active { transform: none; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="brand">
-    <h1>LA CASITA BK</h1>
-    <p>LIVE WEEKEND DASHBOARD</p>
+  <div class="top">
+    <div class="brand">LA CASITA BK <span>/ Weekend</span></div>
+    <div id="liveTag" class="live hidden"><span class="dot"></span><span id="stamp">live</span></div>
   </div>
 
-  <!-- PIN gate -->
+  <!-- passcode gate -->
   <div id="gate">
-    <p style="color:var(--muted);font-size:14px;margin:0 0 14px;">Enter passcode</p>
+    <p>Enter passcode</p>
     <input id="pin" type="password" inputmode="text" autocomplete="off" placeholder="passcode" />
-    <button onclick="enter()">View Dashboard</button>
+    <button class="btn" onclick="enter()">View numbers</button>
     <div id="gateErr"></div>
   </div>
 
   <!-- content -->
   <div id="app" class="hidden"></div>
 
-  <div id="meta" class="meta hidden">
-    <div><span class="dot"></span><span id="stamp">—</span></div>
-    <div>Auto-refreshes every 10 minutes</div>
-    <button class="refresh" onclick="load()">Refresh now</button>
+  <div id="foot" class="foot hidden">
+    <span class="stamp">Auto-refreshes every 10 min</span>
+    <button class="refresh" onclick="load()">Refresh</button>
   </div>
 
 </div>
@@ -87,114 +166,121 @@ let PIN = sessionStorage.getItem("lc_pin") || "";
 let timer = null;
 
 const $ = id => document.getElementById(id);
-const money = n => "$" + (n||0).toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:0});
-const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const money = n => "$" + Math.round(n || 0).toLocaleString("en-US");
 
-function fmtAgo(iso){
-  const s = Math.round((Date.now() - new Date(iso))/1000);
-  if (s < 60) return "just now";
-  if (s < 3600) return Math.round(s/60)+" min ago";
-  return Math.round(s/3600)+" hr ago";
+function fmtAgo(iso) {
+  const s = Math.round((Date.now() - new Date(iso)) / 1000);
+  if (s < 45) return "live, just now";
+  if (s < 3600) return "updated " + Math.round(s / 60) + " min ago";
+  return "updated " + Math.round(s / 3600) + " hr ago";
 }
 
-function enter(){
+function enter() {
   PIN = $("pin").value.trim();
-  if (!PIN){ $("gateErr").textContent = "Enter the passcode."; return; }
+  if (!PIN) { $("gateErr").textContent = "Enter the passcode."; return; }
   load(true);
 }
-$("pin") && $("pin").addEventListener("keydown", e => { if (e.key === "Enter") enter(); });
+$("pin").addEventListener("keydown", e => { if (e.key === "Enter") enter(); });
 
-async function load(fromGate){
+async function load(fromGate) {
   try {
     const r = await fetch(FN, {
-      method:"POST",
-      headers:{ "Authorization":"Bearer "+ANON, "Content-Type":"application/json" },
-      body: JSON.stringify({ pin: PIN })
+      method: "POST",
+      headers: { "Authorization": "Bearer " + ANON, "Content-Type": "application/json" },
+      body: JSON.stringify({ pin: PIN }),
     });
-    if (r.status === 401){
+    if (r.status === 401) {
       sessionStorage.removeItem("lc_pin");
       if (fromGate) $("gateErr").textContent = "Wrong passcode.";
       else showGate();
       return;
     }
-    if (!r.ok) throw new Error("HTTP "+r.status);
+    if (!r.ok) throw new Error("HTTP " + r.status);
     const d = await r.json();
     sessionStorage.setItem("lc_pin", PIN);
     render(d);
-  } catch (e){
+  } catch (e) {
     if (fromGate) $("gateErr").textContent = "Could not load. Try again.";
   }
 }
 
-function showGate(){
+function showGate() {
   $("gate").classList.remove("hidden");
   $("app").classList.add("hidden");
-  $("meta").classList.add("hidden");
+  $("foot").classList.add("hidden");
+  $("liveTag").classList.add("hidden");
 }
 
-function render(d){
+function render(d) {
   $("gate").classList.add("hidden");
   $("app").classList.remove("hidden");
-  $("meta").classList.remove("hidden");
+  $("foot").classList.remove("hidden");
+  $("liveTag").classList.remove("hidden");
 
   const t = d.totals;
-  const ticketRev = (d.events||[]).reduce((a,e)=>a+(e.paid_net||0),0);
-  const totalRev = ticketRev + (t.table_rev||0);
+  const ticketRev = (d.events || []).reduce((a, e) => a + (e.paid_net || 0), 0);
+  const totalRev = ticketRev + (t.table_rev || 0);
+  let i = 0; // stagger index
 
   let html = `
-    <div class="grand">
-      <div class="lbl">Total Heads This Weekend</div>
-      <div class="big">${t.headcount}</div>
-      <div class="grow">
-        <div><div class="n">${t.free}</div><div class="t">Free RSVPs</div></div>
-        <div><div class="n">${t.paid_tickets}</div><div class="t">Paid Tickets</div></div>
-        <div><div class="n rev" style="-webkit-text-fill-color:#3ddc84">${money(totalRev)}</div><div class="t">Revenue</div></div>
+    <div class="summary rise" style="--i:${i++}">
+      <div class="heads">${t.headcount}</div>
+      <div class="heads-label">heads confirmed this weekend</div>
+      <div class="strip">
+        <div><span class="v">${t.free}</span><span class="k">Free RSVPs</span></div>
+        <div><span class="v">${t.paid_tickets}</span><span class="k">Paid</span></div>
+        <div><span class="v money">${money(totalRev)}</span><span class="k">Revenue</span></div>
       </div>
     </div>`;
 
-  for (const e of (d.events||[])){
-    const dt = new Date(e.date+"T12:00:00");
-    const dayName = dt.toLocaleDateString("en-US",{weekday:"long"});
-    const dateStr = dt.toLocaleDateString("en-US",{month:"long",day:"numeric"});
-    const rev = (e.paid_net||0) + (e.table_rev||0);
-    let tablesBlock = "";
-    if ((e.table_list||[]).length){
-      const items = e.table_list.map(t => `
-        <div class="tbl">
-          <div class="tbl-l">
-            <div class="tbl-name">${esc(t.name)}</div>
-            <div class="tbl-sub">${esc(t.type)}${t.slot ? " · "+esc(t.slot) : ""}${t.party ? " · party "+t.party : ""}</div>
+  for (const e of (d.events || [])) {
+    const dt = new Date(e.date + "T12:00:00");
+    const dayName = dt.toLocaleDateString("en-US", { weekday: "long" });
+    const dateStr = dt.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+    const rev = (e.paid_net || 0) + (e.table_rev || 0);
+
+    let resBlock = "";
+    if ((e.table_list || []).length) {
+      const rows = e.table_list.map(tb => `
+        <div class="res">
+          <div>
+            <div class="res-name">${esc(tb.name)}</div>
+            <div class="res-sub">${esc(tb.type)}${tb.slot ? " · " + esc(tb.slot) : ""}${tb.party ? " · party " + tb.party : ""}</div>
           </div>
-          <div class="tbl-amt">${money(t.amount)}</div>
+          <div class="res-amt">${money(tb.amount)}</div>
         </div>`).join("");
-      tablesBlock = `<div class="tbl-head">Table reservations</div>${items}`;
+      resBlock = `<div class="tables"><div class="tables-h">Table reservations</div>${rows}</div>`;
     }
+
     html += `
-      <div class="card">
-        <h2>${dayName} Night</h2>
-        <div class="date">${dateStr}</div>
-        <div class="head">${e.headcount}<small> &nbsp;heads</small></div>
-        <div class="rows">
-          <div class="row"><span>Free — Dance GA</span><b>${e.free_ga}</b></div>
-          <div class="row"><span>Free — Ladies</span><b>${e.free_ladies}</b></div>
-          <div class="row"><span>Paid tickets</span><b>${e.paid_tickets}</b></div>
-          <div class="row"><span>Ticket revenue</span><b class="rev">${money(e.paid_net)}</b></div>
-          <div class="row"><span>Tables reserved</span><b>${e.tables}</b></div>
-          <div class="row"><span>Table revenue</span><b class="rev">${money(e.table_rev)}</b></div>
-          <div class="row"><span>Total revenue</span><b class="rev">${money(rev)}</b></div>
+      <div class="night rise" style="--i:${i++}">
+        <div class="night-head">
+          <div>
+            <div class="night-day">${dayName}</div>
+            <div class="night-date">${dateStr}</div>
+          </div>
+          <div class="night-heads">${e.headcount}<small>heads</small></div>
         </div>
-        ${tablesBlock}
+        <div class="stats">
+          <div class="stat"><span class="k">Free, dance GA</span><span class="v">${e.free_ga}</span></div>
+          <div class="stat"><span class="k">Free, ladies</span><span class="v">${e.free_ladies}</span></div>
+          <div class="stat"><span class="k">Paid tickets</span><span class="v">${e.paid_tickets}</span></div>
+          <div class="stat"><span class="k">Ticket revenue</span><span class="v money">${money(e.paid_net)}</span></div>
+          <div class="stat"><span class="k">Tables</span><span class="v">${e.tables}</span></div>
+          <div class="stat total"><span class="k">Total revenue</span><span class="v money">${money(rev)}</span></div>
+        </div>
+        ${resBlock}
       </div>`;
   }
 
   $("app").innerHTML = html;
-  $("stamp").textContent = "Updated " + fmtAgo(d.generated_at);
+  $("stamp").textContent = fmtAgo(d.generated_at);
 
   clearInterval(timer);
   timer = setInterval(load, 600000); // 10 min
 }
 
-// auto-enter if pin remembered this session
 if (PIN) load();
 </script>
 </body>
