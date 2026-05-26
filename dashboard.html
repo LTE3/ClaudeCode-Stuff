@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>La Casita BK — Live Weekend Dashboard</title>
+<style>
+  :root { --pink:#FF4D8D; --pink2:#FF6B9D; --bg:#0a0a0a; --card:#141414; --line:#262626; --muted:#888; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { margin:0; background:var(--bg); color:#fff; font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
+  .wrap { max-width:680px; margin:0 auto; padding:18px 16px 60px; }
+  .brand { text-align:center; padding:26px 16px; background:linear-gradient(135deg,var(--pink),var(--pink2)); border-radius:18px; margin-bottom:18px; }
+  .brand h1 { margin:0; font-size:21px; letter-spacing:3px; }
+  .brand p { margin:6px 0 0; font-size:12px; opacity:.9; letter-spacing:1px; }
+
+  /* gate */
+  #gate { max-width:340px; margin:60px auto; text-align:center; }
+  #gate input { width:100%; padding:14px; font-size:16px; border-radius:12px; border:1px solid var(--line); background:var(--card); color:#fff; text-align:center; letter-spacing:2px; }
+  #gate button, .btn { margin-top:12px; width:100%; padding:14px; font-size:15px; font-weight:600; border:none; border-radius:12px; background:linear-gradient(135deg,var(--pink),var(--pink2)); color:#fff; cursor:pointer; }
+  #gateErr { color:#ff5b5b; font-size:13px; min-height:18px; margin-top:10px; }
+
+  .grand { background:linear-gradient(135deg,#1c1c1c,#141414); border:1px solid var(--pink); border-radius:18px; padding:20px; margin-bottom:18px; }
+  .grand .big { font-size:46px; font-weight:800; line-height:1; background:linear-gradient(135deg,var(--pink),var(--pink2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .grand .lbl { font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+  .grow { display:flex; gap:14px; margin-top:16px; }
+  .grow > div { flex:1; background:#0e0e0e; border:1px solid var(--line); border-radius:12px; padding:12px; text-align:center; }
+  .grow .n { font-size:22px; font-weight:700; }
+  .grow .t { font-size:11px; color:var(--muted); margin-top:3px; }
+
+  .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px; margin-bottom:14px; }
+  .card h2 { margin:0 0 2px; font-size:17px; }
+  .card .date { font-size:12px; color:var(--muted); margin-bottom:14px; }
+  .head { font-size:40px; font-weight:800; line-height:1; }
+  .head small { font-size:13px; color:var(--muted); font-weight:500; letter-spacing:1px; }
+  .rows { margin-top:14px; }
+  .row { display:flex; justify-content:space-between; padding:9px 0; border-top:1px solid var(--line); font-size:14px; }
+  .row span:first-child { color:var(--muted); }
+  .row b { font-weight:700; }
+  .rev { color:#3ddc84; }
+
+  .meta { text-align:center; color:var(--muted); font-size:12px; margin-top:18px; line-height:1.7; }
+  .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#3ddc84; margin-right:5px; vertical-align:middle; animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .refresh { background:none; border:1px solid var(--line); color:var(--muted); padding:8px 16px; border-radius:10px; cursor:pointer; font-size:13px; margin-top:8px; }
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <h1>LA CASITA BK</h1>
+    <p>LIVE WEEKEND DASHBOARD</p>
+  </div>
+
+  <!-- PIN gate -->
+  <div id="gate">
+    <p style="color:var(--muted);font-size:14px;margin:0 0 14px;">Enter passcode</p>
+    <input id="pin" type="password" inputmode="text" autocomplete="off" placeholder="passcode" />
+    <button onclick="enter()">View Dashboard</button>
+    <div id="gateErr"></div>
+  </div>
+
+  <!-- content -->
+  <div id="app" class="hidden"></div>
+
+  <div id="meta" class="meta hidden">
+    <div><span class="dot"></span><span id="stamp">—</span></div>
+    <div>Auto-refreshes every 10 minutes</div>
+    <button class="refresh" onclick="load()">Refresh now</button>
+  </div>
+
+</div>
+
+<script>
+const FN = "https://tqeunmqnaoyrerkbhokk.supabase.co/functions/v1/weekend-dashboard";
+const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8";
+
+let PIN = sessionStorage.getItem("lc_pin") || "";
+let timer = null;
+
+const $ = id => document.getElementById(id);
+const money = n => "$" + (n||0).toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:0});
+
+function fmtAgo(iso){
+  const s = Math.round((Date.now() - new Date(iso))/1000);
+  if (s < 60) return "just now";
+  if (s < 3600) return Math.round(s/60)+" min ago";
+  return Math.round(s/3600)+" hr ago";
+}
+
+function enter(){
+  PIN = $("pin").value.trim();
+  if (!PIN){ $("gateErr").textContent = "Enter the passcode."; return; }
+  load(true);
+}
+$("pin") && $("pin").addEventListener("keydown", e => { if (e.key === "Enter") enter(); });
+
+async function load(fromGate){
+  try {
+    const r = await fetch(FN, {
+      method:"POST",
+      headers:{ "Authorization":"Bearer "+ANON, "Content-Type":"application/json" },
+      body: JSON.stringify({ pin: PIN })
+    });
+    if (r.status === 401){
+      sessionStorage.removeItem("lc_pin");
+      if (fromGate) $("gateErr").textContent = "Wrong passcode.";
+      else showGate();
+      return;
+    }
+    if (!r.ok) throw new Error("HTTP "+r.status);
+    const d = await r.json();
+    sessionStorage.setItem("lc_pin", PIN);
+    render(d);
+  } catch (e){
+    if (fromGate) $("gateErr").textContent = "Could not load. Try again.";
+  }
+}
+
+function showGate(){
+  $("gate").classList.remove("hidden");
+  $("app").classList.add("hidden");
+  $("meta").classList.add("hidden");
+}
+
+function render(d){
+  $("gate").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  $("meta").classList.remove("hidden");
+
+  const t = d.totals;
+  const ticketRev = (d.events||[]).reduce((a,e)=>a+(e.paid_net||0),0);
+  const totalRev = ticketRev + (t.table_rev||0);
+
+  let html = `
+    <div class="grand">
+      <div class="lbl">Total Heads This Weekend</div>
+      <div class="big">${t.headcount}</div>
+      <div class="grow">
+        <div><div class="n">${t.free}</div><div class="t">Free RSVPs</div></div>
+        <div><div class="n">${t.paid_tickets}</div><div class="t">Paid Tickets</div></div>
+        <div><div class="n rev" style="-webkit-text-fill-color:#3ddc84">${money(totalRev)}</div><div class="t">Revenue</div></div>
+      </div>
+    </div>`;
+
+  for (const e of (d.events||[])){
+    const dt = new Date(e.date+"T12:00:00");
+    const dayName = dt.toLocaleDateString("en-US",{weekday:"long"});
+    const dateStr = dt.toLocaleDateString("en-US",{month:"long",day:"numeric"});
+    const rev = (e.paid_net||0) + (e.table_rev||0);
+    html += `
+      <div class="card">
+        <h2>${dayName} Night</h2>
+        <div class="date">${dateStr}</div>
+        <div class="head">${e.headcount}<small> &nbsp;heads</small></div>
+        <div class="rows">
+          <div class="row"><span>Free — Dance GA</span><b>${e.free_ga}</b></div>
+          <div class="row"><span>Free — Ladies</span><b>${e.free_ladies}</b></div>
+          <div class="row"><span>Paid tickets</span><b>${e.paid_tickets}</b></div>
+          <div class="row"><span>Ticket revenue</span><b class="rev">${money(e.paid_net)}</b></div>
+          <div class="row"><span>Tables reserved</span><b>${e.tables}</b></div>
+          <div class="row"><span>Table revenue</span><b class="rev">${money(e.table_rev)}</b></div>
+          <div class="row"><span>Total revenue</span><b class="rev">${money(rev)}</b></div>
+        </div>
+      </div>`;
+  }
+
+  $("app").innerHTML = html;
+  $("stamp").textContent = "Updated " + fmtAgo(d.generated_at);
+
+  clearInterval(timer);
+  timer = setInterval(load, 600000); // 10 min
+}
+
+// auto-enter if pin remembered this session
+if (PIN) load();
+</script>
+</body>
+</html>

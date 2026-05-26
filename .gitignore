@@ -1,6 +1,13 @@
 node_modules/
 package.json
 package-lock.json
+
+# secrets — never commit
+.sb-token
+.stripe-key
+.resend-key
+.google-app-pw
+*.key
 check-signups.mjs
 setup-brute.mjs
 setup-dns.mjs
