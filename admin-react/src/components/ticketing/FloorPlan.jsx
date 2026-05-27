@@ -55,8 +55,8 @@ const TABLE_PACKAGES = [
 ];
 
 const NIGHT_FLYERS = {
-  '2026-05-22': 'friday-night-flyer.png',
-  '2026-05-23': 'saturday-night-flyer.png',
+  '2026-05-29': 'friday-night-flyer.png',
+  '2026-05-30': 'saturday-night-flyer.png',
 };
 
 function getUrgencyBadge(availability) {
