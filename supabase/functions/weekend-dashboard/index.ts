@@ -68,8 +68,9 @@ Deno.serve(async (req) => {
       `events?is_active=eq.true&event_date=gte.${todayStr}&select=id,event_date,title&order=event_date.asc`
     );
 
-    // Stripe window: 45 days back covers any pre-sale for upcoming events.
-    const since = Math.floor(Date.now() / 1000) - 45 * 86400;
+    // Stripe window: 90 days back. Pre-sale can open ~3 months out; 45 was dropping
+    // early buyers (e.g. April presales for late-May events) and undercounting paid.
+    const since = Math.floor(Date.now() / 1000) - 90 * 86400;
     const sessions = await stripeList("checkout/sessions", since);
     const refunds = await stripeList("refunds", since);
 
