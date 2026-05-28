@@ -277,7 +277,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           )}
           {card.key === 'ga' && !dance && (
             <div className="mt-3">
-              <div className="text-xs text-accent-blue/70">{tier.label} &bull; {Math.min(tier.remaining, 15)} left</div>
+              <div className="text-xs text-accent-blue/70">{tier.label} &bull; {Math.min(tier.remaining, 24)} left</div>
               {tier.label !== 'Last Tier' && !tier.soldOut && <div className="text-[10px] text-text-muted mt-1">Price increases after this tier sells out</div>}
               {tier.soldOut && <div className="text-xs text-accent-coral font-bold mt-1">SOLD OUT</div>}
             </div>
@@ -302,7 +302,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           {card.key === 'free_ga' && (
             <>
               <div className="text-sm text-accent-teal mt-3 font-semibold">
-                {freeGaRemaining > 0 ? `${Math.min(freeGaRemaining, 15)} spots left` : 'ALL CLAIMED'}
+                {freeGaRemaining > 0 ? `${Math.min(freeGaRemaining, 29)} spots left` : 'ALL CLAIMED'}
               </div>
               <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
                 CLAIM FREE ENTRY
@@ -332,7 +332,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           {card.key === 'day_free' && (
             <>
               <div className="text-sm text-accent-teal mt-3 font-semibold">
-                {Math.min(availability?.day_free_remaining ?? 100, 38)} spots left
+                {Math.min(availability?.day_free_remaining ?? 100, 33)} spots left
               </div>
               <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
                 CLAIM FREE ENTRY
