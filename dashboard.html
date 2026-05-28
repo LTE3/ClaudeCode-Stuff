@@ -117,6 +117,25 @@
   .refresh:hover { border-color: var(--pink); }
   .refresh:active { transform: scale(.975); }
 
+  /* ---------- loading ---------- */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    display: inline-block; width: 15px; height: 15px; vertical-align: -2px;
+    border: 2px solid currentColor; border-right-color: transparent;
+    border-radius: 50%; animation: spin .6s linear infinite;
+  }
+  .btn .spinner, .refresh .spinner { margin-right: 8px; }
+  .btn:disabled, .refresh:disabled { cursor: default; opacity: .72; }
+  .btn:disabled:active, .refresh:disabled:active { transform: none; }
+  .btn:disabled:hover, .refresh:disabled:hover { filter: none; border-color: var(--line-2); }
+  .loader {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; min-height: 240px; color: var(--dim);
+  }
+  .loader .spinner { width: 26px; height: 26px; border-width: 2.5px; color: var(--pink); }
+  .loader p { font-size: 13px; color: var(--dim); margin: 0; letter-spacing: .02em; }
+  .loader .refresh { margin-top: 2px; }
+
   .hidden { display: none !important; }
 
   /* ---------- motion ---------- */
@@ -129,6 +148,7 @@
     .rise { animation: none; opacity: 1; transform: none; }
     .dot { animation: none; }
     .btn:active, .refresh:active { transform: none; }
+    .spinner { animation-duration: 1.4s; }
   }
 </style>
 </head>
@@ -144,7 +164,7 @@
   <div id="gate">
     <p>Enter passcode</p>
     <input id="pin" type="password" inputmode="text" autocomplete="off" placeholder="passcode" />
-    <button class="btn" onclick="enter()">View numbers</button>
+    <button id="gateBtn" class="btn" onclick="enter()">View numbers</button>
     <div id="gateErr"></div>
   </div>
 
@@ -153,7 +173,7 @@
 
   <div id="foot" class="foot hidden">
     <span class="stamp">Auto-refreshes every 10 min</span>
-    <button class="refresh" onclick="load()">Refresh</button>
+    <button id="refreshBtn" class="refresh" onclick="load(false, true)">Refresh</button>
   </div>
 
 </div>
@@ -164,6 +184,7 @@ const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 
 let PIN = sessionStorage.getItem("lc_pin") || "";
 let timer = null;
+let busy = false;
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
@@ -183,7 +204,31 @@ function enter() {
 }
 $("pin").addEventListener("keydown", e => { if (e.key === "Enter") enter(); });
 
-async function load(fromGate) {
+function setBtnLoading(id, on, label) {
+  const b = $(id);
+  if (!b) return;
+  b.disabled = on;
+  b.innerHTML = on ? '<span class="spinner"></span>Loading…' : label;
+}
+function showAppLoader() {
+  $("gate").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  $("app").innerHTML = '<div class="loader"><span class="spinner"></span><p>Loading weekend numbers…</p></div>';
+}
+function showAppError() {
+  $("app").innerHTML = '<div class="loader"><p>Could not load. Check your connection.</p><button class="refresh" onclick="load(false, true)">Try again</button></div>';
+}
+
+async function load(fromGate, manual) {
+  if (busy) return;
+  busy = true;
+  $("gateErr").textContent = "";
+  if (fromGate) setBtnLoading("gateBtn", true);
+  else if (manual) setBtnLoading("refreshBtn", true);
+  // first paint (auto-load with stored PIN) has no content yet → show centered loader
+  const firstPaint = !fromGate && !$("app").innerHTML.trim();
+  if (firstPaint) showAppLoader();
+
   try {
     const r = await fetch(FN, {
       method: "POST",
@@ -202,12 +247,18 @@ async function load(fromGate) {
     render(d);
   } catch (e) {
     if (fromGate) $("gateErr").textContent = "Could not load. Try again.";
+    else if (firstPaint) showAppError();
+  } finally {
+    busy = false;
+    if (fromGate) setBtnLoading("gateBtn", false, "View numbers");
+    if (manual) setBtnLoading("refreshBtn", false, "Refresh");
   }
 }
 
 function showGate() {
   $("gate").classList.remove("hidden");
   $("app").classList.add("hidden");
+  $("app").innerHTML = "";
   $("foot").classList.add("hidden");
   $("liveTag").classList.add("hidden");
 }
