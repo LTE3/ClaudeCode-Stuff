@@ -15,7 +15,7 @@ const nightclubCards = [
   {
     key: 'free_before_12',
     emoji: '\u{1F389}',
-    title: 'FREE BEFORE 12AM',
+    title: 'FREE BEFORE 12:30AM',
     price: 'FREE',
     fee: null,
     color: 'teal',
@@ -197,7 +197,7 @@ function isDanceNight(eventType) {
 }
 
 function getCurrentTier(availability) {
-  if (!availability) return { tier: 4, price: '$10', total: '$10', remaining: 40, label: 'Tier 4', noFee: true };
+  if (!availability) return { tier: 4, price: '$10', total: '$15', remaining: 40, label: 'Tier 4' };
   const t1sold = availability.ga_tier1_sold || 0;
   const t1cap = availability.ga_tier1_capacity ?? 0;
   const t2sold = availability.ga_tier2_sold || 0;
@@ -224,8 +224,8 @@ function getCurrentTier(availability) {
     const isLast = t4cap === 0;
     return { tier: 3, price: '$' + t3price, total: '$' + (t3price + 5), remaining: t3cap - t3sold, soldOut: false, label: isLast ? 'Last Tier' : 'Tier 3' };
   }
-  if (t4cap > 0 && t4sold < t4cap) return { tier: 4, price: '$' + t4price, total: '$' + t4price, remaining: t4cap - t4sold, soldOut: false, label: 'Tier 4', noFee: true };
-  return { tier: 4, price: '$' + t4price, total: '$' + t4price, remaining: 0, soldOut: true, label: 'Sold Out', noFee: true };
+  if (t4cap > 0 && t4sold < t4cap) return { tier: 4, price: '$' + t4price, total: '$' + (t4price + 5), remaining: t4cap - t4sold, soldOut: false, label: 'Tier 4' };
+  return { tier: 4, price: '$' + t4price, total: '$' + (t4price + 5), remaining: 0, soldOut: true, label: 'Sold Out' };
 }
 
 export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, onShowTablePicker, ladiesFreeRemaining, availability, gaSoldOut }) {
