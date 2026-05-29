@@ -135,6 +135,14 @@
   .loader .spinner { width: 26px; height: 26px; border-width: 2.5px; color: var(--pink); }
   .loader p { font-size: 13px; color: var(--dim); margin: 0; letter-spacing: .02em; }
   .loader .refresh { margin-top: 2px; }
+  #bar {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0;
+    background: linear-gradient(90deg, var(--pink), #ff7ab0);
+    box-shadow: 0 0 8px var(--pink), 0 0 4px var(--pink);
+    z-index: 50; opacity: 0; pointer-events: none;
+    transition: width 240ms var(--e-out), opacity 320ms var(--e-out);
+  }
+  .pct { font-variant-numeric: tabular-nums; }
 
   .hidden { display: none !important; }
 
@@ -153,6 +161,7 @@
 </style>
 </head>
 <body>
+<div id="bar"></div>
 <div class="wrap">
 
   <div class="top">
@@ -204,16 +213,42 @@ function enter() {
 }
 $("pin").addEventListener("keydown", e => { if (e.key === "Enter") enter(); });
 
+let prog = 0, trickle = null;
+function setBar(p) {
+  prog = p;
+  $("bar").style.width = p + "%";
+  document.querySelectorAll(".pct").forEach(el => el.textContent = Math.round(p) + "%");
+}
+function startBar() {
+  clearInterval(trickle);
+  $("bar").style.opacity = "1";
+  setBar(0);
+  requestAnimationFrame(() => setBar(8));
+  // diminishing trickle toward 90%, never claims completion until response lands
+  trickle = setInterval(() => {
+    if (prog >= 90) return;
+    setBar(Math.min(90, prog + Math.max(0.5, (90 - prog) * 0.09)));
+  }, 380);
+}
+function doneBar() {
+  clearInterval(trickle);
+  setBar(100);
+  setTimeout(() => {
+    $("bar").style.opacity = "0";
+    setTimeout(() => { $("bar").style.width = "0"; prog = 0; }, 340);
+  }, 200);
+}
+
 function setBtnLoading(id, on, label) {
   const b = $(id);
   if (!b) return;
   b.disabled = on;
-  b.innerHTML = on ? '<span class="spinner"></span>Loading…' : label;
+  b.innerHTML = on ? '<span class="spinner"></span>Loading <span class="pct">0%</span>' : label;
 }
 function showAppLoader() {
   $("gate").classList.add("hidden");
   $("app").classList.remove("hidden");
-  $("app").innerHTML = '<div class="loader"><span class="spinner"></span><p>Loading weekend numbers…</p></div>';
+  $("app").innerHTML = '<div class="loader"><span class="spinner"></span><p>Loading weekend numbers… <span class="pct">0%</span></p></div>';
 }
 function showAppError() {
   $("app").innerHTML = '<div class="loader"><p>Could not load. Check your connection.</p><button class="refresh" onclick="load(false, true)">Try again</button></div>';
@@ -228,6 +263,7 @@ async function load(fromGate, manual) {
   // first paint (auto-load with stored PIN) has no content yet → show centered loader
   const firstPaint = !fromGate && !$("app").innerHTML.trim();
   if (firstPaint) showAppLoader();
+  startBar();
 
   try {
     const r = await fetch(FN, {
@@ -250,6 +286,7 @@ async function load(fromGate, manual) {
     else if (firstPaint) showAppError();
   } finally {
     busy = false;
+    doneBar();
     if (fromGate) setBtnLoading("gateBtn", false, "View numbers");
     if (manual) setBtnLoading("refreshBtn", false, "Refresh");
   }
