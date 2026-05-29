@@ -100,6 +100,7 @@ export default function TicketingSection() {
   const { availability, loading: availLoading } = useAvailability(selectedDate);
   const { checkout: testCheckout } = useCheckout();
 
+  const sectionRef = useRef(null);
   const initFromURL = useRef(false);
   useEffect(() => {
     if (initFromURL.current) return;
@@ -119,6 +120,12 @@ export default function TicketingSection() {
     } else {
       setStep('floorplan');
     }
+    // Arrived via a date deep-link (e.g. the promo email's RSVP buttons). Scroll the
+    // ticketing card to the top of the viewport so visitors land on the picker instead
+    // of the page header. Only fires on deep-links, so the homepage iframe is unchanged.
+    setTimeout(() => {
+      sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 250);
   }, [eventsByDate]);
 
   const selectedEvent = selectedDate ? eventsByDate[selectedDate] : null;
@@ -233,7 +240,7 @@ export default function TicketingSection() {
   }
 
   return (
-    <div className="bg-bg-elevated border border-border-default rounded-[16px] overflow-hidden mb-6">
+    <div ref={sectionRef} className="bg-bg-elevated border border-border-default rounded-[16px] overflow-hidden mb-6 scroll-mt-3">
       {/* Header */}
       <div className="p-5 border-b border-border-default flex items-center justify-between">
         <h2 className="font-[family-name:var(--font-display)] text-text-primary text-xl tracking-[3px]">
