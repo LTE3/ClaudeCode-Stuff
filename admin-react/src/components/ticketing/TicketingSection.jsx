@@ -125,7 +125,7 @@ export default function TicketingSection() {
     // of the page header. Only fires on deep-links, so the homepage iframe is unchanged.
     setTimeout(() => {
       sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 250);
+    }, 120);
   }, [eventsByDate]);
 
   const selectedEvent = selectedDate ? eventsByDate[selectedDate] : null;
