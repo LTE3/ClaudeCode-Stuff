@@ -1,4 +1,6 @@
-export default function DanceVenueMapSVG({ availability, onSelectTable, onSelectGA, onSelectFreeGA }) {
+import { showLeft } from '../../utils/scarcity';
+
+export default function DanceVenueMapSVG({ date, availability, onSelectTable, onSelectGA, onSelectFreeGA }) {
   const tables = availability?.tables || [];
 
   function getTableStatus(type, num) {
@@ -32,7 +34,7 @@ export default function DanceVenueMapSVG({ availability, onSelectTable, onSelect
   }
 
   const freeRemainingRaw = (availability?.free_ga_capacity - availability?.free_ga_claimed) ?? 150;
-  const freeRemaining = Math.min(freeRemainingRaw, 34);
+  const freeRemaining = showLeft('dance_free', date, freeRemainingRaw);
   let gaLabel = freeRemaining + ' FREE tickets available';
   if (freeRemainingRaw <= 0) gaLabel = 'FREE TICKETS GONE — $15 GA available';
   else if (freeRemaining <= 20) gaLabel = 'ALMOST GONE — ' + freeRemaining + ' free left';

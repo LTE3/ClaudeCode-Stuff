@@ -1,3 +1,5 @@
+import { showLeft } from '../../utils/scarcity';
+
 const nightclubCards = [
   {
     key: 'ladies_free',
@@ -228,7 +230,7 @@ function getCurrentTier(availability) {
   return { tier: 4, price: '$' + t4price, total: '$' + (t4price + 5), remaining: 0, soldOut: true, label: 'Sold Out' };
 }
 
-export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, onShowTablePicker, ladiesFreeRemaining, availability, gaSoldOut }) {
+export default function TicketTypeCards({ date, eventType, onSelectGA, onSelectVipGA, onShowLadiesFree, onBuyTest, onSelectDirect, onShowTablePicker, ladiesFreeRemaining, availability, gaSoldOut }) {
   const dance = isDanceNight(eventType);
   const dayParty = eventType === 'day_party';
   const tier = getCurrentTier(availability);
@@ -277,7 +279,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           )}
           {card.key === 'ga' && !dance && (
             <div className="mt-3">
-              <div className="text-xs text-accent-blue/70">{tier.label} &bull; {Math.min(tier.remaining, 24)} left</div>
+              <div className="text-xs text-accent-blue/70">{tier.label} &bull; {showLeft('ga', date, tier.remaining)} left</div>
               {tier.label !== 'Last Tier' && !tier.soldOut && <div className="text-[10px] text-text-muted mt-1">Price increases after this tier sells out</div>}
               {tier.soldOut && <div className="text-xs text-accent-coral font-bold mt-1">SOLD OUT</div>}
             </div>
@@ -302,7 +304,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           {card.key === 'free_ga' && (
             <>
               <div className="text-sm text-accent-teal mt-3 font-semibold">
-                {freeGaRemaining > 0 ? `${Math.min(freeGaRemaining, 29)} spots left` : 'ALL CLAIMED'}
+                {freeGaRemaining > 0 ? `${showLeft('free_ga', date, freeGaRemaining)} spots left` : 'ALL CLAIMED'}
               </div>
               <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
                 CLAIM FREE ENTRY
@@ -311,7 +313,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           )}
           {card.key === 'ladies_free' && ladiesFreeRemaining != null && (
             <div className="text-sm text-accent-teal mt-3 font-semibold">
-              {ladiesFreeRemaining > 0 ? `${Math.min(ladiesFreeRemaining, 33)} spots left` : 'ALL CLAIMED'}
+              {ladiesFreeRemaining > 0 ? `${showLeft('ladies_free', date, ladiesFreeRemaining)} spots left` : 'ALL CLAIMED'}
             </div>
           )}
           {card.key === 'ladies_free' && (
@@ -322,7 +324,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           {card.key === 'free_before_12' && (
             <>
               <div className="text-sm text-accent-teal mt-3 font-semibold">
-                {freeGaRemaining > 0 ? `${Math.min(freeGaRemaining, 31)} spots left` : 'ALL CLAIMED'}
+                {freeGaRemaining > 0 ? `${showLeft('free_before', date, freeGaRemaining)} spots left` : 'ALL CLAIMED'}
               </div>
               <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
                 CLAIM FREE ENTRY
@@ -332,7 +334,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           {card.key === 'day_free' && (
             <>
               <div className="text-sm text-accent-teal mt-3 font-semibold">
-                {Math.min(availability?.day_free_remaining ?? 100, 33)} spots left
+                {showLeft('day_free', date, availability?.day_free_remaining ?? 100)} spots left
               </div>
               <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
                 CLAIM FREE ENTRY
@@ -342,7 +344,7 @@ export default function TicketTypeCards({ eventType, onSelectGA, onSelectVipGA, 
           {card.key === 'day_ladies_free' && (
             <>
               <div className="text-sm text-accent-teal mt-3 font-semibold">
-                {Math.min(availability?.day_ladies_free_remaining ?? 50, 27)} spots left
+                {showLeft('day_ladies', date, availability?.day_ladies_free_remaining ?? 50)} spots left
               </div>
               <button className="mt-4 text-xs tracking-[1.5px] bg-accent-teal/10 text-accent-teal border border-accent-teal/25 rounded-full px-5 py-2.5 hover:bg-accent-teal/20 transition-colors font-semibold">
                 CLAIM FREE ENTRY

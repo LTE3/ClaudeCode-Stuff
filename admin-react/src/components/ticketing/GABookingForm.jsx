@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCheckout } from '../../hooks/useCheckout';
+import { showLeft } from '../../utils/scarcity';
 
 function getCurrentTier(availability) {
   if (!availability) return null;
@@ -81,7 +82,7 @@ export default function GABookingForm({ date, availability }) {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-text-secondary text-sm">Remaining</span>
-          <span className="text-accent-blue text-sm">{Math.min(remaining, 24)} tickets</span>
+          <span className="text-accent-blue text-sm">{showLeft('ga', date, remaining)} tickets</span>
         </div>
       </div>
 

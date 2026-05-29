@@ -1,4 +1,6 @@
-export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, gaSoldOut }) {
+import { showLeft } from '../../utils/scarcity';
+
+export default function VenueMapSVG({ date, availability, onSelectTable, onSelectGA, gaSoldOut }) {
   const tables = availability?.tables || [];
 
   // Returns 'available', 'booked' (real), or 'fomo' (fake sold)
@@ -47,7 +49,7 @@ export default function VenueMapSVG({ availability, onSelectTable, onSelectGA, g
 
   const totalSold = (availability?.ga_tier1_sold || 0) + (availability?.ga_tier2_sold || 0) + (availability?.ga_tier3_sold || 0) + (availability?.ga_tier4_sold || 0) + (availability?.ga_sold || 0);
   const totalCapacity = (availability?.ga_tier1_capacity ?? 0) + (availability?.ga_tier2_capacity ?? 0) + (availability?.ga_tier3_capacity ?? 0) + (availability?.ga_tier4_capacity ?? 0);
-  const actualRemaining = Math.min(Math.max(0, totalCapacity - totalSold), 24);
+  const actualRemaining = showLeft('ga', date, totalCapacity - totalSold);
   let gaLabel = actualRemaining + ' TICKETS LEFT';
   if (gaSoldOut) gaLabel = 'SOLD OUT — Join Waitlist';
   else if (actualRemaining <= 0) gaLabel = 'SOLD OUT';

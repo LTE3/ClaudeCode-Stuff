@@ -196,6 +196,7 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
 
       {/* Ticket Type Cards — shown first so free options are immediately visible */}
       <TicketTypeCards
+        date={date}
         eventType={eventType}
         onSelectGA={onSelectGA}
         onSelectVipGA={onSelectVipGA}
@@ -214,6 +215,7 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
           <div>
             {danceNight ? (
               <DanceVenueMapSVG
+                date={date}
                 availability={availability}
                 onSelectTable={handleSelectTable}
                 onSelectGA={onSelectGA}
@@ -221,6 +223,7 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
               />
             ) : (
               <VenueMapSVG
+                date={date}
                 availability={availability}
                 onSelectTable={handleSelectTable}
                 onSelectGA={onSelectGA}
