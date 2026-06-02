@@ -57,9 +57,14 @@ const TABLE_PACKAGES = [
 const NIGHT_FLYERS = {
   '2026-05-29': 'friday-night-flyer.png',
   '2026-05-30': 'saturday-night-flyer.png',
-  '2026-06-05': 'flyer-2026-06-05.jpg',  // La Casita Del Teteo
+  '2026-06-05': 'flyer-2026-06-05.jpg',  // La Casita Del Teteo (10PM-4AM nightclub)
   '2026-06-06': 'flyer-2026-06-06.jpg',  // Una Noche en La Placita
   '2026-06-14': 'flyer-2026-06-14.jpg',  // PR Parade After Party — La Casita de Benito
+};
+
+// Flyers for the early dance experience (salsa/bachata 7-10PM), keyed by date.
+const EARLY_FLYERS = {
+  '2026-06-05': 'flyer-2026-06-05-salsa.jpg',  // La Casita Salsa Night (7-10PM)
 };
 
 function getUrgencyBadge(availability) {
@@ -186,10 +191,14 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
         </button>
       </div>
 
-      {/* Event flyer / promo */}
+      {/* Event flyer / promo. Early dance (salsa/bachata) shows its own flyer when one exists. */}
       {eventType === 'day_party' ? (
         <div className="rounded-[16px] overflow-hidden mb-4">
           <img src={import.meta.env.BASE_URL + 'day-party-flyer.jpg'} alt="Un Verano Sin Ti Day Party" className="w-full h-auto rounded-[16px]" />
+        </div>
+      ) : (danceNight && EARLY_FLYERS[date]) ? (
+        <div className="rounded-[16px] overflow-hidden mb-4">
+          <img src={import.meta.env.BASE_URL + EARLY_FLYERS[date]} alt={`La Casita BK early dance flyer — ${date}`} className="w-full h-auto rounded-[16px]" />
         </div>
       ) : NIGHT_FLYERS[date] ? (
         <div className="rounded-[16px] overflow-hidden mb-4">
