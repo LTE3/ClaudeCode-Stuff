@@ -3826,6 +3826,21 @@
             }
         })();
 
+        // ─── Auto-size the tickets iframe to its content ───
+        // The booking app posts its real height; we size the iframe to match so
+        // there is no nested scroll on mobile (the main booking-funnel friction).
+        // Floor 900 = never smaller than the original; cap 6000 prevents runaway.
+        // Same-origin guard. If no message ever arrives, iframe keeps its 900px.
+        window.addEventListener('message', function (e) {
+            if (e.origin !== window.location.origin) return;
+            var d = e.data;
+            if (!d || d.type !== 'lacasita:ticket-height') return;
+            var f = document.querySelector('iframe[src*="tickets=true"]');
+            if (!f) return;
+            var h = Math.max(900, Math.min(6000, Math.round(d.height || 0)));
+            f.style.height = h + 'px';
+        });
+
         // ─── Promo Video ───
         const promoVideo = document.getElementById('promoVideo');
         const playBtn = document.getElementById('videoPlayBtn');

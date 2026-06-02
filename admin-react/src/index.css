@@ -48,3 +48,11 @@ body {
   0%, 100% { text-shadow: 0 0 0 transparent; }
   50% { text-shadow: 0 0 8px rgba(255, 255, 255, 0.15); }
 }
+
+/* When the ticketing app is embedded as the landing-page iframe, size it to its
+   content instead of filling 100vh, so the parent iframe (auto-sized via
+   postMessage) matches and there is no nested scroll on mobile. Standalone
+   /admin is not embedded and keeps full-height backgrounds. */
+html.embedded,
+html.embedded body { min-height: 0; }
+html.embedded .min-h-screen { min-height: 0 !important; }
