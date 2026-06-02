@@ -89,6 +89,8 @@ Deno.serve(async (req) => {
             ticket_type: data.ticket_type,
             event_date: data.event_date || null,
             amount: selected.amount,
+            // Click→purchase attribution (paid path). Optional/nullable.
+            visitor_id: data.visitor_id || null,
           }),
         }).catch(() => {})
       }
@@ -229,6 +231,8 @@ Deno.serve(async (req) => {
           deposit_amount: selected.amount,
           bottle_package: data.bottle_package || null,
           status: "pending",
+          // Click→purchase attribution (paid path). Optional/nullable.
+          visitor_id: data.visitor_id || null,
         }
 
         const bookingResp = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
@@ -253,6 +257,7 @@ Deno.serve(async (req) => {
         body.append("metadata[customer_phone]", data.customer_phone || "")
         body.append("metadata[quantity]", String(data.quantity || 1))
         if (data.table_id) body.append("metadata[table_id]", data.table_id)
+        if (data.visitor_id) body.append("metadata[visitor_id]", data.visitor_id)
       }
 
       // Add line item

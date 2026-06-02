@@ -7,7 +7,11 @@ export function useCheckout() {
   async function checkout(payload) {
     try {
       setLoading(true);
-      const data = await supabaseEdge('create-checkout', payload);
+      // Attach the persistent visitor id (set by the landing page) so a paid
+      // purchase can be linked to the click that produced it. Best-effort.
+      let visitor_id = null;
+      try { visitor_id = localStorage.getItem('lacasita_vid'); } catch (_e) { /* storage blocked */ }
+      const data = await supabaseEdge('create-checkout', { ...payload, visitor_id });
       if (data.url) {
         // Use top-level window for redirect (works inside iframes)
         (window.top || window).location.href = data.url;
