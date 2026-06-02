@@ -193,7 +193,7 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
         </div>
       ) : NIGHT_FLYERS[date] ? (
         <div className="rounded-[16px] overflow-hidden mb-4">
-          <img src={import.meta.env.BASE_URL + NIGHT_FLYERS[date]} alt="La Casita Memorial Day Weekend" className="w-full h-auto rounded-[16px]" />
+          <img src={import.meta.env.BASE_URL + NIGHT_FLYERS[date]} alt={`La Casita BK event flyer — ${date}`} className="w-full h-auto rounded-[16px]" />
         </div>
       ) : null}
 
