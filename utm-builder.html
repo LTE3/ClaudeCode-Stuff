@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>La Casita BK — Link Tagger</title>
+<style>
+  :root {
+    /* tinted neutrals (warm, toward the brand) — never pure black/white */
+    --bg: oklch(0.18 0.012 60);
+    --surface: oklch(0.22 0.014 60);
+    --surface-2: oklch(0.26 0.016 60);
+    --line: oklch(0.32 0.016 60);
+    --text: oklch(0.93 0.012 70);
+    --muted: oklch(0.70 0.014 70);
+    --accent: oklch(0.72 0.17 50);        /* burnt amber, single accent */
+    --accent-press: oklch(0.66 0.17 50);
+    --ok: oklch(0.78 0.15 150);
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100dvh; background: var(--bg); color: var(--text);
+    font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    display: flex; justify-content: center; padding: 40px 20px;
+  }
+  .wrap { width: 100%; max-width: 560px; }
+  h1 { font-size: 1.5rem; letter-spacing: -0.02em; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 28px; font-size: 0.92rem; }
+  .field { margin-bottom: 18px; }
+  label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px;
+          text-transform: uppercase; letter-spacing: 0.04em; }
+  input, select {
+    width: 100%; padding: 11px 13px; background: var(--surface); color: var(--text);
+    border: 1px solid var(--line); border-radius: 10px; font-size: 0.95rem;
+    transition: border-color 160ms var(--ease);
+  }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .out {
+    margin-top: 26px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 16px;
+  }
+  .out-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase;
+               letter-spacing: 0.05em; margin-bottom: 8px; }
+  .link {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.82rem;
+    word-break: break-all; color: var(--text); background: var(--surface-2);
+    border-radius: 8px; padding: 12px; line-height: 1.45;
+  }
+  .copy {
+    margin-top: 12px; width: 100%; padding: 12px; border: none; border-radius: 10px;
+    background: var(--accent); color: oklch(0.20 0.02 60); font-weight: 600;
+    font-size: 0.95rem; cursor: pointer; transition: transform 140ms var(--ease), background 140ms var(--ease);
+  }
+  .copy:hover { background: var(--accent-press); }
+  .copy:active { transform: scale(0.98); }
+  .copy.done { background: var(--ok); }
+  .hint { font-size: 0.78rem; color: var(--muted); margin-top: 5px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Link Tagger</h1>
+    <p class="sub">Build a tagged lacasitabk.com link so every click is measurable. See UTM_GUIDE.md for the rules.</p>
+
+    <div class="row">
+      <div class="field">
+        <label for="source">Source</label>
+        <select id="source">
+          <option value="ig" selected>ig — Instagram</option>
+          <option value="fb">fb — Facebook</option>
+          <option value="tiktok">tiktok</option>
+          <option value="sms">sms</option>
+          <option value="email">email</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="medium">Medium</label>
+        <select id="medium">
+          <option value="paid" selected>paid — ad</option>
+          <option value="organic">organic — post/story/reel</option>
+          <option value="bio">bio — link in bio</option>
+          <option value="dm">dm</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="campaign">Campaign — event_MMDD</label>
+      <input id="campaign" type="text" placeholder="badbunny_0606" autocomplete="off" />
+      <div class="hint">Same event = same name every time. e.g. friday_0612, prparade_0614</div>
+    </div>
+
+    <div class="field">
+      <label for="content">Content — creative (optional, for A/B)</label>
+      <input id="content" type="text" placeholder="reel_a" autocomplete="off" />
+      <div class="hint">Two ad variants? Same campaign, different content (flyer_a / flyer_b).</div>
+    </div>
+
+    <div class="out">
+      <div class="out-label">Your tagged link</div>
+      <div class="link" id="link"></div>
+      <button class="copy" id="copy">Copy link</button>
+    </div>
+  </div>
+
+<script>
+  const base = 'https://lacasitabk.com/';
+  const $ = id => document.getElementById(id);
+  function clean(s){ return (s||'').trim().toLowerCase().replace(/\s+/g,'_'); }
+  function build(){
+    const p = new URLSearchParams();
+    p.set('utm_source', $('source').value);
+    p.set('utm_medium', $('medium').value);
+    const c = clean($('campaign').value); if (c) p.set('utm_campaign', c);
+    const ct = clean($('content').value); if (ct) p.set('utm_content', ct);
+    const url = base + '?' + p.toString();
+    $('link').textContent = url;
+    return url;
+  }
+  ['source','medium','campaign','content'].forEach(id => $(id).addEventListener('input', build));
+  $('copy').addEventListener('click', async () => {
+    const url = build();
+    try { await navigator.clipboard.writeText(url); } catch(_e) {}
+    const b = $('copy'); b.textContent = 'Copied'; b.classList.add('done');
+    setTimeout(() => { b.textContent = 'Copy link'; b.classList.remove('done'); }, 1400);
+  });
+  build();
+</script>
+</body>
+</html>
