@@ -57,6 +57,9 @@ const TABLE_PACKAGES = [
 const NIGHT_FLYERS = {
   '2026-05-29': 'friday-night-flyer.png',
   '2026-05-30': 'saturday-night-flyer.png',
+  '2026-06-05': 'flyer-2026-06-05.jpg',  // La Casita Del Teteo
+  '2026-06-06': 'flyer-2026-06-06.jpg',  // Una Noche en La Placita
+  '2026-06-14': 'flyer-2026-06-14.jpg',  // PR Parade After Party — La Casita de Benito
 };
 
 function getUrgencyBadge(availability) {
