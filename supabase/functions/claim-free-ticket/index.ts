@@ -11,7 +11,7 @@ Deno.serve(async (req) => {
   try {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!
     const SUPABASE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    const { event_date, customer_name, customer_email, customer_phone, claim_type, quantity } = await req.json()
+    const { event_date, customer_name, customer_email, customer_phone, claim_type, quantity, visitor_id } = await req.json()
     const type = claim_type || "ladies_free"
     const qty = Math.max(parseInt(quantity) || 1, 1)
 
@@ -115,6 +115,8 @@ Deno.serve(async (req) => {
         party_size: qty,
         amount_paid: 0,
         status: "confirmed",
+        // Click→RSVP attribution. Optional: older clients omit it, column is nullable.
+        visitor_id: visitor_id || null,
       }),
     })
     const bookings = await bookingResp.json()
@@ -142,6 +144,27 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify(counterUpdate),
     })
+
+    // Send the confirmation email with the door-scan QR. The frontend already shows the
+    // QR on screen, so email is supplementary: a failure here must never fail the claim.
+    // send-ticket-email embeds session_id verbatim into the QR, so free_<id> produces the
+    // correct ?verify=free_<id> door URL. One login per claim — organic claims are spaced
+    // out and never hit Gmail's login-frequency throttle.
+    if (bookingId) {
+      try {
+        await fetch(`${SUPABASE_URL}/functions/v1/send-ticket-email`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            session_id: `free_${bookingId}`,
+            customer_email,
+            customer_name,
+            ticket_type: bookingType,
+            event_date,
+          }),
+        })
+      } catch (_e) { /* email is best-effort; on-screen QR remains the source of truth */ }
+    }
 
     let capacity: number, claimed: number
     if (type === "day_free") { capacity = evt.day_free_capacity || 0; claimed = evt.day_free_claimed || 0 }

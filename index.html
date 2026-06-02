@@ -3782,19 +3782,48 @@
         })();
 
         // ─── Analytics (privacy-friendly page view) ───
-        if (!sessionStorage.getItem('lacasita_viewed')) {
-            fetch(SUPABASE_URL + '/rest/v1/page_views', {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'return=minimal'
-                },
-                body: JSON.stringify({ page: window.location.pathname, referrer: document.referrer || null })
-            }).catch(() => {});
-            sessionStorage.setItem('lacasita_viewed', '1');
-        }
+        // visitor_id: persistent across sessions (localStorage) → true unique-visitor count.
+        // session_id: per browser session (sessionStorage) → sessions / bounce.
+        // utm_*: campaign attribution parsed off the URL (tag IG links with ?utm_source=ig&utm_campaign=...).
+        // All fields additive; failure here never affects the page.
+        (function trackPageView() {
+            function makeId() {
+                try { return crypto.randomUUID(); }
+                catch (_e) { return 'v_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
+            }
+            var visitorId, sessionId;
+            try {
+                visitorId = localStorage.getItem('lacasita_vid');
+                if (!visitorId) { visitorId = makeId(); localStorage.setItem('lacasita_vid', visitorId); }
+                sessionId = sessionStorage.getItem('lacasita_sid');
+                if (!sessionId) { sessionId = makeId(); sessionStorage.setItem('lacasita_sid', sessionId); }
+            } catch (_e) { /* storage blocked (private mode / IG webview) — send without ids */ }
+
+            var params = new URLSearchParams(window.location.search);
+
+            // One row per session (keeps volume sane); visitor_id still distinguishes people.
+            if (!sessionStorage.getItem('lacasita_viewed')) {
+                fetch(SUPABASE_URL + '/rest/v1/page_views', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        page: window.location.pathname,
+                        referrer: document.referrer || null,
+                        visitor_id: visitorId || null,
+                        session_id: sessionId || null,
+                        utm_source: params.get('utm_source'),
+                        utm_medium: params.get('utm_medium'),
+                        utm_campaign: params.get('utm_campaign')
+                    })
+                }).catch(() => {});
+                sessionStorage.setItem('lacasita_viewed', '1');
+            }
+        })();
 
         // ─── Promo Video ───
         const promoVideo = document.getElementById('promoVideo');

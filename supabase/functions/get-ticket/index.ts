@@ -28,6 +28,19 @@ Deno.serve(async (req) => {
       })
     }
     const b = bookings[0]
+    // First-scan stamp — fire and forget, never blocks the scan response.
+    // PostgREST filter `scanned_at=is.null` ensures only the first scan writes;
+    // re-scans leave the original timestamp intact.
+    fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${b.id}&scanned_at=is.null`, {
+      method: "PATCH",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal",
+      },
+      body: JSON.stringify({ scanned_at: new Date().toISOString() }),
+    }).catch(() => {})
     return new Response(JSON.stringify({
       id: b.id,
       status: "paid",
@@ -78,6 +91,14 @@ Deno.serve(async (req) => {
       "Content-Type": "application/json",
       "Prefer": "return=minimal",
     }
+
+    // First-scan stamp (paid path) — fire and forget, never blocks the scan response.
+    // Filter `scanned_at=is.null` preserves first-scan time across re-scans.
+    fetch(`${SUPABASE_URL}/rest/v1/bookings?stripe_session_id=eq.${session.id}&scanned_at=is.null`, {
+      method: "PATCH",
+      headers: dbHeaders,
+      body: JSON.stringify({ scanned_at: new Date().toISOString() }),
+    }).catch(() => {})
 
     // Check if we already processed this session
     const checkResp = await fetch(`${SUPABASE_URL}/rest/v1/checkout_attempts?stripe_session_id=eq.${session.id}&status=eq.processed&select=id`, {
