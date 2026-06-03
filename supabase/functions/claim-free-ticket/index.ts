@@ -30,9 +30,9 @@ Deno.serve(async (req) => {
       } catch (_e) { /* logging must never block the claim flow */ }
     }
 
-    if (!event_date || !customer_name || !customer_email || !customer_phone) {
+    if (!event_date || !customer_name || !customer_phone) {
       await logFailed("missing_fields")
-      return new Response(JSON.stringify({ error: "Name, email, phone, and event date required" }), {
+      return new Response(JSON.stringify({ error: "Name, phone, and event date required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       })
     }
@@ -110,7 +110,7 @@ Deno.serve(async (req) => {
         event_id: evt.id,
         booking_type: bookingType,
         customer_name,
-        customer_email,
+        customer_email: customer_email || null, // email is now optional (phone-only RSVP)
         customer_phone,
         party_size: qty,
         amount_paid: 0,
@@ -150,7 +150,7 @@ Deno.serve(async (req) => {
     // send-ticket-email embeds session_id verbatim into the QR, so free_<id> produces the
     // correct ?verify=free_<id> door URL. One login per claim — organic claims are spaced
     // out and never hit Gmail's login-frequency throttle.
-    if (bookingId) {
+    if (bookingId && customer_email) {
       try {
         await fetch(`${SUPABASE_URL}/functions/v1/send-ticket-email`, {
           method: "POST",

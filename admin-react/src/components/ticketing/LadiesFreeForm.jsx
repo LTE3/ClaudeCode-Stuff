@@ -4,7 +4,6 @@ import { useClaimFreeTicket } from '../../hooks/useClaimFreeTicket';
 export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_free', title, subtitle }) {
   const { claim, loading, success, ticketData } = useClaimFreeTicket();
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState('');
@@ -16,7 +15,6 @@ export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_fr
       event_date: date,
       claim_type: claimType,
       customer_name: name,
-      customer_email: email,
       customer_phone: phone,
       quantity,
     });
@@ -80,18 +78,15 @@ export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_fr
 
 
       <input
-        type="text" placeholder="Full Name" required value={name}
+        type="text" placeholder="First Name" required value={name}
         onChange={e => setName(e.target.value)}
-        className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand focus:ring-[3px] focus:ring-brand-glow transition-all duration-200 mb-2.5"
-      />
-      <input
-        type="email" placeholder="Email" required value={email}
-        onChange={e => setEmail(e.target.value)}
+        autoComplete="given-name" autoCapitalize="words"
         className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand focus:ring-[3px] focus:ring-brand-glow transition-all duration-200 mb-2.5"
       />
       <input
         type="tel" placeholder="Phone" required value={phone}
         onChange={e => setPhone(e.target.value)}
+        autoComplete="tel" inputMode="tel"
         className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand focus:ring-[3px] focus:ring-brand-glow transition-all duration-200 mb-2.5"
       />
 
