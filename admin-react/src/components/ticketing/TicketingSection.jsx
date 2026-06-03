@@ -112,7 +112,15 @@ export default function TicketingSection() {
     initFromURL.current = true;
     const ev = eventsByDate[dateParam];
     setSelectedDate(dateParam);
-    if (blockParam === 'late' || blockParam === 'early' || blockParam === 'day') {
+    const claimParam = params.get('claim');
+    const FREE_CLAIMS = ['ladies_free', 'dance_ga_free', 'day_free', 'day_ladies_free'];
+    if (claimParam && FREE_CLAIMS.includes(claimParam)) {
+      // Deep-link straight to the claim form (e.g. a tagged ad link). One tap to RSVP —
+      // skips the experience picker and floorplan browse entirely.
+      setSelectedTimeBlock(blockParam === 'early' || blockParam === 'day' ? blockParam : 'late');
+      setBookingType(claimParam);
+      setStep('booking');
+    } else if (blockParam === 'late' || blockParam === 'early' || blockParam === 'day') {
       setSelectedTimeBlock(blockParam);
       setStep('floorplan');
     } else if (ev.early_type || ev.day_type) {

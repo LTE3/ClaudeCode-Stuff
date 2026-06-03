@@ -3841,6 +3841,26 @@
             f.style.height = h + 'px';
         });
 
+        // ─── Hero CTA → soonest night's booking (fewer taps) ───
+        // Point "Get Tickets Now" straight at the next active event's full-screen
+        // booking screen instead of scrolling to the iframe. Progressive: if the
+        // lookup fails, the button keeps its #tickets fallback.
+        (function deepLinkHeroCta() {
+            var cta = document.getElementById('heroTicketsCta');
+            if (!cta) return;
+            var today = new Date().toISOString().slice(0, 10);
+            fetch(SUPABASE_URL + '/rest/v1/events?select=event_date&is_active=eq.true&event_date=gte.' + today + '&order=event_date.asc&limit=1', {
+                headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (rows) {
+                if (Array.isArray(rows) && rows[0] && rows[0].event_date) {
+                    cta.setAttribute('href', '/admin/?tickets=true&date=' + rows[0].event_date + '&block=late');
+                }
+            })
+            .catch(function () { /* keep #tickets fallback */ });
+        })();
+
         // ─── Promo Video ───
         const promoVideo = document.getElementById('promoVideo');
         const playBtn = document.getElementById('videoPlayBtn');
