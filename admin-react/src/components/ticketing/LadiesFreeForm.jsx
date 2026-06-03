@@ -78,13 +78,13 @@ export default function LadiesFreeForm({ date, remaining, claimType = 'ladies_fr
 
 
       <input
-        type="text" placeholder="First Name" required value={name}
+        type="text" name="given-name" id="lf-name" placeholder="First Name" required value={name}
         onChange={e => setName(e.target.value)}
         autoComplete="given-name" autoCapitalize="words"
         className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand focus:ring-[3px] focus:ring-brand-glow transition-all duration-200 mb-2.5"
       />
       <input
-        type="tel" placeholder="Phone" required value={phone}
+        type="tel" name="tel" id="lf-phone" placeholder="Phone" required value={phone}
         onChange={e => setPhone(e.target.value)}
         autoComplete="tel" inputMode="tel"
         className="w-full p-3.5 bg-bg-surface border border-border-default rounded-[8px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand focus:ring-[3px] focus:ring-brand-glow transition-all duration-200 mb-2.5"
