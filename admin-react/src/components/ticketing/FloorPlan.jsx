@@ -191,20 +191,10 @@ export default function FloorPlan({ date, availability, eventType, onSelectGA, o
         </button>
       </div>
 
-      {/* Event flyer / promo. Early dance (salsa/bachata) shows its own flyer when one exists. */}
-      {eventType === 'day_party' ? (
-        <div className="rounded-[16px] overflow-hidden mb-4">
-          <img src={import.meta.env.BASE_URL + 'day-party-flyer.jpg'} alt="Un Verano Sin Ti Day Party" className="w-full h-auto rounded-[16px]" />
-        </div>
-      ) : (danceNight && EARLY_FLYERS[date]) ? (
-        <div className="rounded-[16px] overflow-hidden mb-4">
-          <img src={import.meta.env.BASE_URL + EARLY_FLYERS[date]} alt={`La Casita BK early dance flyer — ${date}`} className="w-full h-auto rounded-[16px]" />
-        </div>
-      ) : NIGHT_FLYERS[date] ? (
-        <div className="rounded-[16px] overflow-hidden mb-4">
-          <img src={import.meta.env.BASE_URL + NIGHT_FLYERS[date]} alt={`La Casita BK event flyer — ${date}`} className="w-full h-auto rounded-[16px]" />
-        </div>
-      ) : null}
+      {/* Flyer intentionally hidden on the booking screen — conversion test (keep the
+          claim CTA above the fold; ad viewers already saw the flyer in the ad). The
+          NIGHT_FLYERS / EARLY_FLYERS maps above are retained so this is a one-block
+          revert if we want flyers back. */}
 
       {/* Ticket Type Cards — shown first so free options are immediately visible */}
       <TicketTypeCards
