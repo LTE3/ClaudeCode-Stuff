@@ -108,8 +108,10 @@ Deno.serve(async (req) => {
       const tableList: any[] = [];
       for (const b of bookings) {
         const t = b.booking_type || "";
-        if (t === "dance_ga_free") freeGa++;
-        else if (t === "ladies_free") freeLadies++;
+        // Count HEADS, not booking rows: a party of N is N people, not 1.
+        const heads = b.party_size || 1;
+        if (t === "dance_ga_free") freeGa += heads;
+        else if (t === "ladies_free") freeLadies += heads;
         else {
           tables++; tableRev += b.amount_paid || 0; // couch / high_top reservations
           tableList.push({

@@ -81,6 +81,10 @@ export default function EventBookingsDashboard({ date, password }) {
                   <div className="text-[10px] tracking-[2px] text-accent-teal mb-1">LADIES FREE</div>
                   <div className="text-accent-teal text-xl font-bold">{summary.ladies_free_count ?? 0}</div>
                 </div>
+                <div className="bg-bg-surface border border-accent-blue/15 rounded-lg p-3 flex-1 min-w-[120px]">
+                  <div className="text-[10px] tracking-[2px] text-accent-blue mb-1">FREE GA</div>
+                  <div className="text-accent-blue text-xl font-bold">{summary.free_ga_count ?? 0}</div>
+                </div>
                 <div className="bg-bg-surface border border-accent-gold/15 rounded-lg p-3 flex-1 min-w-[120px]">
                   <div className="text-[10px] tracking-[2px] text-accent-gold mb-1">COUCHES</div>
                   <div className="text-accent-gold text-xl font-bold">{summary.couch_count ?? 0}</div>
@@ -91,7 +95,7 @@ export default function EventBookingsDashboard({ date, password }) {
                 </div>
                 <div className="bg-bg-surface border border-accent-teal/15 rounded-lg p-3 flex-1 min-w-[120px]">
                   <div className="text-[10px] tracking-[2px] text-accent-teal mb-1">REVENUE</div>
-                  <div className="text-accent-teal text-xl font-bold">${summary.revenue ?? 0}</div>
+                  <div className="text-accent-teal text-xl font-bold">${Math.round((summary.total_revenue ?? summary.revenue ?? 0) / 100)}</div>
                 </div>
               </div>
             )}
