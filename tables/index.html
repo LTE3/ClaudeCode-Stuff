@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>La Casita BK — Reserve a VIP Table</title>
+<style>
+  :root{
+    --bg:#0b0710; --card:#17101d; --line:#2e2238; --text:#f3ecf7; --muted:#b7a9c4;
+    --gold:#FFD34D; --pink1:#FF2D8B; --pink2:#FF6AD5; --ease:cubic-bezier(.23,1,.32,1);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;}
+  .wrap{max-width:520px;margin:0 auto;padding:0 16px 60px;}
+  header{background:linear-gradient(135deg,var(--pink1),var(--pink2));text-align:center;padding:30px 20px;border-radius:0 0 22px 22px;}
+  header h1{margin:0;font-size:24px;letter-spacing:4px;}
+  header .sub{font-size:12px;letter-spacing:2px;margin-top:6px;color:#fff3f9;}
+  h2{font-size:22px;text-align:center;margin:30px 0 6px;}
+  .lead{text-align:center;color:var(--muted);font-size:14px;margin:0 0 22px;line-height:1.5;}
+  .bottles{display:flex;gap:10px;margin:18px 0 26px;}
+  .bottles img{width:50%;border-radius:12px;border:1px solid var(--line);display:block;}
+  .pkg{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;}
+  .pkg .name{color:var(--gold);font-weight:bold;letter-spacing:1px;font-size:15px;}
+  .pkg .meta{color:var(--muted);font-size:12px;margin:4px 0 8px;}
+  .pkg .inc{color:var(--text);font-size:13px;line-height:1.5;}
+  form{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:24px;}
+  label{display:block;font-size:12px;color:var(--muted);margin:12px 0 5px;letter-spacing:.5px;}
+  input,select{width:100%;padding:13px;background:#221a28;border:1px solid var(--line);border-radius:10px;color:var(--text);font-size:15px;}
+  input:focus,select:focus{outline:none;border-color:var(--pink1);}
+  button{width:100%;margin-top:20px;padding:16px;border:none;border-radius:999px;background:linear-gradient(135deg,var(--pink1),var(--pink2));color:#fff;font-size:16px;font-weight:bold;letter-spacing:2px;cursor:pointer;box-shadow:0 6px 22px rgba(255,45,139,.5);transition:transform .14s var(--ease);}
+  button:active{transform:scale(.98)}
+  button:disabled{opacity:.5}
+  .note{text-align:center;color:var(--muted);font-size:12px;margin-top:14px;line-height:1.5;}
+  .ok{display:none;background:var(--card);border:1px solid var(--gold);border-radius:16px;padding:28px 20px;text-align:center;margin-top:24px;}
+  .ok h3{color:var(--gold);margin:0 0 8px;}
+  .err{color:#ff7a9c;font-size:14px;text-align:center;margin-top:10px;min-height:1em;}
+  footer{text-align:center;color:#6f6478;font-size:11px;margin-top:30px;}
+</style>
+</head>
+<body>
+  <header>
+    <h1>LA CASITA BK</h1>
+    <div class="sub">VIP TABLES · BROOKLYN · 21+</div>
+  </header>
+  <div class="wrap">
+    <h2>Reserve a VIP Table 🍾</h2>
+    <p class="lead">No deposit to reserve — lock your table now, bottle minimum due at the door.</p>
+
+    <div class="bottles">
+      <img src="https://lacasitabk.com/admin/bottle-menu-vip.jpg" alt="VIP Bottle Menu" onerror="this.style.display='none'">
+      <img src="https://lacasitabk.com/admin/bottle-menu-packages.jpg" alt="Packages" onerror="this.style.display='none'">
+    </div>
+
+    <div class="pkg">
+      <div class="name">⭐ VIP COUCH — $700++</div>
+      <div class="meta">5–10 guests · $50 deposit waived</div>
+      <div class="inc">2 Premium Bottles · 1 House Champagne · 1 Hookah · $50 Merch Credit · Full Admission</div>
+    </div>
+    <div class="pkg">
+      <div class="name">⭐ VIP HIGH TOP — $450++</div>
+      <div class="meta">1–4 guests · $50 deposit waived</div>
+      <div class="inc">1 Premium Bottle · 1 House Champagne · 1 Hookah · $50 Merch Credit · Full Admission</div>
+    </div>
+
+    <form id="resForm">
+      <label for="date">Which night</label>
+      <select id="date" required><option value="">Loading dates…</option></select>
+
+      <label for="pkg">Table</label>
+      <select id="pkg" required>
+        <option value="vip_couch">VIP Couch (5–10) — $700++</option>
+        <option value="vip_high_top">VIP High Top (1–4) — $450++</option>
+      </select>
+
+      <label for="name">Name</label>
+      <input id="name" type="text" placeholder="Your name" required autocomplete="name" />
+
+      <label for="phone">Phone</label>
+      <input id="phone" type="tel" placeholder="(555) 555-5555" required autocomplete="tel" inputmode="tel" />
+
+      <label for="party">Party size</label>
+      <input id="party" type="number" min="1" max="10" value="6" required />
+
+      <button id="submitBtn" type="submit">RESERVE MY TABLE</button>
+      <div class="err" id="err"></div>
+      <div class="note">We'll text you to confirm your table. Bottle minimum paid at the door.</div>
+    </form>
+
+    <div class="ok" id="ok">
+      <h3>🍾 Table requested!</h3>
+      <p>You're on the list. We'll text you to confirm — bottle minimum due at the door. See you on the dancefloor.</p>
+    </div>
+
+    <footer>Pulse Hospitality Group — La Casita BK · 428 Johnson Ave, Brooklyn NY 11237</footer>
+  </div>
+
+<script>
+  var SUPABASE_URL='https://tqeunmqnaoyrerkbhokk.supabase.co';
+  var ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
+
+  function visitorId(){try{var v=localStorage.getItem('lacasita_vid');if(!v){v=(crypto.randomUUID&&crypto.randomUUID())||('v_'+Date.now().toString(36));localStorage.setItem('lacasita_vid',v);}return v;}catch(e){return null;}}
+
+  // Load upcoming events into the date dropdown
+  var today=new Date().toISOString().slice(0,10);
+  fetch(SUPABASE_URL+'/rest/v1/events?select=event_date,title,is_active&event_date=gte.'+today+'&is_active=eq.true&order=event_date.asc&limit=10',
+    {headers:{apikey:ANON,Authorization:'Bearer '+ANON}})
+   .then(function(r){return r.json();})
+   .then(function(rows){
+     var sel=document.getElementById('date');
+     if(!Array.isArray(rows)||!rows.length){sel.innerHTML='<option value="">No upcoming dates</option>';return;}
+     sel.innerHTML=rows.map(function(e){
+       var label=new Date(e.event_date+'T00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+       return '<option value="'+e.event_date+'">'+label+' — '+(e.title||'La Casita BK')+'</option>';
+     }).join('');
+   }).catch(function(){document.getElementById('date').innerHTML='<option value="">Could not load dates</option>';});
+
+  document.getElementById('resForm').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var btn=document.getElementById('submitBtn'), err=document.getElementById('err');
+    err.textContent='';btn.disabled=true;btn.textContent='RESERVING…';
+    var params=new URLSearchParams(window.location.search);
+    fetch(SUPABASE_URL+'/functions/v1/reserve-table-free',{
+      method:'POST',
+      headers:{Authorization:'Bearer '+ANON,apikey:ANON,'Content-Type':'application/json'},
+      body:JSON.stringify({
+        event_date:document.getElementById('date').value,
+        table_type:document.getElementById('pkg').value,
+        customer_name:document.getElementById('name').value,
+        customer_phone:document.getElementById('phone').value,
+        party_size:document.getElementById('party').value,
+        visitor_id:visitorId()
+      })
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d&&(d.status==='reserved'||d.booking_id)){
+        document.getElementById('resForm').style.display='none';
+        document.getElementById('ok').style.display='block';
+      }else{err.textContent=(d&&d.error)||'Something went wrong — try again.';btn.disabled=false;btn.textContent='RESERVE MY TABLE';}
+    }).catch(function(){err.textContent='Network error — try again.';btn.disabled=false;btn.textContent='RESERVE MY TABLE';});
+  });
+</script>
+</body>
+</html>
