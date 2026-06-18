@@ -1,0 +1,96 @@
+/* La Casita — flite-style ticket sheet. Shared by /fri and /sat flyer pages.
+   Server (Supabase edge fns) is the source of truth for price + inventory;
+   this file is presentation only. */
+:root{
+  --pink:#FF2D8B; --pink2:#FF6AD5; --gold:#FFD34D; --green:#34E5A1; --blue:#6AA8FF;
+  --bg:#08080a; --sheet:#101015; --line:rgba(255,255,255,.08);
+  --muted:#8e8895; --card:#16161d;
+  --ease:cubic-bezier(.32,.72,0,1);
+}
+.cs-scrim{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.55);
+  opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
+.cs-open .cs-scrim{opacity:1;pointer-events:auto}
+
+/* dim/scale the flyer behind when sheet opens */
+.cs-open .phone{transition:transform .5s var(--ease),filter .5s var(--ease);
+  transform:scale(.96) translateY(6px);filter:brightness(.55)}
+
+.cs-sheet{position:fixed;left:0;right:0;bottom:0;z-index:90;margin:0 auto;max-width:480px;
+  max-height:90vh;display:flex;flex-direction:column;
+  background:var(--sheet);border-radius:24px 24px 0 0;border-top:1px solid var(--line);
+  box-shadow:0 -20px 50px -10px rgba(0,0,0,.7);
+  transform:translateY(100%);transition:transform .46s var(--ease)}
+.cs-open .cs-sheet{transform:translateY(0)}
+.cs-grab{width:38px;height:5px;border-radius:999px;background:#3a3a44;margin:10px auto 4px;flex:none}
+.cs-head{position:relative;padding:6px 20px 14px;border-bottom:1px solid var(--line);flex:none}
+.cs-title{font-size:20px;font-weight:900;letter-spacing:-.01em}
+.cs-sub{color:var(--muted);font-size:13px;margin-top:3px}
+.cs-close{position:absolute;top:10px;right:16px;width:30px;height:30px;border-radius:999px;
+  background:#22222b;color:#cfc9d6;border:0;font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center}
+
+.cs-body{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 14px 4px}
+.cs-loading,.cs-msg{color:var(--muted);text-align:center;padding:30px 10px;font-size:14px}
+.cs-err{color:#ff7a7a;font-size:13px;padding:8px 4px 0}
+
+/* ticket rows */
+.cs-tk{display:flex;align-items:center;gap:12px;padding:15px 14px;margin:8px 0;
+  background:var(--card);border:1px solid var(--line);border-radius:16px;cursor:pointer;
+  transition:border-color .2s var(--ease),background .2s var(--ease),opacity .2s}
+.cs-tk.sel{border-color:var(--pink);background:#1c151c}
+.cs-tk.soldout{opacity:.45;pointer-events:none}
+.cs-tk-l{flex:1;min-width:0}
+.cs-tk-name{font-weight:800;font-size:15px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.cs-tag{font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 7px;border-radius:6px;
+  background:rgba(255,211,77,.15);color:var(--gold)}
+.cs-tag.free{background:rgba(52,229,161,.16);color:var(--green)}
+.cs-tk-sub{color:var(--muted);font-size:12px;margin-top:3px}
+.cs-tk-r{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.cs-price{font-weight:900;font-size:17px}
+.cs-price.free{color:var(--green)}
+.cs-price small{font-weight:600;font-size:11px;color:var(--muted)}
+.cs-chev{color:var(--muted);font-size:20px;padding-left:2px}
+
+/* qty stepper (shown on selected row) */
+.cs-step{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.cs-step button{width:34px;height:32px;background:#222029;color:#fff;border:0;font-size:18px;cursor:pointer;line-height:1}
+.cs-step button:active{background:#2e2c38}
+.cs-step .cs-q{min-width:30px;text-align:center;font-weight:800;font-size:14px}
+
+/* details form panel */
+.cs-form{padding:4px 4px 8px}
+.cs-form label{display:block;color:var(--muted);font-size:11px;letter-spacing:.04em;margin:10px 2px 5px}
+.cs-form input{width:100%;padding:13px 14px;background:#16161d;border:1px solid var(--line);
+  border-radius:12px;color:#fff;font-size:15px;outline:none;transition:border-color .2s}
+.cs-form input:focus{border-color:var(--pink)}
+.cs-back{background:transparent;border:0;color:var(--muted);font-size:13px;cursor:pointer;padding:8px 2px;display:inline-flex;align-items:center;gap:5px}
+
+/* footer pay bar */
+.cs-pay{flex:none;padding:12px 16px calc(14px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);background:rgba(16,16,21,.92);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;align-items:center;gap:14px}
+.cs-pay-l{flex:1;min-width:0}
+.cs-pay-lbl{color:var(--muted);font-size:11px;letter-spacing:.04em}
+.cs-pay-amt{font-weight:900;font-size:20px}
+.cs-pay-btn{flex:none;border:0;cursor:pointer;color:#fff;font-weight:900;font-size:16px;
+  padding:15px 28px;border-radius:14px;letter-spacing:.01em;
+  background:linear-gradient(135deg,var(--pink),var(--pink2));
+  box-shadow:0 10px 26px -8px rgba(255,45,139,.75)}
+.cs-pay-btn:disabled{opacity:.4;box-shadow:none;cursor:default}
+.cs-pay-btn:active:not(:disabled){transform:scale(.97)}
+
+/* success / QR */
+.cs-ok{text-align:center;padding:14px 16px 6px}
+.cs-ok h3{font-size:22px;font-weight:900;color:var(--green);margin:6px 0 4px;letter-spacing:.02em}
+.cs-ok .cs-shot{background:rgba(255,211,77,.1);border:1px solid rgba(255,211,77,.25);
+  border-radius:12px;padding:10px;margin:10px auto;max-width:280px;color:var(--gold);font-size:13px;font-weight:600}
+.cs-ok .cs-shot small{display:block;color:var(--muted);font-weight:400;margin-top:2px}
+.cs-qr{display:inline-block;background:#000;border:1px solid var(--line);border-radius:16px;padding:12px;margin:6px 0 10px}
+.cs-qr img{display:block;width:190px;height:190px}
+.cs-detail{text-align:left;max-width:280px;margin:0 auto}
+.cs-detail .row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+.cs-detail .row span:first-child{color:var(--muted)}
+.cs-detail .row span:last-child{font-weight:600}
+
+@media (prefers-reduced-motion: reduce){.cs-sheet,.cs-scrim,.phone{transition:none!important}}

@@ -8,6 +8,7 @@
 <meta property="og:title" content="Una Noche en La Placita — Every Saturday" />
 <meta property="og:description" content="10PM–4AM · 428 Johnson Ave, Brooklyn · 21+" />
 <meta property="og:image" content="https://lacasitabk.com/sat/flyer.jpg" />
+<link rel="stylesheet" href="/tickets/casita-sheet.css" />
 <style>
   :root{
     --pink:#FF2D8B; --pink2:#FF6AD5; --gold:#FFD34D;
@@ -80,20 +81,19 @@
       <div class="bar-name">Una Noche en La Placita</div>
       <div class="bar-when">Sat, Jun 20 · 10PM</div>
     </div>
-    <a class="cta" id="cta" href="https://lacasitabk.com/admin/?tickets=true&date=2026-06-20&block=late&utm_source=flyer&utm_medium=short&utm_campaign=sat_0620">Get Tickets →</a>
+    <a class="cta" id="cta" data-casita-open href="https://lacasitabk.com/admin/?tickets=true&date=2026-06-20&block=late&utm_source=flyer&utm_medium=short&utm_campaign=sat_0620">Get Tickets →</a>
   </div>
 
-  <div class="sheet" id="sheet"><span>Loading tickets…</span></div>
-
   <script>
-    var cta = document.getElementById('cta'), sheet = document.getElementById('sheet');
-    cta.addEventListener('click', function(e){
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      e.preventDefault();
-      var href = cta.getAttribute('href');
-      sheet.classList.add('up');
-      setTimeout(function(){ window.location.href = href; }, 320);
-    });
+    // Sheet config — slides up the flite-style ticket picker on this page.
+    // href on the CTA stays as a no-JS fallback to the full admin ticket page.
+    window.CASITA_EVENT = {
+      date: '2026-06-20',
+      title: 'Una Noche en La Placita',
+      sub: 'Sat, Jun 20 · 10PM–4AM · 21+',
+      tableHref: 'https://lacasitabk.com/admin/?tickets=true&date=2026-06-20&block=late&utm_source=flyer&utm_medium=short&utm_campaign=sat_0620_table'
+    };
   </script>
+  <script src="/tickets/casita-sheet.js"></script>
 </body>
 </html>
