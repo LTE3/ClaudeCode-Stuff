@@ -1,20 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>La Casita BK — Saturday Tickets</title>
-  <link rel="canonical" href="https://lacasitabk.com/admin/?tickets=true&date=2026-06-20&block=late&claim=dance_ga_free&utm_source=ig&utm_medium=short&utm_campaign=sat_0620" />
-  <meta http-equiv="refresh" content="0; url=https://lacasitabk.com/admin/?tickets=true&date=2026-06-20&block=late&claim=dance_ga_free&utm_source=ig&utm_medium=short&utm_campaign=sat_0620" />
-  <script>
-    window.location.replace("https://lacasitabk.com/admin/?tickets=true&date=2026-06-20&block=late&claim=dance_ga_free&utm_source=ig&utm_medium=short&utm_campaign=sat_0620");
-  </script>
-  <style>
-    html,body{margin:0;height:100%;background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;align-items:center;justify-content:center}
-    a{color:#d4af37;text-decoration:none;font-size:18px}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Una Noche en La Placita — Saturday at La Casita BK</title>
+<meta name="theme-color" content="#08080a" />
+<meta property="og:title" content="Una Noche en La Placita — Every Saturday" />
+<meta property="og:description" content="10PM–4AM · 428 Johnson Ave, Brooklyn · 21+" />
+<meta property="og:image" content="https://lacasitabk.com/sat/flyer.jpg" />
+<style>
+  :root{
+    --pink:#FF2D8B; --pink2:#FF6AD5; --gold:#FFD34D;
+    --bg:#08080a; --muted:#9a93a3;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%}
+  body{
+    background:radial-gradient(120% 80% at 50% -10%, #14101f 0%, var(--bg) 55%);
+    color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
+    display:flex;justify-content:center;
+  }
+  .phone{width:100%;max-width:430px;min-height:100vh;display:flex;flex-direction:column;padding:14px 14px 104px}
+  .top{display:flex;align-items:center;justify-content:center;padding:6px 0 14px}
+  .brand{font-weight:800;letter-spacing:.14em;font-size:12.5px;color:#fff}
+  .brand .dot{color:var(--pink);margin:0 4px}
+  .flyer-wrap{
+    border-radius:22px;overflow:hidden;position:relative;
+    box-shadow:0 24px 60px -22px rgba(255,45,139,.55), 0 0 0 1px rgba(255,255,255,.05);
+    animation:rise .6s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .flyer-wrap img{display:block;width:100%;height:auto}
+  .meta{padding:18px 4px 0;animation:rise .6s .08s cubic-bezier(.2,.7,.2,1) both}
+  .kicker{color:var(--gold);font-weight:800;letter-spacing:.16em;font-size:12px}
+  .title{font-size:29px;font-weight:900;letter-spacing:-.01em;margin:6px 0 9px;line-height:1.04}
+  .sub{color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:6px 14px}
+  .sub b{color:#fff;font-weight:600}
+  .bar{
+    position:fixed;left:0;right:0;bottom:0;z-index:5;
+    display:flex;align-items:center;gap:12px;justify-content:space-between;
+    padding:13px 16px calc(13px + env(safe-area-inset-bottom));
+    background:rgba(14,12,16,.72);backdrop-filter:blur(16px) saturate(160%);
+    -webkit-backdrop-filter:blur(16px) saturate(160%);
+    border-top:1px solid rgba(255,255,255,.08);max-width:430px;margin:0 auto;
+    animation:rise .5s .18s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .bar-l{min-width:0}
+  .bar-name{font-weight:800;font-size:14px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-when{color:var(--muted);font-size:12px;margin-top:1px}
+  .cta{
+    flex:none;border:0;cursor:pointer;color:#fff;font-weight:800;font-size:15px;letter-spacing:.02em;
+    padding:13px 22px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    background:linear-gradient(135deg,var(--pink),var(--pink2));
+    box-shadow:0 8px 22px -6px rgba(255,45,139,.7);
+    transition:transform .15s cubic-bezier(.2,.7,.2,1), box-shadow .15s;
+  }
+  .cta:active{transform:scale(.96)}
+  .sheet{position:fixed;inset:0;background:var(--bg);transform:translateY(100%);
+    transition:transform .34s cubic-bezier(.2,.7,.2,1);z-index:20;
+    display:flex;align-items:center;justify-content:center}
+  .sheet.up{transform:translateY(0)}
+  .sheet span{color:var(--muted);font-size:14px;letter-spacing:.08em}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
-  <a href="https://lacasitabk.com/admin/?tickets=true&date=2026-06-20&block=late&claim=dance_ga_free&utm_source=ig&utm_medium=short&utm_campaign=sat_0620">Get Saturday tickets &rarr;</a>
+  <div class="phone">
+    <div class="top"><span class="brand">LA CASITA BK <span class="dot">•</span> PULSE HOSPITALITY</span></div>
+    <div class="flyer-wrap"><img src="flyer.jpg" alt="Una Noche en La Placita — Every Saturday flyer" /></div>
+    <div class="meta">
+      <div class="kicker">SATURDAY • JUNE 20</div>
+      <div class="title">Una Noche en La Placita</div>
+      <div class="sub"><span><b>10PM – 4AM</b></span><span>428 Johnson Ave, Brooklyn</span><span>21+ w/ ID</span></div>
+    </div>
+  </div>
+
+  <div class="bar">
+    <div class="bar-l">
+      <div class="bar-name">Una Noche en La Placita</div>
+      <div class="bar-when">Sat, Jun 20 · 10PM</div>
+    </div>
+    <a class="cta" id="cta" href="https://lacasitabk.com/admin/?tickets=true&date=2026-06-20&block=late&utm_source=flyer&utm_medium=short&utm_campaign=sat_0620">Get Tickets →</a>
+  </div>
+
+  <div class="sheet" id="sheet"><span>Loading tickets…</span></div>
+
+  <script>
+    var cta = document.getElementById('cta'), sheet = document.getElementById('sheet');
+    cta.addEventListener('click', function(e){
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      e.preventDefault();
+      var href = cta.getAttribute('href');
+      sheet.classList.add('up');
+      setTimeout(function(){ window.location.href = href; }, 320);
+    });
+  </script>
 </body>
 </html>
