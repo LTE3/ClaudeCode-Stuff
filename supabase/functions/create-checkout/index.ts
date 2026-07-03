@@ -39,6 +39,7 @@ Deno.serve(async (req) => {
         ga_tier2: { amount: 2000, name: "La Casita BK - GA Tier 2 ($15 + $5 fee)" },
         ga_tier3: { amount: 2500, name: "La Casita BK - GA Tier 3 ($20 + $5 fee)" },
         ga_tier4: { amount: 1500, name: "La Casita BK - GA Tier 4 ($10 + $5 fee)" },
+        ga_18plus: { amount: 2000, name: "La Casita BK - 18+ Entry ($20)" },
         vip_ga: { amount: 4000, name: "La Casita BK - VIP GA ($35 + $5 fee)" },
         vip_couch: { amount: 10000, name: "VIP Couch Deposit — Full Night" },
         vip_high_top: { amount: 5000, name: "VIP High Top Deposit — Full Night" },
@@ -269,6 +270,13 @@ Deno.serve(async (req) => {
       body.append("line_items[0][price_data][product_data][name]", itemName)
       body.append("line_items[0][price_data][unit_amount]", String(selected.amount))
       body.append("line_items[0][quantity]", String(data.quantity || 1))
+
+      // Tables: force Stripe to collect a phone number on the hosted checkout page
+      // (needed to coordinate arrival/bottle service). Lands in session.customer_details.phone.
+      const tableTypes = ["vip_couch", "vip_high_top", "regular_couch", "regular_high_top"]
+      if (tableTypes.some((t) => data.ticket_type.startsWith(t))) {
+        body.append("phone_number_collection[enabled]", "true")
+      }
 
       // Collect email for receipts
       if (data.customer_email && data.customer_email !== "pending@checkout.com") {

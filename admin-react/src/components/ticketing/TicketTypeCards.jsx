@@ -80,6 +80,21 @@ const nightclubCards = [
     accentBg: 'bg-brand',
     shadow: 'hover:shadow-[0_0_20px_rgba(255,77,141,0.15)]',
   },
+  {
+    key: 'ga_18plus',
+    emoji: '\u{1F51E}',
+    title: '18+ ENTRY',
+    price: '$20',
+    fee: null,
+    subtitle: '18-20 welcome • valid ID',
+    dateGate: '2026-07-03',
+    color: 'pink',
+    borderColor: 'border-brand/15',
+    hoverBorder: 'hover:border-brand/40',
+    textColor: 'text-brand',
+    accentBg: 'bg-brand',
+    shadow: 'hover:shadow-[0_0_20px_rgba(255,77,141,0.15)]',
+  },
 ];
 
 const danceCards = [
@@ -237,7 +252,7 @@ export default function TicketTypeCards({ date, eventType, onSelectGA, onSelectV
   const allCards = dayParty ? dayPartyCards : dance ? danceCards : nightclubCards;
   // When GA sold out, hide GA/VIP GA/Ladies Free cards — only show table-related options
   const gaKeys = ['ga', 'vip_ga', 'ladies_free', 'free_ga', 'free_before_12'];
-  const cards = gaSoldOut ? allCards.filter(c => !gaKeys.includes(c.key)) : allCards;
+  const cards = (gaSoldOut ? allCards.filter(c => !gaKeys.includes(c.key)) : allCards).filter(c => !c.dateGate || c.dateGate === date);
 
   const freeGaCapacity = availability?.free_ga_capacity ?? 150;
   const freeGaClaimed = availability?.free_ga_claimed ?? 0;
@@ -249,7 +264,7 @@ export default function TicketTypeCards({ date, eventType, onSelectGA, onSelectV
     else if (key === 'free_before_12') onShowLadiesFree('free_before_12');
     else if (key === 'vip_ga') onShowTablePicker();
     else if (key === 'ladies_free') onShowLadiesFree();
-    else if (key === 'ga_open_bar' || key === 'ladies_group') onSelectDirect(key);
+    else if (key === 'ga_open_bar' || key === 'ladies_group' || key === 'ga_18plus') onSelectDirect(key);
     else if (key === 'day_free') onShowLadiesFree('day_free');
     else if (key === 'day_ladies_free') onShowLadiesFree('day_ladies_free');
     else if (key === 'day_ladies_open_bar' || key === 'day_guys_open_bar' || key === 'day_ladies_ga' || key === 'day_guys_ga') onSelectDirect(key);
@@ -356,6 +371,9 @@ export default function TicketTypeCards({ date, eventType, onSelectGA, onSelectV
           )}
           {card.key === 'ga_open_bar' && (
             <div className="text-xs text-accent-gold/70 mt-3">{card.subtitle}</div>
+          )}
+          {card.key === 'ga_18plus' && (
+            <div className="text-xs text-brand/70 mt-3">{card.subtitle}</div>
           )}
           {card.key === 'test' && (
             <div className="text-xs text-text-muted/60 mt-3">For testing checkout</div>
