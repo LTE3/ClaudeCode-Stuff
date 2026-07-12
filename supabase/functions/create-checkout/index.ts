@@ -77,6 +77,8 @@ Deno.serve(async (req) => {
       // overrides the tier amount for GA-admission types only (not tables/open-bar/ladies).
       const SPECIAL_GA_PRICE: Record<string, { amount: number; name: string }> = {
         "2026-07-10": { amount: 3000, name: "La Casita BK - GA ($25 + $5 fee)" },
+        "2026-07-11": { amount: 3000, name: "La Casita BK - GA ($25 + $5 fee)" },
+        "2026-07-18": { amount: 3000, name: "La Casita BK - GA ($25 + $5 fee)" },
       }
       const gaAdmissionTypes = ["ga", "ga_tier1", "ga_tier2", "ga_tier3", "ga_tier4"]
       const specialGa = gaAdmissionTypes.includes(data.ticket_type) ? SPECIAL_GA_PRICE[data.event_date] : undefined
