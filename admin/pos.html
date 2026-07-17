@@ -8,7 +8,7 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; min-height: 100vh; }
-  .header { background: linear-gradient(135deg, #FF4D8D, #FF6B9D); padding: 16px; text-align: center; }
+  .header { background: linear-gradient(135deg, #FF2D8B, #FF6AD5); padding: 16px; text-align: center; }
   .header h1 { font-size: 18px; letter-spacing: 3px; }
   .reader-select { padding: 12px; background: #111; border-bottom: 1px solid #222; }
   .reader-select select { width: 100%; padding: 10px; background: #1a1a1a; color: #fff; border: 1px solid #333; border-radius: 8px; font-size: 16px; }
@@ -16,19 +16,19 @@
   .menu-item { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
   .menu-item:active { transform: scale(0.95); background: #252525; }
   .menu-item .name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-  .menu-item .price { font-size: 22px; font-weight: 700; color: #FF4D8D; }
-  .menu-item .qty-badge { display: inline-block; background: #FF4D8D; color: #fff; border-radius: 50%; width: 24px; height: 24px; line-height: 24px; font-size: 13px; font-weight: 700; margin-top: 6px; }
+  .menu-item .price { font-size: 22px; font-weight: 700; color: #FFD34D; }
+  .menu-item .qty-badge { display: inline-block; background: #FF2D8B; color: #fff; border-radius: 50%; width: 24px; height: 24px; line-height: 24px; font-size: 13px; font-weight: 700; margin-top: 6px; }
   .cart { padding: 12px; border-top: 1px solid #222; background: #111; }
   .cart h3 { font-size: 14px; color: #888; margin-bottom: 8px; letter-spacing: 1px; }
   .cart-item { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
-  .cart-item .remove { color: #FF4D8D; cursor: pointer; margin-left: 8px; }
+  .cart-item .remove { color: #FF2D8B; cursor: pointer; margin-left: 8px; }
   .totals { padding: 12px; background: #111; border-top: 1px solid #222; }
   .total-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; color: #aaa; }
   .total-row.grand { font-size: 20px; font-weight: 700; color: #fff; padding: 8px 0; }
   .actions { padding: 12px; background: #111; }
-  .charge-btn { width: 100%; padding: 16px; background: #FF4D8D; color: #fff; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
+  .charge-btn { width: 100%; padding: 16px; background: #FF2D8B; color: #fff; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
   .charge-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .charge-btn:active:not(:disabled) { background: #e0437a; }
+  .charge-btn:active:not(:disabled) { background: #d4207a; }
   .clear-btn { width: 100%; padding: 12px; background: transparent; color: #888; border: 1px solid #333; border-radius: 12px; font-size: 14px; cursor: pointer; margin-top: 8px; }
   .status { padding: 12px; text-align: center; font-size: 14px; }
   .status.success { color: #34d399; }
@@ -45,7 +45,7 @@
   .custom-amount button { width: 100%; padding: 10px; background: #333; color: #fff; border: none; border-radius: 8px; font-size: 14px; margin-top: 8px; cursor: pointer; }
   .mgr-bar { padding: 8px 12px; text-align: center; font-size: 12px; letter-spacing: 1px; cursor: pointer; }
   .mgr-bar.locked { background: #1a1a1a; color: #555; }
-  .mgr-bar.unlocked { background: #FF4D8D; color: #fff; animation: mgr-pulse 2s infinite; }
+  .mgr-bar.unlocked { background: #FF2D8B; color: #fff; animation: mgr-pulse 2s infinite; }
   @keyframes mgr-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
 </style>
 </head>
