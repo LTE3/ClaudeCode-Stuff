@@ -100,6 +100,7 @@ const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
 
 const MENU = [
+  // --- Food ---
   { name: 'Burrito', amount: 800 },
   { name: 'Empanadas', amount: 600, noService: true },
   { name: 'Quesadilla', amount: 700 },
@@ -111,12 +112,26 @@ const MENU = [
   { name: 'Extra Meat', amount: 400 },
   { name: 'Mint Cake', amount: 2000 },
   { name: 'Hamburger Special', amount: 6000, noService: true },
-  { name: 'Hamburger Special Mini', amount: 3000, noService: true },
+  { name: 'Hamburger Mini', amount: 3000, noService: true },
+  // --- Drinks (service charge applies) ---
+  { name: 'Nutcracker', amount: 1399 },
+  { name: 'Nutcrackers 2/$20', amount: 2000 },
+  { name: 'Rum Punch', amount: 1299 },
+  { name: 'Margarita Mango', amount: 1599 },
+  { name: 'Margarita Strawberry', amount: 1599 },
+  { name: 'Shot', amount: 899 },
   { name: 'Coca Cola', amount: 600 },
   { name: 'Redbull', amount: 1000 },
   { name: 'Water Bottle', amount: 200, noService: true },
-  { name: 'GA Entry', amount: 3000, noService: true },
-  { name: 'VIP GA Entry', amount: 4000, noService: true },
+  // --- Bottle Service / Hookah (no service charge) ---
+  { name: 'Don Julio Bottle', amount: 20000, noService: true },
+  { name: 'Bacardi Bottle', amount: 15000, noService: true },
+  { name: 'Hookah', amount: 5000, noService: true },
+  { name: 'Hookah Refill', amount: 2000, noService: true },
+  // --- Door Tickets (no service charge) ---
+  { name: 'Guys Ticket', amount: 3000, noService: true },
+  { name: 'GA Ticket', amount: 2000, noService: true },
+  { name: 'Girls Ticket', amount: 1000, noService: true },
 ];
 
 let cart = [];
