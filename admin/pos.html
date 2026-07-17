@@ -100,18 +100,18 @@ const SUPABASE_URL = 'https://tqeunmqnaoyrerkbhokk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxZXVubXFuYW95cmVya2Job2trIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTQ1MzQsImV4cCI6MjA4OTQ3MDUzNH0.hkkuc7_YE2yf0w0NQENpahAxqxxqBfjq8n5QhtTIkw8';
 
 const MENU = [
-  // --- Drinks (service charge applies) ---
-  { name: 'Nutcracker', amount: 1399 },
-  { name: 'Nutcrackers 2/$20', amount: 2000 },
-  { name: 'Rum Punch', amount: 1299 },
-  { name: 'Margarita Classic', amount: 1299 },
-  { name: 'Margarita Mango', amount: 1299 },
-  { name: 'Margarita Strawberry', amount: 1299 },
-  { name: 'Shot', amount: 899 },
-  { name: 'Coca Cola', amount: 600 },
-  { name: 'Redbull', amount: 1000 },
+  // --- Drinks (NO forced service; reader tip prompt handles gratuity) ---
+  { name: 'Nutcracker', amount: 1399, noService: true },
+  { name: 'Nutcrackers 2/$20', amount: 2000, noService: true },
+  { name: 'Rum Punch', amount: 1299, noService: true },
+  { name: 'Margarita Classic', amount: 1299, noService: true },
+  { name: 'Margarita Mango', amount: 1299, noService: true },
+  { name: 'Margarita Strawberry', amount: 1299, noService: true },
+  { name: 'Shot', amount: 899, noService: true },
+  { name: 'Coca Cola', amount: 600, noService: true },
+  { name: 'Redbull', amount: 1000, noService: true },
   { name: 'Water Bottle', amount: 200, noService: true },
-  // --- Bottle Service / Hookah (no service charge) ---
+  // --- Bottle Service (forced 20% service) / Hookah (no service) ---
   { name: 'Don Julio Bottle', amount: 20000 },
   { name: 'Bacardi Bottle', amount: 15000 },
   { name: 'Hookah', amount: 5000, noService: true },
