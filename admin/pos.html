@@ -132,7 +132,7 @@ function toggleManager() {
     return;
   }
   const code = prompt('Enter 4-digit manager code:');
-  if (code === '7742') {
+  if (code === '8888') {
     managerMode = true;
     document.getElementById('mgrBar').className = 'mgr-bar unlocked';
     document.getElementById('mgrBar').textContent = '🔓 MANAGER MODE ACTIVE — 2:00';
@@ -169,7 +169,7 @@ function resetMgrTimeout() {
 function requireManager() {
   if (managerMode) { resetMgrTimeout(); return true; }
   const code = prompt('Enter 4-digit manager code:');
-  if (code === '7742') return true;
+  if (code === '8888') return true;
   const status = document.getElementById('statusBar');
   status.style.display = 'block';
   status.className = 'status error';
