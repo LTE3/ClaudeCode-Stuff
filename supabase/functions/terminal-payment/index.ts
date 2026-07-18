@@ -20,6 +20,114 @@ Deno.serve(async (req) => {
       "Content-Type": "application/json",
     }
 
+    // RSVP with email confirmation
+    if (action === "rsvp") {
+      const { name, email, phone } = data
+      if (!name || !email) {
+        return new Response(JSON.stringify({ error: "name and email required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+      const parts = name.split(" ")
+      const firstName = parts[0]
+      const lastName = parts.slice(1).join(" ") || "(RSVP 5/5)"
+
+      // Insert into signups table
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/signups`, {
+          method: "POST",
+          headers: { ...sbHeaders, "Prefer": "return=minimal" },
+          body: JSON.stringify({
+            first_name: firstName,
+            last_name: lastName,
+            phone: phone || ("000" + Date.now().toString().slice(-7)),
+            email,
+          }),
+        })
+      } catch (_e) {}
+
+      // Send confirmation email with QR code
+      try {
+        const GMAIL_USER = Deno.env.get("GMAIL_USER")!
+        const GMAIL_APP_PASSWORD = Deno.env.get("GMAIL_APP_PASSWORD")!
+        const { SMTPClient } = await import("https://deno.land/x/denomailer@1.6.0/mod.ts")
+        const qrData = encodeURIComponent("LACASITA-CINCO|" + name + "|" + email)
+        const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&bgcolor=FFD700&data=" + qrData
+
+        const html = `
+          <div style="background:#000;padding:30px;text-align:center;font-family:-apple-system,sans-serif;">
+            <div style="max-width:500px;margin:0 auto;">
+              <h1 style="color:#FFD700;font-size:28px;letter-spacing:3px;margin-bottom:4px;">CINCO DE MAYO</h1>
+              <h2 style="color:#FF4D8D;font-size:20px;margin-bottom:20px;">LA CASITA BK</h2>
+              <p style="color:#fff;font-size:16px;margin-bottom:4px;">Hey ${firstName}! You're on the list.</p>
+              <p style="color:#aaa;font-size:14px;margin-bottom:20px;">Tuesday May 5th &bull; 10PM<br/>428 Johnson Ave, Brooklyn, NY 11237</p>
+              <div style="background:#FFD700;border-radius:16px;padding:20px;display:inline-block;margin-bottom:16px;">
+                <img src="${qrUrl}" alt="RSVP QR Code" width="250" height="250" style="display:block;" />
+              </div>
+              <p style="color:#888;font-size:13px;">Show this QR code at the door for free entry</p>
+              <hr style="border:none;border-top:1px solid #222;margin:24px 0;" />
+              <p style="color:#555;font-size:11px;">La Casita BK &bull; Reggaeton Party Experience<br/>Presented by LatinPulse &amp; MTS Productions</p>
+            </div>
+          </div>`
+
+        const client = new SMTPClient({
+          connection: {
+            hostname: "smtp.gmail.com",
+            port: 465,
+            tls: true,
+            auth: { username: GMAIL_USER, password: GMAIL_APP_PASSWORD },
+          },
+        })
+        await client.send({
+          from: `La Casita BK <${GMAIL_USER}>`,
+          to: email,
+          subject: "You're In! Cinco de Mayo @ La Casita BK — Tonight 10PM",
+          html,
+        })
+        await client.close()
+      } catch (_e) {}
+
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
+    // Send custom notification email
+    if (action === "send_notification") {
+      const { to_email, to_name, subject, body_text } = data
+      if (!to_email || !subject || !body_text) {
+        return new Response(JSON.stringify({ error: "to_email, subject, body_text required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+      try {
+        const GMAIL_USER = Deno.env.get("GMAIL_USER")!
+        const GMAIL_APP_PASSWORD = Deno.env.get("GMAIL_APP_PASSWORD")!
+        const { SMTPClient } = await import("https://deno.land/x/denomailer@1.6.0/mod.ts")
+        const html = `
+          <div style="background:#000;padding:30px;text-align:center;font-family:-apple-system,sans-serif;">
+            <div style="max-width:500px;margin:0 auto;">
+              <h1 style="color:#FFD700;font-size:24px;letter-spacing:3px;margin-bottom:20px;">LA CASITA BK</h1>
+              <p style="color:#fff;font-size:16px;line-height:1.6;text-align:left;white-space:pre-line;">${body_text}</p>
+              <hr style="border:none;border-top:1px solid #222;margin:24px 0;" />
+              <p style="color:#555;font-size:11px;">La Casita BK &bull; 428 Johnson Ave, Brooklyn, NY 11237</p>
+            </div>
+          </div>`
+        const client = new SMTPClient({
+          connection: { hostname: "smtp.gmail.com", port: 465, tls: true, auth: { username: GMAIL_USER, password: GMAIL_APP_PASSWORD } },
+        })
+        await client.send({ from: `La Casita BK <${GMAIL_USER}>`, to: to_email, subject, html })
+        await client.close()
+        return new Response(JSON.stringify({ success: true, sent_to: to_email }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      } catch (e) {
+        return new Response(JSON.stringify({ error: (e as Error).message }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        })
+      }
+    }
+
     // Staff management
     if (action === "get_staff") {
       const r = await fetch(`${SUPABASE_URL}/rest/v1/staff?order=name.asc`, { headers: sbHeaders })
@@ -141,71 +249,6 @@ Deno.serve(async (req) => {
       const r = await fetch(url, { headers: sbHeaders })
       const payouts = await r.json()
       return new Response(JSON.stringify({ payouts: payouts || [] }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      })
-    }
-
-    // Clock in
-    if (action === "clock_in") {
-      const { name, role, party_date } = data
-      if (!name || !role || !party_date) {
-        return new Response(JSON.stringify({ error: "name, role, party_date required" }), {
-          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        })
-      }
-      const r = await fetch(`${SUPABASE_URL}/rest/v1/clock_records`, {
-        method: "POST",
-        headers: { ...sbHeaders, "Prefer": "return=representation" },
-        body: JSON.stringify({ name, role, party_date }),
-      })
-      const inserted = await r.json()
-      return new Response(JSON.stringify({ success: true, record: inserted?.[0] }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      })
-    }
-
-    // Clock out
-    if (action === "clock_out") {
-      const { record_id } = data
-      if (!record_id) {
-        return new Response(JSON.stringify({ error: "record_id required" }), {
-          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        })
-      }
-      // Get the record to calculate hours
-      const getR = await fetch(`${SUPABASE_URL}/rest/v1/clock_records?id=eq.${record_id}`, { headers: sbHeaders })
-      const records = await getR.json()
-      if (!records?.length) {
-        return new Response(JSON.stringify({ error: "record not found" }), {
-          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        })
-      }
-      const clockIn = new Date(records[0].clock_in)
-      const clockOut = new Date()
-      const hours = Math.round((clockOut.getTime() - clockIn.getTime()) / 1000 / 60 / 30) / 2 // round to nearest 0.5
-
-      const r = await fetch(`${SUPABASE_URL}/rest/v1/clock_records?id=eq.${record_id}`, {
-        method: "PATCH",
-        headers: { ...sbHeaders, "Prefer": "return=representation" },
-        body: JSON.stringify({ clock_out: clockOut.toISOString(), hours }),
-      })
-      const updated = await r.json()
-      return new Response(JSON.stringify({ success: true, record: updated?.[0] }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      })
-    }
-
-    // Get clock records for a date
-    if (action === "clock_records") {
-      const { party_date } = data
-      if (!party_date) {
-        return new Response(JSON.stringify({ error: "party_date required" }), {
-          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        })
-      }
-      const r = await fetch(`${SUPABASE_URL}/rest/v1/clock_records?party_date=eq.${party_date}&order=clock_in.asc`, { headers: sbHeaders })
-      const records = await r.json()
-      return new Response(JSON.stringify({ records: records || [] }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       })
     }
@@ -468,9 +511,17 @@ Deno.serve(async (req) => {
       })
     }
 
-    // Send to terminal reader
+    // Send to terminal reader. Force the on-reader tip prompt for the portion that does
+    // NOT already carry the forced 20% service (drinks/hookah/tickets/water). Bottles carry
+    // the forced service, so they're excluded from tip-eligible. amount_eligible=0 (bottle-only)
+    // => the reader skips the tip prompt. This guarantees drink gratuity regardless of the
+    // reader/location tipping config.
+    const tipEligible = subtotal - serviceBase
     const processBody = new URLSearchParams()
     processBody.append("payment_intent", pi.id)
+    if (tipEligible > 0) {
+      processBody.append("process_config[tipping][amount_eligible]", String(tipEligible))
+    }
 
     const processResp = await fetch(`https://api.stripe.com/v1/terminal/readers/${reader_id}/process_payment_intent`, {
       method: "POST",
