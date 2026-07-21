@@ -79,6 +79,8 @@ Deno.serve(async (req) => {
         "2026-07-10": { amount: 3000, name: "La Casita BK - GA ($25 + $5 fee)" },
         "2026-07-11": { amount: 2500, name: "La Casita BK - GA ($20 + $5 fee)" },
         "2026-07-18": { amount: 2500, name: "La Casita BK - GA ($20 + $5 fee)" },
+        "2026-07-24": { amount: 2000, name: "La Casita BK - GA ($20 all-in)" },
+        "2026-07-25": { amount: 2000, name: "La Casita BK - GA ($20 all-in)" },
       }
       const gaAdmissionTypes = ["ga", "ga_tier1", "ga_tier2", "ga_tier3", "ga_tier4"]
       const specialGa = gaAdmissionTypes.includes(data.ticket_type) ? SPECIAL_GA_PRICE[data.event_date] : undefined
