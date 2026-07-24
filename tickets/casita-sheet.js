@@ -62,10 +62,11 @@
       var cap = a['ga_tier' + n + '_capacity'] || 0;
       var sold = a['ga_tier' + n + '_sold'] || 0;
       if (cap > 0 && sold < cap) {
-        return { type: 'ga_tier' + n, amount: GA_TIER_AMT['ga_tier' + n], remaining: cap - sold };
+        // Prefer the live tier price from availability; hardcoded map is a fallback only.
+        return { type: 'ga_tier' + n, amount: (a['ga_tier' + n + '_price'] || GA_TIER_AMT['ga_tier' + n]), remaining: cap - sold };
       }
     }
-    return { type: 'ga_tier1', amount: GA_TIER_AMT.ga_tier1, remaining: 0, soldOut: true };
+    return { type: 'ga_tier1', amount: (a.ga_tier1_price || GA_TIER_AMT.ga_tier1), remaining: 0, soldOut: true };
   }
 
   // Build the ticket list for a nightclub event from live availability.
