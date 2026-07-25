@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Una Noche en San Juan — Saturday at La Casita BK</title>
+<title>NESI Tonight — MOVED to Lost in Paradise Rooftop (Sat Jul 25)</title>
 <meta name="theme-color" content="#08080a" />
-<meta property="og:title" content="Una Noche en San Juan — Every Saturday" />
-<meta property="og:description" content="Live concert: NESI · 10PM–4AM · 428 Johnson Ave, Brooklyn · 21+" />
+<meta property="og:title" content="NESI Live — MOVED to Lost in Paradise Rooftop" />
+<meta property="og:description" content="NEW LOCATION tonight: Lost in Paradise Rooftop · 11-01 43rd Ave, Long Island City · 10PM · 21+" />
 <meta property="og:image" content="https://lacasitabk.com/sat/flyer.jpg" />
 <link rel="stylesheet" href="/tickets/casita-sheet.css" />
 <style>
@@ -25,6 +25,21 @@
   .top{display:flex;align-items:center;justify-content:center;padding:6px 0 14px}
   .brand{font-weight:800;letter-spacing:.14em;font-size:12.5px;color:#fff}
   .brand .dot{color:var(--pink);margin:0 4px}
+  .moved{
+    display:block;text-decoration:none;margin:0 0 14px;
+    background:linear-gradient(135deg,#2c0f18,#180b12);
+    border:1.5px solid rgba(255,45,139,.55);border-radius:16px;padding:14px 15px;
+    box-shadow:0 12px 34px -14px rgba(255,45,139,.7);
+    animation:glow 2.6s ease-in-out infinite, rise .5s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .moved .lbl{display:flex;align-items:center;gap:8px;color:var(--gold);font-weight:800;font-size:11px;letter-spacing:.18em}
+  .moved .live{width:8px;height:8px;border-radius:50%;background:var(--pink);animation:blink 1.3s infinite}
+  .moved .why{color:#e7d7e2;font-size:12.5px;line-height:1.4;margin-top:8px}
+  .moved .venue{color:#fff;font-weight:900;font-size:19px;letter-spacing:-.01em;margin-top:8px;display:flex;align-items:center;gap:6px}
+  .moved .addr{color:#c7b3c2;font-size:13px;margin-top:3px}
+  .moved .dir{color:var(--pink2);font-size:12.5px;font-weight:800;margin-top:9px;display:inline-flex;align-items:center;gap:5px}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  @keyframes glow{0%,100%{box-shadow:0 12px 30px -14px rgba(255,45,139,.5)}50%{box-shadow:0 12px 38px -10px rgba(255,45,139,.9)}}
   .flyer-wrap{
     border-radius:22px;overflow:hidden;position:relative;
     box-shadow:0 24px 60px -22px rgba(255,45,139,.55), 0 0 0 1px rgba(255,255,255,.05);
@@ -67,19 +82,26 @@
 </head>
 <body>
   <div class="phone">
-    <div class="top"><span class="brand">LA CASITA BK <span class="dot">•</span> PULSE HOSPITALITY</span></div>
-    <div class="flyer-wrap"><img src="flyer.jpg" alt="Una Noche en San Juan — Every Saturday flyer" /></div>
+    <a class="moved" href="https://maps.google.com/?q=Lost+in+Paradise+Rooftop+Lounge,+11-01+43rd+Ave,+Long+Island+City,+NY+11101" target="_blank" rel="noopener">
+      <div class="lbl"><span class="live"></span> NEW LOCATION TONIGHT</div>
+      <div class="why">La Casita BK is closed tonight for construction — tonight's show has moved to:</div>
+      <div class="venue">📍 Lost in Paradise Rooftop</div>
+      <div class="addr">11-01 43rd Ave, Long Island City, NY 11101</div>
+      <div class="dir">Get directions →</div>
+    </a>
+    <div class="top"><span class="brand">LATINPULSE <span class="dot">•</span> THE LATIN SOCIAL</span></div>
+    <div class="flyer-wrap"><img src="flyer.jpg" alt="Reggaeton Rooftop — NESI live, Sat July 25 at Lost in Paradise Rooftop, Long Island City" /></div>
     <div class="meta">
-      <div class="kicker">SATURDAY • JULY 25</div>
-      <div class="title">Una Noche en San Juan</div>
-      <div class="sub"><span><b>Live: NESI</b></span><span><b>10PM – 4AM</b></span><span>21+ w/ ID</span></div>
+      <div class="kicker">SATURDAY • JULY 25 • 10PM</div>
+      <div class="title">Reggaeton Rooftop — NESI</div>
+      <div class="sub"><span><b>Live: NESI</b></span><span><b>Lost in Paradise Rooftop</b></span><span>Long Island City</span><span>21+ w/ ID</span></div>
     </div>
   </div>
 
   <div class="bar">
     <div class="bar-l">
-      <div class="bar-name">Una Noche en San Juan</div>
-      <div class="bar-when">Sat, Jul 25 · 10PM</div>
+      <div class="bar-name">NESI · Lost in Paradise</div>
+      <div class="bar-when">Sat, Jul 25 · 10PM · Long Island City</div>
     </div>
     <a class="cta" id="cta" data-casita-open href="https://lacasitabk.com/admin/?tickets=true&date=2026-07-25&block=late&utm_source=flyer&utm_medium=short&utm_campaign=sat_0725">Get Tickets →</a>
   </div>
@@ -89,8 +111,8 @@
     // href on the CTA stays as a no-JS fallback to the full admin ticket page.
     window.CASITA_EVENT = {
       date: '2026-07-25',
-      title: 'Una Noche en San Juan',
-      sub: 'Sat, Jul 25 · 10PM–4AM · 21+',
+      title: 'NESI · Lost in Paradise Rooftop',
+      sub: 'Sat, Jul 25 · 10PM · Lost in Paradise, LIC · 21+',
       tableHref: 'https://lacasitabk.com/admin/?tickets=true&date=2026-07-25&block=late&utm_source=flyer&utm_medium=short&utm_campaign=sat_0725_table'
     };
   </script>
