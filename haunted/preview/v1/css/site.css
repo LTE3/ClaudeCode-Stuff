@@ -211,10 +211,10 @@ footer{border-top:1px solid var(--line);padding:var(--s8) 0 var(--s7);margin-top
 .preview-bar a{color:#fff;text-decoration:underline}
 
 /* ---------- motion ---------- */
-.rise{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
-.rise.in{opacity:1;transform:none}
+.js .rise{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.js .rise.in{opacity:1;transform:none}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .rise{opacity:1;transform:none}
+  .js .rise{opacity:1;transform:none}
 }
