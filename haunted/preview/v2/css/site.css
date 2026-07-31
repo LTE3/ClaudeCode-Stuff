@@ -187,11 +187,11 @@ footer{border-top:2px solid var(--line);padding:var(--s8) 0;margin-top:var(--s9)
 .preview-bar a{color:#fff;text-decoration:underline}
 
 /* ---------- motion ---------- */
-.rise{opacity:0;transform:translateY(18px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
-.rise.in{opacity:1;transform:none}
+.js .rise{opacity:0;transform:translateY(18px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.js .rise.in{opacity:1;transform:none}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .rise{opacity:1;transform:none}
+  .js .rise{opacity:1;transform:none}
   .marquee-track{animation:none}
 }
