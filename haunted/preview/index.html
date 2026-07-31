@@ -24,6 +24,16 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
 .v:hover{transform:translateY(-4px)}
 .v1:hover{border-color:var(--candle)}
 .v2:hover{border-color:var(--slime)}
+.v0{border-color:rgba(106,255,143,.45);box-shadow:0 0 60px rgba(106,255,143,.08);margin-bottom:20px}
+.v0:hover{border-color:var(--slime)}
+.v0 h2{color:var(--slime);font-size:30px}
+.pick{display:inline-block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#07200f;background:var(--slime);padding:4px 10px;border-radius:999px;font-weight:700}
+.why{margin:18px 0;border-collapse:collapse;width:100%;font-size:14px}
+.why th,.why td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;color:var(--dim)}
+.why th{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:600}
+.why td:last-child,.why th:last-child{text-align:right;color:var(--ink);white-space:nowrap}
+.why tr:last-child td{border-bottom:none}
+.why .big{color:var(--slime);font-weight:700}
 .tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
 .v h2{margin:10px 0 6px;font-size:26px}
 .v1 h2{color:var(--candle)}
@@ -45,14 +55,37 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
 
   <header>
     <h1>The Haunted Mansion</h1>
-    <p class="sub">Two complete website directions. Both are fully clickable — every page, every link.
-      Open them on your phone and pick one.</p>
+    <p class="sub">Three complete websites. All fully clickable — every page, every link.
+      Start with the recommended one, then compare it against the two directions below.</p>
   </header>
+
+  <a class="v v0" href="final/index.html">
+    <span class="pick">Recommended</span>
+    <h2>The Estate, rebuilt around the numbers</h2>
+    <div class="swatch">
+      <i style="background:#FFB43D"></i><i style="background:#FF7518"></i>
+      <i style="background:#9D4EDD"></i><i style="background:#6AFF8F"></i>
+    </div>
+    <p>Same gothic look as direction 1, but the page is reordered to point at what the room
+      actually sells. The hero button is <b>free before midnight</b>, tables are second, and
+      paid GA is a small after-midnight line — because that is what the last twelve nights look like:</p>
+    <table class="why">
+      <tr><th>Line</th><th>Per night</th></tr>
+      <tr><td>Free RSVP claimed</td><td class="big">46 – 184</td></tr>
+      <tr><td>Ladies free claimed</td><td class="big">23 – 173</td></tr>
+      <tr><td>Paid tickets sold online</td><td>0 – 12</td></tr>
+      <tr><td>Table bookings, all time</td><td>42 &nbsp;·&nbsp; $3,205</td></tr>
+    </table>
+    <p>Pricing is the ladder the room already ran all summer — $10 → $15 → $20 advance GA,
+      tables from $50. Halloween weekend is the only premium: $25 → $35 → $45, tables from $75.</p>
+    <span class="go">Open the recommended build →</span>
+    <div class="pages">Home · Schedule · Tickets &amp; tables · Info</div>
+  </a>
 
   <div class="grid">
 
     <a class="v v1" href="v1/index.html">
-      <span class="tag">Direction 1</span>
+      <span class="tag">Direction 1 · original</span>
       <h2>The Estate</h2>
       <div class="swatch">
         <i style="background:#FFB43D"></i><i style="background:#FF7518"></i>
@@ -65,7 +98,7 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
     </a>
 
     <a class="v v2" href="v2/index.html">
-      <span class="tag">Direction 2</span>
+      <span class="tag">Direction 2 · original</span>
       <h2>The Rave</h2>
       <div class="swatch">
         <i style="background:#6AFF8F"></i><i style="background:#B14BF4"></i>
@@ -84,8 +117,10 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
     <ul>
       <li><b>Real:</b> all 26 nights (Fri + Sat, Sept 4 – Nov 28), the address, 21+, and the Halloween
         weekend highlight. The email/phone signup form genuinely writes to Supabase.</li>
-      <li><b>Placeholder:</b> ticket prices. They're marked with an asterisk and live in one commented
-        block per site, so they're a single edit once you decide.</li>
+      <li><b>Real prices on the recommended build:</b> $10 / $15 / $20 advance GA and $50 tables are
+        exactly what the room ran all summer 2026. Halloween weekend ($25 / $35 / $45, tables $75)
+        is my proposal, not a decision — it's one commented block to change.
+        Directions 1 and 2 still show the old $20 placeholder.</li>
       <li><b>Deliberately off:</b> every ticket button is disabled. Nothing here can charge a card —
         no events are activated and no live checkout runs from a preview.</li>
       <li>Test signups are tagged <b>Preview / Test</b> in the database so they don't pollute the real
