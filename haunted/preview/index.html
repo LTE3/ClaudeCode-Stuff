@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:;">
+<meta name="robots" content="noindex,nofollow">
+<title>Haunted Mansion — preview directions</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070310;--panel:#150a2b;--line:rgba(233,220,246,.14);--ink:#E9DCF6;--dim:#a394bd;--candle:#FFB43D;--slime:#6AFF8F;--magenta:#B14BF4}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(110vw 70vh at 50% -10%,rgba(157,78,221,.28),transparent 60%)}
+.wrap{position:relative;max-width:900px;margin:0 auto;padding:0 24px}
+header{padding:72px 0 40px;text-align:center}
+h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px);margin:0 0 16px;letter-spacing:.03em;
+   background:linear-gradient(180deg,#fff4dd,var(--candle) 50%,#FF7518);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--dim);max-width:560px;margin:0 auto}
+.grid{display:grid;gap:20px;padding-bottom:24px}
+@media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
+.v{display:block;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:28px;color:inherit;text-decoration:none;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .3s}
+.v:hover{transform:translateY(-4px)}
+.v1:hover{border-color:var(--candle)}
+.v2:hover{border-color:var(--slime)}
+.tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.v h2{margin:10px 0 6px;font-size:26px}
+.v1 h2{color:var(--candle)}
+.v2 h2{color:var(--slime)}
+.v p{color:var(--dim);font-size:15px;margin:0 0 18px}
+.swatch{display:flex;gap:6px;margin-bottom:18px}
+.swatch i{width:26px;height:26px;border-radius:3px;display:block}
+.go{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.pages{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--dim)}
+.note{border:1px solid var(--line);border-radius:4px;padding:22px;margin:32px 0 64px;font-size:14px;color:var(--dim)}
+.note b{color:var(--ink)}
+.note ul{margin:10px 0 0;padding-left:20px}
+.note li{margin-bottom:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>The Haunted Mansion</h1>
+    <p class="sub">Two complete website directions. Both are fully clickable — every page, every link.
+      Open them on your phone and pick one.</p>
+  </header>
+
+  <div class="grid">
+
+    <a class="v v1" href="v1/index.html">
+      <span class="tag">Direction 1</span>
+      <h2>The Estate</h2>
+      <div class="swatch">
+        <i style="background:#FFB43D"></i><i style="background:#FF7518"></i>
+        <i style="background:#9D4EDD"></i><i style="background:#120827"></i>
+      </div>
+      <p>Gothic, candlelit, serif. An invitation to a haunted estate — elegant and a little upscale.
+        Leans toward selling tables and bottle service.</p>
+      <span class="go">Open direction 1 →</span>
+      <div class="pages">Home · Schedule · Tickets · Info</div>
+    </a>
+
+    <a class="v v2" href="v2/index.html">
+      <span class="tag">Direction 2</span>
+      <h2>The Rave</h2>
+      <div class="swatch">
+        <i style="background:#6AFF8F"></i><i style="background:#B14BF4"></i>
+        <i style="background:#FF7518"></i><i style="background:#0b0f14"></i>
+      </div>
+      <p>Neon flyer energy. Toxic green and magenta, hard edges, marquee, stacked heavy type.
+        Loud and young — leans toward selling GA volume.</p>
+      <span class="go">Open direction 2 →</span>
+      <div class="pages">Home · Schedule · Tickets · Info</div>
+    </a>
+
+  </div>
+
+  <div class="note">
+    <b>What's real and what isn't</b>
+    <ul>
+      <li><b>Real:</b> all 26 nights (Fri + Sat, Sept 4 – Nov 28), the address, 21+, and the Halloween
+        weekend highlight. The email/phone signup form genuinely writes to Supabase.</li>
+      <li><b>Placeholder:</b> ticket prices. They're marked with an asterisk and live in one commented
+        block per site, so they're a single edit once you decide.</li>
+      <li><b>Deliberately off:</b> every ticket button is disabled. Nothing here can charge a card —
+        no events are activated and no live checkout runs from a preview.</li>
+      <li>Test signups are tagged <b>Preview / Test</b> in the database so they don't pollute the real
+        list, and get swapped to the live tag when a direction is promoted.</li>
+      <li>These pages are <b>noindex</b> — they won't show up in Google, but anyone with the link can
+        open them.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
