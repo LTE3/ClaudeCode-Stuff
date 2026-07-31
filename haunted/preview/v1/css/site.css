@@ -1,0 +1,220 @@
+/* THE HAUNTED MANSION — variant v1 "The Estate"
+   Direction: gothic estate invitation. Candlelight on deep violet, ornamental rules,
+   serif editorial rhythm. Restrained spook — sells the room and the tables. */
+
+:root{
+  /* surface */
+  --bg:#070310;
+  --panel:#120827;
+  --raised:#1b0d33;
+  --line:rgba(233,220,246,.12);
+  --line-strong:rgba(233,220,246,.22);
+  /* ink */
+  --ink:#E9DCF6;
+  --ink-dim:#a394bd;
+  --ink-faint:#6f6088;
+  /* accent */
+  --candle:#FFB43D;
+  --pumpkin:#FF7518;
+  --violet:#9D4EDD;
+  --violet-deep:#5b2a8f;
+  /* type */
+  --display:'Creepster',system-ui,sans-serif;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  /* space — 4px base */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px;
+  --s6:32px; --s7:48px; --s8:64px; --s9:96px; --s10:140px;
+  --maxw:1080px;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:17px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+/* candlelight wash — fixed so it doesn't scroll with content */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(120vw 80vh at 50% -20%, rgba(157,78,221,.30), transparent 60%),
+    radial-gradient(60vw 40vh at 85% 15%, rgba(255,180,61,.10), transparent 65%);
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(100vw 100vh at 50% 40%, transparent 45%, rgba(7,3,16,.85) 100%);
+}
+main,header,footer,nav{position:relative;z-index:2}
+
+img{max-width:100%;display:block}
+a{color:var(--candle);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--s5)}
+
+/* ---------- type ---------- */
+h1,h2,h3{margin:0;font-family:var(--serif);font-weight:600;line-height:1.08;letter-spacing:-.01em}
+h1{font-size:clamp(38px,7vw,76px)}
+h2{font-size:clamp(28px,4.4vw,46px)}
+h3{font-size:clamp(20px,2.4vw,26px)}
+p{margin:0 0 var(--s4)}
+.lede{font-family:var(--serif);font-size:clamp(20px,2.6vw,27px);line-height:1.45;color:var(--ink-dim)}
+.eyebrow{
+  font-family:var(--sans);font-size:12px;font-weight:600;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--candle);
+  margin:0 0 var(--s4)
+}
+.muted{color:var(--ink-dim)}
+.small{font-size:14px}
+
+/* brand mark */
+.mark{
+  font-family:var(--display);font-weight:400;letter-spacing:.03em;
+  line-height:.92;text-transform:uppercase;
+  background:linear-gradient(180deg,#fff4dd 0%,var(--candle) 45%,var(--pumpkin) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 60px rgba(255,117,24,.28);
+}
+
+/* ---------- nav ---------- */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;gap:var(--s5);
+  padding:var(--s5) 0;border-bottom:1px solid var(--line);
+}
+.nav-brand{font-family:var(--display);font-size:23px;color:var(--candle);letter-spacing:.04em}
+.nav-brand:hover{text-decoration:none;color:#fff4dd}
+.nav-links{display:flex;gap:var(--s5);list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.nav-links a{
+  font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);
+  padding-bottom:2px;border-bottom:1px solid transparent;transition:color .25s,border-color .25s
+}
+.nav-links a:hover,.nav-links a[aria-current]{color:var(--ink);border-color:var(--candle);text-decoration:none}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);
+  font-family:var(--sans);font-size:14px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;
+  padding:16px var(--s6);border-radius:2px;border:1px solid transparent;cursor:pointer;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .25s;
+}
+.btn:hover{text-decoration:none;transform:translateY(-2px)}
+.btn-primary{
+  background:linear-gradient(180deg,var(--candle),var(--pumpkin));color:#2b1200;
+  box-shadow:0 6px 30px rgba(255,117,24,.28)
+}
+.btn-primary:hover{box-shadow:0 12px 44px rgba(255,117,24,.42)}
+.btn-ghost{border-color:var(--line-strong);color:var(--ink);background:transparent}
+.btn-ghost:hover{border-color:var(--candle);color:var(--candle)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ---------- ornament ---------- */
+.rule{display:flex;align-items:center;gap:var(--s4);margin:var(--s8) 0;color:var(--violet)}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line-strong),transparent)}
+.rule span{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-faint)}
+
+/* ---------- layout ---------- */
+section{padding:var(--s9) 0}
+.section-head{max-width:640px;margin-bottom:var(--s7)}
+.grid{display:grid;gap:var(--s5)}
+@media(min-width:760px){.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}}
+
+.card{
+  background:linear-gradient(180deg,var(--panel),rgba(18,8,39,.4));
+  border:1px solid var(--line);border-radius:3px;padding:var(--s6);
+  transition:border-color .3s,transform .4s var(--ease)
+}
+.card:hover{border-color:var(--line-strong);transform:translateY(-3px)}
+.card h3{margin-bottom:var(--s3)}
+.card p:last-child{margin-bottom:0}
+
+/* ---------- hero ---------- */
+.hero{padding:var(--s8) 0 var(--s9);text-align:center}
+.hero .mark{font-size:clamp(52px,13vw,150px);margin:var(--s4) 0 var(--s5)}
+.hero .lede{max-width:640px;margin:0 auto var(--s7)}
+.hero-actions{display:flex;gap:var(--s4);justify-content:center;flex-wrap:wrap}
+.hero-meta{
+  display:flex;gap:var(--s5);justify-content:center;flex-wrap:wrap;
+  margin-top:var(--s7);padding-top:var(--s5);border-top:1px solid var(--line);
+  font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)
+}
+
+/* ghost ornament */
+.ghost{font-size:44px;line-height:1;animation:float 6s ease-in-out infinite;display:inline-block}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+
+/* ---------- schedule ---------- */
+.month{margin-bottom:var(--s8)}
+.month-head{display:flex;align-items:baseline;gap:var(--s4);margin-bottom:var(--s5);padding-bottom:var(--s3);border-bottom:1px solid var(--line)}
+.month-head h3{font-size:clamp(24px,3.4vw,34px)}
+.month-head .small{color:var(--ink-faint);letter-spacing:.2em;text-transform:uppercase}
+.nights{display:grid;gap:var(--s3);grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.night{
+  border:1px solid var(--line);border-radius:3px;padding:var(--s4);
+  background:rgba(18,8,39,.55);transition:border-color .3s,background .3s,transform .4s var(--ease)
+}
+.night:hover{border-color:var(--violet);transform:translateY(-2px)}
+.night .dow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint)}
+.night .num{font-family:var(--serif);font-size:30px;line-height:1.1;margin-top:2px}
+.night .tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin-top:var(--s2)}
+.night.peak{
+  border-color:var(--pumpkin);background:linear-gradient(180deg,rgba(255,117,24,.16),rgba(18,8,39,.6));
+  box-shadow:0 0 40px rgba(255,117,24,.16)
+}
+.night.peak .num{color:var(--candle)}
+.night.peak .tag{color:var(--pumpkin);font-weight:600}
+.night.open{border-color:var(--violet)}
+
+/* ---------- tickets ---------- */
+.tier{display:flex;flex-direction:column;height:100%}
+.tier .price{font-family:var(--serif);font-size:46px;line-height:1;margin:var(--s3) 0 var(--s2);color:var(--candle)}
+.tier ul{list-style:none;margin:var(--s4) 0 var(--s6);padding:0;flex:1}
+.tier li{padding:var(--s2) 0;border-bottom:1px solid var(--line);font-size:15px;color:var(--ink-dim)}
+.tier li::before{content:'✦';color:var(--violet);margin-right:var(--s2)}
+.tier.feature{border-color:var(--candle)}
+.badge{
+  display:inline-block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  padding:4px 10px;border:1px solid var(--line-strong);border-radius:999px;color:var(--ink-dim)
+}
+.badge.hot{border-color:var(--pumpkin);color:var(--pumpkin)}
+
+/* ---------- form ---------- */
+.signup{max-width:520px;margin:0 auto;text-align:center}
+.field{margin-bottom:var(--s4);text-align:left}
+.field label{display:block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:var(--s2)}
+.field input{
+  width:100%;padding:14px var(--s4);font-size:16px;font-family:inherit;
+  background:rgba(7,3,16,.7);border:1px solid var(--line-strong);border-radius:2px;color:var(--ink);
+  transition:border-color .25s,box-shadow .25s
+}
+.field input:focus{outline:none;border-color:var(--candle);box-shadow:0 0 0 3px rgba(255,180,61,.15)}
+.field input::placeholder{color:var(--ink-faint)}
+.form-msg{margin-top:var(--s4);font-size:15px;min-height:24px}
+.form-msg.ok{color:#6AFF8F}
+.form-msg.err{color:#ff8a8a}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:var(--s8) 0 var(--s7);margin-top:var(--s9)}
+.foot{display:flex;justify-content:space-between;gap:var(--s5);flex-wrap:wrap;align-items:flex-start}
+.foot .small{color:var(--ink-faint)}
+
+/* preview banner — REMOVE ON PROMOTION */
+.preview-bar{
+  position:sticky;top:0;z-index:50;background:var(--violet-deep);color:#fff;
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-align:center;
+  padding:8px var(--s4);border-bottom:1px solid rgba(255,255,255,.2)
+}
+.preview-bar a{color:#fff;text-decoration:underline}
+
+/* ---------- motion ---------- */
+.rise{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rise.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rise{opacity:1;transform:none}
+}
