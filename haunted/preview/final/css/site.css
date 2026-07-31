@@ -218,14 +218,17 @@ section{padding:var(--s9) 0}
 .badge.hot{border-color:var(--pumpkin);color:var(--pumpkin)}
 .badge.go{border-color:var(--go);color:var(--go)}
 
-/* price ladder table */
-.ladder{width:100%;border-collapse:collapse;font-size:15px}
+/* price ladder table — min-width forces horizontal scroll on phones
+   instead of crushing the four columns into unreadable slivers */
+.ladder{width:100%;min-width:560px;border-collapse:collapse;font-size:15px}
 .ladder th,.ladder td{padding:var(--s3) var(--s4);border-bottom:1px solid var(--line);text-align:left}
 .ladder th{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
 .ladder td:last-child,.ladder th:last-child{text-align:right}
 .ladder .amt{font-family:var(--serif);font-size:22px;color:var(--candle)}
 .ladder tr:last-child td{border-bottom:none}
 .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-hint{display:none;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 var(--s3)}
+@media(max-width:620px){.table-hint{display:block}}
 
 /* ---------- form ---------- */
 .signup{max-width:520px;margin:0 auto;text-align:center}
