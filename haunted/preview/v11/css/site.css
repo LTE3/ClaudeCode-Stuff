@@ -1,0 +1,214 @@
+:root{--hi:var(--red)}
+
+:root{
+  --bg:#0B0B0B; --panel:#131313; --raised:#1B1B1B; --line:rgba(245,240,232,.16);
+  --ink:#F5F0E8; --ink-dim:#a09a91; --red:#E10600; --dark-red:#7A0000;
+  /* --red on near-black is only 3.96:1 -- too low for 11-12px text.
+     Small red type uses this lighter tint instead (WCAG AA). */
+  --red-lt:#FF5A4E;
+  --display:'Oswald',Impact,sans-serif; --body:'Spectral',Georgia,serif;
+  --maxw:1080px;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px;
+  --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(60vw 40vh at 80% 0%,rgba(225,6,0,.20),transparent 60%),
+             radial-gradient(50vw 40vh at 10% 20%,rgba(122,0,0,.22),transparent 62%)}
+a{color:var(--red-lt);text-decoration:none}a:hover{text-decoration:underline}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1;text-transform:uppercase;letter-spacing:.01em}
+h1{font-size:clamp(36px,7.6vw,82px)}h2{font-size:clamp(26px,4.4vw,46px)}h3{font-size:clamp(19px,2.3vw,25px)}
+h4{font-family:var(--display);font-weight:500;font-size:20px;text-transform:uppercase}
+.lede{font-size:clamp(18px,2.2vw,23px);color:var(--ink-dim);font-style:italic}
+.eyebrow{display:block;font-family:var(--display);font-weight:500;font-size:12px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--red-lt);margin:0 0 var(--s4)}
+.eyebrow.hot{color:#ff8f86}.eyebrow.go{color:var(--ink-dim)}
+.muted{color:var(--ink-dim)}
+.mark{font-family:var(--display);font-weight:700;line-height:.92;color:var(--ink)}
+.mark em{font-style:normal;color:var(--red);text-shadow:0 0 50px rgba(225,6,0,.5)}
+.ticketbar{background:var(--red);color:#fff;border-bottom:2px solid #000}
+.ticketbar .tb-txt{font-family:var(--display);font-weight:500}
+.ticketbar .btn{background:#0B0B0B;color:#fff;border:2px solid #0B0B0B}
+.marquee{background:#000;border-bottom:1px solid var(--line)}
+.marquee span{font-family:var(--display);font-weight:500;font-size:12px;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--ink-dim);padding:0 var(--s5)}
+.marquee span::after{content:'\2716';color:var(--red);margin-left:var(--s5)}
+.nav{border-bottom:1px solid var(--line)}
+.nav-brand{font-family:var(--display);font-weight:700;font-size:21px;color:var(--ink);text-decoration:none;text-transform:uppercase}
+.nav-links a{font-family:var(--display);font-weight:500;font-size:14px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-dim);text-decoration:none;padding-bottom:3px;border-bottom:2px solid transparent}
+.nav-links a:hover,.nav-links a[aria-current]{color:var(--ink);border-color:var(--red)}
+.btn{font-family:var(--display);font-weight:500;font-size:14px;letter-spacing:.16em;text-transform:uppercase;
+  padding:16px var(--s6);border-radius:0;border:2px solid var(--red)}
+.btn-primary{background:var(--red);color:#fff;box-shadow:0 8px 34px rgba(225,6,0,.34)}
+.btn-primary:hover{background:#ff2a20;transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.badge{display:inline-block;font-family:var(--display);font-weight:500;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;padding:5px 11px;border:1px solid var(--line);color:var(--ink-dim)}
+.badge.hot,.badge.go{border-color:var(--red);color:var(--red-lt)}
+.rule{display:flex;align-items:center;gap:var(--s4);margin:var(--s8) 0}
+.rule::before,.rule::after{content:'';flex:1;height:3px;background:linear-gradient(90deg,transparent,var(--dark-red),var(--red),transparent)}
+.rule span{font-family:var(--display);font-weight:500;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-dim)}
+.card,.att,.tier,.warn{background:var(--panel);border:1px solid var(--line)}
+.card{padding:var(--s6)}
+.att:hover,.card:hover{transform:translateY(-4px);border-color:var(--red)}
+.att h3{color:var(--red)}
+.meter i{background:var(--red)}
+.meter span{color:var(--ink-dim)}
+.count .u{background:#000;border:1px solid var(--line);border-top:3px solid var(--red)}
+.count .n{font-family:var(--display);font-weight:700;color:var(--ink)}
+.count .l,.count-note{color:var(--ink-dim)}
+.stats{background:var(--raised);border-left:5px solid var(--red)}
+.stat .n{font-family:var(--display);font-weight:700;color:var(--red)}
+.stat .l{color:var(--ink-dim)}
+.legend{color:var(--ink-dim)}
+.legend .k1{background:var(--red)}.legend .k2{background:#ff6a5e}.legend .k3{background:#333}
+.month-head{border-bottom:3px solid var(--dark-red)}
+.month-head h3{font-size:clamp(24px,3.4vw,34px)}
+.month-head .small{font-family:var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dim)}
+.night{background:var(--panel);border:1px solid var(--line)}
+.night:hover{transform:translateY(-3px);border-color:var(--red)}
+.night .dow{font-family:var(--display);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim)}
+.night .num{font-family:var(--display);font-weight:700;font-size:34px}
+.night .tag{font-family:var(--display);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);margin-top:var(--s2)}
+.night.peak{background:linear-gradient(180deg,rgba(225,6,0,.3),var(--panel));border-color:var(--red)}
+.night.peak .num,.night.peak .tag{color:#fff}
+.night.open{border-color:var(--dark-red)}
+.tier .price{font-family:var(--display);font-weight:700;font-size:46px;line-height:1;margin:var(--s3) 0 var(--s2);color:var(--red)}
+.tier .price small{font-family:var(--body);font-style:italic;font-size:15px;color:var(--ink-dim)}
+.tier li{border-bottom:1px solid var(--line);color:var(--ink-dim)}
+.tier li::before{content:'\2716 ';color:var(--red)}
+.tier.feature{border-color:var(--red)}
+.ladder th{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dim);border-bottom:3px solid var(--red)}
+.ladder td{border-bottom:1px solid var(--line);color:var(--ink-dim)}
+.ladder .amt{font-family:var(--display);font-weight:700;font-size:22px;color:var(--ink)}
+.table-hint{color:var(--red)}
+.warn{border-color:var(--red);border-left-width:5px}
+.warn li::before{background:var(--red);color:#fff}
+.warn li{color:var(--ink-dim)}
+.qa{border-bottom:1px solid var(--line)}
+.field label{font-family:var(--display);letter-spacing:.2em;color:var(--ink-dim)}
+.field input{background:#000;border:1px solid var(--line);border-radius:0;color:var(--ink)}
+.field input:focus{border-color:var(--red)}
+.form-msg.ok{color:#6AFF8F}.form-msg.err{color:#ff8a8a}
+footer{border-top:1px solid var(--line)}
+.foot .small{color:var(--ink-dim)}
+.social a{color:var(--ink-dim);border:1px solid var(--line);padding:8px 14px}
+.social a:hover{color:var(--red);border-color:var(--red)}
+.preview-bar{background:#000;color:var(--ink-dim)}
+.preview-bar a{color:var(--red-lt)}
+
+/* ---- shared skeleton (every theme restyles it) ---- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--s5)}
+main,header,footer,nav,.marquee,.ticketbar,.preview-bar{position:relative;z-index:2}
+h1,h2,h3,h4{margin:0}
+p{margin:0 0 var(--s4)}
+section{padding:var(--s8) 0}
+.section-head{max-width:680px;margin-bottom:var(--s6)}
+.grid{display:grid;gap:var(--s5)}
+@media(min-width:760px){.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:520px) and (max-width:759px){.g4{grid-template-columns:repeat(2,1fr)}}
+
+/* sticky admission bar — the one thing every haunt site has */
+.ticketbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:center;
+  gap:var(--s4);flex-wrap:wrap;padding:10px var(--s4);text-align:center}
+.ticketbar .tb-txt{font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.ticketbar .btn{padding:9px 18px;font-size:12px}
+
+.nav{display:flex;align-items:center;justify-content:space-between;gap:var(--s5);padding:var(--s5) 0}
+.nav-links{display:flex;gap:var(--s5);list-style:none;margin:0;padding:0;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);cursor:pointer;text-decoration:none;
+     transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .25s,color .25s,border-color .25s}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.hero{padding:var(--s8) 0 var(--s7);text-align:center}
+.hero-actions{display:flex;gap:var(--s4);flex-wrap:wrap;justify-content:center}
+.badgeline{display:flex;gap:var(--s3);justify-content:center;flex-wrap:wrap;margin-bottom:var(--s5)}
+.marquee{overflow:hidden;white-space:nowrap;padding:var(--s3) 0}
+.marquee-track{display:inline-block;animation:slide 34s linear infinite}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* countdown to opening night */
+.count{display:flex;gap:var(--s4);justify-content:center;flex-wrap:wrap;margin:var(--s7) 0 0}
+.count .u{min-width:78px;padding:var(--s3) var(--s4);text-align:center}
+.count .n{font-size:34px;line-height:1;display:block}
+.count .l{font-size:10px;letter-spacing:.24em;text-transform:uppercase;margin-top:6px;display:block}
+.count-note{margin-top:var(--s4);font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+
+/* stats strip */
+.stats{display:flex;gap:var(--s6);flex-wrap:wrap;justify-content:center;padding:var(--s6) var(--s5)}
+.stat{text-align:center}
+.stat .n{font-size:32px;line-height:1}
+.stat .l{font-size:10px;letter-spacing:.24em;text-transform:uppercase;margin-top:var(--s2)}
+
+/* attraction cards + intensity meter */
+.att{padding:var(--s6);height:100%;display:flex;flex-direction:column;
+  transition:transform .35s var(--ease),border-color .3s,background .3s}
+.att h3{margin-bottom:var(--s3)}
+.att p{flex:1}
+.meter{display:flex;gap:5px;align-items:center;margin-top:var(--s4)}
+.meter i{width:22px;height:6px;border-radius:2px;display:block;opacity:.22}
+.meter i.on{opacity:1}
+.meter span{font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-left:var(--s2)}
+
+/* dates */
+.legend{display:flex;gap:var(--s5);flex-wrap:wrap;margin-bottom:var(--s6);font-size:12px;
+  letter-spacing:.14em;text-transform:uppercase}
+.legend b{display:inline-block;width:12px;height:12px;margin-right:8px;vertical-align:-1px}
+.month{margin-bottom:var(--s7)}
+.month-head{display:flex;align-items:baseline;gap:var(--s4);margin-bottom:var(--s5);padding-bottom:var(--s3)}
+.nights{display:grid;gap:var(--s3);grid-template-columns:repeat(auto-fill,minmax(148px,1fr))}
+.night{padding:var(--s4);transition:transform .35s var(--ease),border-color .3s,background .3s}
+.night .num{line-height:1.1;margin-top:2px}
+
+/* admission tiers */
+.tier{display:flex;flex-direction:column;height:100%;padding:var(--s6)}
+.tier ul{list-style:none;margin:var(--s4) 0 var(--s6);padding:0;flex:1}
+.tier li{padding:var(--s2) 0;font-size:15px}
+.ladder{width:100%;min-width:560px;border-collapse:collapse;font-size:15px}
+.ladder th,.ladder td{padding:var(--s3) var(--s4);text-align:left}
+.ladder td:last-child,.ladder th:last-child{text-align:right}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-hint{display:none;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 var(--s3)}
+@media(max-width:620px){.table-hint{display:block}}
+
+/* warnings / house rules */
+.warn{padding:var(--s6)}
+.warn ul{list-style:none;margin:var(--s4) 0 0;padding:0;display:grid;gap:var(--s3)}
+@media(min-width:700px){.warn ul{grid-template-columns:1fr 1fr}}
+.warn li{padding-left:26px;position:relative;font-size:15px}
+.warn li::before{content:'!';position:absolute;left:0;top:0;width:18px;height:18px;line-height:18px;
+  text-align:center;font-size:11px;font-weight:700;border-radius:50%}
+
+/* faq */
+.qa{padding:var(--s5) 0}
+.qa h4{margin-bottom:var(--s2)}
+
+.signup{max-width:520px;margin:0 auto;text-align:center}
+.field{margin-bottom:var(--s4);text-align:left}
+.field label{display:block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:var(--s2)}
+.field input{width:100%;padding:14px var(--s4);font-size:16px;font-family:inherit;transition:border-color .25s,box-shadow .25s}
+.field input:focus{outline:none}
+.form-msg{margin-top:var(--s4);font-size:15px;min-height:24px}
+.social{display:flex;gap:var(--s4);flex-wrap:wrap;list-style:none;margin:var(--s5) 0 0;padding:0}
+.social a{font-size:12px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none}
+footer{padding:var(--s8) 0 var(--s7);margin-top:var(--s8)}
+.foot{display:flex;justify-content:space-between;gap:var(--s6);flex-wrap:wrap;align-items:flex-start}
+.small{font-size:14px}
+.preview-bar{font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:8px var(--s4)}
+.js .rise{opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.js .rise.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}
+  .js .rise{opacity:1;transform:none}}
+
+.hot-text{color:var(--hi)}
+.fields{display:block}
+.center{text-align:center}
+.mx{margin-left:auto;margin-right:auto}
+.tight{padding-top:0}
