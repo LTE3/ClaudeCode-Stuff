@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://tqeunmqnaoyrerkbhokk.supabase.co https://api.stripe.com; img-src 'self' data: https://*.stripe.com; frame-src 'self' https://js.stripe.com https://hooks.stripe.com; media-src 'self';">
+<!-- PREVIEW BUILD — remove this line on promotion (handoff §7.1) -->
+<meta name="robots" content="noindex,nofollow">
+<title>Tickets &amp; Tables — The Haunted Mansion</title>
+<meta name="description" content="General admission, early-entry free list, and reserved tables with bottle service.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+
+<!-- PREVIEW BANNER — remove on promotion -->
+<div class="preview-bar">Preview · direction 1 “The Estate” · <a href="../index.html">see the other direction</a></div>
+
+<div class="wrap">
+  <nav class="nav">
+    <a class="nav-brand" href="index.html">Haunted Mansion</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="tickets.html" aria-current="page">Tickets</a></li>
+      <li><a href="info.html">Info</a></li>
+    </ul>
+  </nav>
+</div>
+
+<main>
+  <div class="wrap">
+
+    <header style="padding:64px 0 32px;max-width:720px">
+      <p class="eyebrow">Admission</p>
+      <h1 style="font-size:clamp(34px,6vw,60px)">Ways in.</h1>
+      <p class="lede">Three doors into the house. Every night of the season, 428 Johnson Ave, 21+ with ID.</p>
+    </header>
+
+    <!-- ==========================================================
+         PROVISIONAL PRICING — SINGLE SOURCE OF TRUTH
+         Prices below are PLACEHOLDERS pending owner sign-off (§11.4).
+         Change them HERE and nowhere else. When real numbers land they
+         must match exactly what create-checkout charges (§5), and the
+         active price belongs on ga_tier1 (tier 1 is fee-free; tiers
+         2/3/4 add a hardcoded +$5 in the ticket UI).
+         ========================================================== -->
+
+    <section style="padding-top:32px">
+      <div class="grid g3">
+
+        <article class="card tier rise">
+          <span class="badge">Early</span>
+          <h3 style="margin-top:16px">Free before midnight</h3>
+          <p class="price">$0</p>
+          <p class="small muted" style="margin:0">Limited each night · RSVP required</p>
+          <ul>
+            <li>Entry before 12:00am</li>
+            <li>RSVP in advance, name at the door</li>
+            <li>Capacity capped — first come</li>
+          </ul>
+          <button class="btn btn-ghost" type="button" disabled>Opens closer to the date</button>
+        </article>
+
+        <article class="card tier feature rise">
+          <span class="badge hot">Most popular</span>
+          <h3 style="margin-top:16px">General admission</h3>
+          <p class="price">$20<span style="font-size:18px;color:var(--ink-faint)">*</span></p>
+          <p class="small muted" style="margin:0">*Provisional — final price TBA</p>
+          <ul>
+            <li>Entry all night, doors 10pm</li>
+            <li>All-in price, no surprise fees</li>
+            <li>Halloween weekend priced separately</li>
+          </ul>
+          <button class="btn btn-primary" type="button" disabled>On sale soon</button>
+        </article>
+
+        <article class="card tier rise">
+          <span class="badge">Groups</span>
+          <h3 style="margin-top:16px">Tables &amp; bottles</h3>
+          <p class="price">Deposit</p>
+          <p class="small muted" style="margin:0">Packages from TBA · limited per night</p>
+          <ul>
+            <li>Reserved high-top for your group</li>
+            <li>Bottle packages &amp; mixers</li>
+            <li>Skip the line, host at the door</li>
+          </ul>
+          <button class="btn btn-ghost" type="button" disabled>Request a table</button>
+        </article>
+
+      </div>
+
+      <p class="small muted" style="margin-top:32px;text-align:center">
+        Pricing shown is provisional while the season is finalised. Nothing on this page charges a card yet —
+        get on the list below and you'll be first to know when tickets go live.
+      </p>
+    </section>
+
+    <div class="rule"><span>Halloween weekend</span></div>
+
+    <section style="padding-top:0">
+      <div class="card rise" style="text-align:center;border-color:var(--pumpkin)">
+        <p class="eyebrow" style="color:var(--pumpkin)">October 30 &amp; 31</p>
+        <h2>Halloween is a Saturday this year.</h2>
+        <p class="lede" style="max-width:560px;margin:16px auto 0">
+          The biggest two nights of the season, and the only ones we expect to sell out early.
+          Presale goes to the list first.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="signup rise">
+        <p class="eyebrow">Presale access</p>
+        <h2>Be first through the door.</h2>
+        <p class="muted">We'll text and email you the moment tickets and tables open.</p>
+        <form class="signup-form" novalidate>
+          <div class="fields">
+            <div class="field">
+              <label for="email-t">Email</label>
+              <input id="email-t" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" required>
+            </div>
+            <div class="field">
+              <label for="phone-t">Phone</label>
+              <input id="phone-t" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(347) 000-0000" required>
+            </div>
+            <button class="btn btn-primary" type="submit" style="width:100%">Notify me</button>
+          </div>
+          <p class="form-msg" role="status" aria-live="polite"></p>
+        </form>
+        <p class="small muted" style="margin-top:16px">21+ only. Reply STOP to opt out of texts at any time.</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <p class="mark" style="font-size:28px;margin-bottom:8px">The Haunted Mansion</p>
+      <p class="small">428 Johnson Ave, Brooklyn, NY 11237 · 21+ w/ ID</p>
+      <p class="small">Fridays &amp; Saturdays · September 4 – November 28, 2026</p>
+    </div>
+    <div>
+      <ul class="nav-links" style="flex-direction:column;gap:8px">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="schedule.html">Schedule</a></li>
+        <li><a href="info.html">Info &amp; FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>
