@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:;">
 <meta name="robots" content="noindex,nofollow">
-<title>Haunted Mansion — preview directions</title>
+<title>Haunted Mansion — ten preview directions</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
 <style>
@@ -13,20 +13,20 @@
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(110vw 70vh at 50% -10%,rgba(157,78,221,.28),transparent 60%)}
-.wrap{position:relative;max-width:900px;margin:0 auto;padding:0 24px}
+.wrap{position:relative;max-width:960px;margin:0 auto;padding:0 24px}
 header{padding:72px 0 40px;text-align:center}
 h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px);margin:0 0 16px;letter-spacing:.03em;
    background:linear-gradient(180deg,#fff4dd,var(--candle) 50%,#FF7518);-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--dim);max-width:560px;margin:0 auto}
-.grid{display:grid;gap:20px;padding-bottom:24px}
+.sub{color:var(--dim);max-width:600px;margin:0 auto}
+.grid{display:grid;gap:18px;padding-bottom:24px}
 @media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
-.v{display:block;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:28px;color:inherit;text-decoration:none;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .3s}
-.v:hover{transform:translateY(-4px)}
-.v1:hover{border-color:var(--candle)}
-.v2:hover{border-color:var(--slime)}
-.v0{border-color:rgba(106,255,143,.45);box-shadow:0 0 60px rgba(106,255,143,.08);margin-bottom:20px}
-.v0:hover{border-color:var(--slime)}
-.v0 h2{color:var(--slime);font-size:30px}
+.v{display:block;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:26px;color:inherit;text-decoration:none;
+   transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .3s}
+.v:hover{transform:translateY(-4px);border-color:var(--c,var(--candle))}
+.v h2{margin:10px 0 6px;font-size:24px;color:var(--c,var(--ink))}
+.v p{color:var(--dim);font-size:15px;margin:0 0 18px}
+.v0{border-color:rgba(106,255,143,.45);box-shadow:0 0 60px rgba(106,255,143,.08);margin-bottom:22px;--c:var(--slime)}
+.v0 h2{font-size:30px}
 .pick{display:inline-block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#07200f;background:var(--slime);padding:4px 10px;border-radius:999px;font-weight:700}
 .why{margin:18px 0;border-collapse:collapse;width:100%;font-size:14px}
 .why th,.why td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;color:var(--dim)}
@@ -35,14 +35,13 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
 .why tr:last-child td{border-bottom:none}
 .why .big{color:var(--slime);font-weight:700}
 .tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
-.v h2{margin:10px 0 6px;font-size:26px}
-.v1 h2{color:var(--candle)}
-.v2 h2{color:var(--slime)}
-.v p{color:var(--dim);font-size:15px;margin:0 0 18px}
-.swatch{display:flex;gap:6px;margin-bottom:18px}
-.swatch i{width:26px;height:26px;border-radius:3px;display:block}
+.swatch{display:flex;gap:6px;margin-bottom:16px}
+.swatch i{width:24px;height:24px;border-radius:3px;display:block;border:1px solid rgba(255,255,255,.12)}
 .go{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
 .pages{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--dim)}
+.rule{display:flex;align-items:center;gap:16px;margin:14px 0 22px}
+.rule::before,.rule::after{content:'';flex:1;border-top:1px solid var(--line)}
+.rule span{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
 .note{border:1px solid var(--line);border-radius:4px;padding:22px;margin:32px 0 64px;font-size:14px;color:var(--dim)}
 .note b{color:var(--ink)}
 .note ul{margin:10px 0 0;padding-left:20px}
@@ -55,8 +54,9 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
 
   <header>
     <h1>The Haunted Mansion</h1>
-    <p class="sub">Three complete websites. All fully clickable — every page, every link.
-      Start with the recommended one, then compare it against the two directions below.</p>
+    <p class="sub">Ten complete websites. Every one is fully clickable — Home, Schedule,
+      Tickets &amp; tables, Info. Same real dates and same real prices across all ten;
+      only the design changes.</p>
   </header>
 
   <a class="v v0" href="final/index.html">
@@ -66,9 +66,9 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
       <i style="background:#FFB43D"></i><i style="background:#FF7518"></i>
       <i style="background:#9D4EDD"></i><i style="background:#6AFF8F"></i>
     </div>
-    <p>Same gothic look as direction 1, but the page is reordered to point at what the room
-      actually sells. The hero button is <b>free before midnight</b>, tables are second, and
-      paid GA is a small after-midnight line — because that is what the last twelve nights look like:</p>
+    <p>Gothic and candlelit, but the page is reordered to point at what the room actually sells.
+      The hero button is <b>free before midnight</b>, tables are second, and paid GA is a small
+      after-midnight line — because that is what the last twelve nights look like:</p>
     <table class="why">
       <tr><th>Line</th><th>Per night</th></tr>
       <tr><td>Free RSVP claimed</td><td class="big">46 – 184</td></tr>
@@ -82,31 +82,124 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
     <div class="pages">Home · Schedule · Tickets &amp; tables · Info</div>
   </a>
 
+  <div class="rule"><span>The other nine</span></div>
+
   <div class="grid">
 
-    <a class="v v1" href="v1/index.html">
-      <span class="tag">Direction 1 · original</span>
+    <a class="v" href="v1/index.html" style="--c:#FFB43D">
+      <span class="tag">Direction 1</span>
       <h2>The Estate</h2>
       <div class="swatch">
         <i style="background:#FFB43D"></i><i style="background:#FF7518"></i>
         <i style="background:#9D4EDD"></i><i style="background:#120827"></i>
       </div>
-      <p>Gothic, candlelit, serif. An invitation to a haunted estate — elegant and a little upscale.
-        Leans toward selling tables and bottle service.</p>
-      <span class="go">Open direction 1 →</span>
+      <p>The original gothic build. Candlelit, serif, upscale — an invitation to a haunted estate.
+        Leans toward selling tables. Ticket-first page order.</p>
+      <span class="go">Open →</span>
       <div class="pages">Home · Schedule · Tickets · Info</div>
     </a>
 
-    <a class="v v2" href="v2/index.html">
-      <span class="tag">Direction 2 · original</span>
+    <a class="v" href="v2/index.html" style="--c:#6AFF8F">
+      <span class="tag">Direction 2</span>
       <h2>The Rave</h2>
       <div class="swatch">
         <i style="background:#6AFF8F"></i><i style="background:#B14BF4"></i>
         <i style="background:#FF7518"></i><i style="background:#0b0f14"></i>
       </div>
       <p>Neon flyer energy. Toxic green and magenta, hard edges, marquee, stacked heavy type.
-        Loud and young — leans toward selling GA volume.</p>
-      <span class="go">Open direction 2 →</span>
+        Loud and young — leans toward GA volume.</p>
+      <span class="go">Open →</span>
+      <div class="pages">Home · Schedule · Tickets · Info</div>
+    </a>
+
+    <a class="v" href="v3/index.html" style="--c:#A41E22">
+      <span class="tag">Direction 3</span>
+      <h2>The Playbill</h2>
+      <div class="swatch">
+        <i style="background:#F2E8D5"></i><i style="background:#A41E22"></i>
+        <i style="background:#1A1614"></i><i style="background:#C6902F"></i>
+      </div>
+      <p>Vintage horror playbill. Cream paper, wood-type, blood-red ink, letterpress shadows.
+        The only light design in the set — reads like a 1930s carnival poster.</p>
+      <span class="go">Open →</span>
+      <div class="pages">Home · Schedule · Tickets · Info</div>
+    </a>
+
+    <a class="v" href="v4/index.html" style="--c:#FF2D95">
+      <span class="tag">Direction 4</span>
+      <h2>Perreo Tropical</h2>
+      <div class="swatch">
+        <i style="background:#FF2D95"></i><i style="background:#22E4F7"></i>
+        <i style="background:#FFC93C"></i><i style="background:#14002B"></i>
+      </div>
+      <p>Latin club neon. Hot pink and cyan over deep purple, rounded pills, bilingual headlines.
+        The most obviously reggaetón of the ten.</p>
+      <span class="go">Open →</span>
+      <div class="pages">Home · Schedule · Tickets · Info</div>
+    </a>
+
+    <a class="v" href="v5/index.html" style="--c:#E8622C">
+      <span class="tag">Direction 5</span>
+      <h2>Black Tie</h2>
+      <div class="swatch">
+        <i style="background:#0A0A0A"></i><i style="background:#FFFFFF"></i>
+        <i style="background:#E8622C"></i><i style="background:#2A2A2A"></i>
+      </div>
+      <p>Understated luxury. Near-black, white serif, one orange accent, enormous whitespace.
+        Says expensive without saying anything. Built to sell tables.</p>
+      <span class="go">Open →</span>
+      <div class="pages">Home · Schedule · Tickets · Info</div>
+    </a>
+
+    <a class="v" href="v6/index.html" style="--c:#B8860B">
+      <span class="tag">Direction 6</span>
+      <h2>The Séance</h2>
+      <div class="swatch">
+        <i style="background:#1A1410"></i><i style="background:#E8DCC0"></i>
+        <i style="background:#B8860B"></i><i style="background:#7A2E2E"></i>
+      </div>
+      <p>Sepia and candle-gold, typewriter type, dashed rules. Looks like a document someone
+        found in the basement. Quiet and genuinely eerie.</p>
+      <span class="go">Open →</span>
+      <div class="pages">Home · Schedule · Tickets · Info</div>
+    </a>
+
+    <a class="v" href="v7/index.html" style="--c:#C1121F">
+      <span class="tag">Direction 7</span>
+      <h2>Blood Moon</h2>
+      <div class="swatch">
+        <i style="background:#0A0000"></i><i style="background:#C1121F"></i>
+        <i style="background:#F0EAD6"></i><i style="background:#FF4D2E"></i>
+      </div>
+      <p>Cinematic. Deep red on black, carved Roman capitals, film-title scale. Feels like a
+        horror movie poster for the season rather than a club flyer.</p>
+      <span class="go">Open →</span>
+      <div class="pages">Home · Schedule · Tickets · Info</div>
+    </a>
+
+    <a class="v" href="v8/index.html" style="--c:#B4FF39">
+      <span class="tag">Direction 8</span>
+      <h2>Monster Mash</h2>
+      <div class="swatch">
+        <i style="background:#2B0A3D"></i><i style="background:#B4FF39"></i>
+        <i style="background:#FF8A00"></i><i style="background:#FF4FD8"></i>
+      </div>
+      <p>Cartoon Halloween. Purple, lime and orange, fat rounded shapes, sticker energy.
+        The friendliest of the ten — reads instantly on a phone.</p>
+      <span class="go">Open →</span>
+      <div class="pages">Home · Schedule · Tickets · Info</div>
+    </a>
+
+    <a class="v" href="v9/index.html" style="--c:#33FF66">
+      <span class="tag">Direction 9</span>
+      <h2>Cursed Broadcast</h2>
+      <div class="swatch">
+        <i style="background:#000000"></i><i style="background:#33FF66"></i>
+        <i style="background:#FF3355"></i><i style="background:#0D1F12"></i>
+      </div>
+      <p>Green-on-black terminal. Monospace everything, scanlines, glitched title. Looks like a
+        pirate signal, not a venue site — the most screenshot-and-repost of the set.</p>
+      <span class="go">Open →</span>
       <div class="pages">Home · Schedule · Tickets · Info</div>
     </a>
 
@@ -116,11 +209,11 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
     <b>What's real and what isn't</b>
     <ul>
       <li><b>Real:</b> all 26 nights (Fri + Sat, Sept 4 – Nov 28), the address, 21+, and the Halloween
-        weekend highlight. The email/phone signup form genuinely writes to Supabase.</li>
-      <li><b>Real prices on the recommended build:</b> $10 / $15 / $20 advance GA and $50 tables are
-        exactly what the room ran all summer 2026. Halloween weekend ($25 / $35 / $45, tables $75)
-        is my proposal, not a decision — it's one commented block to change.
-        Directions 1 and 2 still show the old $20 placeholder.</li>
+        weekend highlight. The email/phone signup form on every one of the ten genuinely writes to Supabase.</li>
+      <li><b>Real prices:</b> $10 / $15 / $20 advance GA and $50 tables are exactly what the room ran
+        all summer 2026. Halloween weekend ($25 / $35 / $45, tables $75) is my proposal, not a
+        decision — it's one commented block to change. Directions 1 and 2 still show the old
+        $20 placeholder; directions 3–9 and the recommended build all carry the real ladder.</li>
       <li><b>Deliberately off:</b> every ticket button is disabled. Nothing here can charge a card —
         no events are activated and no live checkout runs from a preview.</li>
       <li>Test signups are tagged <b>Preview / Test</b> in the database so they don't pollute the real
