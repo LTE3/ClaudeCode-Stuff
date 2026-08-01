@@ -35,6 +35,11 @@
      siblings. This layer is what keeps the title's contrast independent of how
      light a patch of the corridor happens to sit behind it. */
   --scrim:rgba(0,0,0,.60);
+  /* ...and it does not, on its own. Measured against rendered pixels rather than
+     the declared background, the corridor still reaches a 99th-percentile grey of
+     78 under the type. This pool sits only where the type sits, so the rest of
+     the corridor keeps its depth. Model default, like the scrim. */
+  --wm-pool:rgba(0,0,0,.30);
   /* one type scale */
   /* per-face fit factor. Every variant states its own; see variants.py. */
   --wm-scale:1;
@@ -160,6 +165,14 @@ p{margin:0 0 1.15rem}
   from{transform:translate3d(-4%,3%,0) scale(1.04)}
   to{transform:translate3d(5%,-4%,0) scale(1.2)}
 }
+/* A pool of shade where the type sits. Same reason as the d model: the plate is
+   an image, so the flat scrim on ::before is not what ends up behind the glyphs,
+   and the n corridor is the brighter of the two plates (p99 of 78 against d's 50).
+   This has to be ::after, not more scrim on ::before -- .fog is at z-index -1 and
+   would drift its glow back over anything painted at -2. ::after is last in tree
+   order at the same depth, so it paints over the fog. */
+.frame::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
+  background:radial-gradient(66% 56% at 50% 46%,var(--wm-pool),transparent 78%)}
 /* corner ticks -- the frame reads as a frame instead of a border */
 .frame .tick{position:absolute;width:18px;height:18px;pointer-events:none;
   border:0 solid var(--hair)}
@@ -173,8 +186,13 @@ p{margin:0 0 1.15rem}
   white-space:nowrap;color:var(--ink)}
 /* The initials carry the accent colour and nothing else. They used to be set at
    1.32em on a zero line-height, which pushed them out of the baseline and read as
-   a broken drop-cap rather than a lockup. Same size, different colour. */
-.title span i{font-style:normal;color:var(--red)}
+   a broken drop-cap rather than a lockup. Same size, different colour.
+   The colour is --red-lt, not --red. --red is tuned to carry white button text,
+   so it is dark; measured against the actual pixels of the corridor plate the n1
+   initials came out at 1.99-2.77, under the 3.0 large-text floor, while the white
+   lines beside them scored 7+. The lit tint each palette already declares clears
+   it on every sibling and reads as the same accent. */
+.title span i{font-style:normal;color:var(--red-lt)}
 .title .b{font-size:calc(var(--t-hero2) * var(--wm-scale))}
 .hero .kick{font:400 12px/1.5 var(--f-body);letter-spacing:.4em;text-transform:uppercase;
   color:var(--muted);margin:0 0 1.7rem}

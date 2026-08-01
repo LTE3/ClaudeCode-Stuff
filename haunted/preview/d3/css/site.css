@@ -38,6 +38,19 @@
      no matter how light a patch of the engraving sits behind it, and it is a
      model default because every variant needs the same guarantee. */
   --scrim:rgba(0,0,0,.62);
+  /* A flat scrim alone did NOT keep that promise. Measured against the rendered
+     pixels rather than the declared background, the saturated display line came
+     out at 2.6-2.9 against the engraving -- under the 3.0 WCAG floor for large
+     text -- on three of the five palettes, on the home page as much as the inner
+     ones. Contrast checks that read the CSS background colour cannot see this,
+     because the colour they read is not what is behind the glyphs. Deepening the
+     scrim would have fixed it by dimming the whole plate back toward the flat
+     black it replaced, so instead this pool sits only where the wordmark sits and
+     leaves the silhouette at the edges alone. Model default, like the scrim:
+     every palette needs the same floor. .44 landed d4 on exactly 3.00, which is
+     the floor and not a margin -- antialiasing on another machine can round the
+     wrong way -- so it carries a little more. */
+  --wm-pool:rgba(0,0,0,.50);
   /* neutrals. Not part of any variant's art direction -- every one of the five
      is a dark build, so one set of greys serves all of them. */
   --off-ink:#9A9A9A; --off-bg:#2A2A2A; --off-line:#3A3A3A; --foot-ink:#CFCFCF;
@@ -127,7 +140,7 @@ p{margin:0 0 1.1rem}
   padding:clamp(64px,10vw,110px) 0 clamp(72px,10vw,120px);
   text-align:center;overflow:hidden;border-bottom:2px solid var(--blood)}
 .hero::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-2;
-  background:radial-gradient(78% 90% at 50% 0%,var(--glow-a),transparent 68%),
+  background:  radial-gradient(78% 90% at 50% 0%,var(--glow-a),transparent 68%),
              radial-gradient(46% 50% at 50% 104%,var(--glow-b),transparent 72%),
              linear-gradient(var(--scrim),var(--scrim))}
 /* two slow-drifting light pools. Transform only, so it composites on the GPU
@@ -142,8 +155,15 @@ p{margin:0 0 1.1rem}
   to{transform:translate3d(5%,-4%,0) scale(1.16)}
 }
 /* vignette, so the wordmark sits in the middle of something instead of on a slab */
+/* The pool has to live HERE, not on ::before. .hero .fog and this vignette both
+   sit at z-index:-1, so anything painted on ::before at -2 gets re-lit by the
+   drifting glow pools on top of it -- which is exactly what happened: the first
+   attempt moved d2, d3 and d5 and left d1 unchanged to the pixel, because d1's
+   glow is the strongest red of the five. ::after is last in tree order at the
+   same depth, so it paints over the fog. */
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
-  background:radial-gradient(120% 90% at 50% 45%,transparent 42%,var(--vignette))}
+  background:radial-gradient(72% 62% at 50% 50%,var(--wm-pool),transparent 82%),
+             radial-gradient(120% 90% at 50% 45%,transparent 42%,var(--vignette))}
 .hero>*{position:relative;z-index:1}
 .wordmark{display:block;font-family:var(--f-disp);font-weight:var(--disp-w);line-height:.88;
   text-transform:uppercase;color:var(--red);
@@ -159,8 +179,21 @@ p{margin:0 0 1.1rem}
   padding:10px 18px;font-family:var(--f-lab);font-size:13px;
   letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
 .hero .cta-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:30px}
-/* inner pages: same hero, half the height, no call to action */
-.hero.sub{min-height:min(46svh,400px);padding:clamp(52px,7vw,84px) 0}
+/* inner pages: same hero, half the height, no call to action.
+   The glow stack above is sized in percentages OF THE HERO BOX, so halving the
+   height does not halve the glow -- the same gradients now land almost entirely
+   inside the frame and the plate vanishes under a flat rust wash. That is what
+   the three inner pages were doing while the home page read fine. Pushing both
+   origins outside the box keeps only the tail of each, and the crop drops from
+   the sky to the silhouette, which is the part of the plate worth showing in a
+   band this short. */
+.hero.sub{min-height:min(46svh,400px);padding:clamp(52px,7vw,84px) 0;
+  background-position:50% 54%}
+.hero.sub::before{
+  background:  radial-gradient(72% 128% at 50% -32%,var(--glow-a),transparent 60%),
+             radial-gradient(42% 72% at 50% 130%,var(--glow-b),transparent 66%),
+             linear-gradient(var(--scrim),var(--scrim))}
+.hero.sub .fog{opacity:.5}
 .hero.sub .wordmark .w1{font-size:clamp(42px,9vw,102px)}
 .hero.sub .wordmark .w2{font-size:clamp(27px,5.4vw,60px)}
 /* scroll cue: a line that draws downward, once every few seconds */
