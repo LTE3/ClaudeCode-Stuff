@@ -1,26 +1,64 @@
 /* ============================================================
-   v20 "Marquee" -- structural model: dominionofterror.com
+   Dominion model -- structural model: dominionofterror.com
    Gold display headings on flat black, orange subheads, red accents,
    two-column panel rows, flat text price list, maroon contact band.
-   Type: Creepster display / Fjalla One labels / Open Sans body.
+
+   Every themeable value is a custom property declared once in :root. The
+   variant layer overrides that block and nothing else -- there is no
+   hard-coded colour or font face below this point, which is what keeps the
+   five siblings structurally identical.
    ============================================================ */
 :root{
-  --bg:#000000; --panel:#0B0B0B; --panel2:#121212; --line:#2E2E2E;
+  /* type */
+  --f-disp:Creepster,Impact,"Arial Black",sans-serif;
+  --f-lab:"Fjalla One",Impact,sans-serif;
+  --f-body:"Open Sans",ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --disp-w:400;
+  /* surfaces */
+  --bg:#000000; --panel:#0B0B0B; --panel2:#121212; --well:#050505; --line:#2E2E2E;
   --ink:#FFFFFF; --body:#EEEEEE; --muted:#B7B7B7;
-  --gold:#FFCC00; --orange:#FF6600; --red:#FF0000; --ember:#FF3300;
+  /* brand. Each clears 4.5:1 on black on its own: gold 13.9:1, orange 7.1:1,
+     red 5.2:1, ember 6.0:1. On the maroon band red drops to 4.6:1, so that
+     band uses --ember instead. */
+  --gold:#FFCC00; --acc-hi:#FFD84D; --orange:#FF6600; --red:#FF0000; --ember:#FF3300;
   --maroon:#330000; --blood:#660000;
-  /* every one of those five brand colours clears 4.5:1 on black on its own:
-     gold 13.9:1, orange 7.1:1, red 5.2:1, ember 6.0:1. No lightened tint is
-     needed here -- unlike v21, this palette is body-text safe as drawn.
-     On the --maroon band red drops to 4.6:1, so that band uses --ember. */
+  /* white on pure #FF0000 is 4.0:1 -- fine for display type, short of the
+     4.5:1 bar for a button label. --btn is the same hue at 6.4:1 behind white,
+     and it is the exact red the peak calendar cells use. */
+  --btn:#C10000; --btn-hi:#E00000;
+  /* atmosphere */
+  --glow-a:rgba(102,0,0,.55); --glow-b:rgba(255,102,0,.16);
+  --tex-a:rgba(102,0,0,.38); --tex-b:rgba(255,51,0,.12); --hatch:rgba(102,0,0,.5);
+  --wm-glow:rgba(255,0,0,.45); --wm-shadow:#4A0000; --wm-glow2:rgba(255,204,0,.3);
+  --ghost-hi:rgba(255,204,0,.12); --edge-open:#4A3A00;
+  --vignette:rgba(0,0,0,.72);
+  /* neutrals. Not part of any variant's art direction -- every one of the five
+     is a dark build, so one set of greys serves all of them. */
+  --off-ink:#9A9A9A; --off-bg:#2A2A2A; --off-line:#3A3A3A; --foot-ink:#CFCFCF;
+  /* one type scale, used everywhere. Display steps are 1.25-1.3 apart so a
+     section head cannot be mistaken for a column head. */
+  /* per-face fit factor. Every variant states its own; see variants.py. */
+  --wm-scale:1;
+  --t-hero:clamp(52px,12.5vw,146px);
+  --t-hero2:clamp(32px,7.6vw,88px);
+  --t-1:clamp(31px,5.8vw,62px);
+  --t-2:clamp(26px,3.9vw,42px);
+  --t-3:clamp(21px,2.7vw,28px);
+  --t-4:20px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --ease-out:cubic-bezier(.2,0,0,1);
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0;background:var(--bg);color:var(--body);
-  font:400 16.5px/1.75 var(--f-body);
+  font:400 17px/1.75 var(--f-body);
   overflow-x:hidden;
 }
+/* film grain over the whole document. Fixed, non-interactive, and cheap: one
+   80x80 tile of fractal noise repeated. */
+body::after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)'/%3E%3C/svg%3E")}
 img{max-width:100%;height:auto}
 a{color:var(--red)}
 a:hover{color:var(--orange)}
@@ -33,326 +71,423 @@ p{margin:0 0 1.1rem}
 .center{text-align:center}
 .muted{color:var(--muted)}
 .skip{position:absolute;left:-9999px}
-.skip:focus{left:12px;top:12px;z-index:99;background:var(--gold);color:#000;padding:10px 16px}
+.skip:focus{left:12px;top:12px;z-index:99;background:var(--gold);color:var(--bg);padding:10px 16px}
 
 /* display + label faces */
-.disp{font-family:var(--f-disp);font-weight:400;
+.disp{font-family:var(--f-disp);font-weight:var(--disp-w);
   text-transform:uppercase;letter-spacing:.02em;color:var(--gold)}
 .lab{font-family:var(--f-lab);text-transform:uppercase;letter-spacing:.06em}
-.fine{font:400 13px/1.7 var(--f-body);color:var(--muted);margin:0}
-.eyebrow{font-family:var(--f-lab);font-size:14px;line-height:1.4;
-  letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin:0 0 .9rem}
+.fine{font:400 13.5px/1.7 var(--f-body);color:var(--muted);margin:0}
+.eyebrow{font-family:var(--f-lab);font-size:13.5px;line-height:1.4;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--red);margin:0 0 1rem}
 
 /* preview chrome */
-.preview-bar{background:#161616;color:#EEEEEE;text-align:center;
+.preview-bar{background:var(--panel2);color:var(--body);text-align:center;
   border-bottom:1px solid var(--line);font-family:var(--f-lab);
   font-size:13px;line-height:1.5;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px}
 .preview-bar a{color:var(--gold)}
 
 /* ---- thin red nav strip (their .navbar) ---- */
-.strip{position:sticky;top:0;z-index:40;background:#000;border-bottom:2px solid var(--blood)}
+.strip{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:2px solid var(--blood);
+  transition:background .3s var(--ease-out),border-color .3s var(--ease-out)}
 .strip-in{width:min(1140px,92vw);margin-inline:auto;display:flex;align-items:center;
-  gap:18px;padding:9px 0;flex-wrap:wrap}
-.strip nav{display:flex;gap:18px;flex-wrap:wrap}
-.strip nav a{font-family:var(--f-lab);font-size:15px;line-height:1;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--red);text-decoration:none;padding:5px 0}
+  gap:18px;padding:10px 0;flex-wrap:wrap}
+.strip nav{display:flex;gap:20px;flex-wrap:wrap}
+.strip nav a{font-family:var(--f-lab);font-size:15px;line-height:1;position:relative;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--red);text-decoration:none;padding:6px 0}
+.strip nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:2px;
+  background:var(--gold);transition:right .28s var(--ease)}
 .strip nav a:hover{color:var(--gold)}
+.strip nav a:hover::after{right:0}
 .strip nav a[aria-current]{color:var(--gold)}
+.strip nav a[aria-current]::after{right:0}
 .pips{margin-left:auto;display:flex;gap:9px}
-.pips a{width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--blood);
+.pips a{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--blood);
   color:var(--red);font-family:var(--f-lab);font-size:11px;
-  letter-spacing:.04em;text-decoration:none;border-radius:50%}
+  letter-spacing:.04em;text-decoration:none;border-radius:50%;
+  transition:background .2s var(--ease-out),color .2s var(--ease-out)}
 .pips a:hover{background:var(--blood);color:var(--gold)}
 
-/* ---- hero band: short, full-bleed, wordmark centred ---- */
-.hero{position:relative;background:#000;padding:clamp(46px,9vw,86px) 0 clamp(38px,7vw,68px);
-  text-align:center;overflow:hidden;
-  border-bottom:2px solid var(--blood)}
-.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+/* ---- hero band ----
+   Their hero runs about 570px on a desktop viewport. Ours holds the same
+   proportion but is measured against the viewport instead of a fixed pixel
+   height, so it fills the screen on a phone and stays a band on a monitor. */
+.hero{position:relative;background:var(--bg);isolation:isolate;
+  min-height:min(78svh,700px);display:grid;place-items:center;
+  padding:clamp(64px,10vw,110px) 0 clamp(72px,10vw,120px);
+  text-align:center;overflow:hidden;border-bottom:2px solid var(--blood)}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-2;
   background:radial-gradient(78% 90% at 50% 0%,var(--glow-a),transparent 68%),
              radial-gradient(46% 50% at 50% 104%,var(--glow-b),transparent 72%)}
+/* two slow-drifting light pools. Transform only, so it composites on the GPU
+   and never triggers layout. */
+.hero .fog{position:absolute;inset:-25% -15%;pointer-events:none;z-index:-1;
+  background:radial-gradient(36% 44% at 24% 62%,var(--glow-a),transparent 66%),
+             radial-gradient(32% 38% at 78% 34%,var(--glow-b),transparent 68%);
+  filter:blur(26px);will-change:transform;
+  animation:drift 46s ease-in-out infinite alternate}
+@keyframes drift{
+  from{transform:translate3d(-4%,3%,0) scale(1.02)}
+  to{transform:translate3d(5%,-4%,0) scale(1.16)}
+}
+/* vignette, so the wordmark sits in the middle of something instead of on a slab */
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
+  background:radial-gradient(120% 90% at 50% 45%,transparent 42%,var(--vignette))}
 .hero>*{position:relative;z-index:1}
-.wordmark{display:block;font-family:var(--f-disp);line-height:.9;
+.wordmark{display:block;font-family:var(--f-disp);font-weight:var(--disp-w);line-height:.88;
   text-transform:uppercase;color:var(--red);
-  text-shadow:0 0 22px var(--wm-glow),0 3px 0 var(--wm-shadow)}
-.wordmark .w1{display:block;font-size:clamp(40px,11.5vw,112px);letter-spacing:.02em}
-.wordmark .w2{display:block;font-size:clamp(26px,7vw,68px);color:var(--gold);
-  text-shadow:0 0 18px var(--wm-glow2);margin-top:.05em}
+  text-shadow:0 0 8px var(--wm-glow),0 0 34px var(--wm-glow),0 3px 0 var(--wm-shadow)}
+.wordmark .w1{display:block;font-size:calc(var(--t-hero) * var(--wm-scale));
+  letter-spacing:.02em;white-space:nowrap}
+.wordmark .w2{display:block;font-size:calc(var(--t-hero2) * var(--wm-scale));
+  white-space:nowrap;color:var(--gold);
+  text-shadow:0 0 24px var(--wm-glow2);margin-top:.04em}
 .hero .kick{font-family:var(--f-lab);font-size:13px;line-height:1.5;
-  letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin:0 0 1.5rem}
-.badge{display:inline-block;margin-top:22px;border:2px solid var(--gold);
-  padding:9px 16px;font-family:var(--f-lab);font-size:13px;
+  letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin:0 0 1.6rem}
+.badge{display:inline-block;margin-top:26px;border:2px solid var(--gold);
+  padding:10px 18px;font-family:var(--f-lab);font-size:13px;
   letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.hero .cta-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:30px}
+/* inner pages: same hero, half the height, no call to action */
+.hero.sub{min-height:min(46svh,400px);padding:clamp(52px,7vw,84px) 0}
+.hero.sub .wordmark .w1{font-size:clamp(42px,9vw,102px)}
+.hero.sub .wordmark .w2{font-size:clamp(27px,5.4vw,60px)}
+/* scroll cue: a line that draws downward, once every few seconds */
+.cue{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:9px;
+  font-family:var(--f-lab);font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--muted)}
+.cue i{display:block;width:1px;height:36px;background:linear-gradient(var(--muted),transparent);
+  transform-origin:top;animation:cue 2.8s var(--ease) infinite}
+@keyframes cue{0%{opacity:0;transform:scaleY(.2)}35%{opacity:1}100%{opacity:0;transform:scaleY(1)}}
+@media (max-width:720px){.cue{display:none}}
 
 /* ---- the claim stack (their gold H1 / orange H3 / red line) ---- */
-.claim{background:#000;text-align:center;padding:clamp(38px,6.5vw,72px) 0 clamp(26px,4vw,44px)}
-.claim h1,.claim h2{font-family:var(--f-disp);color:var(--gold);
-  text-transform:uppercase;font-size:clamp(28px,6.4vw,62px);letter-spacing:.015em;margin:0}
-.claim h3{font-family:var(--f-disp);color:var(--orange);
-  text-transform:uppercase;font-size:clamp(20px,4.4vw,42px);letter-spacing:.015em;
-  margin:.5rem 0 0;font-weight:400}
-.claim .say{font-family:var(--f-lab);font-size:clamp(14px,2.4vw,19px);
-  letter-spacing:.06em;color:var(--red);margin:1.1rem 0 0;text-transform:none}
+.claim{background:var(--bg);text-align:center;padding:clamp(44px,7vw,80px) 0 clamp(28px,4vw,46px)}
+.claim h1,.claim h2{font-family:var(--f-disp);font-weight:var(--disp-w);color:var(--gold);
+  text-transform:uppercase;font-size:var(--t-1);letter-spacing:.015em;margin:0}
+.claim h3{font-family:var(--f-disp);font-weight:var(--disp-w);color:var(--orange);
+  text-transform:uppercase;font-size:var(--t-2);letter-spacing:.015em;margin:.55rem 0 0}
+.claim .say{font-family:var(--f-lab);font-size:clamp(15px,2.4vw,20px);
+  letter-spacing:.06em;color:var(--red);margin:1.2rem 0 0;text-transform:none}
 
-/* ---- the stacked ticket call ---- */
-.callout{background:#000;text-align:center;padding:clamp(26px,4.5vw,52px) 0 clamp(40px,7vw,80px)}
-.callout .stack{display:inline-block;text-decoration:none}
-.callout .big{display:block;font-family:var(--f-disp);
-  font-size:clamp(38px,10vw,86px);line-height:.92;color:var(--gold);text-transform:uppercase}
+/* ---- the stacked ticket call ----
+   Their version is display type acting as a link and nothing else. Kept, but
+   given a frame, a lit floor and a real button underneath it, because a
+   40px word floating on black does not read as the primary action. */
+.callout{background:var(--bg);text-align:center;padding:clamp(30px,5vw,62px) 0}
+.ctabox{position:relative;overflow:hidden;padding:clamp(34px,5.5vw,62px) 22px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ctabox::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(64% 130% at 50% 118%,var(--glow-a),transparent 68%)}
+.ctabox>*{position:relative}
+.callout .stack{display:inline-block;margin:0}
+.callout .big{display:block;font-family:var(--f-disp);font-weight:var(--disp-w);
+  font-size:clamp(42px,9.5vw,96px);line-height:.92;color:var(--gold);text-transform:uppercase;
+  transition:color .25s var(--ease-out)}
 .callout .sub{display:block;font-family:var(--f-lab);
-  font-size:clamp(15px,3vw,26px);letter-spacing:.3em;text-transform:uppercase;
-  color:var(--red);margin-top:.35em}
-.callout .stack:hover .big{color:var(--acc-hi)}
-.callout .stack:hover .sub{color:var(--orange)}
-.callout .fine{margin-top:20px}
+  font-size:clamp(15px,2.6vw,24px);letter-spacing:.3em;text-transform:uppercase;
+  color:var(--red);margin-top:.4em;transition:color .25s var(--ease-out)}
+.callout .fine{margin-top:22px}
+.callout .cta-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:26px}
+
+/* even line breaks when a headline does wrap */
+.claim h1,.claim h2,.sechead h2,.callout .big,.warn h2,.signup-band h2{text-wrap:balance}
 
 /* ---- buttons ---- */
 .btn{display:inline-block;font-family:var(--f-lab);font-size:15px;
-  line-height:1;letter-spacing:.14em;text-transform:uppercase;padding:15px 26px;
-  border:2px solid transparent;cursor:pointer;text-decoration:none;text-align:center}
-/* white on pure #FF0000 is only 4.0:1 -- fine for the display type this palette uses
-   it for, short of the 4.5:1 bar for a 15px button label. --btnred is the same hue
-   dropped to 6.4:1 behind white, and it is the exact red the peak calendar cells use. */
-.btn-primary{background:var(--btn);color:#FFFFFF;border-color:var(--btn)}
-.btn-primary:hover{background:var(--btn-hi);border-color:var(--btn-hi);color:#FFFFFF}
-.btn-gold{background:var(--gold);color:#000000;border-color:var(--gold)}
-.btn-gold:hover{background:var(--acc-hi);border-color:var(--acc-hi);color:#000000}
+  line-height:1;letter-spacing:.14em;text-transform:uppercase;padding:17px 30px;
+  border:2px solid transparent;cursor:pointer;text-decoration:none;text-align:center;
+  transition:background .2s var(--ease-out),border-color .2s var(--ease-out),
+             color .2s var(--ease-out),transform .2s var(--ease-out)}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:var(--btn);color:var(--ink);border-color:var(--btn)}
+.btn-primary:hover{background:var(--btn-hi);border-color:var(--btn-hi);color:var(--ink)}
+.btn-gold{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.btn-gold:hover{background:var(--acc-hi);border-color:var(--acc-hi);color:var(--bg)}
 .btn-ghost{background:transparent;color:var(--gold);border-color:var(--gold)}
 .btn-ghost:hover{background:var(--ghost-hi);color:var(--gold)}
 /* disabled state is drawn with real colours, not opacity -- 5.1:1, still legible */
-.btn:disabled{background:#2A2A2A;color:#9A9A9A;border-color:#3A3A3A;cursor:not-allowed}
-.btn:disabled:hover{background:#2A2A2A;color:#9A9A9A;border-color:#3A3A3A}
+.btn:disabled{background:var(--off-bg);color:var(--off-ink);border-color:var(--off-line);cursor:not-allowed}
+.btn:disabled:hover{background:var(--off-bg);color:var(--off-ink);border-color:var(--off-line);transform:none}
 
 /* ---- section shell ---- */
-.band{padding:clamp(44px,7vw,84px) 0}
+.band{padding:clamp(52px,7.5vw,96px) 0}
+.band.tight{padding:clamp(34px,5vw,60px) 0}
 .band.tex{background:var(--panel);
   background-image:radial-gradient(58% 70% at 12% 0%,var(--tex-a),transparent 62%),
                    radial-gradient(52% 66% at 92% 100%,var(--tex-b),transparent 66%)}
-.band.flat{background:#000}
-.sechead{margin-bottom:clamp(20px,3vw,34px)}
-.sechead h2{font-family:var(--f-disp);color:var(--gold);text-transform:uppercase;
-  font-size:clamp(26px,5.6vw,54px);letter-spacing:.015em}
-.sechead p{color:var(--muted);margin:.9rem 0 0;max-width:56ch}
+.band.flat{background:var(--bg)}
+.sechead{margin-bottom:clamp(24px,3.4vw,40px)}
+.sechead h2{font-family:var(--f-disp);font-weight:var(--disp-w);color:var(--gold);
+  text-transform:uppercase;font-size:var(--t-1);letter-spacing:.015em}
+.sechead p{color:var(--muted);margin:1rem 0 0;max-width:56ch;font-size:16.5px}
 .center .sechead p{margin-inline:auto}
+/* a hairline that starts at the heading and runs out to the edge of the column */
+.sechead::after{content:"";display:block;height:1px;margin-top:20px;
+  background:linear-gradient(90deg,var(--gold),transparent 42%)}
+.center .sechead::after{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 
 /* their two-column row */
-.row2{display:grid;gap:clamp(30px,5vw,54px);grid-template-columns:1fr}
+.row2{display:grid;gap:clamp(34px,5vw,60px);grid-template-columns:1fr}
 @media (min-width:880px){.row2{grid-template-columns:1fr 1fr}}
-.colhead{font-family:var(--f-disp);color:var(--gold);text-transform:uppercase;
-  font-size:clamp(26px,5.4vw,50px);letter-spacing:.015em;margin:0 0 1.1rem}
-.subhead{font-family:var(--f-disp);color:var(--gold);text-transform:uppercase;
-  font-size:clamp(20px,3.6vw,30px);letter-spacing:.015em;margin:1.6rem 0 .7rem;font-weight:400}
-.colwrap p{font-size:16px}
+/* a column head is deliberately a step DOWN from a section head -- the old
+   build set both at ~52px and the page read as one flat list of shouts. */
+.colhead{font-family:var(--f-disp);font-weight:var(--disp-w);color:var(--gold);
+  text-transform:uppercase;font-size:var(--t-2);letter-spacing:.015em;margin:0 0 1.2rem;
+  padding-bottom:.5rem;border-bottom:1px solid var(--line)}
+.subhead{font-family:var(--f-lab);color:var(--orange);
+  text-transform:uppercase;font-size:15px;letter-spacing:.2em;margin:1.8rem 0 .7rem}
+.colwrap p{font-size:16.5px}
 .colwrap ul{margin:0 0 1.1rem;padding-left:20px}
-.colwrap li{margin-bottom:.45rem;font-size:16px}
+.colwrap li{margin-bottom:.5rem;font-size:16.5px}
 
-/* flat gold price lines -- their admission block, no cards */
-.plines{list-style:none;margin:0 0 1.2rem;padding:0}
-.plines li{font-family:var(--f-lab);font-size:clamp(17px,3vw,22px);
-  line-height:1.5;letter-spacing:.03em;color:var(--gold);text-transform:uppercase}
-.plines li span{color:var(--body);font-family:var(--f-body);font-size:14px;
-  letter-spacing:0;text-transform:none;display:block;margin-top:2px}
-.hours{font-family:var(--f-lab);font-size:clamp(16px,2.8vw,20px);
-  letter-spacing:.04em;color:var(--body);text-transform:uppercase;margin:0 0 .5rem}
-.note{color:var(--body);font-size:15.5px}
+/* flat gold price lines -- their admission block, no cards. Ruled like a menu
+   so the eye can run down the prices instead of reading four paragraphs. */
+.plines{list-style:none;margin:0 0 1.4rem;padding:0}
+.plines li{font-family:var(--f-lab);font-size:clamp(18px,3vw,23px);
+  line-height:1.45;letter-spacing:.03em;color:var(--gold);text-transform:uppercase;
+  padding:14px 0;border-bottom:1px solid var(--line)}
+.plines li:first-child{padding-top:0}
+.plines li:last-child{border-bottom:0}
+.plines li span{color:var(--body);font-family:var(--f-body);font-size:14.5px;line-height:1.6;
+  letter-spacing:0;text-transform:none;display:block;margin-top:5px}
+.hours{font-family:var(--f-lab);font-size:clamp(17px,2.8vw,21px);
+  letter-spacing:.04em;color:var(--body);text-transform:uppercase;margin:0 0 .6rem}
+.note{color:var(--body);font-size:16px}
+
+/* ---- the season, in four numbers. Counted off the calendar, not typed. ---- */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line)}
+@media (min-width:800px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--well);padding:clamp(26px,3.6vw,40px) 14px;text-align:center}
+.stat .n{display:block;font-family:var(--f-disp);font-weight:var(--disp-w);
+  font-size:clamp(46px,6.6vw,76px);line-height:1;color:var(--gold);
+  font-variant-numeric:tabular-nums}
+.stat .l{display:block;font-family:var(--f-lab);font-size:12px;line-height:1.4;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:12px}
 
 /* ---- calendars ---- */
 /* the home page prints the calendar inside one half of a two-column row, so three
    months across would give each grid ~180px and 22px day cells. Two across keeps
    the cells thumb-sized. .cals.wide is the full-bleed version on the dates page. */
-.cals{display:grid;gap:14px;grid-template-columns:1fr}
+.cals{display:grid;gap:16px;grid-template-columns:1fr}
 @media (min-width:560px){.cals{grid-template-columns:1fr 1fr}}
-@media (min-width:900px){.cals.wide{grid-template-columns:repeat(3,1fr);gap:20px}}
-.cal{border:2px solid var(--blood);background:var(--well);padding:14px 12px 16px}
-.cal-name{font-family:var(--f-disp);font-size:24px;color:var(--gold);
-  text-transform:uppercase;text-align:center;margin:0 0 12px;letter-spacing:.02em}
+@media (min-width:900px){.cals.wide{grid-template-columns:repeat(3,1fr);gap:22px}}
+.cal{border:2px solid var(--blood);background:var(--well);padding:18px 16px 20px}
+.cal-name{font-family:var(--f-lab);font-size:15px;color:var(--gold);
+  text-transform:uppercase;text-align:center;margin:0 0 14px;letter-spacing:.22em}
 .cal-name b{font-weight:400;color:var(--orange)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cal-grid .dh{font-family:var(--f-lab);font-size:10px;line-height:1;
-  letter-spacing:.04em;color:var(--muted);text-align:center;padding-bottom:5px}
-.cal-grid .c{aspect-ratio:1;display:grid;place-items:center;font:400 13px/1 var(--f-body)}
-.cal-grid .off{color:#9A9A9A}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal-grid .dh{font-family:var(--f-lab);font-size:11px;line-height:1;
+  letter-spacing:.04em;color:var(--muted);text-align:center;padding-bottom:7px}
+.cal-grid .c{aspect-ratio:1;min-height:30px;display:grid;place-items:center;
+  font:400 14px/1 var(--f-body)}
+.cal-grid .off{color:var(--off-ink)}
 .cal-grid .pad{visibility:hidden}
-.cal-grid .on{background:var(--gold);color:#000000;font-weight:700}
-.cal-grid .peak{background:var(--btn);color:#FFFFFF;font-weight:700}
-.key{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:18px}
-.key span{display:flex;align-items:center;gap:8px;font-family:var(--f-lab);
+.cal-grid .on{background:var(--gold);color:var(--bg);font-weight:700}
+.cal-grid .peak{background:var(--btn);color:var(--ink);font-weight:700}
+.key{display:flex;flex-wrap:wrap;gap:9px 22px;margin-top:22px}
+.key span{display:flex;align-items:center;gap:9px;font-family:var(--f-lab);
   font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.key i{width:14px;height:14px;display:block;border:1px solid var(--line)}
+.key i{width:15px;height:15px;display:block;border:1px solid var(--line)}
 .key .k1{background:var(--gold)}
 .key .k2{background:var(--btn)}
 .key .k3{background:transparent}
 
 /* ---- night list (shared .month markup) ---- */
-.months{display:grid;gap:16px;grid-template-columns:1fr}
+.months{display:grid;gap:18px;grid-template-columns:1fr}
 @media (min-width:760px){.months{grid-template-columns:repeat(3,1fr)}}
-.month{border:2px solid var(--blood);background:var(--well);padding:16px 14px}
+.month{border:2px solid var(--blood);background:var(--well);padding:18px 16px}
 .month-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
-  border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:13px}
-.month-head h3{font-family:var(--f-disp);font-size:26px;color:var(--gold);
-  text-transform:uppercase;letter-spacing:.02em}
-.month-head .small{font-family:var(--f-lab);font-size:11px;line-height:1;
+  border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px}
+.month-head h3{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:26px;
+  color:var(--gold);text-transform:uppercase;letter-spacing:.02em}
+.month-head .small{font-family:var(--f-lab);font-size:11.5px;line-height:1;
   letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.nights{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:7px}
-.night{border:1px solid var(--line);background:#000;padding:9px 5px;text-align:center}
-.night .dow{display:block;font-family:var(--f-lab);font-size:10px;
+.nights{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px}
+.night{border:1px solid var(--line);background:var(--bg);padding:11px 6px;text-align:center;
+  transition:border-color .2s var(--ease-out),transform .2s var(--ease-out)}
+.night:hover{border-color:var(--gold);transform:translateY(-2px)}
+.night .dow{display:block;font-family:var(--f-lab);font-size:10.5px;
   line-height:1;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.night .num{display:block;font-family:var(--f-disp);font-size:26px;
+.night .num{display:block;font-family:var(--f-disp);font-weight:var(--disp-w);font-size:28px;
   line-height:1.15;color:var(--gold)}
-.night .tag{display:block;font-family:var(--f-lab);font-size:9.5px;
-  line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-top:3px}
+.night .tag{display:block;font-family:var(--f-lab);font-size:10px;
+  line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-top:4px}
 .night.peak{border-color:var(--red)}
 .night.peak .num{color:var(--red)}
 .night.open{border-color:var(--edge-open)}
 
 /* ---- attraction cards ---- */
-.grid4{display:grid;gap:14px;grid-template-columns:1fr}
+.grid4{display:grid;gap:16px;grid-template-columns:1fr}
 @media (min-width:620px){.grid4{grid-template-columns:1fr 1fr}}
 @media (min-width:1000px){.grid4{grid-template-columns:repeat(4,1fr)}}
-.att{border:1px solid var(--line);background:var(--panel2);padding:22px 18px}
-.att h3{font-family:var(--f-disp);font-size:25px;color:var(--gold);
-  text-transform:uppercase;letter-spacing:.02em;margin-bottom:.7rem}
-.att p{font-size:15.5px;line-height:1.75;margin:0 0 1.1rem}
-.meter{display:flex;align-items:center;gap:5px}
-.meter i{width:20px;height:6px;background:#3A3A3A;display:block}
-.meter i.on{background:var(--gold)}
-.meter span{margin-left:8px;font-family:var(--f-lab);font-size:10.5px;
-  line-height:1;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-
+.att{border:1px solid var(--line);background:var(--panel2);padding:26px 22px;
+  display:flex;flex-direction:column;
+  transition:border-color .25s var(--ease-out),transform .25s var(--ease-out),
+             background .25s var(--ease-out)}
+.att:hover{border-color:var(--gold);transform:translateY(-3px)}
+.att h3{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:var(--t-3);
+  color:var(--gold);text-transform:uppercase;letter-spacing:.02em;margin-bottom:.8rem}
+.att p{font-size:16px;line-height:1.75;margin:0 0 1.3rem;flex:1}
 /* ---- countdown ---- */
-.count{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;max-width:540px;margin:0 auto}
-.count .u{border:2px solid var(--blood);background:var(--well);padding:14px 4px}
-.count .n{display:block;font-family:var(--f-disp);
-  font-size:clamp(28px,7.5vw,46px);line-height:1;color:var(--gold)}
-.count .l{display:block;font-family:var(--f-lab);font-size:10.5px;
-  line-height:1.4;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:7px}
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:660px;margin:0 auto}
+.count .u{border:2px solid var(--blood);background:var(--well);padding:20px 4px}
+.count .n{display:block;font-family:var(--f-disp);font-weight:var(--disp-w);
+  font-size:clamp(38px,8vw,64px);line-height:1;color:var(--gold);
+  font-variant-numeric:tabular-nums}
+.count .l{display:block;font-family:var(--f-lab);font-size:11px;
+  line-height:1.4;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:9px}
 
 /* ---- tiers ---- */
-.tiers{display:grid;gap:14px;grid-template-columns:1fr}
+.tiers{display:grid;gap:16px;grid-template-columns:1fr}
 @media (min-width:840px){.tiers{grid-template-columns:repeat(3,1fr)}}
-.tier{border:1px solid var(--line);background:var(--panel2);padding:24px 20px;
-  display:flex;flex-direction:column}
+.tier{border:1px solid var(--line);background:var(--panel2);padding:28px 24px;
+  display:flex;flex-direction:column;transition:transform .25s var(--ease-out)}
+.tier:hover{transform:translateY(-3px)}
 .tier.feature{border:2px solid var(--gold)}
 .tier .tag{display:inline-block;font-family:var(--f-lab);font-size:11px;
   line-height:1;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
-  border:1px solid var(--line);padding:7px 11px;align-self:flex-start;margin-bottom:15px}
-.tier.feature .tag{color:#000000;background:var(--gold);border-color:var(--gold)}
-.tier h3{font-family:var(--f-disp);font-size:27px;color:var(--gold);
-  text-transform:uppercase;letter-spacing:.02em;margin-bottom:.4rem}
-.tier .price{font-family:var(--f-lab);font-size:40px;line-height:1;
-  color:var(--ink);margin:.4rem 0 .35rem;letter-spacing:.02em}
+  border:1px solid var(--line);padding:8px 12px;align-self:flex-start;margin-bottom:17px}
+.tier.feature .tag{color:var(--bg);background:var(--gold);border-color:var(--gold)}
+.tier h3{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:var(--t-3);
+  color:var(--gold);text-transform:uppercase;letter-spacing:.02em;margin-bottom:.4rem}
+.tier .price{font-family:var(--f-lab);font-size:46px;line-height:1;
+  color:var(--ink);margin:.5rem 0 .35rem;letter-spacing:.02em}
 .tier .price small{font-family:var(--f-body);font-size:12px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--muted);margin-left:7px}
 .tier .fine{margin-bottom:0}
-.tier ul{list-style:none;padding:0;margin:1.1rem 0 1.4rem;flex:1}
-.tier li{position:relative;padding-left:19px;margin-bottom:.6rem;font-size:15.5px;line-height:1.7}
+.tier ul{list-style:none;padding:0;margin:1.2rem 0 1.5rem;flex:1}
+.tier li{position:relative;padding-left:20px;margin-bottom:.65rem;font-size:16px;line-height:1.7}
 .tier li::before{content:"";position:absolute;left:0;top:.68em;width:9px;height:2px;
   background:var(--red)}
 
 /* ---- price ladder ---- */
-.ladder-wrap{margin-top:24px}
+.ladder-wrap{margin-top:26px}
 .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line)}
 .ladder{border-collapse:collapse;width:100%;min-width:520px;background:var(--panel2)}
-.ladder th,.ladder td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--line);
-  font-size:15px}
+.ladder th,.ladder td{padding:15px;text-align:left;border-bottom:1px solid var(--line);
+  font-size:15.5px}
 .ladder th{font-family:var(--f-lab);font-size:12px;line-height:1.3;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--gold);background:#000}
-.ladder td.amt{font-family:var(--f-lab);font-size:20px;color:var(--ink);
+  letter-spacing:.16em;text-transform:uppercase;color:var(--gold);background:var(--bg)}
+.ladder td.amt{font-family:var(--f-lab);font-size:22px;color:var(--ink);
   letter-spacing:.02em}
 .ladder td.hot{color:var(--orange)}
 .ladder tr:last-child td{border-bottom:0}
 .ladder-wrap .fine{margin-bottom:10px}
 
 /* ---- info cards ---- */
-.two{display:grid;gap:16px;grid-template-columns:1fr}
-@media (min-width:860px){.two{grid-template-columns:1fr 1fr;gap:24px}}
-.card{border:1px solid var(--line);background:var(--panel2);padding:24px 20px}
-.card h3{font-family:var(--f-disp);font-size:26px;color:var(--gold);
-  text-transform:uppercase;letter-spacing:.02em;margin-bottom:.9rem}
-.card p{font-size:15.5px}
+.two{display:grid;gap:18px;grid-template-columns:1fr}
+@media (min-width:860px){.two{grid-template-columns:1fr 1fr;gap:26px}}
+.card{border:1px solid var(--line);background:var(--panel2);padding:28px 24px}
+.card h3{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:var(--t-3);
+  color:var(--gold);text-transform:uppercase;letter-spacing:.02em;margin-bottom:1rem}
+.card p{font-size:16px}
 .card p:last-child{margin-bottom:0}
 .deets{list-style:none;padding:0;margin:0}
-.deets li{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+.deets li{display:flex;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}
 .deets li:last-child{border-bottom:0}
-.deets b{flex:0 0 96px;font-family:var(--f-lab);font-size:11px;
-  line-height:2;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
-.deets span{font-size:15.5px}
+.deets b{flex:0 0 100px;font-family:var(--f-lab);font-size:11.5px;
+  line-height:1.9;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.deets span{font-size:16px}
 
 /* ---- rules ---- */
-.warn{border:2px solid var(--red);background:#0A0000;padding:clamp(22px,4vw,34px)}
-.warn h2{font-family:var(--f-disp);font-size:clamp(24px,4.6vw,40px);
-  color:var(--red);text-transform:uppercase;letter-spacing:.02em;margin-bottom:1.1rem}
-.warn ul{list-style:none;padding:0;margin:0;display:grid;gap:11px}
-@media (min-width:760px){.warn ul{grid-template-columns:1fr 1fr;gap:11px 28px}}
-.warn li{position:relative;padding-left:21px;font-size:15.5px;line-height:1.75}
+.warn{border:2px solid var(--red);background:var(--well);padding:clamp(26px,4vw,40px);
+  background-image:radial-gradient(70% 100% at 0% 0%,var(--tex-a),transparent 60%)}
+.warn h2{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:var(--t-2);
+  color:var(--red);text-transform:uppercase;letter-spacing:.02em;margin-bottom:1.3rem}
+.warn ul{list-style:none;padding:0;margin:0;display:grid;gap:13px}
+@media (min-width:760px){.warn ul{grid-template-columns:1fr 1fr;gap:13px 30px}}
+.warn li{position:relative;padding-left:22px;font-size:16px;line-height:1.75}
 .warn li::before{content:"";position:absolute;left:0;top:.72em;width:10px;height:2px;
   background:var(--red)}
 
 /* ---- faq ---- */
 .faq{max-width:840px}
 .q{border-bottom:1px solid var(--line)}
-.q summary{cursor:pointer;list-style:none;padding:18px 42px 18px 0;position:relative;
-  font-family:var(--f-lab);font-size:19px;letter-spacing:.02em;color:var(--gold)}
+.q summary{cursor:pointer;list-style:none;padding:20px 44px 20px 0;position:relative;
+  font-family:var(--f-lab);font-size:20px;letter-spacing:.02em;color:var(--gold);
+  transition:color .2s var(--ease-out)}
+.q summary:hover{color:var(--acc-hi)}
 .q summary::-webkit-details-marker{display:none}
-.q summary::after{content:"+";position:absolute;right:8px;top:15px;color:var(--red);font-size:24px}
-.q[open] summary::after{content:"\2013"}
-.q p{font-size:15.5px;padding:0 0 18px;margin:0}
+.q summary::after{content:"+";position:absolute;right:8px;top:16px;color:var(--red);font-size:26px;
+  transition:transform .25s var(--ease)}
+.q[open] summary::after{content:"\2013";transform:none}
+.q p{font-size:16px;padding:0 0 20px;margin:0}
 
 /* ---- signup ---- */
 .signup-band{background:var(--panel);border-top:2px solid var(--blood)}
-.signup-band h2{font-family:var(--f-disp);color:var(--gold);
-  text-transform:uppercase;font-size:clamp(28px,5.4vw,50px);letter-spacing:.015em;
-  margin-bottom:.8rem}
-.fields{display:grid;gap:11px;grid-template-columns:1fr;margin-top:20px}
+.signup-band h2{font-family:var(--f-disp);font-weight:var(--disp-w);color:var(--gold);
+  text-transform:uppercase;font-size:var(--t-1);letter-spacing:.015em;margin-bottom:.9rem}
+.fields{display:grid;gap:12px;grid-template-columns:1fr;margin-top:24px}
 @media (min-width:720px){.fields{grid-template-columns:1fr 1fr auto;align-items:end}}
 .field{text-align:left}
-.field label{display:block;font-family:var(--f-lab);font-size:11px;
-  line-height:1.8;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-.field input{width:100%;background:#000;border:1px solid var(--line);color:var(--ink);
-  padding:14px;font:400 16px/1.4 var(--f-body)}
-.field input::placeholder{color:#9A9A9A}
-.form-msg{margin:14px 0 0;font-family:var(--f-lab);font-size:15px;
+.field label{display:block;font-family:var(--f-lab);font-size:11.5px;
+  line-height:1.8;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.field input{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  padding:15px;font:400 16px/1.4 var(--f-body);
+  transition:border-color .2s var(--ease-out)}
+.field input:hover{border-color:var(--muted)}
+.field input::placeholder{color:var(--off-ink)}
+.form-msg{margin:16px 0 0;font-family:var(--f-lab);font-size:15px;
   letter-spacing:.06em;color:var(--gold);min-height:1.2em}
-.signup-band .fine{margin-top:15px}
+.signup-band .fine{margin-top:16px}
 
 /* ---- contact & connect band (their .reachUsWrap) ---- */
-.reach{background:var(--maroon);text-align:center;padding:clamp(30px,5vw,54px) 0}
-.reach h2{font-family:var(--f-disp);color:var(--gold);text-transform:uppercase;
-  font-size:clamp(26px,5.2vw,48px);letter-spacing:.015em;margin-bottom:1rem}
+.reach{background:var(--maroon);text-align:center;padding:clamp(36px,5.5vw,64px) 0}
+.reach h2{font-family:var(--f-disp);font-weight:var(--disp-w);color:var(--gold);
+  text-transform:uppercase;font-size:var(--t-2);letter-spacing:.015em;margin-bottom:1.1rem}
 /* --red is 4.6:1 here, --ember is 5.0:1. Use ember on maroon, everywhere. */
 .reach a{color:var(--ember);text-decoration:none;font-family:var(--f-lab);
-  font-size:clamp(16px,2.8vw,20px);letter-spacing:.04em}
+  font-size:clamp(17px,2.8vw,21px);letter-spacing:.04em}
 .reach a:hover{color:var(--gold)}
-.reach p{margin:0 0 .55rem}
-.reach .fine{color:#CFCFCF;margin-top:14px}
-.reach .pips{margin:18px auto 0;justify-content:center}
+.reach p{margin:0 0 .6rem}
+.reach .fine{color:var(--foot-ink);margin-top:16px}
+.reach .pips{margin:20px auto 0;justify-content:center}
 .reach .pips a{border-color:var(--ember);color:var(--ember);font-size:11px}
-.reach .pips a:hover{background:var(--ember);color:#1A0000}
+.reach .pips a:hover{background:var(--ember);color:var(--maroon)}
 
 /* ---- footer ---- */
-footer{background:#000;padding:26px 0 30px;
+footer{background:var(--bg);padding:28px 0 32px;
   background-image:repeating-linear-gradient(90deg,var(--hatch) 0 2px,transparent 2px 9px);
   background-size:100% 3px;background-repeat:no-repeat;background-position:0 0}
-.foot{display:grid;gap:20px;grid-template-columns:1fr;padding-top:18px}
+.foot{display:grid;gap:22px;grid-template-columns:1fr;padding-top:20px}
 @media (min-width:760px){.foot{grid-template-columns:1.4fr 1fr 1fr}}
 .foot h4{font-family:var(--f-lab);font-size:12px;line-height:1.6;
-  letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 .8rem}
-.foot p,.foot li{font-size:15px;color:#CFCFCF;margin:0 0 .45rem}
+  letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 .9rem}
+.foot p,.foot li{font-size:15.5px;color:var(--foot-ink);margin:0 0 .5rem}
 .foot ul{list-style:none;padding:0;margin:0}
-.foot a{color:#CFCFCF;text-decoration:none}
+.foot a{color:var(--foot-ink);text-decoration:none}
 .foot a:hover{color:var(--gold)}
-.foot .mk{font-family:var(--f-disp);font-size:26px;color:var(--red);
-  text-transform:uppercase;letter-spacing:.02em;margin-bottom:.5rem}
-.legal{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;display:flex;
+.foot .mk{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:28px;color:var(--red);
+  text-transform:uppercase;letter-spacing:.02em;margin-bottom:.6rem}
+.legal{border-top:1px solid var(--line);margin-top:26px;padding-top:18px;display:flex;
   flex-wrap:wrap;gap:8px 20px;justify-content:space-between;align-items:center}
 .legal a{color:var(--red);text-decoration:none}
 .legal a:hover{color:var(--gold)}
 
-/* ---- reveal ---- */
-.js .rise{opacity:0;transform:translateY(16px)}
-.js .rise.in{opacity:1;transform:none;transition:opacity .7s ease,transform .7s ease}
+/* ---- reveal ----
+   16px and 700ms linear-ease read as a fade-in on a slow page. 14px on the
+   standard ease-out curve lands sooner and settles, which is the difference
+   between "something moved" and "that was deliberate". */
+.js .rise{opacity:0;transform:translateY(14px)}
+.js .rise.in{opacity:1;transform:none;
+  transition:opacity .62s var(--ease),transform .62s var(--ease)}
+/* children of a staggered container come in 70ms apart, capped at six so a
+   long grid never feels like it is loading */
+.js .rise[data-stagger]>*{opacity:0;transform:translateY(12px)}
+.js .rise[data-stagger].in>*{opacity:1;transform:none;
+  transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.js .rise[data-stagger].in>*:nth-child(2){transition-delay:.07s}
+.js .rise[data-stagger].in>*:nth-child(3){transition-delay:.14s}
+.js .rise[data-stagger].in>*:nth-child(4){transition-delay:.21s}
+.js .rise[data-stagger].in>*:nth-child(5){transition-delay:.28s}
+.js .rise[data-stagger].in>*:nth-child(n+6){transition-delay:.35s}
 @media (prefers-reduced-motion:reduce){
-  .js .rise{opacity:1;transform:none;transition:none}
+  .js .rise,.js .rise[data-stagger]>*{opacity:1;transform:none;transition:none}
+  .hero .fog,.cue i{animation:none}
   *{animation-duration:.001ms !important;transition-duration:.001ms !important}
 }
 
@@ -363,6 +498,7 @@ footer{background:#000;padding:26px 0 30px;
   --f-lab:Oswald,Impact,sans-serif;
   --f-body:"Source Sans 3",ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
   --disp-w:400;
+  --wm-scale:1;
   --bg:#050403;
   --panel:#0A0807;
   --panel2:#12100E;
@@ -393,12 +529,12 @@ footer{background:#000;padding:26px 0 30px;
 }
 
 /* display face weight, pinned (several of these faces ship one weight only) */
-.claim h1,.claim h2,.claim h3,.callout .big,.colhead,.subhead,.sechead h2,.disp,
-.cal-name,.month-head h3,.night .num,.count .n,.tier h3,.att h3,.card h3,.warn h2,
+.claim h1,.claim h2,.claim h3,.callout .big,.colhead,.sechead h2,.disp,
+.month-head h3,.night .num,.count .n,.stat .n,.tier h3,.att h3,.card h3,.warn h2,
 .signup-band h2,.reach h2,.foot .mk,.wordmark .w1,.wordmark .w2{font-weight:var(--disp-w)}
 
 /* grid tracks may shrink below their content; month heads wrap */
-.month,.cal,.colwrap,.tier,.att,.card,.fc,.count .u{min-width:0}
+.month,.cal,.colwrap,.tier,.att,.card,.fc,.count .u,.stat,.tape{min-width:0}
 .month-head{flex-wrap:wrap}
 
 /* handbill: hairline strip rather than the heavy 2px bar, wider display tracking */
