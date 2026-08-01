@@ -2864,6 +2864,7 @@
         <div class="hm-when">🎃 September → November</div>
         <div class="hm-more">✦ More details coming soon ✦</div>
         <form id="hmForm" class="hm-form" novalidate>
+          <input type="text" id="hmName" name="name" placeholder="Full name" autocomplete="name" required>
           <input type="email" id="hmEmail" name="email" placeholder="Email" autocomplete="email" required>
           <input type="tel" id="hmPhone" name="phone" placeholder="Phone" autocomplete="tel" required>
           <button type="submit" id="hmBtn" class="hm-btn">Get on the list 🦇</button>
@@ -2880,15 +2881,21 @@
         var reEmail=/^[^@\s]+@[^@\s]+\.[^@\s]+$/;
         f.addEventListener('submit',async function(e){
           e.preventDefault();
+          var name=document.getElementById('hmName').value.trim().replace(/\s+/g,' ');
           var email=document.getElementById('hmEmail').value.trim();
           var phone=document.getElementById('hmPhone').value.trim();
           var digits=phone.replace(/\D/g,'');
+          if(name.length<2){s.style.color='#FF7518';s.textContent='Enter your name.';return;}
           if(!reEmail.test(email)){s.style.color='#FF7518';s.textContent='Enter a valid email.';return;}
           if(digits.length<10){s.style.color='#FF7518';s.textContent='Enter a valid phone number.';return;}
+          var parts=name.split(' ');
+          var first=parts[0];
+          var last=parts.length>1?parts.slice(1).join(' '):'-';
           b.disabled=true;var t=b.textContent;b.textContent='Summoning…';
           try{
-            var res=await fetch(U+'/rest/v1/signups',{method:'POST',headers:{'apikey':A,'Authorization':'Bearer '+A,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({first_name:'Haunted',last_name:'Mansion',email:email,phone:phone})});
-            if(res.status===201||res.status===204){f.style.display='none';s.style.color='#6AFF8F';s.innerHTML="🎃 You're on the list. The mansion will call for you.";}
+            var res=await fetch(U+'/rest/v1/signups',{method:'POST',headers:{'apikey':A,'Authorization':'Bearer '+A,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({first_name:first,last_name:last,email:email,phone:phone,source:'haunted_mansion'})});
+            if(res.status===201||res.status===204){f.style.display='none';s.style.color='#6AFF8F';s.innerHTML="🎃 You're on the list, "+first+". The mansion will call for you.";}
+            else if(res.status===409){f.style.display='none';s.style.color='#6AFF8F';s.innerHTML="🎃 You're already on the list, "+first+". The mansion remembers you.";}
             else{s.style.color='#FF7518';s.textContent='Could not add you — try again.';b.disabled=false;b.textContent=t;}
           }catch(err){s.style.color='#FF7518';s.textContent='Network error — try again.';b.disabled=false;b.textContent=t;}
         });
