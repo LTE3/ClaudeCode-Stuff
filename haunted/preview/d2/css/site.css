@@ -1,0 +1,411 @@
+/* ============================================================
+   v20 "Marquee" -- structural model: dominionofterror.com
+   Gold display headings on flat black, orange subheads, red accents,
+   two-column panel rows, flat text price list, maroon contact band.
+   Type: Creepster display / Fjalla One labels / Open Sans body.
+   ============================================================ */
+:root{
+  --bg:#000000; --panel:#0B0B0B; --panel2:#121212; --line:#2E2E2E;
+  --ink:#FFFFFF; --body:#EEEEEE; --muted:#B7B7B7;
+  --gold:#FFCC00; --orange:#FF6600; --red:#FF0000; --ember:#FF3300;
+  --maroon:#330000; --blood:#660000;
+  /* every one of those five brand colours clears 4.5:1 on black on its own:
+     gold 13.9:1, orange 7.1:1, red 5.2:1, ember 6.0:1. No lightened tint is
+     needed here -- unlike v21, this palette is body-text safe as drawn.
+     On the --maroon band red drops to 4.6:1, so that band uses --ember. */
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--body);
+  font:400 16.5px/1.75 var(--f-body);
+  overflow-x:hidden;
+}
+img{max-width:100%;height:auto}
+a{color:var(--red)}
+a:hover{color:var(--orange)}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{
+  outline:2px solid var(--gold);outline-offset:3px}
+h1,h2,h3,h4{margin:0;line-height:1.05}
+p{margin:0 0 1.1rem}
+.wrap{width:min(1140px,92vw);margin-inline:auto}
+.narrow{width:min(760px,92vw)}
+.center{text-align:center}
+.muted{color:var(--muted)}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:12px;top:12px;z-index:99;background:var(--gold);color:#000;padding:10px 16px}
+
+/* display + label faces */
+.disp{font-family:var(--f-disp);font-weight:400;
+  text-transform:uppercase;letter-spacing:.02em;color:var(--gold)}
+.lab{font-family:var(--f-lab);text-transform:uppercase;letter-spacing:.06em}
+.fine{font:400 13px/1.7 var(--f-body);color:var(--muted);margin:0}
+.eyebrow{font-family:var(--f-lab);font-size:14px;line-height:1.4;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin:0 0 .9rem}
+
+/* preview chrome */
+.preview-bar{background:#161616;color:#EEEEEE;text-align:center;
+  border-bottom:1px solid var(--line);font-family:var(--f-lab);
+  font-size:13px;line-height:1.5;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px}
+.preview-bar a{color:var(--gold)}
+
+/* ---- thin red nav strip (their .navbar) ---- */
+.strip{position:sticky;top:0;z-index:40;background:#000;border-bottom:2px solid var(--blood)}
+.strip-in{width:min(1140px,92vw);margin-inline:auto;display:flex;align-items:center;
+  gap:18px;padding:9px 0;flex-wrap:wrap}
+.strip nav{display:flex;gap:18px;flex-wrap:wrap}
+.strip nav a{font-family:var(--f-lab);font-size:15px;line-height:1;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--red);text-decoration:none;padding:5px 0}
+.strip nav a:hover{color:var(--gold)}
+.strip nav a[aria-current]{color:var(--gold)}
+.pips{margin-left:auto;display:flex;gap:9px}
+.pips a{width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--blood);
+  color:var(--red);font-family:var(--f-lab);font-size:11px;
+  letter-spacing:.04em;text-decoration:none;border-radius:50%}
+.pips a:hover{background:var(--blood);color:var(--gold)}
+
+/* ---- hero band: short, full-bleed, wordmark centred ---- */
+.hero{position:relative;background:#000;padding:clamp(46px,9vw,86px) 0 clamp(38px,7vw,68px);
+  text-align:center;overflow:hidden;
+  border-bottom:2px solid var(--blood)}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(78% 90% at 50% 0%,var(--glow-a),transparent 68%),
+             radial-gradient(46% 50% at 50% 104%,var(--glow-b),transparent 72%)}
+.hero>*{position:relative;z-index:1}
+.wordmark{display:block;font-family:var(--f-disp);line-height:.9;
+  text-transform:uppercase;color:var(--red);
+  text-shadow:0 0 22px var(--wm-glow),0 3px 0 var(--wm-shadow)}
+.wordmark .w1{display:block;font-size:clamp(40px,11.5vw,112px);letter-spacing:.02em}
+.wordmark .w2{display:block;font-size:clamp(26px,7vw,68px);color:var(--gold);
+  text-shadow:0 0 18px var(--wm-glow2);margin-top:.05em}
+.hero .kick{font-family:var(--f-lab);font-size:13px;line-height:1.5;
+  letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin:0 0 1.5rem}
+.badge{display:inline-block;margin-top:22px;border:2px solid var(--gold);
+  padding:9px 16px;font-family:var(--f-lab);font-size:13px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+
+/* ---- the claim stack (their gold H1 / orange H3 / red line) ---- */
+.claim{background:#000;text-align:center;padding:clamp(38px,6.5vw,72px) 0 clamp(26px,4vw,44px)}
+.claim h1,.claim h2{font-family:var(--f-disp);color:var(--gold);
+  text-transform:uppercase;font-size:clamp(28px,6.4vw,62px);letter-spacing:.015em;margin:0}
+.claim h3{font-family:var(--f-disp);color:var(--orange);
+  text-transform:uppercase;font-size:clamp(20px,4.4vw,42px);letter-spacing:.015em;
+  margin:.5rem 0 0;font-weight:400}
+.claim .say{font-family:var(--f-lab);font-size:clamp(14px,2.4vw,19px);
+  letter-spacing:.06em;color:var(--red);margin:1.1rem 0 0;text-transform:none}
+
+/* ---- the stacked ticket call ---- */
+.callout{background:#000;text-align:center;padding:clamp(26px,4.5vw,52px) 0 clamp(40px,7vw,80px)}
+.callout .stack{display:inline-block;text-decoration:none}
+.callout .big{display:block;font-family:var(--f-disp);
+  font-size:clamp(38px,10vw,86px);line-height:.92;color:var(--gold);text-transform:uppercase}
+.callout .sub{display:block;font-family:var(--f-lab);
+  font-size:clamp(15px,3vw,26px);letter-spacing:.3em;text-transform:uppercase;
+  color:var(--red);margin-top:.35em}
+.callout .stack:hover .big{color:var(--acc-hi)}
+.callout .stack:hover .sub{color:var(--orange)}
+.callout .fine{margin-top:20px}
+
+/* ---- buttons ---- */
+.btn{display:inline-block;font-family:var(--f-lab);font-size:15px;
+  line-height:1;letter-spacing:.14em;text-transform:uppercase;padding:15px 26px;
+  border:2px solid transparent;cursor:pointer;text-decoration:none;text-align:center}
+/* white on pure #FF0000 is only 4.0:1 -- fine for the display type this palette uses
+   it for, short of the 4.5:1 bar for a 15px button label. --btnred is the same hue
+   dropped to 6.4:1 behind white, and it is the exact red the peak calendar cells use. */
+.btn-primary{background:var(--btn);color:#FFFFFF;border-color:var(--btn)}
+.btn-primary:hover{background:var(--btn-hi);border-color:var(--btn-hi);color:#FFFFFF}
+.btn-gold{background:var(--gold);color:#000000;border-color:var(--gold)}
+.btn-gold:hover{background:var(--acc-hi);border-color:var(--acc-hi);color:#000000}
+.btn-ghost{background:transparent;color:var(--gold);border-color:var(--gold)}
+.btn-ghost:hover{background:var(--ghost-hi);color:var(--gold)}
+/* disabled state is drawn with real colours, not opacity -- 5.1:1, still legible */
+.btn:disabled{background:#2A2A2A;color:#9A9A9A;border-color:#3A3A3A;cursor:not-allowed}
+.btn:disabled:hover{background:#2A2A2A;color:#9A9A9A;border-color:#3A3A3A}
+
+/* ---- section shell ---- */
+.band{padding:clamp(44px,7vw,84px) 0}
+.band.tex{background:var(--panel);
+  background-image:radial-gradient(58% 70% at 12% 0%,var(--tex-a),transparent 62%),
+                   radial-gradient(52% 66% at 92% 100%,var(--tex-b),transparent 66%)}
+.band.flat{background:#000}
+.sechead{margin-bottom:clamp(20px,3vw,34px)}
+.sechead h2{font-family:var(--f-disp);color:var(--gold);text-transform:uppercase;
+  font-size:clamp(26px,5.6vw,54px);letter-spacing:.015em}
+.sechead p{color:var(--muted);margin:.9rem 0 0;max-width:56ch}
+.center .sechead p{margin-inline:auto}
+
+/* their two-column row */
+.row2{display:grid;gap:clamp(30px,5vw,54px);grid-template-columns:1fr}
+@media (min-width:880px){.row2{grid-template-columns:1fr 1fr}}
+.colhead{font-family:var(--f-disp);color:var(--gold);text-transform:uppercase;
+  font-size:clamp(26px,5.4vw,50px);letter-spacing:.015em;margin:0 0 1.1rem}
+.subhead{font-family:var(--f-disp);color:var(--gold);text-transform:uppercase;
+  font-size:clamp(20px,3.6vw,30px);letter-spacing:.015em;margin:1.6rem 0 .7rem;font-weight:400}
+.colwrap p{font-size:16px}
+.colwrap ul{margin:0 0 1.1rem;padding-left:20px}
+.colwrap li{margin-bottom:.45rem;font-size:16px}
+
+/* flat gold price lines -- their admission block, no cards */
+.plines{list-style:none;margin:0 0 1.2rem;padding:0}
+.plines li{font-family:var(--f-lab);font-size:clamp(17px,3vw,22px);
+  line-height:1.5;letter-spacing:.03em;color:var(--gold);text-transform:uppercase}
+.plines li span{color:var(--body);font-family:var(--f-body);font-size:14px;
+  letter-spacing:0;text-transform:none;display:block;margin-top:2px}
+.hours{font-family:var(--f-lab);font-size:clamp(16px,2.8vw,20px);
+  letter-spacing:.04em;color:var(--body);text-transform:uppercase;margin:0 0 .5rem}
+.note{color:var(--body);font-size:15.5px}
+
+/* ---- calendars ---- */
+/* the home page prints the calendar inside one half of a two-column row, so three
+   months across would give each grid ~180px and 22px day cells. Two across keeps
+   the cells thumb-sized. .cals.wide is the full-bleed version on the dates page. */
+.cals{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:560px){.cals{grid-template-columns:1fr 1fr}}
+@media (min-width:900px){.cals.wide{grid-template-columns:repeat(3,1fr);gap:20px}}
+.cal{border:2px solid var(--blood);background:var(--well);padding:14px 12px 16px}
+.cal-name{font-family:var(--f-disp);font-size:24px;color:var(--gold);
+  text-transform:uppercase;text-align:center;margin:0 0 12px;letter-spacing:.02em}
+.cal-name b{font-weight:400;color:var(--orange)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-grid .dh{font-family:var(--f-lab);font-size:10px;line-height:1;
+  letter-spacing:.04em;color:var(--muted);text-align:center;padding-bottom:5px}
+.cal-grid .c{aspect-ratio:1;display:grid;place-items:center;font:400 13px/1 var(--f-body)}
+.cal-grid .off{color:#9A9A9A}
+.cal-grid .pad{visibility:hidden}
+.cal-grid .on{background:var(--gold);color:#000000;font-weight:700}
+.cal-grid .peak{background:var(--btn);color:#FFFFFF;font-weight:700}
+.key{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:18px}
+.key span{display:flex;align-items:center;gap:8px;font-family:var(--f-lab);
+  font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.key i{width:14px;height:14px;display:block;border:1px solid var(--line)}
+.key .k1{background:var(--gold)}
+.key .k2{background:var(--btn)}
+.key .k3{background:transparent}
+
+/* ---- night list (shared .month markup) ---- */
+.months{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:760px){.months{grid-template-columns:repeat(3,1fr)}}
+.month{border:2px solid var(--blood);background:var(--well);padding:16px 14px}
+.month-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:13px}
+.month-head h3{font-family:var(--f-disp);font-size:26px;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.02em}
+.month-head .small{font-family:var(--f-lab);font-size:11px;line-height:1;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.nights{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:7px}
+.night{border:1px solid var(--line);background:#000;padding:9px 5px;text-align:center}
+.night .dow{display:block;font-family:var(--f-lab);font-size:10px;
+  line-height:1;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.night .num{display:block;font-family:var(--f-disp);font-size:26px;
+  line-height:1.15;color:var(--gold)}
+.night .tag{display:block;font-family:var(--f-lab);font-size:9.5px;
+  line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-top:3px}
+.night.peak{border-color:var(--red)}
+.night.peak .num{color:var(--red)}
+.night.open{border-color:var(--edge-open)}
+
+/* ---- attraction cards ---- */
+.grid4{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:620px){.grid4{grid-template-columns:1fr 1fr}}
+@media (min-width:1000px){.grid4{grid-template-columns:repeat(4,1fr)}}
+.att{border:1px solid var(--line);background:var(--panel2);padding:22px 18px}
+.att h3{font-family:var(--f-disp);font-size:25px;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.02em;margin-bottom:.7rem}
+.att p{font-size:15.5px;line-height:1.75;margin:0 0 1.1rem}
+.meter{display:flex;align-items:center;gap:5px}
+.meter i{width:20px;height:6px;background:#3A3A3A;display:block}
+.meter i.on{background:var(--gold)}
+.meter span{margin-left:8px;font-family:var(--f-lab);font-size:10.5px;
+  line-height:1;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+
+/* ---- countdown ---- */
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;max-width:540px;margin:0 auto}
+.count .u{border:2px solid var(--blood);background:var(--well);padding:14px 4px}
+.count .n{display:block;font-family:var(--f-disp);
+  font-size:clamp(28px,7.5vw,46px);line-height:1;color:var(--gold)}
+.count .l{display:block;font-family:var(--f-lab);font-size:10.5px;
+  line-height:1.4;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:7px}
+
+/* ---- tiers ---- */
+.tiers{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:840px){.tiers{grid-template-columns:repeat(3,1fr)}}
+.tier{border:1px solid var(--line);background:var(--panel2);padding:24px 20px;
+  display:flex;flex-direction:column}
+.tier.feature{border:2px solid var(--gold)}
+.tier .tag{display:inline-block;font-family:var(--f-lab);font-size:11px;
+  line-height:1;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--line);padding:7px 11px;align-self:flex-start;margin-bottom:15px}
+.tier.feature .tag{color:#000000;background:var(--gold);border-color:var(--gold)}
+.tier h3{font-family:var(--f-disp);font-size:27px;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.02em;margin-bottom:.4rem}
+.tier .price{font-family:var(--f-lab);font-size:40px;line-height:1;
+  color:var(--ink);margin:.4rem 0 .35rem;letter-spacing:.02em}
+.tier .price small{font-family:var(--f-body);font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin-left:7px}
+.tier .fine{margin-bottom:0}
+.tier ul{list-style:none;padding:0;margin:1.1rem 0 1.4rem;flex:1}
+.tier li{position:relative;padding-left:19px;margin-bottom:.6rem;font-size:15.5px;line-height:1.7}
+.tier li::before{content:"";position:absolute;left:0;top:.68em;width:9px;height:2px;
+  background:var(--red)}
+
+/* ---- price ladder ---- */
+.ladder-wrap{margin-top:24px}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line)}
+.ladder{border-collapse:collapse;width:100%;min-width:520px;background:var(--panel2)}
+.ladder th,.ladder td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--line);
+  font-size:15px}
+.ladder th{font-family:var(--f-lab);font-size:12px;line-height:1.3;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--gold);background:#000}
+.ladder td.amt{font-family:var(--f-lab);font-size:20px;color:var(--ink);
+  letter-spacing:.02em}
+.ladder td.hot{color:var(--orange)}
+.ladder tr:last-child td{border-bottom:0}
+.ladder-wrap .fine{margin-bottom:10px}
+
+/* ---- info cards ---- */
+.two{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:860px){.two{grid-template-columns:1fr 1fr;gap:24px}}
+.card{border:1px solid var(--line);background:var(--panel2);padding:24px 20px}
+.card h3{font-family:var(--f-disp);font-size:26px;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.02em;margin-bottom:.9rem}
+.card p{font-size:15.5px}
+.card p:last-child{margin-bottom:0}
+.deets{list-style:none;padding:0;margin:0}
+.deets li{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+.deets li:last-child{border-bottom:0}
+.deets b{flex:0 0 96px;font-family:var(--f-lab);font-size:11px;
+  line-height:2;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.deets span{font-size:15.5px}
+
+/* ---- rules ---- */
+.warn{border:2px solid var(--red);background:#0A0000;padding:clamp(22px,4vw,34px)}
+.warn h2{font-family:var(--f-disp);font-size:clamp(24px,4.6vw,40px);
+  color:var(--red);text-transform:uppercase;letter-spacing:.02em;margin-bottom:1.1rem}
+.warn ul{list-style:none;padding:0;margin:0;display:grid;gap:11px}
+@media (min-width:760px){.warn ul{grid-template-columns:1fr 1fr;gap:11px 28px}}
+.warn li{position:relative;padding-left:21px;font-size:15.5px;line-height:1.75}
+.warn li::before{content:"";position:absolute;left:0;top:.72em;width:10px;height:2px;
+  background:var(--red)}
+
+/* ---- faq ---- */
+.faq{max-width:840px}
+.q{border-bottom:1px solid var(--line)}
+.q summary{cursor:pointer;list-style:none;padding:18px 42px 18px 0;position:relative;
+  font-family:var(--f-lab);font-size:19px;letter-spacing:.02em;color:var(--gold)}
+.q summary::-webkit-details-marker{display:none}
+.q summary::after{content:"+";position:absolute;right:8px;top:15px;color:var(--red);font-size:24px}
+.q[open] summary::after{content:"\2013"}
+.q p{font-size:15.5px;padding:0 0 18px;margin:0}
+
+/* ---- signup ---- */
+.signup-band{background:var(--panel);border-top:2px solid var(--blood)}
+.signup-band h2{font-family:var(--f-disp);color:var(--gold);
+  text-transform:uppercase;font-size:clamp(28px,5.4vw,50px);letter-spacing:.015em;
+  margin-bottom:.8rem}
+.fields{display:grid;gap:11px;grid-template-columns:1fr;margin-top:20px}
+@media (min-width:720px){.fields{grid-template-columns:1fr 1fr auto;align-items:end}}
+.field{text-align:left}
+.field label{display:block;font-family:var(--f-lab);font-size:11px;
+  line-height:1.8;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.field input{width:100%;background:#000;border:1px solid var(--line);color:var(--ink);
+  padding:14px;font:400 16px/1.4 var(--f-body)}
+.field input::placeholder{color:#9A9A9A}
+.form-msg{margin:14px 0 0;font-family:var(--f-lab);font-size:15px;
+  letter-spacing:.06em;color:var(--gold);min-height:1.2em}
+.signup-band .fine{margin-top:15px}
+
+/* ---- contact & connect band (their .reachUsWrap) ---- */
+.reach{background:var(--maroon);text-align:center;padding:clamp(30px,5vw,54px) 0}
+.reach h2{font-family:var(--f-disp);color:var(--gold);text-transform:uppercase;
+  font-size:clamp(26px,5.2vw,48px);letter-spacing:.015em;margin-bottom:1rem}
+/* --red is 4.6:1 here, --ember is 5.0:1. Use ember on maroon, everywhere. */
+.reach a{color:var(--ember);text-decoration:none;font-family:var(--f-lab);
+  font-size:clamp(16px,2.8vw,20px);letter-spacing:.04em}
+.reach a:hover{color:var(--gold)}
+.reach p{margin:0 0 .55rem}
+.reach .fine{color:#CFCFCF;margin-top:14px}
+.reach .pips{margin:18px auto 0;justify-content:center}
+.reach .pips a{border-color:var(--ember);color:var(--ember);font-size:11px}
+.reach .pips a:hover{background:var(--ember);color:#1A0000}
+
+/* ---- footer ---- */
+footer{background:#000;padding:26px 0 30px;
+  background-image:repeating-linear-gradient(90deg,var(--hatch) 0 2px,transparent 2px 9px);
+  background-size:100% 3px;background-repeat:no-repeat;background-position:0 0}
+.foot{display:grid;gap:20px;grid-template-columns:1fr;padding-top:18px}
+@media (min-width:760px){.foot{grid-template-columns:1.4fr 1fr 1fr}}
+.foot h4{font-family:var(--f-lab);font-size:12px;line-height:1.6;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 .8rem}
+.foot p,.foot li{font-size:15px;color:#CFCFCF;margin:0 0 .45rem}
+.foot ul{list-style:none;padding:0;margin:0}
+.foot a{color:#CFCFCF;text-decoration:none}
+.foot a:hover{color:var(--gold)}
+.foot .mk{font-family:var(--f-disp);font-size:26px;color:var(--red);
+  text-transform:uppercase;letter-spacing:.02em;margin-bottom:.5rem}
+.legal{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;display:flex;
+  flex-wrap:wrap;gap:8px 20px;justify-content:space-between;align-items:center}
+.legal a{color:var(--red);text-decoration:none}
+.legal a:hover{color:var(--gold)}
+
+/* ---- reveal ---- */
+.js .rise{opacity:0;transform:translateY(16px)}
+.js .rise.in{opacity:1;transform:none;transition:opacity .7s ease,transform .7s ease}
+@media (prefers-reduced-motion:reduce){
+  .js .rise{opacity:1;transform:none;transition:none}
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+
+/* ===== variant D2 "Bone House" ===== */
+
+:root{
+  --f-disp:"Pirata One",Georgia,serif;
+  --f-lab:Oswald,Impact,sans-serif;
+  --f-body:"Source Sans 3",ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --disp-w:400;
+  --bg:#050403;
+  --panel:#0A0807;
+  --panel2:#12100E;
+  --well:#060504;
+  --line:#332C26;
+  --ink:#FFFFFF;
+  --body:#EDE6DA;
+  --muted:#B9AFA2;
+  --gold:#EFE3CE;
+  --acc-hi:#FFF6E6;
+  --orange:#E08A3C;
+  --red:#E2483F;
+  --ember:#FF6B5E;
+  --maroon:#2A0F0A;
+  --blood:#4A1B12;
+  --btn:#A02419;
+  --btn-hi:#C42F21;
+  --glow-a:rgba(74,27,18,.62);
+  --glow-b:rgba(224,138,60,.14);
+  --tex-a:rgba(74,27,18,.40);
+  --tex-b:rgba(224,138,60,.10);
+  --hatch:rgba(74,27,18,.55);
+  --wm-glow:rgba(226,72,63,.35);
+  --wm-shadow:#3A100B;
+  --wm-glow2:rgba(239,227,206,.22);
+  --ghost-hi:rgba(239,227,206,.12);
+  --edge-open:#4A3A2A;
+}
+
+/* display face weight, pinned (several of these faces ship one weight only) */
+.claim h1,.claim h2,.claim h3,.callout .big,.colhead,.subhead,.sechead h2,.disp,
+.cal-name,.month-head h3,.night .num,.count .n,.tier h3,.att h3,.card h3,.warn h2,
+.signup-band h2,.reach h2,.foot .mk,.wordmark .w1,.wordmark .w2{font-weight:var(--disp-w)}
+
+/* grid tracks may shrink below their content; month heads wrap */
+.month,.cal,.colwrap,.tier,.att,.card,.fc,.count .u{min-width:0}
+.month-head{flex-wrap:wrap}
+
+/* handbill: hairline strip rather than the heavy 2px bar, wider display tracking */
+.strip{border-bottom-width:1px}
+.wordmark .w1,.wordmark .w2{letter-spacing:.04em}
+.badge{border-width:1px}
+
+/* form result states */
+.form-msg.err{color:#FF6B6B}
+.form-msg.ok{color:#EFE3CE}
