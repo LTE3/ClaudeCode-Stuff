@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:;">
 <meta name="robots" content="noindex,nofollow">
-<title>Haunted Mansion — ten preview directions</title>
+<title>Haunted Mansion — preview directions</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23070310'/%3E%3Cpath d='M16 5c-5 0-9 4-9 9v13l3-2 3 2 3-2 3 2 3-2 3 2V14c0-5-4-9-9-9z' fill='%23FFB43D'/%3E%3Ccircle cx='12.5' cy='14' r='1.7' fill='%23070310'/%3E%3Ccircle cx='19.5' cy='14' r='1.7' fill='%23070310'/%3E%3C/svg%3E">
@@ -38,6 +38,21 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
 .mods li{font-size:12px;letter-spacing:.02em;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
 .note{border:1px solid var(--line);border-radius:4px;padding:22px;margin:32px 0 64px;font-size:14px;color:var(--dim)}
 .note b{color:var(--ink)}
+/* the two flagship models sit above the ten -- full width, marked as the picks */
+.lead-in{margin:34px 0 18px;padding-top:26px;border-top:1px solid var(--line)}
+.lead-in h2{font-size:20px;margin:0 0 8px;color:var(--ink)}
+.lead-in p{margin:0;color:var(--dim);font-size:15px;max-width:680px}
+.feat{grid-column:1/-1;display:block;background:linear-gradient(180deg,#1b0d33,#150a2b);
+  border:1px solid var(--c,var(--candle));border-radius:4px;padding:26px;color:inherit;
+  text-decoration:none;transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.feat:hover{transform:translateY(-4px)}
+.feat:focus-visible{outline:2px solid var(--c,var(--candle));outline-offset:3px}
+.feat h2{margin:10px 0 4px;font-size:28px;color:var(--c,var(--ink))}
+.feat .modelof{font-size:13px;color:var(--ink);margin:0 0 14px}
+.feat .modelof b{color:var(--c,var(--candle))}
+.feat p{color:var(--dim);font-size:15px;margin:0 0 18px;max-width:62ch}
+.pick{display:inline-block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:#120a22;background:var(--c,var(--candle));border-radius:999px;padding:5px 11px;margin-bottom:4px}
 .note ul{margin:10px 0 0;padding-left:20px}
 .note li{margin-bottom:6px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -48,14 +63,14 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
 
   <header>
     <h1>The Haunted Mansion</h1>
-    <p class="sub">Ten complete websites. Every one is fully clickable — Home, Dates,
-      Tickets &amp; tables, Plan your visit. Same real dates and same real prices across all ten;
+    <p class="sub">Twelve complete websites. Every one is fully clickable — Home, Dates,
+      Tickets &amp; tables, Plan your visit. Same real dates and same real prices across all of them;
       only the design changes.</p>
   </header>
 
-  <p class="setlead">Built off the six haunt sites you sent (Pure Terror, Nightmare in Nassau,
-    Evidence of Evil, Dark Side, Dominion of Terror, Gateways). What all of those do got turned
-    into a checklist. <b>Every one of these ten carries the whole kit:</b></p>
+  <p class="setlead">The first two are the ones Manny picked, built as direct models of those
+    sites — same page order, same module set, same CTA rhythm, our art direction and our real
+    facts. <b>The ten below take the whole kit from all six sites:</b></p>
 
   <ul class="mods">
     <li>Sticky admission bar that never leaves the screen</li>
@@ -70,6 +85,44 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
   </ul>
 
   <div class="grid">
+
+    <a class="feat" href="v20/index.html" style="--c:#F5B301">
+      <span class="pick">Manny's pick · main model</span>
+      <h2>Terror Park</h2>
+      <p class="modelof">Modeled on <b>pureterror.com</b></p>
+      <div class="swatch">
+        <i style="background:#000000"></i><i style="background:#E30E0E"></i>
+        <i style="background:#F5B301"></i><i style="background:#7CFF2E"></i>
+      </div>
+      <p>Their build, our room: full-bleed black stage, heavy condensed logotype in metal gold, the
+        yellow ticket pill top-right, a credential strip where their press logos sit, the gold claim
+        line boxed in red, and the toxic-green announcement bar. Loud, American, unmistakably a
+        scream park.</p>
+      <span class="go">Open →</span>
+      <div class="pages">Home · Dates · Tickets · Plan your visit</div>
+    </a>
+
+    <a class="feat" href="v21/index.html" style="--c:#FF4E01">
+      <span class="pick">Manny's pick · main model</span>
+      <h2>Fog &amp; Frame</h2>
+      <p class="modelof">Modeled on <b>nightmareinnassau.com</b></p>
+      <div class="swatch">
+        <i style="background:#000000"></i><i style="background:#D71114"></i>
+        <i style="background:#FF4E01"></i><i style="background:#FFFFFF"></i>
+      </div>
+      <p>The hairline white frame around a fog hero, stacked serif title with oversized red initials,
+        red BUY TICKETS under it, torn-tape ENTER IF YOU DARE panels, real month grids with
+        colour-coded day cells, and the Location / Dates / Time cards over an orange ticket bar at
+        the bottom. Quieter and more expensive-looking than direction 20.</p>
+      <span class="go">Open →</span>
+      <div class="pages">Home · Dates · Tickets · Plan your visit</div>
+    </a>
+
+    <div class="lead-in" style="grid-column:1/-1">
+      <h2>The other ten directions</h2>
+      <p>Round two, built from all six reference sites rather than modeled on one. Same facts,
+        same prices, same four pages each.</p>
+    </div>
 
     <a class="v" href="v10/index.html" style="--c:#7CFF2E">
       <span class="tag">Direction 10</span>
@@ -207,10 +260,10 @@ h1{font-family:'Creepster',cursive;font-weight:400;font-size:clamp(38px,8vw,66px
     <b>What's real and what isn't</b>
     <ul>
       <li><b>Real:</b> all 26 nights (Fri + Sat, Sept 4 – Nov 28), the address, 21+, and the Halloween
-        weekend highlight. The email/phone signup form on every one of the ten genuinely writes to Supabase.</li>
+        weekend highlight. The email/phone signup form on every one of them genuinely writes to Supabase.</li>
       <li><b>Real prices:</b> $10 / $15 / $20 advance GA and $50 tables are exactly what the room ran
         all summer 2026. Halloween weekend ($25 / $35 / $45, tables $75) is my proposal, not a
-        decision — it's one commented block to change, and all ten carry the same numbers.</li>
+        decision — it's one commented block to change, and every direction carries the same numbers.</li>
       <li><b>The "attractions" are the room, not rooms.</b> Music, decor and fog, costume weekend,
         table service — programming 428 Johnson already controls. No maze, no actors, no
         walkthrough is invented anywhere.</li>
