@@ -32,6 +32,12 @@
   --wm-glow:rgba(255,0,0,.45); --wm-shadow:#4A0000; --wm-glow2:rgba(255,204,0,.3);
   --ghost-hi:rgba(255,204,0,.12); --edge-open:#4A3A00;
   --vignette:rgba(0,0,0,.72);
+  /* Scrim over the hero plate. The art is a greyscale engraving, so the palette
+     on top of it comes entirely from the glow gradients -- one plate serves all
+     five siblings. This layer is what guarantees the wordmark keeps its contrast
+     no matter how light a patch of the engraving sits behind it, and it is a
+     model default because every variant needs the same guarantee. */
+  --scrim:rgba(0,0,0,.62);
   /* neutrals. Not part of any variant's art direction -- every one of the five
      is a dark build, so one set of greys serves all of them. */
   --off-ink:#9A9A9A; --off-bg:#2A2A2A; --off-line:#3A3A3A; --foot-ink:#CFCFCF;
@@ -112,13 +118,18 @@ p{margin:0 0 1.1rem}
    Their hero runs about 570px on a desktop viewport. Ours holds the same
    proportion but is measured against the viewport instead of a fixed pixel
    height, so it fills the screen on a phone and stays a band on a monitor. */
-.hero{position:relative;background:var(--bg);isolation:isolate;
+/* The engraved mansion plate sits on the element itself, underneath every
+   decorative layer: the glow gradients tint it, the scrim holds it down and the
+   vignette closes the edges. Greyscale in, palette out. */
+.hero{position:relative;isolation:isolate;
+  background:var(--bg) url("../../art/hero-d.webp") 50% 34%/cover no-repeat;
   min-height:min(78svh,700px);display:grid;place-items:center;
   padding:clamp(64px,10vw,110px) 0 clamp(72px,10vw,120px);
   text-align:center;overflow:hidden;border-bottom:2px solid var(--blood)}
 .hero::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-2;
   background:radial-gradient(78% 90% at 50% 0%,var(--glow-a),transparent 68%),
-             radial-gradient(46% 50% at 50% 104%,var(--glow-b),transparent 72%)}
+             radial-gradient(46% 50% at 50% 104%,var(--glow-b),transparent 72%),
+             linear-gradient(var(--scrim),var(--scrim))}
 /* two slow-drifting light pools. Transform only, so it composites on the GPU
    and never triggers layout. */
 .hero .fog{position:absolute;inset:-25% -15%;pointer-events:none;z-index:-1;
@@ -166,10 +177,16 @@ p{margin:0 0 1.1rem}
 .claim{background:var(--bg);text-align:center;padding:clamp(44px,7vw,80px) 0 clamp(28px,4vw,46px)}
 .claim h1,.claim h2{font-family:var(--f-disp);font-weight:var(--disp-w);color:var(--gold);
   text-transform:uppercase;font-size:var(--t-1);letter-spacing:.015em;margin:0}
-.claim h3{font-family:var(--f-disp);font-weight:var(--disp-w);color:var(--orange);
+.claim h3{font-family:var(--f-lab);color:var(--orange);
   text-transform:uppercase;font-size:var(--t-2);letter-spacing:.015em;margin:.55rem 0 0}
 .claim .say{font-family:var(--f-lab);font-size:clamp(15px,2.4vw,20px);
   letter-spacing:.06em;color:var(--red);margin:1.2rem 0 0;text-transform:none}
+/* Engraved filigree under the claim. Screen blending tints the white linework to
+   whatever the palette puts behind it, so one plate serves all five siblings. */
+.claim::after{content:"";display:block;width:min(420px,64%);height:46px;
+  margin:clamp(22px,3vw,34px) auto 0;
+  background:url("../../art/orn-d.webp") 50% 50%/contain no-repeat;
+  mix-blend-mode:screen;opacity:.55}
 
 /* ---- the stacked ticket call ----
    Their version is display type acting as a link and nothing else. Kept, but
@@ -180,6 +197,11 @@ p{margin:0 0 1.1rem}
   border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .ctabox::before{content:"";position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(64% 130% at 50% 118%,var(--glow-a),transparent 68%)}
+/* Ground fog rolling across the lit floor under the ticket call. Screen blend,
+   so the plate's black drops out and only the smoke carries the palette. */
+.ctabox::after{content:"";position:absolute;left:0;right:0;bottom:0;height:62%;
+  pointer-events:none;mix-blend-mode:screen;opacity:.5;
+  background:url("../../art/fog-b.webp") 50% 100%/cover no-repeat}
 .ctabox>*{position:relative}
 .callout .stack{display:inline-block;margin:0}
 .callout .big{display:block;font-family:var(--f-disp);font-weight:var(--disp-w);
@@ -234,7 +256,7 @@ p{margin:0 0 1.1rem}
 @media (min-width:880px){.row2{grid-template-columns:1fr 1fr}}
 /* a column head is deliberately a step DOWN from a section head -- the old
    build set both at ~52px and the page read as one flat list of shouts. */
-.colhead{font-family:var(--f-disp);font-weight:var(--disp-w);color:var(--gold);
+.colhead{font-family:var(--f-lab);color:var(--gold);
   text-transform:uppercase;font-size:var(--t-2);letter-spacing:.015em;margin:0 0 1.2rem;
   padding-bottom:.5rem;border-bottom:1px solid var(--line)}
 .subhead{font-family:var(--f-lab);color:var(--orange);
@@ -262,7 +284,7 @@ p{margin:0 0 1.1rem}
   background:var(--line);border:1px solid var(--line)}
 @media (min-width:800px){.stats{grid-template-columns:repeat(4,1fr)}}
 .stat{background:var(--well);padding:clamp(26px,3.6vw,40px) 14px;text-align:center}
-.stat .n{display:block;font-family:var(--f-disp);font-weight:var(--disp-w);
+.stat .n{display:block;font-family:var(--f-lab);
   font-size:clamp(46px,6.6vw,76px);line-height:1;color:var(--gold);
   font-variant-numeric:tabular-nums}
 .stat .l{display:block;font-family:var(--f-lab);font-size:12px;line-height:1.4;
@@ -302,7 +324,7 @@ p{margin:0 0 1.1rem}
 .month{border:2px solid var(--blood);background:var(--well);padding:18px 16px}
 .month-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
   border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px}
-.month-head h3{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:26px;
+.month-head h3{font-family:var(--f-lab);font-size:26px;
   color:var(--gold);text-transform:uppercase;letter-spacing:.02em}
 .month-head .small{font-family:var(--f-lab);font-size:11.5px;line-height:1;
   letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
@@ -312,7 +334,7 @@ p{margin:0 0 1.1rem}
 .night:hover{border-color:var(--gold);transform:translateY(-2px)}
 .night .dow{display:block;font-family:var(--f-lab);font-size:10.5px;
   line-height:1;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.night .num{display:block;font-family:var(--f-disp);font-weight:var(--disp-w);font-size:28px;
+.night .num{display:block;font-family:var(--f-lab);font-size:28px;
   line-height:1.15;color:var(--gold)}
 .night .tag{display:block;font-family:var(--f-lab);font-size:10px;
   line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-top:4px}
@@ -329,13 +351,41 @@ p{margin:0 0 1.1rem}
   transition:border-color .25s var(--ease-out),transform .25s var(--ease-out),
              background .25s var(--ease-out)}
 .att:hover{border-color:var(--gold);transform:translateY(-3px)}
-.att h3{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:var(--t-3);
+.att h3{font-family:var(--f-lab);font-size:var(--t-3);
   color:var(--gold);text-transform:uppercase;letter-spacing:.02em;margin-bottom:.8rem}
 .att p{font-size:16px;line-height:1.75;margin:0 0 1.3rem;flex:1}
+/* One engraved spot per card, keyed to the card's subject. The plates are white
+   linework on black, so screen blending drops the black out and leaves the line
+   art tinted by whatever sits behind it -- no cut-outs, no alpha channel, and the
+   same four files serve all five siblings. Decorative only: the heading already
+   says what the card is, so these carry no meaning a screen reader would miss. */
+.att::before{content:"";display:block;width:66px;height:66px;margin:0 0 16px;
+  background-repeat:no-repeat;background-position:0 50%;background-size:contain;
+  mix-blend-mode:screen;opacity:.9}
+.att:nth-child(1)::before{background-image:url("../../art/spot-floor.webp")}
+.att:nth-child(2)::before{background-image:url("../../art/spot-fog.webp")}
+.att:nth-child(3)::before{background-image:url("../../art/spot-costume.webp")}
+.att:nth-child(4)::before{background-image:url("../../art/spot-table.webp")}
+/* The page was a single column of equal-width boxes all the way down -- stats
+   4-up, attractions 4-up, countdown 4-up -- so the eye had no reason to slow
+   anywhere. On wide screens the attraction row breaks that rhythm: a 12-column
+   grid woven 5/7 then 7/5, and the card turns side-by-side so the spot art gets
+   room instead of being a stamp above cramped type. Scoped with :has() because
+   .grid4 also carries the plain cards further down, which stay 4-up. */
+@media (min-width:1000px){
+  .grid4:has(.att){grid-template-columns:repeat(12,1fr);gap:18px}
+  .grid4:has(.att) .att{grid-column:span 7;display:grid;
+    grid-template-columns:auto 1fr;column-gap:24px;align-items:start;
+    padding:30px 28px}
+  .grid4:has(.att) .att:nth-child(1),
+  .grid4:has(.att) .att:nth-child(4){grid-column:span 5}
+  .grid4:has(.att) .att::before{width:92px;height:92px;margin:2px 0 0;grid-row:span 2}
+  .grid4:has(.att) .att p{margin-bottom:0}
+}
 /* ---- countdown ---- */
 .count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:660px;margin:0 auto}
 .count .u{border:2px solid var(--blood);background:var(--well);padding:20px 4px}
-.count .n{display:block;font-family:var(--f-disp);font-weight:var(--disp-w);
+.count .n{display:block;font-family:var(--f-lab);
   font-size:clamp(38px,8vw,64px);line-height:1;color:var(--gold);
   font-variant-numeric:tabular-nums}
 .count .l{display:block;font-family:var(--f-lab);font-size:11px;
@@ -352,7 +402,7 @@ p{margin:0 0 1.1rem}
   line-height:1;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
   border:1px solid var(--line);padding:8px 12px;align-self:flex-start;margin-bottom:17px}
 .tier.feature .tag{color:var(--bg);background:var(--gold);border-color:var(--gold)}
-.tier h3{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:var(--t-3);
+.tier h3{font-family:var(--f-lab);font-size:var(--t-3);
   color:var(--gold);text-transform:uppercase;letter-spacing:.02em;margin-bottom:.4rem}
 .tier .price{font-family:var(--f-lab);font-size:46px;line-height:1;
   color:var(--ink);margin:.5rem 0 .35rem;letter-spacing:.02em}
@@ -382,7 +432,7 @@ p{margin:0 0 1.1rem}
 .two{display:grid;gap:18px;grid-template-columns:1fr}
 @media (min-width:860px){.two{grid-template-columns:1fr 1fr;gap:26px}}
 .card{border:1px solid var(--line);background:var(--panel2);padding:28px 24px}
-.card h3{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:var(--t-3);
+.card h3{font-family:var(--f-lab);font-size:var(--t-3);
   color:var(--gold);text-transform:uppercase;letter-spacing:.02em;margin-bottom:1rem}
 .card p{font-size:16px}
 .card p:last-child{margin-bottom:0}
@@ -418,7 +468,13 @@ p{margin:0 0 1.1rem}
 .q p{font-size:16px;padding:0 0 20px;margin:0}
 
 /* ---- signup ---- */
-.signup-band{background:var(--panel);border-top:2px solid var(--blood)}
+/* Plaster tooth under the sign-up panel. The scrim on top holds the texture to
+   roughly a third of its strength, which is enough to kill the flat-slab look
+   without moving the panel far enough off --panel to threaten label contrast. */
+.signup-band{border-top:2px solid var(--blood);
+  background:linear-gradient(var(--scrim),var(--scrim)),
+             url("../../art/texture-wall.webp") 50% 50%/cover,
+             var(--panel)}
 .signup-band h2{font-family:var(--f-disp);font-weight:var(--disp-w);color:var(--gold);
   text-transform:uppercase;font-size:var(--t-1);letter-spacing:.015em;margin-bottom:.9rem}
 .fields{display:grid;gap:12px;grid-template-columns:1fr;margin-top:24px}
@@ -461,7 +517,7 @@ footer{background:var(--bg);padding:28px 0 32px;
 .foot ul{list-style:none;padding:0;margin:0}
 .foot a{color:var(--foot-ink);text-decoration:none}
 .foot a:hover{color:var(--gold)}
-.foot .mk{font-family:var(--f-disp);font-weight:var(--disp-w);font-size:28px;color:var(--red);
+.foot .mk{font-family:var(--f-lab);font-size:28px;color:var(--red);
   text-transform:uppercase;letter-spacing:.02em;margin-bottom:.6rem}
 .legal{border-top:1px solid var(--line);margin-top:26px;padding-top:18px;display:flex;
   flex-wrap:wrap;gap:8px 20px;justify-content:space-between;align-items:center}

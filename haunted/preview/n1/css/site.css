@@ -30,6 +30,11 @@
   --glow-a:rgba(255,255,255,.16); --glow-b:rgba(215,17,20,.22);
   --wash:rgba(151,0,10,.42); --ghost-hi:rgba(255,255,255,.1);
   --edge-open:#2F4A2F; --top-bg:rgba(0,0,0,.9);
+  /* Scrim over the hero plate. The art is greyscale, so the palette on top of it
+     comes entirely from the glow gradients and one plate serves all five
+     siblings. This layer is what keeps the title's contrast independent of how
+     light a patch of the corridor happens to sit behind it. */
+  --scrim:rgba(0,0,0,.60);
   /* one type scale */
   /* per-face fit factor. Every variant states its own; see variants.py. */
   --wm-scale:1;
@@ -135,12 +140,17 @@ p{margin:0 0 1.15rem}
    box, so the frame read as an empty rectangle with a small title in it. This
    fills the screen and puts moving fog behind the type. */
 .hero{padding:clamp(16px,2.6vw,26px) 0 clamp(38px,6vw,64px);text-align:center}
+/* The corridor plate sits on the frame itself, under every decorative layer: the
+   glow gradients tint it and the scrim holds it down. The art is greyscale, so
+   one plate serves all five siblings and each one colours it differently. */
 .frame{position:relative;border:1px solid var(--hair);padding:clamp(46px,7vw,90px) 6vw;
-  overflow:hidden;background:var(--bg);isolation:isolate;
+  overflow:hidden;isolation:isolate;
+  background:var(--bg) url("../../art/hero-n.webp") 50% 42%/cover no-repeat;
   min-height:min(70svh,640px);display:grid;place-items:center;align-content:center}
 .frame::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-2;
   background:radial-gradient(75% 60% at 50% 108%,var(--glow-a),transparent 70%),
-             radial-gradient(60% 45% at 50% 8%,var(--glow-b),transparent 72%)}
+             radial-gradient(60% 45% at 50% 8%,var(--glow-b),transparent 72%),
+             linear-gradient(var(--scrim),var(--scrim))}
 .frame .fog{position:absolute;inset:-25% -15%;pointer-events:none;z-index:-1;
   background:radial-gradient(34% 40% at 26% 74%,var(--glow-a),transparent 66%),
              radial-gradient(30% 36% at 74% 26%,var(--glow-b),transparent 68%);
@@ -161,7 +171,10 @@ p{margin:0 0 1.15rem}
 .title{font-family:var(--f-disp);line-height:.9;margin:0 0 1.5rem;letter-spacing:.01em}
 .title span{display:block;font-size:calc(var(--t-hero) * var(--wm-scale));
   white-space:nowrap;color:var(--ink)}
-.title span i{font-style:normal;color:var(--red);font-size:1.32em;line-height:0}
+/* The initials carry the accent colour and nothing else. They used to be set at
+   1.32em on a zero line-height, which pushed them out of the baseline and read as
+   a broken drop-cap rather than a lockup. Same size, different colour. */
+.title span i{font-style:normal;color:var(--red)}
 .title .b{font-size:calc(var(--t-hero2) * var(--wm-scale))}
 .hero .kick{font:400 12px/1.5 var(--f-body);letter-spacing:.4em;text-transform:uppercase;
   color:var(--muted);margin:0 0 1.7rem}
@@ -278,6 +291,31 @@ p{margin:0 0 1.15rem}
 .att:hover{border-color:var(--red);transform:translateY(-3px)}
 .att h3{font-size:var(--t-3);margin-bottom:.7rem}
 .att p{font-size:16px;line-height:1.75;color:var(--body);margin:0 0 1.3rem;flex:1}
+/* One engraved spot per card, keyed to the card's subject. White linework on
+   black, so screen blending drops the black out and the palette tints what is
+   left. Decorative only -- the heading already carries the meaning. */
+.att::before{content:"";display:block;width:62px;height:62px;margin:0 0 16px;
+  background-repeat:no-repeat;background-position:0 50%;background-size:contain;
+  mix-blend-mode:screen;opacity:.88}
+.att:nth-child(1)::before{background-image:url("../../art/spot-floor.webp")}
+.att:nth-child(2)::before{background-image:url("../../art/spot-fog.webp")}
+.att:nth-child(3)::before{background-image:url("../../art/spot-costume.webp")}
+.att:nth-child(4)::before{background-image:url("../../art/spot-table.webp")}
+/* Same rhythm break as the other model: the page stacked equal-width boxes the
+   whole way down, so on wide screens the attraction row weaves 5/7 then 7/5 on a
+   12-column grid and the card goes side-by-side, which gives the spot art room
+   instead of stamping it above cramped type. :has() scopes it to the attraction
+   row -- .grid4 also carries the plain cards, which stay 4-up. */
+@media (min-width:1000px){
+  .grid4:has(.att){grid-template-columns:repeat(12,1fr);gap:20px}
+  .grid4:has(.att) .att{grid-column:span 7;display:grid;
+    grid-template-columns:auto 1fr;column-gap:26px;align-items:start;
+    padding:32px 30px}
+  .grid4:has(.att) .att:nth-child(1),
+  .grid4:has(.att) .att:nth-child(4){grid-column:span 5}
+  .grid4:has(.att) .att::before{width:88px;height:88px;margin:2px 0 0;grid-row:span 2}
+  .grid4:has(.att) .att p{margin-bottom:0}
+}
 /* ---- countdown row ---- */
 .count{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:680px;
   margin:0 auto}
@@ -357,7 +395,13 @@ p{margin:0 0 1.15rem}
 .q p{font-size:16px;color:var(--body);padding:0 0 22px}
 
 /* ---- signup ---- */
-.signup-band{border-top:1px solid var(--line);background:var(--panel)}
+/* Plaster tooth under the sign-up panel. The scrim holds the texture to roughly
+   a third strength -- enough to kill the flat slab, not enough to move the panel
+   far enough off --panel to threaten label contrast. */
+.signup-band{border-top:1px solid var(--line);
+  background:linear-gradient(var(--scrim),var(--scrim)),
+             url("../../art/texture-wall.webp") 50% 50%/cover,
+             var(--panel)}
 .signup-band h2{font-size:var(--t-1);margin-bottom:.9rem}
 .fields{display:grid;gap:12px;grid-template-columns:1fr;margin-top:24px}
 @media (min-width:720px){.fields{grid-template-columns:1fr 1fr auto;align-items:end}}
@@ -381,7 +425,16 @@ p{margin:0 0 1.15rem}
   color:var(--red-lt);margin:0 0 1rem}
 .fc p{font-family:var(--f-disp);font-size:20px;line-height:1.5;color:var(--ink);margin:0}
 .fc p small{display:block;font:var(--body-w) 14px/1.6 var(--f-body);color:var(--muted);margin-top:7px}
-.buybar{background:var(--orange);text-align:center;padding:clamp(32px,5vw,56px) 0}
+/* The reference site's orange CTA bar, kept -- it is the only full-bleed colour
+   on an otherwise dark page, so it is the page's rhythm, not a mistake. What it
+   lacked was depth: a flat rectangle of saturated coral. Screening the fog plate
+   over it breaks the flat fill and, because screen lightens, it raises contrast
+   for the dark ink rather than eating into it. */
+.buybar{background:var(--orange);text-align:center;padding:clamp(32px,5vw,56px) 0;
+  position:relative;isolation:isolate;overflow:hidden}
+.buybar::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:url("../../art/fog-a.webp") 50% 62%/cover no-repeat;
+  mix-blend-mode:screen;opacity:.2}
 .buybar h2{color:var(--bar-ink);font-size:var(--t-1);margin-bottom:1.2rem}
 .buybar .fine{color:var(--bar-ink2);margin-top:16px}
 .buybar .btn{background:var(--bar-ink);color:var(--orange)}
@@ -442,17 +495,17 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:40px 0 32px
   --red-hi:#EE1B1E;
   --deep:#97000A;
   --deep-ink:#FFFFFF;
-  --orange:#FF4E01;
-  --orange-hi:#FF6A24;
-  --open:#2E7D32;
+  --orange:#FF6A5A;
+  --orange-hi:#FF8577;
+  --open:#6B1015;
   --open-ink:#FFFFFF;
   --strip-ink:#FFFFFF;
   --glow-a:rgba(255,255,255,.16);
   --glow-b:rgba(215,17,20,.22);
   --wash:rgba(151,0,10,.42);
-  --bar-ink:#0A0A0A;
-  --bar-ink2:#2A1000;
-  --edge-open:#2F4A2F;
+  --bar-ink:#1A0000;
+  --bar-ink2:#2A0603;
+  --edge-open:#5A2226;
 }
 
 .title span,.tagline p,.sechead h2,.month-head h3,.night .num,.count .n,.stat .n,
@@ -465,4 +518,4 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:40px 0 32px
 
 /* form result states */
 .form-msg.err{color:#FF6B6B}
-.form-msg.ok{color:#FF4E01}
+.form-msg.ok{color:#FF6A5A}
