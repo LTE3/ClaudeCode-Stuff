@@ -50,6 +50,15 @@ Deno.serve(async (req) => {
     }
     const evt = events[0]
 
+    // Block claims for inactive/closed dates (venue closed). Mirrors the paid-checkout guard so
+    // free tickets can't be claimed for a night that isn't actually running.
+    if (evt.is_active !== true) {
+      await logFailed("event_inactive")
+      return new Response(JSON.stringify({ error: "This event is not available." }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      })
+    }
+
     // Check capacity based on claim type (accounting for quantity)
     if (type === "day_free") {
       if ((evt.day_free_claimed || 0) + qty > (evt.day_free_capacity || 0)) {
