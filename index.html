@@ -2842,6 +2842,11 @@
         color:#1a0b0b;font-weight:900;font-size:15px;letter-spacing:.04em;text-transform:uppercase;
         background:linear-gradient(135deg,#FF7518,#FFB43D);
         box-shadow:0 10px 26px -8px rgba(255,117,24,.7);transition:transform .15s cubic-bezier(.2,.7,.2,1),box-shadow .15s;}
+      .hm-buy{display:block;margin-top:18px;padding:16px 0;border-radius:999px;border:1px solid #ff6a60;
+        color:#fff7f2;font-weight:900;font-size:16px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
+        background:linear-gradient(135deg,#e8433a,#8e0f0b);box-shadow:0 10px 28px -6px rgba(236,31,28,.75);
+        transition:transform .15s cubic-bezier(.2,.7,.2,1);}
+      .hm-buy:active{transform:scale(.98);}
       .hm-btn:hover{transform:translateY(-1px);box-shadow:0 14px 30px -8px rgba(255,117,24,.85);}
       .hm-btn:active{transform:scale(.98);}
       .hm-btn:disabled{opacity:.7;cursor:default;}
@@ -2861,9 +2866,10 @@
         <div class="hm-kicker">La Casita is temporarily closed</div>
         <div class="hm-title">The Haunted Mansion</div>
         <img class="hm-skull" src="/haunted/skull.gif" alt="Haunted Mansion skull" width="120" height="90" />
-        <div class="hm-sub">The doors creak open the <b>first week of September</b>.<br>A haunted reggaetón experience you won't escape.</div>
-        <div class="hm-when">🎃 September → November</div>
-        <div class="hm-more">✦ More details coming soon ✦</div>
+        <div class="hm-sub">Now open in <b>Bushwick, Brooklyn</b>.<br>One hour inside the house. Tickets from $20.</div>
+        <div class="hm-when">🎃 Thu – Sun · October</div>
+        <a class="hm-buy" href="https://hauntedmansionbk.com/nights.html">Buy tickets →</a>
+        <div class="hm-more">✦ Or get on the list ✦</div>
         <form id="hmForm" class="hm-form" novalidate>
           <input type="text" id="hmName" name="name" placeholder="Full name" autocomplete="name" required>
           <input type="email" id="hmEmail" name="email" placeholder="Email" autocomplete="email" required>
